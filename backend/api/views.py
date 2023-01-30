@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from .serializer import CallesIndependenciaSerializer, UVSerializer
-from core.models import UV, CallesIndependencia
+from core.models.core import UV, CallesIndependencia
 
 @api_view(['GET'])
 def get_data_uv(request):
