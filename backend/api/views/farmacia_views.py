@@ -1,13 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from api.serializers.farmacia_serializers import (
-    LaboratoriosSerializer, 
-    ProductoFarmaciaSerializer,
-    ComprobanteVentaSerializer,
-    RecetasSerializer,
-    ProductoVendidoSerializer,
-    CargaProductoSerializer,
-)
+from api.serializers.farmacia_serializers import *
 from database.models import (
     Laboratorios, 
     ProductoFarmacia,

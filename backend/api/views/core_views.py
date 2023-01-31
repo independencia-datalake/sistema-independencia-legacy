@@ -1,15 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from api.serializers.core_serializers import (
-    CallesIndependenciaSerializer, 
-    UVSerializer,
-    PersonaSerializer,
-    TelefonoSerializer,
-    CorreoSerializer,
-    DireccionSerializer,
-    PersonaInfoSaludSerializer,
-    PersonaArchivosSerializer,
-)
+from api.serializers.core_serializers import *
 from database.models import (
     UV, 
     CallesIndependencia,
