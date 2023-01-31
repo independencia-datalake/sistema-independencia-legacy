@@ -1,11 +1,11 @@
 from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
 
-from .models.farmacia import (
+from .models import (
     ProductoFarmacia,
     ProductoVendido,
 )
-from .models.stock import (
+from .models import (
     BodegaVirtual,
     ProductoMermado,
     ProductoIngresado,
@@ -79,6 +79,7 @@ def update_bodega_by_ingreso(sender, instance, **kwargs):
     if precio_venta_ingreso != precio_venta_producto:
         prod_farm.precio = precio_venta_ingreso
         prod_farm.save()
+
 
 
 

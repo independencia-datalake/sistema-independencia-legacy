@@ -1,4 +1,4 @@
-"""backend_setting URL Configuration
+"""django_rest_settings URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.1/topics/http/urls/
@@ -18,5 +18,9 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls'))
+    path('api/core/', include('api.urls.core_urls')),
+    path('api/farmacia/', include('api.urls.farmacia_urls')),
+    path('api/seguridad/', include('api.urls.seguridad_urls')),
+    path('api/stock/', include('api.urls.stock_urls')),
+
 ]

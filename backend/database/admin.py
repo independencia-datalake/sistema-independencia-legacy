@@ -1,8 +1,5 @@
 from django.contrib import admin
-from .models.core import *
-from .models.farmacia import *
-from .models.seguridad import *
-from .models.stock import *
+from .models import *
 
 
 ## ADMIN CORE
