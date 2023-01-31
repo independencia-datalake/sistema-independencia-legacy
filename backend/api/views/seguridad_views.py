@@ -21,21 +21,25 @@ def get_clasificacion_delito(request):
     serializer = ClasificacionDelitoSerializer(items, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
 def get_delito(request):
     items = Delito.objects.all()
     serializer = DelitoSerializer(items, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
 def get_llamado_seguridad(request):
     items = LlamadoSeguridad.objects.all()
     serializer = LlamadoSeguridadSerializer(items, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
 def get_denunciante(request):
     items = Denunciante.objects.all()
     serializer = DenuncianteSerializer(items, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
 def get_requerimiento(request):
     items = Requerimiento.objects.all()
     serializer = RequerimientoSerializer(items, many=True)

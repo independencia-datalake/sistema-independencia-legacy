@@ -1,0 +1,51 @@
+[
+{
+    "model": "database.clasificaciondelito",
+    "pk": 1,
+    "fields": {
+        "nombre": "Delito de mayor connotacion social"
+    }
+},
+{
+    "model": "database.clasificaciondelito",
+    "pk": 2,
+    "fields": {
+        "nombre": "Violencia Intrafamiliar"
+    }
+},
+{
+    "model": "database.clasificaciondelito",
+    "pk": 3,
+    "fields": {
+        "nombre": "Incivilidades"
+    }
+},
+{
+    "model": "database.clasificaciondelito",
+    "pk": 4,
+    "fields": {
+        "nombre": "Abusos sexuales"
+    }
+},
+{
+    "model": "database.clasificaciondelito",
+    "pk": 5,
+    "fields": {
+        "nombre": "Accidentes e incendios"
+    }
+},
+{
+    "model": "database.clasificaciondelito",
+    "pk": 6,
+    "fields": {
+        "nombre": "Derivaciones"
+    }
+},
+{
+    "model": "database.clasificaciondelito",
+    "pk": 7,
+    "fields": {
+        "nombre": "Otro"
+    }
+}
+]
