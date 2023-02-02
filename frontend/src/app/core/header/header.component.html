@@ -2,21 +2,19 @@
   <mat-toolbar class="header">
     <button mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon>Menu</button>
         <mat-menu #menu="matMenu">
-        <button mat-menu-item>Quienes Somos</button>
-        <button mat-menu-item>Preguntas y Respuestas</button>
+        <button routerLink="quienes" mat-menu-item>Quienes Somos</button>
+        <button routerLink="qna" mat-menu-item>Preguntas y Respuestas</button>
         <button mat-menu-item>Calculadora UV</button>
         <button mat-menu-item>Visualización</button>
         </mat-menu>
     <span class="spacer"></span>
-    <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-        <mat-icon class="test">block</mat-icon>
-    </button>
-    <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
-      <mat-icon>account_circle</mat-icon>
-    </button>
-    <button mat-icon-button aria-label="Home Page">
-      <mat-icon>home</mat-icon>
-    </button>
+
+    <button mat-icon-button class="example-icon favorite-icon usuario"></button>
+    <button mat-icon-button class="example-icon favorite-icon log-out"></button>
+    <button routerLink="" mat-icon-button class="inicio"></button>
+
   </mat-toolbar>
 </p>
+
+
 

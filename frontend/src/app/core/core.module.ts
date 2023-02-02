@@ -5,9 +5,14 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
 
+
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+import { AppRoutingModule } from '../app-routing.module';
+
 import { QuienesSomosComponent } from './quienes-somos/quienes-somos.component';
+import { QnaComponent } from './qna/qna.component';
+import { HomeComponent } from './home/home.component';
 
 
 @NgModule({
@@ -15,6 +20,8 @@ import { QuienesSomosComponent } from './quienes-somos/quienes-somos.component';
     HeaderComponent,
     FooterComponent,
     QuienesSomosComponent,
+    QnaComponent,
+    HomeComponent,
 
   ],
   imports: [
@@ -23,6 +30,7 @@ import { QuienesSomosComponent } from './quienes-somos/quienes-somos.component';
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
+    AppRoutingModule,
 
   ],
   exports: [
@@ -31,4 +39,6 @@ import { QuienesSomosComponent } from './quienes-somos/quienes-somos.component';
   ]
 
 })
-export class CoreModule { }
+export class CoreModule {
+
+}

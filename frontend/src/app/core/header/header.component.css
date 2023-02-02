@@ -8,11 +8,28 @@
     padding-bottom: 10px;
   }
 
-
 .mdc-list-item {
   background-color: #F9405C;
 }
 
-.test {
-  color: blue;
+.mat-mdc-menu-content {
+  margin: 0;
+  padding: 0px 0;
+  list-style-type: none;
+  background-color: #F9405C;
+}
+
+.usuario {
+  background:url(../../../assets/icon-avatar.png) left no-repeat;
+  background-position: center;
+}
+
+.log-out {
+  background:url(../../../assets/logout.png) left no-repeat;
+  background-position: center;
+}
+
+.inicio {
+  background:url(../../../assets/inicio.png) left no-repeat;
+  background-position: center;
 }

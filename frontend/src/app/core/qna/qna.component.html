@@ -1,0 +1,74 @@
+<div class="container contenedor-wrap">
+  <h2 class="margin-bottom-30">Preguntas y Respuestas</h2>
+
+  <!--Accordion wrapper-->
+  <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+
+    <!-- Accordion card -->
+    <div class="card">
+
+      <!-- Card header -->
+      <div class="card-header" role="tab" id="headingOne1">
+        <a (click)="showDiv1 = !showDiv1" data-toggle="collapse" data-parent="#accordionEx" aria-expanded="true"
+        aria-controls="collapseOne1">
+          <h5 class="mb-0 hover-effect">
+            Pregunta numero 1 <i class="fas fa-angle-down rotate-icon"></i>
+          </h5>
+        </a>
+      </div>
+
+      <!-- Card body -->
+      <div *ngIf="showDiv1" id="collapseOne1">
+        <div class="card-body">
+          Respuesta ingeniosa de la pregunta numero 1
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Accordion card -->
+    <div class="card">
+
+      <!-- Card header -->
+      <div class="card-header" role="tab" id="headingTwo2">
+        <a (click)="showDiv2 = !showDiv2" data-toggle="collapse" data-parent="#accordionEx"
+          aria-expanded="false" aria-controls="collapseTwo2">
+          <h5 class="mb-0 hover-effect">
+            Pregunta numero 2 <i class="fas fa-angle-down rotate-icon"></i>
+          </h5>
+        </a>
+      </div>
+
+      <!-- Card body -->
+      <div>
+        <div *ngIf="showDiv2" class="card-body">
+          Respuesta ingeniosa de la pregunta numero 2
+        </div>
+      </div>
+
+    </div>
+    <!-- Accordion card -->
+
+    <!-- Accordion card -->
+    <div class="card">
+
+      <!-- Card header -->
+      <div class="card-header" role="tab" id="headingThree3">
+        <a (click)="showDiv3 = !showDiv3" class="collapsed hover-effect" data-toggle="collapse" data-parent="#accordionEx"
+          aria-expanded="false" aria-controls="collapseThree3">
+          <h5 class="mb-0">
+            Pregunta numero 3 <i class="fas fa-angle-down rotate-icon"></i>
+          </h5>
+        </a>
+      </div>
+
+      <!-- Card body -->
+      <div *ngIf="showDiv3">
+        <div class="card-body">
+          Respuesta un poco mediocre de la pregunta numero 3
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

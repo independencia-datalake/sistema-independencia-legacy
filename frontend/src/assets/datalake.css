@@ -179,7 +179,7 @@ a.article:hover {
 	padding:10px 15px 10px 40px;
 }
 #menu-top ul li a.ver-perfil{
-	background:url(img/icon-avatar.png) left no-repeat;
+	background:url(icon-avatar.png) left no-repeat;
 }
 #menu-top ul li a.cerrar-sesion{
 	background:url(img/icon-salir.png) left no-repeat;
@@ -206,7 +206,7 @@ a.article:hover {
 .contenedor-wrap{
 	background-color:#FFF;
 	padding:30px;
-	-webkit-box-shadow: 0px 0px 12px 7px rgba(0,0,0,0.05); 
+	-webkit-box-shadow: 0px 0px 12px 7px rgba(0,0,0,0.05);
 	box-shadow: 0px 0px 12px 7px rgba(0,0,0,0.05);
 }
 
@@ -244,7 +244,7 @@ button.navbar-toggler:hover, button.navbar-toggler:active, button.navbar-toggler
 	border-bottom:10px solid #F9405C;
 	/*position:absolute;
 	bottom:0;
-	left:0;*/ 
+	left:0;*/
 	right:0;
 	margin-top:100px;
 }
@@ -252,7 +252,7 @@ button.navbar-toggler:hover, button.navbar-toggler:active, button.navbar-toggler
 .container.container-footer{
 	background-color:transparent;
 	padding:0;
-	-webkit-box-shadow:none; 
+	-webkit-box-shadow:none;
 	box-shadow: none;
 	text-align:center;
 }
@@ -384,7 +384,7 @@ a.menu-item-view{ display:inline-block; float:right; border-radius: 50px; paddin
 .bg-negro.contenedor-wrap{
 	background-color:#222;
 	padding:30px;
-	-webkit-box-shadow: 0px 0px 12px 7px rgba(0,0,0,0.05); 
+	-webkit-box-shadow: 0px 0px 12px 7px rgba(0,0,0,0.05);
 	box-shadow: 0px 0px 12px 7px rgba(0,0,0,0.05);
 }
 
@@ -448,11 +448,11 @@ legend.legend-small{
 }
 @media (min-width: 1024px) {
 	.consola-vis-der label{
-		display: inline-block !important; 
+		display: inline-block !important;
 		width: 120px;
 	}
 	.consola-vis-der input{
-		display: inline-block !important; 
+		display: inline-block !important;
 		width: 180px;
 	}
 	.consola-vis-der input#id_fecha_inicio{
@@ -477,11 +477,11 @@ legend.legend-small{
 }
 table#datos-vis tr td{
 	padding: 3px !important;
-	
+
 }
 table#datos-vis{
 	overflow: auto !important;
-	overflow-y: hidden; 
+	overflow-y: hidden;
     overflow-x: auto;
     width: 100% !important;
     box-sizing: border-box;
@@ -490,7 +490,7 @@ table#datos-vis.tabla-block{
 	display: block;
 }
 .content-table-vis{
-	float: right; 
+	float: right;
 	width:60%;
 	padding-right: 10%;
 }
@@ -540,3 +540,4 @@ contenedor-grafico{
 
 }
 .eliminar-lista:hover{ background-color:#000; border:1px solid #000; color:#FFF;}
+
