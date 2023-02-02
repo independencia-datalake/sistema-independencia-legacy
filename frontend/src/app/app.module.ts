@@ -10,18 +10,16 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FarmaciaModule } from './farmacia/farmacia.module';
-import { HeaderComponent } from './header/header.component';
-import { FooterComponent } from './footer/footer.component';
+import { CoreModule } from './core/core.module';
 
-const appPath = { 
-  
+
+const appPath = {
+
  }
 
 @NgModule({
   declarations: [
     AppComponent,
-    HeaderComponent,
-    FooterComponent
   ],
   imports: [
     BrowserModule,
@@ -31,7 +29,8 @@ const appPath = {
     MatToolbarModule,
     MatIconModule,
     MatButtonModule,
-    MatMenuModule
+    MatMenuModule,
+    CoreModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
