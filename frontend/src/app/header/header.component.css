@@ -1,0 +1,14 @@
+.spacer {
+    flex: 1 1 auto;
+  }
+
+.header {
+    background-color: #222222;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+
+.mdc-list-item {
+  background-color: #F9405C;
+}

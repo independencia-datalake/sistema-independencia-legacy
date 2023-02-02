@@ -1,0 +1,21 @@
+<p>
+  <mat-toolbar class="header">
+    <button mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon>Menu</button>
+        <mat-menu #menu="matMenu">
+        <button mat-menu-item>Quienes Somos</button>
+        <button mat-menu-item>Preguntas y Respuestas</button>
+        <button mat-menu-item>Calculadora UV</button>
+        <button mat-menu-item>Visualización</button>
+        </mat-menu>
+    <span class="spacer"></span>
+    <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+        <mat-icon>block</mat-icon>
+    </button>
+    <button mat-icon-button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Home Page">
+      <mat-icon>home</mat-icon>
+    </button>
+  </mat-toolbar>
+</p>
