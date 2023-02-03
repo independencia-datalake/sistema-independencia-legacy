@@ -1,0 +1,19 @@
+.mat-h2, .mat-headline-6, .mat-typography .mat-h2, .mat-typography .mat-headline-6, .mat-typography h2 {
+  font: 500 20px/32px Roboto, sans-serif;
+  letter-spacing: .0125em;
+  margin: 0 0 0px;
+}
+
+.mat-h4, .mat-body-1, .mat-typography .mat-h4, .mat-typography .mat-body-1, .mat-typography h4 {
+  font: 400 16px/24px Roboto, sans-serif;
+  letter-spacing: .03125em;
+  margin: 0 0 0px;
+}
+
+p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1em;
+  font-weight: 300;
+  line-height: 1.0em;
+  color: #999;
+}

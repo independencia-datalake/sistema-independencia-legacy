@@ -1,0 +1,27 @@
+
+
+.mat-mdc-radio-button.mat-accent {
+  --mdc-radio-disabled-selected-icon-color: #000;
+  --mdc-radio-disabled-unselected-icon-color: #000;
+  --mdc-radio-unselected-focus-icon-color: #212121;
+  --mdc-radio-unselected-hover-icon-color: #212121;
+  --mdc-radio-unselected-icon-color: rgba(0, 0, 0, .54);
+  --mdc-radio-unselected-pressed-icon-color: rgba(0, 0, 0, .54);
+  --mdc-radio-selected-focus-icon-color: #ff4081;
+  --mdc-radio-selected-hover-icon-color: #ff4081;
+  --mdc-radio-selected-icon-color: #ff4081;
+  --mdc-radio-selected-pressed-icon-color: #ff4081;
+  --mat-mdc-radio-ripple-color: #000;
+  --mat-mdc-radio-checked-ripple-color: #ff4081;
+}
+
+.mat-mdc-radio-button .mdc-form-field {
+  color: #000000;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: 0rem;
+}
+
+

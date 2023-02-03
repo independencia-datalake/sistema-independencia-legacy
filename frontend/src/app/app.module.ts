@@ -11,6 +11,8 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FarmaciaModule } from './farmacia/farmacia.module';
 import { CoreModule } from './core/core.module';
+import { SeguridadModule } from './seguridad/seguridad.module';
+import { MatRadioModule } from '@angular/material/radio';
 
 
 const appPath = {
@@ -31,6 +33,8 @@ const appPath = {
     MatButtonModule,
     MatMenuModule,
     CoreModule,
+    SeguridadModule,
+    MatRadioModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
