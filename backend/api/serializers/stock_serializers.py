@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from database.models import *
+from database.farmacia.models import *
 
 class BodegaVirtualSerializer(serializers.ModelSerializer):
     class Meta:

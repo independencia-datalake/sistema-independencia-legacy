@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from database.models import *
+from database.core.models import *
 
 class UVSerializer(serializers.ModelSerializer):
     class Meta:

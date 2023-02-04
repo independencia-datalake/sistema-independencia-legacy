@@ -1,7 +1,10 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
+from rest_framework import generics
+
+
 from api.serializers.core_serializers import *
-from database.models import (
+from database.core.models import (
     UV, 
     CallesIndependencia,
     Persona,
@@ -12,7 +15,36 @@ from database.models import (
     PersonaArchivos,
 )
 
-    ## GET
+    ## UV
+
+class UVListCreateAPIViw(generics.ListCreateAPIView):
+    queryset = UV.objects.all()
+    serializer_class = UVSerializer
+
+    def perfrom_create(self, serializer):
+        instance = serializer.save()
+
+class UVDetailAPIViw(generics.RetrieveAPIView):
+    queryset = UV.objects.all()
+    serializer_class = UVSerializer
+    lookup_field = 'pk'
+
+class UVUpdateAPIViw(generics.UpdateAPIView):
+    queryset = UV.objects.all()
+    serializer_class = UVSerializer
+    lookup_field = 'pk'
+
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+
+class UVDeleteAPIViw(generics.DestroyAPIView):
+    queryset = UV.objects.all()
+    serializer_class = UVSerializer
+    lookup_field = 'pk'
+
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)
+
 
 @api_view(['GET'])
 def get_data_uv(request):

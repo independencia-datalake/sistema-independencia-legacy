@@ -164,3 +164,4 @@ testem.log
 Thumbs.db
 
 .angular
+client_api_tester

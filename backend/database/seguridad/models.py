@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from utils.uv import obtener_uv
-from .core import (
+from database.core.models import (
     UV,
 )
 

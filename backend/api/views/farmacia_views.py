@@ -1,7 +1,7 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from api.serializers.farmacia_serializers import *
-from database.models import (
+from database.farmacia.models import (
     Laboratorios, 
     ProductoFarmacia,
     ComprobanteVenta,

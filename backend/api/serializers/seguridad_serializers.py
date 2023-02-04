@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from database.models import *
+from database.seguridad.models import *
 
 class ClasificacionDelitoSerializer(serializers.ModelSerializer):
     class Meta:
