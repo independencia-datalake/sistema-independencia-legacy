@@ -11,6 +11,7 @@ import { CoreModule } from './core/core.module';
 import { SeguridadModule } from './seguridad/seguridad.module';
 import { MatRadioModule } from '@angular/material/radio';
 import { UsersComponent } from './users/users.component';
+import { FormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { UsersComponent } from './users/users.component';
     CoreModule,
     SeguridadModule,
     MatRadioModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

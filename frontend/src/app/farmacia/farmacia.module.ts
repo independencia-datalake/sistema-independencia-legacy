@@ -6,6 +6,8 @@ import { FarmaciaHomeComponent } from './farmacia-home/farmacia-home.component';
 import { StockProductosComponent } from './stock-productos/stock-productos.component';
 import { InformesFarmaciaComponent } from './informes-farmacia/informes-farmacia.component';
 import { VentaComponent } from './venta/venta.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -19,6 +21,8 @@ import { VentaComponent } from './venta/venta.component';
   imports: [
     CommonModule,
     AppRoutingModule,
+    MatFormFieldModule,
+    FormsModule,
   ]
 })
 export class FarmaciaModule { }

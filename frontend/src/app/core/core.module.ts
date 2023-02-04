@@ -13,7 +13,7 @@ import { QuienesSomosComponent } from './quienes-somos/quienes-somos.component';
 import { QnaComponent } from './qna/qna.component';
 import { HomeComponent } from './home/home.component';
 import { PersonaComponent } from './persona/persona.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 
@@ -39,7 +39,7 @@ import { MatRadioModule } from '@angular/material/radio';
     FormsModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatRadioModule
+    MatRadioModule,
   ],
   exports: [
     HeaderComponent,
