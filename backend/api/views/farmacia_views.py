@@ -1,5 +1,6 @@
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework import generics
+
 from api.serializers.farmacia_serializers import *
 from database.farmacia.models import (
     Laboratorios, 
@@ -11,41 +12,186 @@ from database.farmacia.models import (
 )
 
 
-    ## GET
+    ## Laboratorios
+
+class LaboratoriosListCreateAPIViw(generics.ListCreateAPIView):
+    queryset = Laboratorios.objects.all()
+    serializer_class = LaboratoriosSerializer
+
+    def perfrom_create(self, serializer):
+        instance = serializer.save()
+
+class LaboratoriosDetailAPIViw(generics.RetrieveAPIView):
+    queryset = Laboratorios.objects.all()
+    serializer_class = LaboratoriosSerializer
+    lookup_field = 'pk'
+
+class LaboratoriosUpdateAPIViw(generics.UpdateAPIView):
+    queryset = Laboratorios.objects.all()
+    serializer_class = LaboratoriosSerializer
+    lookup_field = 'pk'
+
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+
+class LaboratoriosDeleteAPIViw(generics.DestroyAPIView):
+    queryset = Laboratorios.objects.all()
+    serializer_class = LaboratoriosSerializer
+    lookup_field = 'pk'
+
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)
 
 
-@api_view(['GET'])
-def get_laboratorios(request):
-    items = Laboratorios.objects.all()
-    serializer = LaboratoriosSerializer(items, many=True)
-    return Response(serializer.data)
+    ## Producto Farmacia
 
-@api_view(['GET'])
-def get_producto_farmacia(request):
-    items = ProductoFarmacia.objects.all()
-    serializer = ProductoFarmaciaSerializer(items, many=True)
-    return Response(serializer.data)
+class ProductoFarmaciaListCreateAPIViw(generics.ListCreateAPIView):
+    queryset = ProductoFarmacia.objects.all()
+    serializer_class = ProductoFarmaciaSerializer
 
-@api_view(['GET'])
-def get_comprobante_venta(request):
-    items = ComprobanteVenta.objects.all()
-    serializer = ComprobanteVentaSerializer(items, many=True)
-    return Response(serializer.data)
+    def perfrom_create(self, serializer):
+        instance = serializer.save()
 
-@api_view(['GET'])
-def get_recetas(request):
-    items = Recetas.objects.all()
-    serializer = RecetasSerializer(items, many=True)
-    return Response(serializer.data)
+class ProductoFarmaciaDetailAPIViw(generics.RetrieveAPIView):
+    queryset = ProductoFarmacia.objects.all()
+    serializer_class = ProductoFarmaciaSerializer
+    lookup_field = 'pk'
 
-@api_view(['GET'])
-def get_producto_vendido(request):
-    items = ProductoVendido.objects.all()
-    serializer = ProductoVendidoSerializer(items, many=True)
-    return Response(serializer.data)
+class ProductoFarmaciaUpdateAPIViw(generics.UpdateAPIView):
+    queryset = ProductoFarmacia.objects.all()
+    serializer_class = ProductoFarmaciaSerializer
+    lookup_field = 'pk'
 
-@api_view(['GET'])
-def get_carga_producto(request):
-    items = CargaProducto.objects.all()
-    serializer = CargaProductoSerializer(items, many=True)
-    return Response(serializer.data)
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+
+class ProductoFarmaciaDeleteAPIViw(generics.DestroyAPIView):
+    queryset = ProductoFarmacia.objects.all()
+    serializer_class = ProductoFarmaciaSerializer
+    lookup_field = 'pk'
+
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)
+
+
+    ## Comprobante Venta
+
+class ComprobanteVentaListCreateAPIViw(generics.ListCreateAPIView):
+    queryset = ComprobanteVenta.objects.all()
+    serializer_class = ComprobanteVentaSerializer
+
+    def perfrom_create(self, serializer):
+        instance = serializer.save()
+
+class ComprobanteVentasDetailAPIViw(generics.RetrieveAPIView):
+    queryset = ComprobanteVenta.objects.all()
+    serializer_class = ComprobanteVentaSerializer
+    lookup_field = 'pk'
+
+class ComprobanteVentaUpdateAPIViw(generics.UpdateAPIView):
+    queryset = ComprobanteVenta.objects.all()
+    serializer_class = ComprobanteVentaSerializer
+    lookup_field = 'pk'
+
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+
+class ComprobanteVentaDeleteAPIViw(generics.DestroyAPIView):
+    queryset = ComprobanteVenta.objects.all()
+    serializer_class = ComprobanteVentaSerializer
+    lookup_field = 'pk'
+
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)
+
+
+    ## Recetas
+
+class RecetasListCreateAPIViw(generics.ListCreateAPIView):
+    queryset = Recetas.objects.all()
+    serializer_class = RecetasSerializer
+
+    def perfrom_create(self, serializer):
+        instance = serializer.save()
+
+class RecetasDetailAPIViw(generics.RetrieveAPIView):
+    queryset = Recetas.objects.all()
+    serializer_class = RecetasSerializer
+    lookup_field = 'pk'
+
+class RecetasUpdateAPIViw(generics.UpdateAPIView):
+    queryset = Recetas.objects.all()
+    serializer_class = RecetasSerializer
+    lookup_field = 'pk'
+
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+
+class RecetasDeleteAPIViw(generics.DestroyAPIView):
+    queryset = Recetas.objects.all()
+    serializer_class = RecetasSerializer
+    lookup_field = 'pk'
+
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)
+
+    ## Producto Vendido
+
+class ProductoVendidoListCreateAPIViw(generics.ListCreateAPIView):
+    queryset = ProductoVendido.objects.all()
+    serializer_class = ProductoVendidoSerializer
+
+    def perfrom_create(self, serializer):
+        instance = serializer.save()
+
+class ProductoVendidoDetailAPIViw(generics.RetrieveAPIView):
+    queryset = ProductoVendido.objects.all()
+    serializer_class = ProductoVendidoSerializer
+    lookup_field = 'pk'
+
+class ProductoVendidoUpdateAPIViw(generics.UpdateAPIView):
+    queryset = ProductoVendido.objects.all()
+    serializer_class = ProductoVendidoSerializer
+    lookup_field = 'pk'
+
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+
+class ProductoVendidoDeleteAPIViw(generics.DestroyAPIView):
+    queryset = ProductoVendido.objects.all()
+    serializer_class = ProductoVendidoSerializer
+    lookup_field = 'pk'
+
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)
+
+
+    ## Carga Producto
+
+class CargaProductoListCreateAPIViw(generics.ListCreateAPIView):
+    queryset = CargaProducto.objects.all()
+    serializer_class = CargaProductoSerializer
+
+    def perfrom_create(self, serializer):
+        instance = serializer.save()
+
+class CargaProductoDetailAPIViw(generics.RetrieveAPIView):
+    queryset = CargaProducto.objects.all()
+    serializer_class = CargaProductoSerializer
+    lookup_field = 'pk'
+
+class CargaProductoUpdateAPIViw(generics.UpdateAPIView):
+    queryset = CargaProducto.objects.all()
+    serializer_class = CargaProductoSerializer
+    lookup_field = 'pk'
+
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+
+class CargaProductoDeleteAPIViw(generics.DestroyAPIView):
+    queryset = CargaProducto.objects.all()
+    serializer_class = CargaProductoSerializer
+    lookup_field = 'pk'
+
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)
