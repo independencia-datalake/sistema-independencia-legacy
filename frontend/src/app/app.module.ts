@@ -8,6 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { FarmaciaModule } from './farmacia/farmacia.module';
 import { CoreModule } from './core/core.module';
+import { SeguridadModule } from './seguridad/seguridad.module';
+import { MatRadioModule } from '@angular/material/radio';
 import { UsersComponent } from './users/users.component';
 
 
@@ -23,6 +25,8 @@ import { UsersComponent } from './users/users.component';
     BrowserAnimationsModule,
     FarmaciaModule,
     CoreModule,
+    SeguridadModule,
+    MatRadioModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
