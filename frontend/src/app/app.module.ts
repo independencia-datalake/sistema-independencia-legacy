@@ -9,8 +9,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FarmaciaModule } from './farmacia/farmacia.module';
 import { CoreModule } from './core/core.module';
 import { SeguridadModule } from './seguridad/seguridad.module';
-import { MatRadioModule } from '@angular/material/radio';
 import { UsersComponent } from './users/users.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -26,7 +26,8 @@ import { UsersComponent } from './users/users.component';
     FarmaciaModule,
     CoreModule,
     SeguridadModule,
-    MatRadioModule,
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

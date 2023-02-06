@@ -1,0 +1,116 @@
+.mat-mdc-radio-button.mat-accent {
+    --mdc-radio-disabled-selected-icon-color: #000;
+    --mdc-radio-disabled-unselected-icon-color: #000;
+    --mdc-radio-unselected-focus-icon-color: #212121;
+    --mdc-radio-unselected-hover-icon-color: #212121;
+    --mdc-radio-unselected-icon-color: rgba(0, 0, 0, .54);
+    --mdc-radio-unselected-pressed-icon-color: rgba(0, 0, 0, .54);
+    --mdc-radio-selected-focus-icon-color: #ff4081;
+    --mdc-radio-selected-hover-icon-color: #ff4081;
+    --mdc-radio-selected-icon-color: #ff4081;
+    --mdc-radio-selected-pressed-icon-color: #ff4081;
+    --mat-mdc-radio-ripple-color: #000;
+    --mat-mdc-radio-checked-ripple-color: #ff4081;
+  }
+  
+  
+  .mat-mdc-radio-button .mdc-form-field {
+    color: #000000;
+  }
+  
+  label {
+    display: inline-block;
+    margin-bottom: 0rem;
+  }
+  
+  .mat-mdc-card {
+    position: relative;
+    border-radius: var(--mdc-elevated-card-container-shape, var(--mdc-shape-medium, 4px));
+    background-color: #FFF;
+    border-width: 0;
+    border-style: solid;
+    border-color: var(--mdc-elevated-card-container-color, transparent);
+  }
+  
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: #fff;
+  }
+  
+  .mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
+    color: black;
+  }
+  
+  .mat-mdc-raised-button.mat-unthemed {
+    --mdc-protected-button-container-color: #ff4081;
+    --mdc-protected-button-label-text-color: #fff;
+  }
+  
+  .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
+    color: black;
+  }
+  
+  .saltar {
+    text-align: center;
+  }
+
+  .mat-horizontal-stepper-header-container {
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    background-color: #FFF;
+    color: black;
+}
+
+.mat-step-text-label {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: black;
+}
+
+.mat-step-header .mat-step-icon {
+  background-color: #222222;
+  color: #fff;
+}
+
+.mat-step-header .mat-step-icon-selected, .mat-step-header .mat-step-icon-state-done, .mat-step-header .mat-step-icon-state-edit {
+  background-color: #ff4081;
+  color: #fff;
+}
+
+.mat-horizontal-content-container {
+  overflow: hidden;
+  padding: 0 24px 24px 24px;
+  background-color: #FFF;
+}
+
+t-mdc-slide-toggle {
+  --mdc-switch-disabled-selected-handle-color: green;
+  --mdc-switch-disabled-unselected-handle-color: green;
+  --mdc-switch-disabled-selected-track-color: black;
+  --mdc-switch-disabled-unselected-track-color: black;
+  --mdc-switch-unselected-focus-state-layer-color: black;
+  --mdc-switch-unselected-pressed-state-layer-color: black;
+  --mdc-switch-unselected-hover-state-layer-color: black;
+  --mdc-switch-unselected-focus-track-color: black;
+  --mdc-switch-unselected-hover-track-color: black;
+  --mdc-switch-unselected-pressed-track-color: black;
+  --mdc-switch-unselected-track-color: black;
+  --mdc-switch-unselected-focus-handle-color: black;
+  --mdc-switch-unselected-hover-handle-color: black;
+  --mdc-switch-unselected-pressed-handle-color: black;
+  --mdc-switch-handle-surface-color: var(--mdc-theme-surface, black);
+  --mdc-switch-unselected-handle-color: black;
+  --mdc-switch-selected-icon-color: black;
+  --mdc-switch-disabled-selected-icon-color: black;
+  --mdc-switch-disabled-unselected-icon-color: black;
+  --mdc-switch-unselected-icon-color: black;
+}
+
+.mdc-form-field>label {
+  margin-left: 0;
+  margin-right: auto;
+  padding-left: 4px;
+  padding-right: 0;
+  color:#000;
+  order: 0;
+}

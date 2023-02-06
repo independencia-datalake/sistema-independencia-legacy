@@ -1,41 +1,37 @@
-<div class="container contenedor-wrap">
-  <b><h1>Verificación Identidad</h1></b>
-  <b><h3>Usuaria(o)</h3></b>
-  <form>
+<mat-card class="container contenedor-wrap">
+  <form [formGroup]="formCheckPersona" (ngSubmit)="onCheckPersona()">
+  <mat-card-content >
+    <b><h1>Verificación Identidad</h1></b>
+    <b><h3>Usuaria(o)</h3></b>
     <div>
       <label>Tipo de identificación: </label>
-      <mat-radio-group>
-        <div>
-          <mat-radio-button value="Rut">Rut</mat-radio-button>
-        </div>
-        <div>
-          <mat-radio-button value="Pasaporte">Pasaporte</mat-radio-button>
-        </div>
-        <div>
-          <mat-radio-button value="Otro">Otro</mat-radio-button>
-        </div>
+      <mat-radio-group aria-label="Select an option" formControlName="tipo">
+      <div>
+        <mat-radio-button value="RUT">Rut</mat-radio-button>
+      </div>
+      <div>
+        <mat-radio-button value="PASAPORTE">Pasaporte</mat-radio-button>
+      </div>
+      <div>
+        <mat-radio-button value="OTRO">Otro</mat-radio-button>
+      </div>
       </mat-radio-group>
-      <label>Numero de identificación: </label>
-      <br>
-
-      <input matInput placeholder="12.345.678-9">
-
-
     </div>
-    </form>
-      <br>
-      <br>
-
-      <input class='btn ver-o-editar' type='submit' value='Siguiente'>
-</div>
-      <hr>
-
-<div class="container contenedor-wrap">
-  <div class="botones">
-    <a routerLink="/farmacia/venta">saltar ...</a>
-  </div>
-</div>
-
-
-
+    <hr>
+    <div>
+      <mat-form-field class="example-full-width">
+        <mat-label>Nº Identificación</mat-label>
+        <input formControlName="numero_identificacion" matInput placeholder="18.465.635-3">
+      </mat-form-field>
+    </div>
+    <div>
+      <button type="submit" mat-raised-button>Siguente</button>
+    </div>
+  </mat-card-content>
+  </form>
+  <hr>
+  <mat-card-content style="text-align: center;">
+    <a mat-raised-button routerLink="/farmacia/venta">Saltar ...</a>
+  </mat-card-content>
+</mat-card>
 
