@@ -46,50 +46,224 @@ class UVDeleteAPIViw(generics.DestroyAPIView):
         return super().perform_destroy(instance)
 
 
-@api_view(['GET'])
-def get_data_uv(request):
-    items = UV.objects.all()
-    serializer = UVSerializer(items, many=True)
-    return Response(serializer.data)
+    ## Calles Independencia
 
-@api_view(['GET'])
-def get_data_calles_independencia(request):
-    items = CallesIndependencia.objects.all()
-    serializer = CallesIndependenciaSerializer(items, many=True)
-    return Response(serializer.data)
+class CallesIndependenciaListCreateAPIViw(generics.ListCreateAPIView):
+    queryset = CallesIndependencia.objects.all()
+    serializer_class = CallesIndependenciaSerializer
 
-@api_view(['GET'])
-def get_data_persona(request):
-    items = Persona.objects.all()
-    serializer = PersonaSerializer(items, many=True)
-    return Response(serializer.data)
+    def perfrom_create(self, serializer):
+        instance = serializer.save()
 
-@api_view(['GET'])
-def get_data_telefono(request):
-    items = Telefono.objects.all()
-    serializer = TelefonoSerializer(items, many=True)
-    return Response(serializer.data)
+class CallesIndependenciaDetailAPIViw(generics.RetrieveAPIView):
+    queryset = CallesIndependencia.objects.all()
+    serializer_class = CallesIndependenciaSerializer
+    lookup_field = 'pk'
 
-@api_view(['GET'])
-def get_data_correo(request):
-    items = Correo.objects.all()
-    serializer = CorreoSerializer(items, many=True)
-    return Response(serializer.data)
+class CallesIndependenciaUpdateAPIViw(generics.UpdateAPIView):
+    queryset = CallesIndependencia.objects.all()
+    serializer_class = CallesIndependenciaSerializer
+    lookup_field = 'pk'
 
-@api_view(['GET'])
-def get_data_direccion(request):
-    items = Direccion.objects.all()
-    serializer = DireccionSerializer(items, many=True)
-    return Response(serializer.data)
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
 
-@api_view(['GET'])
-def get_data_persona_info_salud(request):
-    items = PersonaInfoSalud.objects.all()
-    serializer = PersonaInfoSaludSerializer(items, many=True)
-    return Response(serializer.data)
+class CallesIndependenciaDeleteAPIViw(generics.DestroyAPIView):
+    queryset = CallesIndependencia.objects.all()
+    serializer_class = CallesIndependenciaSerializer
+    lookup_field = 'pk'
 
-@api_view(['GET'])
-def get_data_persona_archivos(request):
-    items = PersonaArchivos.objects.all()
-    serializer = PersonaArchivosSerializer(items, many=True)
-    return Response(serializer.data)
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)
+
+
+
+    ## Persona
+
+
+class PersonaListCreateAPIViw(generics.ListCreateAPIView):
+    queryset = Persona.objects.all()
+    serializer_class = PersonaSerializer
+
+    def perfrom_create(self, serializer):
+        instance = serializer.save()
+
+class PersonaDetailAPIViw(generics.RetrieveAPIView):
+    queryset = Persona.objects.all()
+    serializer_class = PersonaSerializer
+    lookup_field = 'pk'
+
+class PersonaUpdateAPIViw(generics.UpdateAPIView):
+    queryset = Persona.objects.all()
+    serializer_class = PersonaSerializer
+    lookup_field = 'pk'
+
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+
+class PersonaDeleteAPIViw(generics.DestroyAPIView):
+    queryset = Persona.objects.all()
+    serializer_class = PersonaSerializer
+    lookup_field = 'pk'
+
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)
+
+
+    ## Telefono
+
+class TelefonoListCreateAPIViw(generics.ListCreateAPIView):
+    queryset = Telefono.objects.all()
+    serializer_class = TelefonoSerializer
+
+    def perfrom_create(self, serializer):
+        instance = serializer.save()
+
+class TelefonoDetailAPIViw(generics.RetrieveAPIView):
+    queryset = Telefono.objects.all()
+    serializer_class = TelefonoSerializer
+    lookup_field = 'pk'
+
+class TelefonoUpdateAPIViw(generics.UpdateAPIView):
+    queryset = Telefono.objects.all()
+    serializer_class = TelefonoSerializer
+    lookup_field = 'pk'
+
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+
+class TelefonoDeleteAPIViw(generics.DestroyAPIView):
+    queryset = Telefono.objects.all()
+    serializer_class = TelefonoSerializer
+    lookup_field = 'pk'
+
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)
+
+
+
+    ## Correo
+
+class CorreoListCreateAPIViw(generics.ListCreateAPIView):
+    queryset = Correo.objects.all()
+    serializer_class = CorreoSerializer
+
+    def perfrom_create(self, serializer):
+        instance = serializer.save()
+
+class CorreoDetailAPIViw(generics.RetrieveAPIView):
+    queryset = Correo.objects.all()
+    serializer_class = CorreoSerializer
+    lookup_field = 'pk'
+
+class CorreoUpdateAPIViw(generics.UpdateAPIView):
+    queryset = Correo.objects.all()
+    serializer_class = CorreoSerializer
+    lookup_field = 'pk'
+
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+
+class CorreoDeleteAPIViw(generics.DestroyAPIView):
+    queryset = Correo.objects.all()
+    serializer_class = CorreoSerializer
+    lookup_field = 'pk'
+
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)
+
+
+
+    ## Direccion
+
+class DireccionListCreateAPIViw(generics.ListCreateAPIView):
+    queryset = Direccion.objects.all()
+    serializer_class = DireccionSerializer
+
+    def perfrom_create(self, serializer):
+        instance = serializer.save()
+
+class DireccionDetailAPIViw(generics.RetrieveAPIView):
+    queryset = Direccion.objects.all()
+    serializer_class = DireccionSerializer
+    lookup_field = 'pk'
+
+class DireccionUpdateAPIViw(generics.UpdateAPIView):
+    queryset = Direccion.objects.all()
+    serializer_class = DireccionSerializer
+    lookup_field = 'pk'
+
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+
+class DireccionDeleteAPIViw(generics.DestroyAPIView):
+    queryset = Direccion.objects.all()
+    serializer_class = DireccionSerializer
+    lookup_field = 'pk'
+
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)
+
+
+
+    ## Persona Info Salud
+
+class PersonaInfoSaludListCreateAPIViw(generics.ListCreateAPIView):
+    queryset = PersonaInfoSalud.objects.all()
+    serializer_class = PersonaInfoSaludSerializer
+
+    def perfrom_create(self, serializer):
+        instance = serializer.save()
+
+class PersonaInfoSaludDetailAPIViw(generics.RetrieveAPIView):
+    queryset = PersonaInfoSalud.objects.all()
+    serializer_class = PersonaInfoSaludSerializer
+    lookup_field = 'pk'
+
+class PersonaInfoSaludUpdateAPIViw(generics.UpdateAPIView):
+    queryset = PersonaInfoSalud.objects.all()
+    serializer_class = PersonaInfoSaludSerializer
+    lookup_field = 'pk'
+
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+
+class PersonaInfoSaludDeleteAPIViw(generics.DestroyAPIView):
+    queryset = PersonaInfoSalud.objects.all()
+    serializer_class = PersonaInfoSaludSerializer
+    lookup_field = 'pk'
+
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)
+
+
+
+    ## Persona Archivos
+
+class PersonaArchivosListCreateAPIViw(generics.ListCreateAPIView):
+    queryset = PersonaArchivos.objects.all()
+    serializer_class = PersonaArchivosSerializer
+
+    def perfrom_create(self, serializer):
+        instance = serializer.save()
+
+class PersonaArchivosDetailAPIViw(generics.RetrieveAPIView):
+    queryset = PersonaArchivos.objects.all()
+    serializer_class = PersonaArchivosSerializer
+    lookup_field = 'pk'
+
+class PersonaArchivosUpdateAPIViw(generics.UpdateAPIView):
+    queryset = PersonaArchivos.objects.all()
+    serializer_class = PersonaArchivosSerializer
+    lookup_field = 'pk'
+
+    def perform_update(self, serializer):
+        return super().perform_update(serializer)
+
+class PersonaArchivosDeleteAPIViw(generics.DestroyAPIView):
+    queryset = PersonaArchivos.objects.all()
+    serializer_class = PersonaArchivosSerializer
+    lookup_field = 'pk'
+
+    def perform_destroy(self, instance):
+        return super().perform_destroy(instance)

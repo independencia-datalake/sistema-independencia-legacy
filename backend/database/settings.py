@@ -38,11 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    #Database
     'database.core',
     'database.farmacia',
     'database.seguridad',
     
-
     #third-party
     'corsheaders',
     'rest_framework',

@@ -41,8 +41,7 @@ class ProductoFarmacia(models.Model):
         return reverse("productofarmacia-inicio")  
 
 class ComprobanteVenta(models.Model):
-    comprador = models.ForeignKey(Persona, on_delete=models.PROTECT,verbose_name='Comprador') 
-    receta = models.FileField(blank=True, null=True,upload_to='farmacia/receta_medica/%Y/%m/%d/')
+    comprador = models.ForeignKey(Persona, on_delete=models.PROTECT,verbose_name='Comprador')
     
     farmaceuta = models.ForeignKey(User,null = True , blank=True, on_delete=models.PROTECT, verbose_name='Profesional')
     created = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación", editable=False)

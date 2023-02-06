@@ -1,0 +1,176 @@
+<mat-stepper [linear]="isLinear" #stepper>
+  <mat-step [stepControl]="formCrearPersona">
+    <form [formGroup]="formCrearPersona">
+      <ng-template matStepLabel>Informacion Basica</ng-template>
+      <label>Tipo de identificación: </label>
+        <mat-radio-group formControlName="tipo_identificacion" aria-label="Select an option" required>
+          <div>
+            <mat-radio-button value="RUT">Rut</mat-radio-button>
+          </div>
+          <div>
+            <mat-radio-button value="PASAPORTE">Pasaporte</mat-radio-button>
+          </div>
+          <div>
+            <mat-radio-button value="OTRO">Otro</mat-radio-button>
+          </div>
+        </mat-radio-group>
+  
+        <mat-form-field>
+        <mat-label>Nº Identificación</mat-label>
+          <input formControlName="numero_identificacion" matInput placeholder="18.465.635-3" required>
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Nacionalidad</mat-label>
+            <input formControlName="nacionalidad" matInput placeholder="Chileno">
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Nombre Persona</mat-label>
+            <input formControlName="nombre_persona" matInput placeholder="Octavio" required>
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Apellido Paterno</mat-label>
+            <input formControlName="apellido_paterno" matInput placeholder="Montt">
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Apellido Materno</mat-label>
+            <input formControlName="apellido_materno" matInput placeholder="Maray">
+        </mat-form-field>
+  
+        <mat-form-field appearance="fill">
+          <mat-label>Estado</mat-label>
+          <select matNativeControl formControlName="estado_civil">
+            <option value=""></option>
+            <option value="SOLTEO/A'">Soltero/a</option>
+            <option value="CASADO/A">Casado/a</option>
+            <option value="VIUDO/A">Viudo/a</option>
+            <option value="UNION CIVIL">Union Civil</option>
+            <option value="DIVORSIADO/A">Divorsiado/a</option>
+          </select>
+        </mat-form-field>
+        
+        <mat-form-field>
+          <mat-label>Hijos</mat-label>
+          <input matInput placeholder="0" formControlName="hijos" type="number"/>
+        </mat-form-field>
+          
+        <mat-form-field>
+          <mat-label>Enfermedad</mat-label>
+            <input formControlName="enfermedad" matInput placeholder="">
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Medicamento</mat-label>
+            <input formControlName="medicamento" matInput placeholder="">
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Lugar De Atencion</mat-label>
+            <input formControlName="lugar_de_atencion" matInput placeholder="">
+        </mat-form-field>
+
+        <mat-slide-toggle formControlName="discapacidad">Discapacidad</mat-slide-toggle>
+
+        <mat-slide-toggle formControlName="certificado_compin">Certificado Compin</mat-slide-toggle>
+
+        <mat-slide-toggle formControlName="embarazo">Embarazo</mat-slide-toggle>
+
+        <mat-slide-toggle formControlName="certificado_embarazo">Certificado Embarazo</mat-slide-toggle>
+
+        <div>
+          <button matStepperNext mat-raised-button>Siguente</button>
+        </div>
+    
+    </form>
+  </mat-step>
+  <mat-step [stepControl]="formDireccionPersona" label="Informacion de Contacto">
+    <hr>
+    <h2>Direccion</h2>
+    <form [formGroup]="formDireccionPersona">
+      <mat-form-field>
+        <mat-label>Calle</mat-label>
+          <input formControlName="calle" matInput placeholder="Av. Independencia" [matAutocomplete]="auto" required>
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let item of filterdOptions" [value]="item">
+              {{item}}
+            </mat-option>
+          </mat-autocomplete>
+      </mat-form-field>
+  
+      <mat-form-field>
+        <mat-label>Numeracion</mat-label>
+        <input matInput placeholder="0" formControlName="numero" type="number"/>
+      </mat-form-field>
+    </form>
+    <hr>
+    <h2>Contacto</h2>
+    <form [formGroup]="formCorreoPersona">
+
+      <mat-form-field>
+        <mat-label>Correo</mat-label>
+          <input formControlName="correo" matInput placeholder="ejemplo@gmail.com" required>
+      </mat-form-field>
+
+    </form>
+
+    <form [formGroup]="formTelefonoPersona">
+
+      <label>Tipo de Telefono </label>
+        <mat-radio-group formControlName="tipo_telefono" aria-label="Select an option" required>
+          <div>
+            <mat-radio-button value="RUT">Rut</mat-radio-button>
+          </div>
+          <div>
+            <mat-radio-button value="PASAPORTE">Pasaporte</mat-radio-button>
+          </div>
+          <div>
+            <mat-radio-button value="OTRO">Otro</mat-radio-button>
+          </div>
+        </mat-radio-group>
+
+  
+
+        <label>Tipo Telefono secundario</label>
+        <mat-radio-group formControlName="tipo_identificacion" aria-label="Select an option" required>
+          <div>
+            <mat-radio-button value="RUT">Rut</mat-radio-button>
+          </div>
+          <div>
+            <mat-radio-button value="PASAPORTE">Pasaporte</mat-radio-button>
+          </div>
+          <div>
+            <mat-radio-button value="OTRO">Otro</mat-radio-button>
+          </div>
+        </mat-radio-group>
+
+    </form>
+
+    <div>
+      <button mat-raised-button matStepperPrevious>Back</button>
+      <button matStepperNext mat-raised-button>Siguente</button>
+    </div>
+
+  </mat-step>
+  <mat-step [stepControl]="formInfoSaludPersona" label="Informacion de Salud">
+    <form [formGroup]="formInfoSaludPersona">
+
+    </form>
+    <form [formGroup]="formArchivoPersona">
+
+    </form>
+
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Crear Persona</ng-template>
+    <p>Texto de Prueba</p>
+    <div>
+      <button type="submit" mat-raised-button>Siguente</button>
+      <!-- <button mat-button (click)="">Reset</button> -->
+    </div>
+  </mat-step>
+</mat-stepper>
+
+  

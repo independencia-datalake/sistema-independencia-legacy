@@ -1,5 +1,3 @@
-
-
 .mat-mdc-radio-button.mat-accent {
   --mdc-radio-disabled-selected-icon-color: #000;
   --mdc-radio-disabled-unselected-icon-color: #000;
@@ -15,6 +13,7 @@
   --mat-mdc-radio-checked-ripple-color: #ff4081;
 }
 
+
 .mat-mdc-radio-button .mdc-form-field {
   color: #000000;
 }
@@ -24,4 +23,32 @@ label {
   margin-bottom: 0rem;
 }
 
+.mat-mdc-card {
+  position: relative;
+  border-radius: var(--mdc-elevated-card-container-shape, var(--mdc-shape-medium, 4px));
+  background-color: #FFF;
+  border-width: 0;
+  border-style: solid;
+  border-color: var(--mdc-elevated-card-container-color, transparent);
+}
 
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: #fff;
+}
+
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: black;
+}
+
+.mat-mdc-raised-button.mat-unthemed {
+  --mdc-protected-button-container-color: #ff4081;
+  --mdc-protected-button-label-text-color: #fff;
+}
+
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
+  color: black;
+}
+
+.saltar {
+  text-align: center;
+}
