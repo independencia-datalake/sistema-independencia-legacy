@@ -12,43 +12,48 @@
     --mat-mdc-radio-ripple-color: #000;
     --mat-mdc-radio-checked-ripple-color: #ff4081;
   }
-  
-  
+  .mat-mdc-slide-toggle.mat-accent {
+    --mdc-switch-selected-focus-state-layer-color: #90a4ae;
+    --mdc-switch-selected-handle-color: #90a4ae;
+    --mdc-switch-selected-hover-state-layer-color: #90a4ae;
+    --mdc-switch-selected-pressed-state-layer-color: #90a4ae;
+    --mdc-switch-selected-focus-handle-color: #b0bec5;
+    --mdc-switch-selected-hover-handle-color: #b0bec5;
+    --mdc-switch-selected-pressed-handle-color: #b0bec5;
+    --mdc-switch-selected-focus-track-color: #FC3D59;
+    --mdc-switch-selected-hover-track-color: #FC3D59;
+    --mdc-switch-selected-pressed-track-color: #FC3D59;
+    --mdc-switch-selected-track-color: #FC3D59;
+}
+
+
   .mat-mdc-radio-button .mdc-form-field {
     color: #000000;
   }
-  
+
   label {
     display: inline-block;
     margin-bottom: 0rem;
   }
-  
-  .mat-mdc-card {
-    position: relative;
-    border-radius: var(--mdc-elevated-card-container-shape, var(--mdc-shape-medium, 4px));
-    background-color: #FFF;
-    border-width: 0;
-    border-style: solid;
-    border-color: var(--mdc-elevated-card-container-color, transparent);
-  }
-  
+
+
   .mdc-text-field--filled:not(.mdc-text-field--disabled) {
-    background-color: #fff;
+    background-color: #ffffff;
   }
-  
+
   .mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
     color: black;
   }
-  
+
   .mat-mdc-raised-button.mat-unthemed {
     --mdc-protected-button-container-color: #ff4081;
     --mdc-protected-button-label-text-color: #fff;
   }
-  
+
   .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
     color: black;
   }
-  
+
   .saltar {
     text-align: center;
   }
@@ -86,7 +91,7 @@
 t-mdc-slide-toggle {
   --mdc-switch-disabled-selected-handle-color: green;
   --mdc-switch-disabled-unselected-handle-color: green;
-  --mdc-switch-disabled-selected-track-color: black;
+  --mdc-switch-disabled-selected-track-color: #FC3D59;
   --mdc-switch-disabled-unselected-track-color: black;
   --mdc-switch-unselected-focus-state-layer-color: black;
   --mdc-switch-unselected-pressed-state-layer-color: black;
@@ -113,4 +118,122 @@ t-mdc-slide-toggle {
   padding-right: 0;
   color:#000;
   order: 0;
+}
+
+.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+  padding-top: 16px;
+  padding-bottom: 16px;
+ background-color:  #f5f5f5;
+}
+
+.mat-mdc-form-field-flex {
+  display: inline-flex;
+  align-items: baseline;
+  box-sizing: border-box;
+  width: 100%;
+  background-color:  #f5f5f5;
+}
+
+.mat-mdc-slide-toggle.mat-accent {
+  margin-left: 10px;
+}
+
+.siguiente {
+  margin-top: 15px;
+}
+
+.mat-mdc-text-field-wrapper {
+  background-color: #f5f5f5;
+
+}
+
+input::placeholder {
+  color: rgb(132, 132, 132) !important;
+}
+
+.mdc-menu-surface.mat-mdc-autocomplete-panel {
+  width: 100%;
+  max-height: 256px;
+  position: static;
+  visibility: hidden;
+  transform-origin: center top;
+  margin: 0;
+  padding: 0px 0 !important;
+  list-style-type: none;
+}
+
+.mat-mdc-card {
+  position: relative;
+  border-radius: var(--mdc-elevated-card-container-shape, var(--mdc-shape-medium, 4px));
+  background-color: white;
+  border-width: 0;
+  border-style: solid;
+  border-color: white;
+}
+
+.mat-mdc-select-value {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.eliminar {
+  font-size: 0.8em;
+  color: #fff;
+  background-color: #FC3D59;
+  /* border-color: #000000; */
+  margin-left: 10px;
+  transform: scale(0.65);
+
+}
+
+.mdc-menu-surface.mat-mdc-select-panel {
+  width: 100%;
+  max-height: 275px;
+  position: static;
+  outline: 0;
+  margin: 0;
+  padding: 0px 0 !important;
+  list-style-type: none;
+}
+
+.mat-datepicker-content {
+  box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+  background-color: white;
+  color: black;
+}
+.mat-mdc-button:not(:disabled) {
+  color: #000;
+}
+.mat-calendar-table-header, .mat-calendar-body-label {
+  color: rgba(153, 153, 153, 0.7);
+}
+.mat-datepicker-toggle, .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button {
+  color: #000;
+}
+.mat-calendar-body-cell-content, .mat-date-range-input-separator {
+  color: #000;
+  border-color: rgba(0,0,0,0);
+}
+table tr:nth-child(1) td {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+tr:nth-child(odd) td {
+  background-color: #ffffff;
+  color: #222;
+}
+button.btn:hover, button:hover {
+  background-color: #ffffff;
+  border: 1px solid #fff;
+}
+.mat-calendar-body-selected {
+  background-color: #fc3d59;
+  color: #fff;
+}
+
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    background-color: #fc3d59;
+}
+
+.info {
+  margin-right: 15px;
 }

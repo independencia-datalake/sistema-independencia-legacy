@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { PersonaService } from 'src/app/service/persona.service';
 import { CallesService } from 'src/app/service/calles.service';
 
@@ -20,21 +20,25 @@ export class PersonaCrearComponent implements OnInit{
   formArchivoPersona:FormGroup;
 
   loading = false;
-  success = false;  
+  success = false;
 
   persona: any;
 
   options = [];
   filterdOptions;
 
+  selectedValue: number;
 
-  constructor(private fb: FormBuilder, private personaService: PersonaService, private callesIndependencia: CallesService) { }
+
+  constructor(private fb: FormBuilder, private personaService: PersonaService, private callesIndependencia: CallesService) {
+    this.addArchivo()
+  }
 
   ngOnInit(): void {
     this.formCrearPersona = this.fb.group({
       tipo_identificacion: '',
-      numero_identificacion: '',
-      nombre_persona: '',
+      numero_identificacion: '1234',
+      nombre_persona: 'tavi',
       apellido_paterno: '',
       apellido_materno: '',
       nombre_completo: '',
@@ -80,10 +84,10 @@ export class PersonaCrearComponent implements OnInit{
     this.formInfoSaludPersona = this.fb.group({
       persona:'',
       prevision:'',
-      isapre:'',
+      isapre:'No Aplica',
       comentarios:'',
     })
-  
+
     this.formArchivoPersona = this.fb.group({
       persona:'',
       archivo:'',
@@ -111,6 +115,35 @@ export class PersonaCrearComponent implements OnInit{
     this.loading = true;
   }
 
-  
+  selectedFile: any = null;
+
+  onFileSelected(event: any,archivoIndex:number): void {
+      this.selectedFile = event.target.files[archivoIndex] ?? null;
+
+  }
+
+  onItemChange(value){
+    console.log(" Value is : ", value );
+ }
+
+ form = this.fb.group({
+    archivos: this.fb.array([])
+ });
+
+ get archivos() {
+  return this.form.controls["archivos"] as FormArray;
+ }
+
+ addArchivo() {
+  const archivoForm = this.fb.group({
+    archivo: File,
+  });
+  this.archivos.push(archivoForm);
+ }
+
+ deleteArchivo(archivoIndex:number){
+  this.archivos.removeAt(archivoIndex)
+ }
+
 
 }

@@ -36,19 +36,78 @@
 <hr>
 
 <div class="container contenedor-wrap">
-  <h3>Productos</h3>
+  <h1>Venta</h1>
 
-  <form>
-    <mat-form-field>
-      <input matInput placeholder="Nombre">
-    </mat-form-field>
-    <mat-form-field>
-      <input matInput placeholder="Cantidad">
-    </mat-form-field>
+  <mat-card >
+    <h2> Archivos </h2>
+    <form>
+    <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+    <input hidden (change)="onFileSelected($event)" #fileInput type="file">
+    <span class="file-name">{{selectedFile?.name}}</span>
+    <hr>
+    <button>+</button>
   </form>
 
-  <button mat-raised-button>Agregar Producto</button>
+  </mat-card>
+  <hr>
+  <mat-card >
+    <h2>Productos</h2>
+    <div [formGroup]="form">
+
+      <ng-container formArrayName="productos">
+        <ng-container *ngFor="let productoForm of productos.controls; let i = index" [formGroupName]="i">
+          <div class="producto-form-row">
+            <mat-form-field>
+              <mat-label>Nombre Producto</mat-label>
+              <input formControlName="nombre" matInput placeholder="Producto X">
+              <!-- <mat-placeholder class="placeholder">Search</mat-placeholder> -->
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Cantidad</mat-label>
+              <input formControlName="cantidad" matInput placeholder="XX">
+            </mat-form-field>
+
+            <button class="btn ver-o-editar eliminar" (click)="deleteProducto(i)"><mat-icon class="icon-display">delete_forever</mat-icon></button>
+
+          </div>
+
+        </ng-container>
+      </ng-container>
+
+
+    </div>
+
+    <div>
+      <button mat-raised-button (click)="addProducto()">
+        Agregar Producto
+      </button>
+
+      <button mat-raised-button style="float:right">Siguiente </button>
+    </div>
+  </mat-card>
+
+
+
 
 
 </div>
 
+<script>
+document.getElementById("add_file").onclick=function (ev) {
+            var image = document.getElementById("files");
+
+            var newInput = document.createElement("input");
+            newInput.type="file";
+            newInput.name = "file[]";
+            newInput.style = "width: 100%";
+
+            var br=document.createElement("br");
+            var br1=document.createElement("br");
+
+            image.appendChild(newInput);
+            image.appendChild(br);
+            image.appendChild(br1);
+
+        }
+</script>
