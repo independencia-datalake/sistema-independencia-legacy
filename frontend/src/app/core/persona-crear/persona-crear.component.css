@@ -5,12 +5,12 @@
     --mdc-radio-unselected-hover-icon-color: #212121;
     --mdc-radio-unselected-icon-color: rgba(0, 0, 0, .54);
     --mdc-radio-unselected-pressed-icon-color: rgba(0, 0, 0, .54);
-    --mdc-radio-selected-focus-icon-color: #ff4081;
-    --mdc-radio-selected-hover-icon-color: #ff4081;
-    --mdc-radio-selected-icon-color: #ff4081;
-    --mdc-radio-selected-pressed-icon-color: #ff4081;
+    --mdc-radio-selected-focus-icon-color: #fc3d59;
+    --mdc-radio-selected-hover-icon-color: #fc3d59;
+    --mdc-radio-selected-icon-color: #fc3d59;
+    --mdc-radio-selected-pressed-icon-color: #fc3d59;
     --mat-mdc-radio-ripple-color: #000;
-    --mat-mdc-radio-checked-ripple-color: #ff4081;
+    --mat-mdc-radio-checked-ripple-color: #fc3d59;
   }
   .mat-mdc-slide-toggle.mat-accent {
     --mdc-switch-selected-focus-state-layer-color: #90a4ae;
@@ -46,7 +46,7 @@
   }
 
   .mat-mdc-raised-button.mat-unthemed {
-    --mdc-protected-button-container-color: #ff4081;
+    --mdc-protected-button-container-color: #fc3d59;
     --mdc-protected-button-label-text-color: #fff;
   }
 
@@ -78,7 +78,7 @@
 }
 
 .mat-step-header .mat-step-icon-selected, .mat-step-header .mat-step-icon-state-done, .mat-step-header .mat-step-icon-state-edit {
-  background-color: #ff4081;
+  background-color: #fc3d59;
   color: #fff;
 }
 

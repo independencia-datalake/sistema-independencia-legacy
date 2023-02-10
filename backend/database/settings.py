@@ -25,7 +25,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+if DEBUG:
+    ALLOWED_HOSTS = []
+else:
+    ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -60,11 +63,20 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'database.urls'
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:4200',
-]
-CORS_ALLOWED_ORIGIN_REGEXES = r'^/api/.*'
-CORS_ALLOW_CREDENTIALS = True
+
+if DEBUG:
+    CORS_ALLOWED_ORIGINS = [
+        'http://localhost:4200',
+    ]
+    CORS_ALLOWED_ORIGIN_REGEXES = r'^/api/.*'
+    CORS_ALLOW_CREDENTIALS = True
+else:
+    CORS_ALLOWED_ORIGINS = [
+        'http://localhost:4200',            ## PATH OF FRONTEND
+    ]
+    CORS_ALLOWED_ORIGIN_REGEXES = r'^/api/.*'
+    CORS_ALLOW_CREDENTIALS = True
+
 
 TEMPLATES = [
     {
@@ -97,11 +109,14 @@ if DEBUG:
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'sistema-independencia.sqlite3',
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'postgres',
+            'USER': os.environ.get('DATABASES_USER'),
+            'PASSWORD': os.environ.get('DATABASES_PASSWORD'),
+            'HOST': os.environ.get('DATABASES_HOST'),
+            'PORT': 5432
         }
     }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -157,3 +172,12 @@ REST_FRAMEWORK = {
     #     'rest_framework.authentication.IsAuthenticatedOrReadOnly',
     # ]
 }
+
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+# AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+# AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+
+# AWS_S3_FILE_OVERWRITE = False
+# AWS_DEFAULT_ACL = None
+# AWS_LOCATION = 'media/'
