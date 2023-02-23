@@ -1,0 +1,67 @@
+.scrolling-text {
+  white-space: nowrap; /* hace que el texto no se divida en varias líneas */
+  overflow: hidden; /* oculta el texto que se sale del contenedor */
+  animation: scrolling 20s linear infinite; /* inicia la animación que mueve el texto */
+  color: #FC3D59 ;
+  background-color: rgb(255, 255, 255);
+}
+
+@keyframes scrolling {
+  0% {
+    transform: translateX(100%); /* mueve el texto a la derecha del contenedor */
+  }
+  100% {
+    transform: translateX(-100%); /* mueve el texto a la izquierda del contenedor */
+  }
+}
+
+.text-container {
+  overflow: hidden;
+}
+
+@import url("https://unpkg.com/leaflet@1.9.3/dist/leaflet.css");
+
+#map {
+  height: 500px;
+  /* border: 2px solid black; */
+}
+
+.mat-mdc-checkbox .mdc-form-field {
+  color: #000000;
+}
+
+.mat-mdc-checkbox.mat-accent {
+  --mdc-checkbox-selected-checkmark-color: #ffffff;
+  --mdc-checkbox-selected-focus-icon-color: #FC3D59;
+  --mdc-checkbox-selected-hover-icon-color: #FC3D59;
+  --mdc-checkbox-selected-icon-color: #FC3D59;
+  --mdc-checkbox-selected-pressed-icon-color: #FC3D59;
+  --mdc-checkbox-unselected-focus-icon-color: #000000;
+  --mdc-checkbox-unselected-hover-icon-color: #000000;
+  --mdc-checkbox-disabled-selected-icon-color: rgba(0, 0, 0, .38);
+  --mdc-checkbox-disabled-unselected-icon-color: rgba(0, 0, 0, .38);
+  --mdc-checkbox-unselected-icon-color: rgba(0, 0, 0, .54);
+  --mdc-checkbox-unselected-pressed-icon-color: rgba(0, 0, 0, .54);
+}
+
+label {
+  display: inline-block;
+  margin-bottom: 0;
+}
+.mat-mdc-select-value {
+  color: rgb(0 0 0 / 87%);
+  background-color: #f5f5f5;
+}
+
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: rgb(0 0 0 / 60%);
+}
+.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+  padding-top: 16px;
+  padding-bottom: 16px;
+ background-color:  #f5f5f5;
+}
+
+.mat-mdc-text-field-wrapper {
+  background-color: #f5f5f5;
+}

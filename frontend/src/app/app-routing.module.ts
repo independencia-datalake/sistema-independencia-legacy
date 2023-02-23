@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './core/home/home.component';
+import { InfoComunaComponent } from './core/info-comuna/info-comuna.component';
 import { PersonaCrearComponent } from './core/persona-crear/persona-crear.component';
 import { PersonaComponent } from './core/persona/persona.component';
 
@@ -19,6 +20,7 @@ const routes: Routes = [
   {path:'qna',component:QnaComponent},
   {path:'persona',component:PersonaComponent},
   {path:'persona/crear',component:PersonaCrearComponent},
+  {path: 'conoce-tu-area', component:InfoComunaComponent},
 
   // FARMACIA
   {path:'farmacia',component:FarmaciaHomeComponent},

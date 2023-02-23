@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { PersonaService } from 'src/app/service/persona.service';
 import { CallesService } from 'src/app/service/calles.service';
+import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'app-persona-crear',
@@ -10,6 +11,8 @@ import { CallesService } from 'src/app/service/calles.service';
   encapsulation: ViewEncapsulation.None,
 })
 export class PersonaCrearComponent implements OnInit{
+
+  numero_identificacion: string;
 
   isLinear = true
   formCrearPersona: FormGroup;
@@ -29,15 +32,19 @@ export class PersonaCrearComponent implements OnInit{
 
   selectedValue: number;
 
+  constructor(private fb: FormBuilder, private personaService: PersonaService, private callesIndependencia: CallesService, private route: ActivatedRoute) {
 
-  constructor(private fb: FormBuilder, private personaService: PersonaService, private callesIndependencia: CallesService) {
     this.addArchivo()
   }
 
   ngOnInit(): void {
+
+    console.log(this.route.snapshot.queryParamMap.get('tipo'))
+
+
     this.formCrearPersona = this.fb.group({
-      tipo_identificacion: '',
-      numero_identificacion: '1234',
+      tipo_identificacion: this.route.snapshot.queryParamMap.get('tipo'),
+      numero_identificacion: this.route.snapshot.queryParamMap.get('numero_identificacion'),
       nombre_persona: 'tavi',
       apellido_paterno: '',
       apellido_materno: '',
@@ -84,7 +91,7 @@ export class PersonaCrearComponent implements OnInit{
     this.formInfoSaludPersona = this.fb.group({
       persona:'',
       prevision:'',
-      isapre:'No Aplica',
+      isapre:'NO APLICA',
       comentarios:'',
     })
 
@@ -94,6 +101,7 @@ export class PersonaCrearComponent implements OnInit{
     })
 
     this.getCalles();
+
 
   }
 
@@ -144,6 +152,7 @@ export class PersonaCrearComponent implements OnInit{
  deleteArchivo(archivoIndex:number){
   this.archivos.removeAt(archivoIndex)
  }
+
 
 
 }

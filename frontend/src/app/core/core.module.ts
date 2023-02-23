@@ -34,6 +34,10 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule} from '@angular/material/select';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { InfoComunaComponent } from './info-comuna/info-comuna.component';
+import { MatCheckboxModule } from '@angular/material/checkbox'
+
 
 
 @NgModule({
@@ -45,6 +49,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     HomeComponent,
     PersonaComponent,
     PersonaCrearComponent,
+    InfoComunaComponent,
   ],
   imports: [
     CommonModule,
@@ -66,7 +71,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatAutocompleteModule,
     MatSelectModule,
     MatNativeDateModule,
-
+    MatExpansionModule,
+    MatCheckboxModule,
   ],
   providers: [
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}},

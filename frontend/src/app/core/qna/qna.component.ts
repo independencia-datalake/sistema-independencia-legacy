@@ -11,4 +11,6 @@ export class QnaComponent {
   showDiv2 = false;
   showDiv3 = false;
 
+  panelOpenState = false;
 }
+

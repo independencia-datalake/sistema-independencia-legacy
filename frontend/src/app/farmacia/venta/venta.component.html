@@ -2,32 +2,32 @@
   <div class="container contenidos-comprobante-venta">
       <div class="row">
           <div class="col">
-              <h2> Nombre <span class="magenta">jaime</span></h2>
+              <h2> Nombre <span class="magenta"> {{ persona.nombre_completo }} </span></h2>
 
               <h4 class="magenta">Nº de Identificación:</h4>
-              <p>1234</p>
+              <p>{{ persona.numero_identificacion }}</p>
               <h4 class="magenta">Nº de Teléfono</h4>
-              <p>420</p>
+              <p>{{ telefono.telefono }}</p>
               <h4 class="magenta"> N° de Teléfono Secundario</h4>
-              <p>fonito2</p>
+              <p>{{ telefono.telefono_secundario }}</p>
               <h4 class="magenta">Correo:</h4>
-              <p>@gmail</p>
+              <p>{{ correo.correo }}</p>
           </div>
           <div class="col">
-              <h2> UV: <span class="magenta"> direccion gene </span></h2>
+              <h2> UV: <span class="magenta"> {{ persona.uv }} </span></h2>
               <h4 class="magenta">Fecha de nacimiento:</h4>
-              <p>1996</p>
+              <p>{{ persona.fecha_nacimiento }}</p>
               <h4 class="magenta">Dirección:</h4>
               <p>doxeado
           </div>
           <div class="col">
               <h2>Antecedentes de Salud</h2>
               <h4 class="magenta">Prevision</h4>
-              <p>tu prevision</p>
+              <p>{{ infosalud.prevision }}</p>
               <h4 class="magenta">Isapre</h4>
-              <p>tu isapre</p>
+              <p>{{ infosalud.isapre }}</p>
               <h4 class="magenta">Observaciones</h4>
-              <p>intolerante a la lactosa</p>
+              <p>{{ infosalud.comentarios }}</p>
 
           </div>
       </div>
@@ -42,7 +42,7 @@
     <h2> Archivos </h2>
     <form>
     <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
-    <input hidden (change)="onFileSelected($event)" #fileInput type="file">
+    <input hidden (change)="onFileSelected($event)" #fileInput type="file" multiple>
     <span class="file-name">{{selectedFile?.name}}</span>
     <hr>
     <button>+</button>
@@ -52,7 +52,7 @@
   <hr>
   <mat-card >
     <h2>Productos</h2>
-    <div [formGroup]="form">
+    <div [formGroup]="formProductos">
 
       <ng-container formArrayName="productos">
         <ng-container *ngFor="let productoForm of productos.controls; let i = index" [formGroupName]="i">
@@ -83,7 +83,7 @@
         Agregar Producto
       </button>
 
-      <button mat-raised-button style="float:right">Siguiente </button>
+      <button (click)="onSubmit()" mat-raised-button style="float:right">Siguiente </button>
     </div>
   </mat-card>
 

@@ -42,8 +42,8 @@
   }
 
   .mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
-    color: black;
-  }
+    color: #b1b1b1;
+}
 
   .mat-mdc-raised-button.mat-unthemed {
     --mdc-protected-button-container-color: #fc3d59;
@@ -237,3 +237,4 @@ button.btn:hover, button:hover {
 .info {
   margin-right: 15px;
 }
+

@@ -11,9 +11,9 @@ import { take } from 'rxjs/operators';
   encapsulation: ViewEncapsulation.None,
 })
 export class PersonaComponent implements OnInit{
-  
+
   formCheckPersona: FormGroup;
-  
+
   loading = false;
   success = false;
 
@@ -34,8 +34,6 @@ export class PersonaComponent implements OnInit{
     })
 
     this.personaService.getPersonas().pipe(take(1)).subscribe(data => {this.personas = data;})
-    
-
   }
 
   onCheckPersona(): void {
@@ -44,20 +42,23 @@ export class PersonaComponent implements OnInit{
     const numero_identificacion = this.formCheckPersona.value.numero_identificacion;
     console.log(this.formCheckPersona.value)
     console.log(this.personas)
-    
+    const tipo_seleccionado = this.formCheckPersona.value.tipo;
+
     try {
       const result = this.personas.find(item => item.numero_identificacion === numero_identificacion)
       if (typeof result != "undefined") {
         this.success = true
         console.log(result.id)
-        this.router.navigate(['farmacia/venta'])
+        console.log(this.formCheckPersona.value.numero_identificacion)
+        this.router.navigate(['farmacia/venta'], { queryParams: {id_persona: result.id}})
       } else {
-        this.router.navigate(['persona/crear'])
+        this.router.navigate(['persona/crear'], { queryParams: {numero_identificacion: numero_identificacion, tipo: tipo_seleccionado }})
+
       }
     } catch(err) {
       console.log(err)
     }
     this.loading = false;
   }
-  
+
 }

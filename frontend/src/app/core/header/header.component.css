@@ -33,3 +33,7 @@
   background:url(../../../assets/inicio.png) left no-repeat;
   background-position: center;
 }
+
+.mat-mdc-button:not(:disabled) {
+  color: #ffffff !important;
+}

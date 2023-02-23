@@ -1,0 +1,63 @@
+<div class="container contenedor-wrap text-container">
+  <div>
+    <h1 style="text-align: center;">Conoce tu area ! </h1>
+
+
+
+    <div id="map"></div>
+  </div>
+  <div class="scrolling-text">
+    Sabias que: *inserte dato curioso numero 1* - Sabias que: *Inserte dato curioso numero 2* - Sabias que: *Inserte dato curioso aqui - Sabias que: *Inserte dato curioso numero 3* Pog  |
+  </div>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+          <mat-checkbox (change)="onCheckboxChangeInteres()" [checked]="showMarkers">Puntos de interes</mat-checkbox>
+          <div *ngIf="showMarkers">
+            <mat-form-field appearance="outline">
+              <mat-label>Punto de interes</mat-label>
+              <mat-select [(value)]="selectedOption" (selectionChange)="onSelectionChangeInteres()">
+                <mat-option *ngFor="let option of opciones_interes" [value]="option">{{puntosInteres[option][0]}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+      </div>
+      <div class="col">
+        <mat-checkbox (change)="onCheckboxChangeSalud()" [checked]="showMarkerssalud" >Hospitales y consultorios</mat-checkbox>
+        <div *ngIf="showMarkerssalud">
+          <mat-form-field appearance="outline">
+            <mat-label>Centro de salud</mat-label>
+            <mat-select [(value)]="selectedOption" (selectionChange)="onSelectionChangeSalud()">
+              <mat-option *ngFor="let option of opciones_salud" [value]="option">{{puntosSalud[option][0]}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col">
+        <mat-checkbox (change)="onCheckboxChangeEducacion()" [checked]="showMarkerseduc">Centros educacionales</mat-checkbox>
+        <div *ngIf="showMarkerseduc">
+          <mat-form-field appearance="outline">
+            <mat-label>Centros Educacionales</mat-label>
+            <mat-select [(value)]="selectedOption" (selectionChange)="onSelectionChangeEducacion()">
+              <mat-option *ngFor="let option of opciones_educ" [value]="option">{{puntosEduc[option][0]}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="col">
+        <mat-checkbox (change)="onCheckboxChangeMonumento()" [checked]="showMarkersmonumento">Monumentos Nacionales</mat-checkbox>
+        <div *ngIf="showMarkersmonumento">
+          <mat-form-field appearance="outline">
+            <mat-label>Monumentos Nacionales</mat-label>
+            <mat-select [(value)]="selectedOption" (selectionChange)="onSelectionChangeMonumento()">
+              <mat-option *ngFor="let option of opciones_monumento" [value]="option">{{puntosMonumento[option][0]}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
