@@ -35,9 +35,16 @@ export class InfoComunaComponent {
   markersmonumento: any[] = [];
   showMarkersmonumento = false;
 
+  opciones_UV: string[] = [];
+
   poligono_independencia: any;
   map: Map; // Declarar la variable map como propiedad de la clase
   selectedOption: string;
+  private poligonoUV: L.LayerGroup;
+
+
+
+  // Crea una capa vacía para los polígonos
 
   constructor(private http: HttpClient) {
     // PUNTOS DE INTERES
@@ -93,20 +100,86 @@ export class InfoComunaComponent {
 
 
   ngAfterViewInit(): void{
-    this.map = new Map('map').setView([-33.414316, -70.664376], 14); // asignar el valor de la variable map
+    this.map = new Map('map').setView([-33.414316, -70.664376], 14,); // asignar el valor de la variable map
     tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains: 'abcd',
       // maxZoom: 14
     }).addTo(this.map); // Usar this.map en lugar de map
 
-    this.http.get('../../assets/poligono_independencia.json').subscribe(response => {
-      this.poligono_independencia = response;
-      const puntos = Object.values(this.poligono_independencia).map(punto => [punto[1], punto[0]]);
-      const poligono = polygon([puntos]).addTo(this.map); // Usar this.map en lugar de map
-      poligono.setStyle({color:'#FC3D59'})
+    const poligonoIndependencia = L.layerGroup().addTo(this.map);
+    const poligonoUV = L.layerGroup().addTo(this.map);
+
+    // this.http.get('../../assets/poligono_independencia.json').subscribe(response => {
+    //   this.poligono_independencia = response;
+    //   const puntos = Object.values(this.poligono_independencia).map(punto => [punto[1], punto[0]]);
+    //   const poligono = L.polygon([puntos], {color:'#FC3D59'}).addTo(poligonoIndependencia); // Usar this.map en lugar de map
+    //   const popup = poligono.bindPopup("Comuna de Independencia.");
+    //   poligono.on('mouseover', function(e) {
+    //     popup.openPopup();
+    //   });
+    //   poligono.on('mouseout', function() {
+    //     poligono.closePopup();
+    //   });
+    // });
+
+    this.http.get('../../assets/uv_coordenadas.json').subscribe((data: any) => {
+      const popup = L.popup();
+      const mapObj = this.map;
+      for (let id in data) {
+        const coords = [];
+        for (let pointId in data[id]) {
+          const point = data[id][pointId];
+          coords.push([point[1], point[0]]);
+        }
+        const poligono_uv = L.polygon([coords], {color:'#FC3D59'}).addTo(poligonoUV);
+
+        // Agregar contenido del popup
+        poligono_uv.bindPopup(id);
+
+        // Agregar opciones a la lista
+        this.opciones_UV.push(id);
+
+        // Agregar eventos para mostrar/ocultar el popup
+        poligono_uv.on('mouseover', function (e) {
+          popup.setLatLng(e.latlng)
+               .setContent(e.target._popup._content)
+               .openOn(mapObj);
+          e.target.setStyle({
+            weight: 5,
+            color: '#FC3D59',
+            dashArray: '',
+            fillOpacity: 0.7
+          });
+
+        });
+
+        poligono_uv.on('mouseout', function (e) {
+          mapObj.closePopup(popup);
+
+        // Cambiar el estilo del polígono
+        e.target.setStyle({
+          weight: 3,
+          color: '#FC3D59',
+          dashArray: '',
+          fillOpacity: 0.2
+        });
+        });
+      }
     });
+
+    var capas = {
+    "Polígono Independencia": poligonoIndependencia,
+     "Polígono Unidades Vecinales": poligonoUV
+    }
+
+    // Agrega la capa al LayerControl
+      const layerControl = L.control.layers(null, capas).addTo(this.map);
+
+
+
   }
+
 
   onCheckboxChangeInteres() {
     var redIcon = L.icon({
@@ -215,5 +288,10 @@ export class InfoComunaComponent {
     const puntoMonumento = this.puntosMonumento[this.selectedOption];
     const marker = L.marker(puntoMonumento[1]);
     this.map.flyTo(marker.getLatLng(), 16);
+  }
+
+  onSelectionChangeUV() {
+    const id = this.selectedOption;
+    console.log(this.poligonoUV)
   }
 }
