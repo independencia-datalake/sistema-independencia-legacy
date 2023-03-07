@@ -29,7 +29,7 @@ DEBUG = True
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = ['*']
+    ALLOWED_HOSTS = ['54.207.142.208']
 
 
 # Application definition
@@ -112,9 +112,9 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'postgres',
-            'USER': os.environ.get('DATABASES_USER'),
-            'PASSWORD': os.environ.get('DATABASES_PASSWORD'),
-            'HOST': os.environ.get('DATABASES_HOST'),
+            'USER': 'django-dev-database',
+            'PASSWORD': '!!Indepen??##*',
+            'HOST': 'django-dev-database.c6kieiiqjoxj.sa-east-1.rds.amazonaws.com',
             'PORT': 5432
         }
     }
@@ -155,6 +155,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
