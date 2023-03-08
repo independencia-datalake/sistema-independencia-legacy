@@ -1,0 +1,25 @@
+@import url("https://unpkg.com/leaflet@1.9.3/dist/leaflet.css");
+
+#map {
+  height: 500px;
+  width: 500px;
+  /* border: 2px solid black; */
+}
+
+.mat-expansion-panel {
+  background: #FC3D59;
+  color: #fff;
+}
+
+p {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.1em;
+  font-weight: 300;
+  line-height: 1.7em;
+  color: #fff;
+}
+
+.mdc-tab {
+  color: black;
+  background-color:  #FC3D59;
+  }

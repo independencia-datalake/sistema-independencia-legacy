@@ -8,7 +8,7 @@ import * as L from 'leaflet';
   selector: 'app-info-comuna',
   templateUrl: './info-comuna.component.html',
   styleUrls: ['./info-comuna.component.css'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 
 
@@ -40,11 +40,8 @@ export class InfoComunaComponent {
   poligono_independencia: any;
   map: Map; // Declarar la variable map como propiedad de la clase
   selectedOption: string;
-  private poligonoUV: L.LayerGroup;
-
-
-
-  // Crea una capa vacía para los polígonos
+  centro_poligonoIndepe: L.LatLngBounds; // declarar la variable global
+  centro_uv_aux: L.LatLngBounds; // declarar la variable global
 
   constructor(private http: HttpClient) {
     // PUNTOS DE INTERES
@@ -96,10 +93,8 @@ export class InfoComunaComponent {
 
   }
 
-
-
-
   ngAfterViewInit(): void{
+
     this.map = new Map('map').setView([-33.414316, -70.664376], 14,); // asignar el valor de la variable map
     tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -110,18 +105,21 @@ export class InfoComunaComponent {
     const poligonoIndependencia = L.layerGroup().addTo(this.map);
     const poligonoUV = L.layerGroup().addTo(this.map);
 
-    // this.http.get('../../assets/poligono_independencia.json').subscribe(response => {
-    //   this.poligono_independencia = response;
-    //   const puntos = Object.values(this.poligono_independencia).map(punto => [punto[1], punto[0]]);
-    //   const poligono = L.polygon([puntos], {color:'#FC3D59'}).addTo(poligonoIndependencia); // Usar this.map en lugar de map
-    //   const popup = poligono.bindPopup("Comuna de Independencia.");
-    //   poligono.on('mouseover', function(e) {
-    //     popup.openPopup();
-    //   });
-    //   poligono.on('mouseout', function() {
-    //     poligono.closePopup();
-    //   });
-    // });
+    this.http.get('../../assets/poligono_independencia.json').subscribe(response => {
+      this.poligono_independencia = response;
+      const puntos = Object.values(this.poligono_independencia).map(punto => [punto[1], punto[0]]);
+      const poligono = L.polygon([puntos], {color:'#FC3D59'}).addTo(poligonoIndependencia); // Usar this.map en lugar de map
+      this.centro_poligonoIndepe = poligono.getBounds();
+      const popup = poligono.bindPopup("Comuna de Independencia.");
+      poligono.on('mouseover', function(e) {
+        popup.openPopup();
+      });
+      poligono.on('mouseout', function() {
+        poligono.closePopup();
+      });
+    });
+
+
 
     this.http.get('../../assets/uv_coordenadas.json').subscribe((data: any) => {
       const popup = L.popup();
@@ -133,6 +131,7 @@ export class InfoComunaComponent {
           coords.push([point[1], point[0]]);
         }
         const poligono_uv = L.polygon([coords], {color:'#FC3D59'}).addTo(poligonoUV);
+
 
         // Agregar contenido del popup
         poligono_uv.bindPopup(id);
@@ -292,6 +291,21 @@ export class InfoComunaComponent {
 
   onSelectionChangeUV() {
     const id = this.selectedOption;
-    console.log(this.poligonoUV)
+    // this.map.fitBounds(this.centro_poligonoIndepe);
+
+
+    this.http.get('../../assets/uv_coordenadas.json').subscribe((data: any) => {
+
+      console.log(data[id])
+      const coordsaux = [];
+      for (let pointId in data[id]) {
+        const point = data[id][pointId];
+        coordsaux.push([point[1], point[0]]);
+      }
+      const poligono_aux = L.polygon([coordsaux]);
+      const centro_uv_aux = poligono_aux.getBounds();
+      this.map.fitBounds(centro_uv_aux);
+
+    });
   }
 }

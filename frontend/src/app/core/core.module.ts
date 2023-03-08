@@ -36,7 +36,15 @@ import { MatSelectModule} from '@angular/material/select';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { InfoComunaComponent } from './info-comuna/info-comuna.component';
-import { MatCheckboxModule } from '@angular/material/checkbox'
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { InfoUvComponent } from './info-uv/info-uv.component'
+import {MatTabsModule} from '@angular/material/tabs';
+import { DialogUVComponent } from './info-uv/dialog-uv/dialog-uv.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { VisComponent } from './vis/vis.component';
+import { MatTableModule } from '@angular/material/table';
+
+
 
 
 
@@ -50,6 +58,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
     PersonaComponent,
     PersonaCrearComponent,
     InfoComunaComponent,
+    InfoUvComponent,
+    DialogUVComponent,
+    VisComponent
+
   ],
   imports: [
     CommonModule,
@@ -73,6 +85,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
     MatNativeDateModule,
     MatExpansionModule,
     MatCheckboxModule,
+    MatTabsModule,
+    MatDialogModule,
+    MatTableModule,
+
   ],
   providers: [
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}},

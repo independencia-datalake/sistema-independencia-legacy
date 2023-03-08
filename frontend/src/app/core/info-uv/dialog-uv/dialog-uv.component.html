@@ -1,0 +1,36 @@
+<h1 mat-dialog-title style="color: white !important;">¿Cual es tu unidad vecinal?</h1>
+<div mat-dialog-content>
+  Elige una opcion:
+  <mat-radio-group [(ngModel)]="selectedOption">
+    <mat-radio-button value="direccion">Ingresar dirección</mat-radio-button>
+    <mat-radio-button value="unidad-vecinal">Ingresar unidad vecinal</mat-radio-button>
+  </mat-radio-group>
+  <div *ngIf="selectedOption === 'unidad-vecinal'">
+    <mat-form-field>
+      <mat-label>Unidad vecinal:</mat-label>
+      <mat-select [(ngModel)]="selectedUV">
+        <mat-option *ngFor="let uv of uvOptions" [value]="uv">{{uv}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div *ngIf="selectedOption === 'direccion'">
+    <mat-form-field>
+      <mat-label>Calle</mat-label>
+        <input formControlName="calle" matInput placeholder="Av. Independencia" [matAutocomplete]="auto" required>
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let item of filterdOptions" [value]="item">
+            {{item}}
+          </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+
+    <mat-form-field>
+      <mat-label>Numeracion</mat-label>
+      <input matInput placeholder="0" formControlName="numero" type="number"/>
+    </mat-form-field>
+  </div>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close cdkFocusInitial (click)="onNoClick()">Ok</button>
+</div>

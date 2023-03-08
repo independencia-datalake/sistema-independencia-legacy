@@ -1,0 +1,12 @@
+.mat-mdc-dialog-container {
+  --mdc-dialog-container-color: #FC3D59;
+  --mdc-dialog-with-divider-divider-color: rgba(255, 255, 255, 0.12);
+  --mdc-dialog-subhead-color: rgba(255, 255, 255, 0.87);
+  --mdc-dialog-supporting-text-color: rgba(255, 255, 255, 0.6);
+}
+
+.texto-click {
+  color: #0000FF !important;
+  /* color: #FC3D59 !important; */
+  cursor: pointer;
+}
