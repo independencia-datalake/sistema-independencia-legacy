@@ -20,8 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = os.environ.get('SECRET_KEY')
-SECRET_KEY = 'vylll%eshxe0o+mh40oahu1!d4!g)kq23dhseh9vhs-f4g%*$q '
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -29,7 +28,7 @@ DEBUG = True
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = ['*']
+    ALLOWED_HOSTS = ['54.207.142.208']
 
 
 # Application definition
@@ -112,9 +111,9 @@ else:
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': 'postgres',
-            'USER': os.environ.get('DATABASES_USER'),
-            'PASSWORD': os.environ.get('DATABASES_PASSWORD'),
-            'HOST': os.environ.get('DATABASES_HOST'),
+            'USER': 'django-dev-database',
+            'PASSWORD': '!!Indepen??##*',
+            'HOST': 'django-dev-database.c6kieiiqjoxj.sa-east-1.rds.amazonaws.com',
             'PORT': 5432
         }
     }
@@ -155,6 +154,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
