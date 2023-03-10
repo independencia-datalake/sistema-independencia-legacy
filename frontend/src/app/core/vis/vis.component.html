@@ -8,7 +8,7 @@
       <div class="col">
         <h2>Resumen sobre</h2>
 
-        <table mat-table [dataSource]="dataSource">
+        <table mat-table [dataSource]="dataSource" class="mi-tabla">
           <!-- Columna de nombre -->
           <ng-container matColumnDef="nombre">
             <th mat-header-cell *matHeaderCellDef>Nombre</th>
@@ -19,7 +19,7 @@
           <!-- Columna de correo densidad -->
           <ng-container matColumnDef="densidad">
             <th mat-header-cell *matHeaderCellDef>densidad</th>
-            <td mat-cell *matCellDef="let element">{{element.densidad}}</td>
+            <td mat-cell *matCellDef="let element" >{{element.densidad}}</td>
           </ng-container>
 
           <!-- Define las columnas -->

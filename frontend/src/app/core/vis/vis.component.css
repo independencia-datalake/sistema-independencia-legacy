@@ -42,3 +42,18 @@ table tr:nth-child(odd) td {
   background-color: #F0F0F0 !important;
   color: black !important;
 }
+
+.mi-tabla {
+
+  height: 447px;
+  overflow: auto;
+  display: block;
+}
+
+.mi-tabla th,
+.mi-tabla td {
+  width: 1%;
+  white-space: nowrap;
+}
+
+

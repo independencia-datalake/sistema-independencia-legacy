@@ -3,11 +3,11 @@ import { Map, tileLayer, polygon, marker } from 'leaflet';
 import * as L from 'leaflet';
 import { HttpClient } from '@angular/common/http';
 import { GeoJSON } from 'leaflet';
+import { MatTableDataSource } from '@angular/material/table';
 
-
-export interface unidad_vecinal {
-  nombre: string;
-  densidad: number;
+interface unidad_vecinal {
+  nombre: any;
+  densidad: any;
 }
 
 @Component({
@@ -17,6 +17,7 @@ export interface unidad_vecinal {
   encapsulation: ViewEncapsulation.None,
 })
 export class VisComponent {
+
   result: any[];
   map: Map;
   geoJsonLayer: L.GeoJSON;
@@ -25,8 +26,15 @@ export class VisComponent {
   infoControl: any;
   info: L.Control;
 
+  dataTabla: any=[];
+
+  unidadesVecinales: unidad_vecinal[] = [];
+  dataSource = new MatTableDataSource<unidad_vecinal>(this.unidadesVecinales);
+
   constructor(private http: HttpClient) {
    }
+
+
 
   ngAfterViewInit(): void{
     let geoJsonData: any;  // Definir la variable fuera del método subscribe
@@ -36,6 +44,10 @@ export class VisComponent {
 
     this.http.get('../../assets/density-test.json').subscribe((data: any) => {
       this.densityData = data
+      for (const [nombre, densidad] of Object.entries(data)) {
+        this.unidadesVecinales.push({ nombre, densidad });
+      }
+      this.dataSource.data = this.unidadesVecinales;
     });
 
     // Convert the data to GeoJSON
@@ -175,16 +187,48 @@ legend.onAdd = function (map) {
 };
 
 legend.addTo(this.map)
+
+// this.http.get('../../assets/density-test.json').subscribe((data: any) => {
+//   this.densityData = data
+//   console.log(this.densityData)
+// });
+
+// this.tablita
   }
+
+tablita() {
+  this.http.get('../../assets/density-test.json').subscribe((data: any) => {
+  this.densityData = data
+  // console.log([Object.keys(this.densityData)])
+  // console.log(this.densityData)
+  for (let i =0; i<2; i++) {
+    this.dataTabla.push({nombre: Object.keys(this.densityData)[i], densidad: Object.values(this.densityData)[i]})
+  }
+  console.log(this.dataTabla)
+  // console.log([{nombre:'UV-1', densidad: 5},{nombre:'UV-2', densidad: 10}])
+  // return [{nombre:'UV-1', densidad: 5},{nombre:'UV-2', densidad: 10}]
+  });
+  // return [{nombre: Object.keys(this.densityData)[1], densidad: Object.values(this.densityData)[1]}];
+  // return this.kekw
+  // return this.dataTabla
+  return [{nombre:'UV-1', densidad: 5},{nombre:'UV-2', densidad: 10}]
+}
 
 // TABLA
 displayedColumns: string[] = ['nombre', 'densidad'];
-dataSource: unidad_vecinal[] = [
-  {nombre: 'UV-1', densidad: 5},
-  {nombre: 'UV-9', densidad: 42},
-  {nombre: 'UV-15', densidad: 68},
-  {nombre: 'UV-26', densidad: 100}
-];
+pez: any = this.tablita();
+
+
+// dataSource: unidad_vecinal[] = [
+//   {nombre: 'UV-1', densidad: 5},
+//   {nombre: 'UV-9', densidad: 42},
+//   {nombre: 'UV-15', densidad: 68},
+//   {nombre: 'UV-26', densidad: 100},
+//   this.pez
+// ];
+// dataSource: unidad_vecinal[] = this.pez;
+
+
 
 }
 
