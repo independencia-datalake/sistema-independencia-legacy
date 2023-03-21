@@ -22,10 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 if DEBUG:
-    ALLOWED_HOSTS = ['*']
+    LLOWED_HOSTS = ['*']
 else:
     ALLOWED_HOSTS = ['54.207.142.208']
 
@@ -111,8 +111,8 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'postgres',
-            'USER': 'django-dev-database',
+            'NAME': 'django-dev-database',
+            'USER': 'postgres',
             'PASSWORD': '!!Indepen??##*',
             'HOST': 'django-dev-database.c6kieiiqjoxj.sa-east-1.rds.amazonaws.com',
             'PORT': 5432
@@ -175,11 +175,11 @@ REST_FRAMEWORK = {
     # ]
 }
 
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-# AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
-# AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
-# AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+#AWS_ACCESS_KEY_ID = 
+#AWS_SECRET_ACCESS_KEY = 
+#AWS_STORAGE_BUCKET_NAME = 'dev.cdn.farmacia.atencion.independencia.cl' 
 
-# AWS_S3_FILE_OVERWRITE = False
-# AWS_DEFAULT_ACL = None
-# AWS_LOCATION = 'media/'
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+AWS_LOCATION = 'media/'
