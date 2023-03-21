@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'database.core',
     'database.farmacia',
     'database.seguridad',
+    'database.mapa_legacy',
     
     #third-party
     'corsheaders',
