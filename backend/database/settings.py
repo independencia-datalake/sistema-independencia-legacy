@@ -53,12 +53,10 @@ INSTALLED_APPS = [
     #third-party
     'corsheaders',
     'rest_framework',
-<<<<<<< Updated upstream
     'storages',
-=======
     'rest_framework.authtoken',
 
->>>>>>> Stashed changes
+
 ]
 
 MIDDLEWARE = [
@@ -241,13 +239,8 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 #AWS_SECRET_ACCESS_KEY = 
 #AWS_STORAGE_BUCKET_NAME = 'dev.cdn.farmacia.atencion.independencia.cl' 
 
-<<<<<<< Updated upstream
-AWS_S3_FILE_OVERWRITE = False
-AWS_DEFAULT_ACL = None
-AWS_LOCATION = 'media/'
-=======
+
 # AWS_S3_FILE_OVERWRITE = False
 # AWS_DEFAULT_ACL = None
 # AWS_LOCATION = 'media/'
 
->>>>>>> Stashed changes
