@@ -4,6 +4,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { Persona } from 'src/app/interface/core/persona';
 import { PersonaService } from 'src/app/service/persona.service';
+import { ProductosService } from 'src/app/service/productos.service';
 
 export class Product {
   name: string='a';
@@ -38,7 +39,11 @@ export class VentaComponent implements OnInit {
     files: this.fb.array([])
   });
 
+  options = [];
+  filteredOptions;
+
   constructor(private fb:FormBuilder,
+              private productosfarmacia: ProductosService,
               private personaService: PersonaService,
               // private telefonoService: TelefonoService,
               private route: ActivatedRoute) {
@@ -50,10 +55,12 @@ export class VentaComponent implements OnInit {
   ngOnInit(): void {
     console.log('copium')
     this.loading = true;
-    this.personaService.getPersona(this.id_persona).pipe(take(1)).subscribe(data => {this.persona = data;})
-    this.personaService.getTelefono(this.id_persona).pipe(take(1)).subscribe(data => {this.telefono = data;})
-    this.personaService.getCorreo(this.id_persona).pipe(take(1)).subscribe(data => {this.correo = data;})
-    this.personaService.getPersonaInfoSalud(this.id_persona).pipe(take(1)).subscribe(data => {this.infosalud = data;})
+    // this.personaService.getPersona(this.id_persona).pipe(take(1)).subscribe(data => {this.persona = data;})
+    // this.personaService.getTelefono(this.id_persona).pipe(take(1)).subscribe(data => {this.telefono = data;})
+    // this.personaService.getCorreo(this.id_persona).pipe(take(1)).subscribe(data => {this.correo = data;})
+    // this.personaService.getPersonaInfoSalud(this.id_persona).pipe(take(1)).subscribe(data => {this.infosalud = data;})
+
+    this.getProductosOptions();
   }
 
 
@@ -76,6 +83,13 @@ export class VentaComponent implements OnInit {
 
   deleteProducto(productoIndex: number){
     this.productos.removeAt(productoIndex);
+  }
+
+  getProductosOptions(): void {
+    this.productosfarmacia.getProductos().subscribe(response => {
+      this.options = response;
+      this.filteredOptions = response;
+    })
   }
 
   selectedFile: any = null;

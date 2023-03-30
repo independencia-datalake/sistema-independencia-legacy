@@ -2,32 +2,33 @@
   <div class="container contenidos-comprobante-venta">
       <div class="row">
           <div class="col">
-              <h2> Nombre <span class="magenta"> {{ persona.nombre_completo }} </span></h2>
-
+              <!-- <h2> Nombre <span class="magenta"> {{ persona.nombre_completo }} </span></h2> -->
+              <h2> Nombre <span class="magenta"> jaime </span></h2>
               <h4 class="magenta">Nº de Identificación:</h4>
-              <p>{{ persona.numero_identificacion }}</p>
+              <!-- <p>{{ persona.numero_identificacion }}</p> -->
               <h4 class="magenta">Nº de Teléfono</h4>
-              <p>{{ telefono.telefono }}</p>
+              <!-- <p>{{ telefono.telefono }}</p> -->
               <h4 class="magenta"> N° de Teléfono Secundario</h4>
-              <p>{{ telefono.telefono_secundario }}</p>
+              <!-- <p>{{ telefono.telefono_secundario }}</p> -->
               <h4 class="magenta">Correo:</h4>
-              <p>{{ correo.correo }}</p>
+              <!-- <p>{{ correo.correo }}</p> -->
           </div>
           <div class="col">
-              <h2> UV: <span class="magenta"> {{ persona.uv }} </span></h2>
+              <!-- <h2> UV: <span class="magenta"> {{ persona.uv }} </span></h2> -->
+              <h2> UV: <span class="magenta"> 420 </span></h2>
               <h4 class="magenta">Fecha de nacimiento:</h4>
-              <p>{{ persona.fecha_nacimiento }}</p>
+              <!-- <p>{{ persona.fecha_nacimiento }}</p> -->
               <h4 class="magenta">Dirección:</h4>
               <p>doxeado
           </div>
           <div class="col">
               <h2>Antecedentes de Salud</h2>
               <h4 class="magenta">Prevision</h4>
-              <p>{{ infosalud.prevision }}</p>
+              <!-- <p>{{ infosalud.prevision }}</p> -->
               <h4 class="magenta">Isapre</h4>
-              <p>{{ infosalud.isapre }}</p>
+              <!-- <p>{{ infosalud.isapre }}</p> -->
               <h4 class="magenta">Observaciones</h4>
-              <p>{{ infosalud.comentarios }}</p>
+              <!-- <p>{{ infosalud.comentarios }}</p> -->
 
           </div>
       </div>
@@ -57,15 +58,19 @@
       <ng-container formArrayName="productos">
         <ng-container *ngFor="let productoForm of productos.controls; let i = index" [formGroupName]="i">
           <div class="producto-form-row">
-            <mat-form-field>
-              <mat-label>Nombre Producto</mat-label>
-              <input formControlName="nombre" matInput placeholder="Producto X">
-              <!-- <mat-placeholder class="placeholder">Search</mat-placeholder> -->
-            </mat-form-field>
+            <mat-form-field class="info">
+              <mat-label>Nombre del producto </mat-label>
+                <mat-select>
+                  <mat-option *ngFor="let producto of filteredOptions" [value]="producto">
+                    {{ producto }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
 
-            <mat-form-field>
+            <mat-form-field >
               <mat-label>Cantidad</mat-label>
-              <input formControlName="cantidad" matInput placeholder="XX">
+              <input type="number" formControlName="cantidad" matInput placeholder="0">
+              <span matTextSuffix>unidades</span>
             </mat-form-field>
 
             <button class="btn ver-o-editar eliminar" (click)="deleteProducto(i)"><mat-icon class="icon-display">delete_forever</mat-icon></button>

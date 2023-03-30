@@ -3,6 +3,7 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { PersonaService } from 'src/app/service/persona.service';
 import { CallesService } from 'src/app/service/calles.service';
 import { ActivatedRoute, Params } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-persona-crear',
@@ -32,7 +33,7 @@ export class PersonaCrearComponent implements OnInit{
 
   selectedValue: number;
 
-  constructor(private fb: FormBuilder, private personaService: PersonaService, private callesIndependencia: CallesService, private route: ActivatedRoute) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private personaService: PersonaService, private callesIndependencia: CallesService, private route: ActivatedRoute) {
 
     this.addArchivo()
   }

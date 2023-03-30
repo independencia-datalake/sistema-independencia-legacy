@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -11,6 +11,9 @@ import { CoreModule } from './core/core.module';
 import { SeguridadModule } from './seguridad/seguridad.module';
 import { UsersComponent } from './users/users.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AuthModule } from './auth/auth.module';
+
+
 
 
 @NgModule({
@@ -28,7 +31,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     SeguridadModule,
     FormsModule,
     ReactiveFormsModule,
-
+    AuthModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

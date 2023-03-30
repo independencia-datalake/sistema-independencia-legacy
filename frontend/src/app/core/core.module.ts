@@ -48,6 +48,7 @@ import { MatTableModule } from '@angular/material/table';
 
 
 
+
 @NgModule({
   declarations: [
     HeaderComponent,
@@ -88,6 +89,7 @@ import { MatTableModule } from '@angular/material/table';
     MatTabsModule,
     MatDialogModule,
     MatTableModule,
+
 
   ],
   providers: [

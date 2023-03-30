@@ -17,8 +17,13 @@ export class UsersService {
   }
 
   getUser(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/users/2`);
+    return this.http.get<User>(`${this.apiUrl}/users/2/`);
   }
+
+  getUser2(user: User): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/users/${user.id}/`);
+  }
+
 
   createUser(user: User): Observable<User> {
     return this.http.post<User>(`${this.apiUrl}/users/`, user);
@@ -29,7 +34,7 @@ export class UsersService {
   }
 
   deleteUser(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/users/${id}/delete/`)
+    return this.http.delete<void>(`${this.apiUrl}/users/delete/${id}/`)
   }
 
 }

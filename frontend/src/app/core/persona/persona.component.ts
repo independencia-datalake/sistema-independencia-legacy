@@ -60,5 +60,8 @@ export class PersonaComponent implements OnInit{
     }
     this.loading = false;
   }
+  ventaSaltar(): void {
+    this.router.navigate(['farmacia/venta'], { queryParams: {id_persona: 1}})
+  }
 
 }

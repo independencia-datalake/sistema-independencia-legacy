@@ -27,7 +27,7 @@ class UV(models.Model):
         return f'{self.numero_uv}'
 
 class Persona(models.Model):
-    uv = models.ForeignKey(UV, on_delete=models.PROTECT, verbose_name="Unidad Vecinal")
+    uv = models.ForeignKey(UV, on_delete=models.PROTECT, verbose_name="Unidad Vecinal", blank=True, null=True)
     tipo_identificacion = models.CharField(blank=False, default='RUT', max_length=200,
                                             choices=(
                                                 ('RUT','Rut'),
@@ -40,7 +40,7 @@ class Persona(models.Model):
     nombre_persona = models.CharField(max_length=200, verbose_name="Nombre Persona")
     apellido_paterno = models.CharField(max_length=200, verbose_name="Apellido Paterno")
     apellido_materno = models.CharField(max_length=200, verbose_name="Apellido Materno")
-    nombre_completo = models.CharField(max_length=200, verbose_name="Nombre Completo")
+    nombre_completo = models.CharField(max_length=200, verbose_name="Nombre Completo",blank=True, null=True )
     fecha_nacimiento = models.DateField(verbose_name='Fecha de Nacimiento', blank=True, null=True)
     estado_civil = models.CharField(
         null=True,

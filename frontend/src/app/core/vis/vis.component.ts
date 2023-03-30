@@ -76,10 +76,13 @@ export class VisComponent {
 
     });
 
-    this.map = new Map('map').setView([-33.414316, -70.664376], 14); // asignar el valor de la variable map
+    // this.map = new Map('map').setView([-33.414316, -70.664376], 14); // asignar el valor de la variable map
+    this.map = new Map('map').setView([-33.416793, -70.662822], 14); // asignar el valor de la variable map
+
     tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains: 'abcd',
+      opacity:0,
       // maxZoom: 14
     }).addTo(this.map); // Usar this.map en lugar de map
 
@@ -89,6 +92,22 @@ export class VisComponent {
       onEachFeature: onEachFeature
     }).addTo(this.map);
 
+    // const image = '../../../assets/PREDIOS_INDEPENDENCIA.mid.Png';
+    const image = '../../../assets/PREDIOS_INDEPENDENCIA.neo.Png';
+    // const image = '../../../assets/PREDIOS_INDEPENDENCIA.small.Png';
+    const imageBounds = L.latLngBounds([[-33.3988667, -70.681777777], [-33.4322444, -70.650155555]]);
+    // const imageBounds = L.latLngBounds([[-33.3988667, -70.68177815372947], [-33.43226186336609, -70.65015499735182]]);
+
+    // L.rectangle(imageBounds).addTo(this.map);
+    // this.map.fitBounds(imageBounds);
+
+    const imageOptions = {
+      opacity: 0.5,
+      zIndex: 1,
+      attribution: 'Image attribution',
+      interactive: true
+    };
+    L.imageOverlay(image, imageBounds, imageOptions).addTo(this.map);
     function getColor(d) {
       return d >= 90 ? '#FC3D59' :
              d >= 70 ? '#FA6378' :
@@ -217,17 +236,6 @@ tablita() {
 // TABLA
 displayedColumns: string[] = ['nombre', 'densidad'];
 pez: any = this.tablita();
-
-
-// dataSource: unidad_vecinal[] = [
-//   {nombre: 'UV-1', densidad: 5},
-//   {nombre: 'UV-9', densidad: 42},
-//   {nombre: 'UV-15', densidad: 68},
-//   {nombre: 'UV-26', densidad: 100},
-//   this.pez
-// ];
-// dataSource: unidad_vecinal[] = this.pez;
-
 
 
 }

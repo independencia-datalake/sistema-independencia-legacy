@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LoginComponent } from './auth/login/login.component';
+import { SignupComponent } from './auth/signup/signup.component';
 import { HomeComponent } from './core/home/home.component';
 import { InfoComunaComponent } from './core/info-comuna/info-comuna.component';
 import { InfoUvComponent } from './core/info-uv/info-uv.component';
@@ -15,14 +17,21 @@ import { StockProductosComponent } from './farmacia/stock-productos/stock-produc
 import { VentaComponent } from './farmacia/venta/venta.component';
 import { SeguridadHomeComponent } from './seguridad/seguridad-home/seguridad-home.component';
 
+import { AuthGuard } from './guards/auth.guard';
+import { CrearProductoComponent } from './farmacia/crear-producto/crear-producto.component';
+
+
 const routes: Routes = [
+  // AUTH
+  { path: 'login', component: LoginComponent},
+  { path: 'signup', component: SignupComponent},
   // CORE
   {path:'',component:HomeComponent},
-  {path:'quienes',component:QuienesSomosComponent},
+  {path:'quienes',component:QuienesSomosComponent, canActivate: [AuthGuard]},
   {path:'qna',component:QnaComponent},
   {path:'persona',component:PersonaComponent},
   {path:'persona/crear',component:PersonaCrearComponent},
-  {path:'vis',component:VisComponent},
+  {path:'vis',component:VisComponent, canActivate: [AuthGuard]},
   {path: 'conoce-tu-area', component:InfoComunaComponent},
   {path: 'conoce-tu-uv', component:InfoUvComponent},
 
@@ -31,9 +40,10 @@ const routes: Routes = [
   {path:'farmacia/informes',component:InformesFarmaciaComponent},
   {path:'farmacia/venta',component:VentaComponent},
 
+
   // STOCK
   {path:'stock',component:StockProductosComponent},
-
+  {path:'stock/crear-producto',component:CrearProductoComponent},
   // SEGURIDAD
   {path:'seguridad', component:SeguridadHomeComponent},
 ];

@@ -1,0 +1,37 @@
+mat-card {
+  width: 60%;
+  margin: auto;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+mat-spinner {
+  margin: auto;
+}
+
+input {
+  width: 525px !important;
+}
+
+.mat-mdc-card {
+  position: relative;
+  background-color: white;
+}
+
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
+  color: rgb(0 0 0 / 87%);
+}
+
+
+.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+  background-color: #f5f5f5;
+}
+input::placeholder {
+  color: rgb(132, 132, 132) !important;
+}
+.mat-mdc-raised-button.mat-accent {
+  --mdc-protected-button-container-color: #fc3d59;
+  --mdc-protected-button-label-text-color: white;
+}

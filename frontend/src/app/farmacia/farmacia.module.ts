@@ -12,6 +12,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
+import { CrearProductoComponent } from './crear-producto/crear-producto.component';
+import { MatSelectModule } from '@angular/material/select';
 
 
 
@@ -21,7 +23,8 @@ import { MatButtonModule } from '@angular/material/button';
     FarmaciaHomeComponent,
     StockProductosComponent,
     InformesFarmaciaComponent,
-    VentaComponent
+    VentaComponent,
+    CrearProductoComponent
   ],
   imports: [
     CommonModule,
@@ -33,6 +36,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     MatCardModule,
     MatButtonModule,
+    MatSelectModule,
   ],
 
 })

@@ -29,6 +29,7 @@ def update_bodega_by_mermado(sender, instance, **kwargs):
 @receiver(pre_save, sender=ProductoVendido)
 def update_bodega_by_venta(sender, instance, **kwargs):
     num = ProductoVendido.objects.filter(pk=instance.pk).count()
+    print('pez')
     if num == 0:        
         key = instance.nombre.id
         cantidad_vendida = instance.cantidad

@@ -1,0 +1,37 @@
+<div class="container contenedor-wrap text-container">
+  <form [formGroup]="formCrearProducto" (submit)="createProducto()">
+
+    <mat-form-field class="info">
+      <mat-label>Nombre del producto </mat-label>
+        <input formControlName="marca_producto" matInput placeholder="" required>
+      </mat-form-field>
+
+    <mat-form-field class="info">
+      <mat-label>Componente Activo </mat-label>
+        <input formControlName="p_a" matInput placeholder="" required>
+      </mat-form-field>
+
+    <mat-form-field class="info">
+      <mat-label>Dosis </mat-label>
+        <input formControlName="dosis" matInput placeholder="" required>
+      </mat-form-field>
+
+    <mat-form-field class="info">
+      <mat-label>Presentacion </mat-label>
+        <input formControlName="presentacion" matInput placeholder="" required>
+      </mat-form-field>
+
+    <mat-form-field class="info">
+      <mat-label>Proovedor </mat-label>
+        <input formControlName="p_a" matInput placeholder="" required>
+      </mat-form-field>
+
+      <div>
+        <button type="submit" mat-raised-button>Crear producto</button>
+        <!-- <button mat-button (click)="">Reset</button> -->
+      </div>
+
+
+
+  </form>
+</div>

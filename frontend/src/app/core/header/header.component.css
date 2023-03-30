@@ -37,3 +37,7 @@
 .mat-mdc-button:not(:disabled) {
   color: #ffffff !important;
 }
+
+.nombre_usuario {
+  font-size: 18px;
+}
