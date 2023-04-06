@@ -19,6 +19,7 @@ import { SeguridadHomeComponent } from './seguridad/seguridad-home/seguridad-hom
 
 import { AuthGuard } from './guards/auth.guard';
 import { CrearProductoComponent } from './farmacia/crear-producto/crear-producto.component';
+import { ComprobanteventaDetailComponent } from './farmacia/comprobanteventa-detail/comprobanteventa-detail.component';
 
 
 const routes: Routes = [
@@ -39,6 +40,7 @@ const routes: Routes = [
   {path:'farmacia',component:FarmaciaHomeComponent},
   {path:'farmacia/informes',component:InformesFarmaciaComponent},
   {path:'farmacia/venta',component:VentaComponent},
+  {path:'farmacia/comprobanteventa-detail', component:ComprobanteventaDetailComponent},
 
 
   // STOCK

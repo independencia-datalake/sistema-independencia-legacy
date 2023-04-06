@@ -3,32 +3,31 @@
       <div class="row">
           <div class="col">
               <!-- <h2> Nombre <span class="magenta"> {{ persona.nombre_completo }} </span></h2> -->
-              <h2> Nombre <span class="magenta"> jaime </span></h2>
+              <h2> Nombre <span class="magenta"> {{ persona.nombre_completo }} </span></h2>
               <h4 class="magenta">Nº de Identificación:</h4>
-              <!-- <p>{{ persona.numero_identificacion }}</p> -->
+              <p>{{ persona.numero_identificacion }}</p>
               <h4 class="magenta">Nº de Teléfono</h4>
-              <!-- <p>{{ telefono.telefono }}</p> -->
+              <p>{{ telefono.telefono }}</p>
               <h4 class="magenta"> N° de Teléfono Secundario</h4>
-              <!-- <p>{{ telefono.telefono_secundario }}</p> -->
+              <p>{{ telefono.telefono_secundario }}</p>
               <h4 class="magenta">Correo:</h4>
-              <!-- <p>{{ correo.correo }}</p> -->
+              <p>{{ correo.correo }}</p>
           </div>
           <div class="col">
-              <!-- <h2> UV: <span class="magenta"> {{ persona.uv }} </span></h2> -->
-              <h2> UV: <span class="magenta"> 420 </span></h2>
+              <h2> UV: <span class="magenta"> {{ persona.uv }} </span></h2>
               <h4 class="magenta">Fecha de nacimiento:</h4>
-              <!-- <p>{{ persona.fecha_nacimiento }}</p> -->
+              <p>{{ persona.fecha_nacimiento }}</p>
               <h4 class="magenta">Dirección:</h4>
               <p>doxeado
           </div>
           <div class="col">
               <h2>Antecedentes de Salud</h2>
               <h4 class="magenta">Prevision</h4>
-              <!-- <p>{{ infosalud.prevision }}</p> -->
+              <p>{{ infosalud.prevision }}</p>
               <h4 class="magenta">Isapre</h4>
-              <!-- <p>{{ infosalud.isapre }}</p> -->
+              <p>{{ infosalud.isapre }}</p>
               <h4 class="magenta">Observaciones</h4>
-              <!-- <p>{{ infosalud.comentarios }}</p> -->
+              <p>{{ infosalud.comentarios }}</p>
 
           </div>
       </div>
@@ -53,16 +52,16 @@
   <hr>
   <mat-card >
     <h2>Productos</h2>
-    <div [formGroup]="formProductos">
+    <form [formGroup]="formProductos">
 
-      <ng-container formArrayName="productos">
+      <ng-container formArrayName="producto">
         <ng-container *ngFor="let productoForm of productos.controls; let i = index" [formGroupName]="i">
           <div class="producto-form-row">
             <mat-form-field class="info">
               <mat-label>Nombre del producto </mat-label>
-                <mat-select>
+                <mat-select (selectionChange)="seleccionarProducto($event, i)">
                   <mat-option *ngFor="let producto of filteredOptions" [value]="producto">
-                    {{ producto }}
+                    {{ producto.marca_producto }}
                   </mat-option>
                 </mat-select>
               </mat-form-field>
@@ -81,7 +80,7 @@
       </ng-container>
 
 
-    </div>
+    </form>
 
     <div>
       <button mat-raised-button (click)="addProducto()">

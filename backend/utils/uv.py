@@ -1,7 +1,12 @@
 import pandas as pd
+import os
 
 def obtener_uv(calle, numero):
-  df = pd.read_csv('calculadorauv/static/calculadorauv/streets_uv.csv')
+  print(os.getcwd())
+  # df = pd.read_csv('calculadorauv/static/calculadorauv/streets_uv.csv')
+  df = pd.read_csv('{}\\static\\assets\\streets_uv.csv'.format(os.getcwd()))
+  # path('{}/static/assets/streats_uv.csv'.format(os.getcwd()))
+  # df = None
   validaciones = df[df['calle']==calle]
   uv = None
 
@@ -99,3 +104,8 @@ def validar_igual(numero, validacion):
   igual = int(validacion['conjunto'])
   if numero == igual:
     return validacion['uv']
+  
+
+
+
+# obtener_uv('LA PAZ', 482)

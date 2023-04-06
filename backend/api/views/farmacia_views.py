@@ -57,6 +57,7 @@ class ProductoFarmaciaDetailAPIViw(generics.RetrieveAPIView):
     serializer_class = ProductoFarmaciaSerializer
     lookup_field = 'pk'
 
+
 class ProductoFarmaciaUpdateAPIViw(generics.UpdateAPIView):
     queryset = ProductoFarmacia.objects.all()
     serializer_class = ProductoFarmaciaSerializer

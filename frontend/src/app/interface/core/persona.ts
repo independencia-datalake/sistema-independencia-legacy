@@ -20,6 +20,6 @@ export interface Persona {
     embarazo?: boolean;
     certificado_embarazo?: boolean;
     created?: string;
-    updated: string;
+    updated?: string;
     uv?: Uv;
   }

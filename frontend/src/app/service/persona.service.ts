@@ -6,6 +6,7 @@ import { Correo } from '../interface/core/correo';
 import { Persona } from '../interface/core/persona';
 import { PersonaInfoSalud } from '../interface/core/personainfosalud';
 import { Telefono } from '../interface/core/telefono';
+import { Direccion } from '../interface/core/direccion';
 
 @Injectable({
   providedIn: 'root'
@@ -36,5 +37,25 @@ export class PersonaService {
 
   getPersonaInfoSalud(id_persona): Observable<PersonaInfoSalud> {
     return this.http.get<PersonaInfoSalud>(`${this.apiUrl}/core/personainfosalud/${id_persona}`);
+  }
+
+  createPersona(persona: Persona): Observable<Persona> {
+    return this.http.post<Persona>(`${this.apiUrl}/core/persona/`, persona)
+  }
+
+  createDireccion(direccion: Direccion): Observable<Direccion> {
+    return this.http.post<Direccion>(`${this.apiUrl}/core/direccion/`, direccion)
+  }
+
+  createCorreo(correo: Correo): Observable<Correo> {
+    return this.http.post<Correo>(`${this.apiUrl}/core/correo/`, correo)
+  }
+
+  createTelefono(telefono: Telefono): Observable<Telefono> {
+    return this.http.post<Telefono>(`${this.apiUrl}/core/telefono/`, telefono)
+  }
+
+  createInfosalud(infosalud: PersonaInfoSalud): Observable<PersonaInfoSalud> {
+    return this.http.post<PersonaInfoSalud>(`${this.apiUrl}/core/personainfosalud/`, infosalud)
   }
 }

@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 if DEBUG:
     LLOWED_HOSTS = ['*']
@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     #third-party
     'corsheaders',
     'rest_framework',
-    'storages',
+    # 'storages',
     'rest_framework.authtoken',
 
 
@@ -234,7 +234,7 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_SERIALIZER": "rest_framework_simplejwt.serializers.TokenRefreshSlidingSerializer",
 }
 
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 #AWS_ACCESS_KEY_ID = 
 #AWS_SECRET_ACCESS_KEY = 
 #AWS_STORAGE_BUCKET_NAME = 'dev.cdn.farmacia.atencion.independencia.cl' 

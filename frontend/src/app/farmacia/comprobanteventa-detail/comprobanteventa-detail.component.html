@@ -1,0 +1,11 @@
+<div>N° de Venta: {{ id_comprobante }}</div>
+<div>N° de identificacion: {{ n_identificacion }}</div>
+<div>Receta:</div>
+<div>Fecha de venta: {{ fecha_venta }}</div>
+<div>atentido por: {{ profesional }}</div>
+
+<div>Precio total: {{ totalVenta }}</div>
+
+<ul>
+  <li *ngFor="let producto of productos">nombre: {{ producto.nombre }} | Cantidad: {{ producto.cantidad }} | Precio venta: {{ producto.precio_venta }}</li>
+</ul>

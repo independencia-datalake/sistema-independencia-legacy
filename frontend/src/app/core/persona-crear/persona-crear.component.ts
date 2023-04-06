@@ -4,6 +4,7 @@ import { PersonaService } from 'src/app/service/persona.service';
 import { CallesService } from 'src/app/service/calles.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-persona-crear',
@@ -31,7 +32,7 @@ export class PersonaCrearComponent implements OnInit{
   options = [];
   filterdOptions;
 
-  selectedValue: number;
+  selectedValue: any;
 
   constructor(private fb: FormBuilder, private http: HttpClient, private personaService: PersonaService, private callesIndependencia: CallesService, private route: ActivatedRoute) {
 
@@ -64,13 +65,14 @@ export class PersonaCrearComponent implements OnInit{
     })
 
     this.formDireccionPersona = this.fb.group({
-      persona:'',
+      persona:2,
       calle:'',
       numero:'',
       complemento_direccion:'',
+      uv:'',
     })
     this.formDireccionPersona.get('calle').valueChanges.subscribe(response => {
-      console.log('data is ', response);
+      // console.log('data is ', response);
       this.filterData(response);
     })
 
@@ -154,6 +156,66 @@ export class PersonaCrearComponent implements OnInit{
   this.archivos.removeAt(archivoIndex)
  }
 
+ onSubmit() {
+  console.log('nom nom nom')
 
+  // CREAR PERSONA
+  const data_persona = this.formCrearPersona.value;
+  const fechaformateada = format(data_persona.fecha_nacimiento, 'yyyy-MM-dd');
+  data_persona.fecha_nacimiento = fechaformateada
+  this.personaService.createPersona(data_persona).subscribe(respuesta => {
+  const persona_actual = respuesta.id;
+
+
+  // CREAR DIRECCION
+  const data_direccion = this.formDireccionPersona.value;
+  data_direccion.persona = persona_actual;
+  // console.log(data_direccion)
+  this.personaService.createDireccion(data_direccion).subscribe(respuesta =>{
+    console.log(respuesta)
+  }, (error)=> {
+    console.log(error);
+  });
+
+  // CREAR CORREO
+  const data_correo = this.formCorreoPersona.value;
+  data_correo.persona = persona_actual;
+    this.personaService.createCorreo(data_correo).subscribe(respuesta => {
+      console.log(respuesta)
+    }, (error)=>{
+      console.log(error)
+    })
+
+  // CREAR TELEFONO
+  const data_telefono = this.formTelefonoPersona.value;
+  data_telefono.persona = persona_actual
+    this.personaService.createTelefono(data_telefono).subscribe(respuesta => {
+      console.log(respuesta)
+    }, (error)=>{
+      console.log(error)
+    })
+
+  // CREAR PERSONA INFOSALUD
+  const data_infosalud = this.formInfoSaludPersona.value;
+  data_infosalud.persona = persona_actual
+  if (data_infosalud.prevision !== 'ISAPRE') {
+    data_infosalud.isapre = "NO APLICA"
+  } else {
+
+  }
+
+  // console.log(data_infosalud)
+    this.personaService.createInfosalud(data_infosalud).subscribe(respuesta => {
+      console.log(respuesta)
+    }, (error)=>{
+      console.log(error)
+    })
+
+    console.log(respuesta)
+  }, (error)=> {
+    console.log(error);
+  });
+
+ }
 
 }

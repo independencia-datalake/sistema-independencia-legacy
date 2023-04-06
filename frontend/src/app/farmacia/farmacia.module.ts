@@ -14,6 +14,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { CrearProductoComponent } from './crear-producto/crear-producto.component';
 import { MatSelectModule } from '@angular/material/select';
+import { ComprobanteventaDetailComponent } from './comprobanteventa-detail/comprobanteventa-detail.component';
 
 
 
@@ -24,7 +25,8 @@ import { MatSelectModule } from '@angular/material/select';
     StockProductosComponent,
     InformesFarmaciaComponent,
     VentaComponent,
-    CrearProductoComponent
+    CrearProductoComponent,
+    ComprobanteventaDetailComponent
   ],
   imports: [
     CommonModule,

@@ -80,7 +80,7 @@
 
           <mat-form-field style="width: 212px;">
             <mat-label>Fecha de Nacimiento</mat-label>
-            <input matInput [matDatepicker]="picker1" autocomplete="off"  placeholder="and placeholder">
+            <input matInput [matDatepicker]="picker1" autocomplete="off"  placeholder="and placeholder" formControlName="fecha_nacimiento">
             <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
             <mat-datepicker #picker1 color="primary"></mat-datepicker>
           </mat-form-field>
@@ -149,13 +149,13 @@
             <label>Tipo de Telefono </label>
             <mat-radio-group formControlName="tipo_telefono" aria-label="Select an option" required>
               <div>
-                <mat-radio-button value="Movil">Movil</mat-radio-button>
+                <mat-radio-button value="MOVIL">Movil</mat-radio-button>
               </div>
               <div>
-                <mat-radio-button value="Casa">Casa</mat-radio-button>
+                <mat-radio-button value="CASA">Casa</mat-radio-button>
               </div>
               <div>
-                <mat-radio-button value="Trabajo">Trabajo</mat-radio-button>
+                <mat-radio-button value="TRABAJO">Trabajo</mat-radio-button>
               </div>
               <div>
                 <mat-radio-button value="OTRO">Otro</mat-radio-button>
@@ -171,13 +171,13 @@
             <label>Tipo Telefono secundario</label>
           <mat-radio-group formControlName="tipo_telefono_secundario" aria-label="Select an option" required>
             <div>
-              <mat-radio-button value="Movil">Movil</mat-radio-button>
+              <mat-radio-button value="MOVIL">Movil</mat-radio-button>
             </div>
             <div>
-              <mat-radio-button value="Casa">Casa</mat-radio-button>
+              <mat-radio-button value="CASA">Casa</mat-radio-button>
             </div>
             <div>
-              <mat-radio-button value="Trabajo">Trabajo</mat-radio-button>
+              <mat-radio-button value="TRABAJO">Trabajo</mat-radio-button>
             </div>
             <div>
               <mat-radio-button value="OTRO">Otro</mat-radio-button>
@@ -204,22 +204,22 @@
       <label><h2>Previsión de Salud: </h2></label>
       <mat-radio-group [(ngModel)]="selectedValue" formControlName="prevision" aria-label="Select an option" required>
         <div>
-          <mat-radio-button [value]="0" value="FONASA">Fonasa</mat-radio-button>
+          <mat-radio-button  value="FONASA">Fonasa</mat-radio-button>
         </div>
         <div>
-          <mat-radio-button [value]="0" value="DIPRECA-CAPREDENA">Dipreca-Capredena</mat-radio-button>
+          <mat-radio-button value="DIPRECA-CAPREDENA">Dipreca-Capredena</mat-radio-button>
         </div>
         <div>
-          <mat-radio-button [value]="1" value="ISAPRE">Isapre</mat-radio-button>
+          <mat-radio-button value="ISAPRE">Isapre</mat-radio-button>
         </div>
         <div>
-          <mat-radio-button [value]="0" value="NINGUNA">Ninguna</mat-radio-button>
+          <mat-radio-button value="NINGUNA">Ninguna</mat-radio-button>
         </div>
       </mat-radio-group>
 
-      <mat-form-field *ngIf="selectedValue ===1 " appearance="outline">
+      <mat-form-field *ngIf="selectedValue ==='ISAPRE' " appearance="outline">
         <mat-label>Previsión de Salud</mat-label>
-        <mat-select>
+        <mat-select formControlName="isapre">
           <mat-option value="NO APLICA">No Aplica</mat-option>
           <mat-option value="BANMEDICA">Banmedica</mat-option>
           <mat-option value="ISALUD">Isalud</mat-option>
@@ -240,7 +240,7 @@
       <h2>Observaciónes: </h2>
       <mat-form-field class="example-full-width">
         <mat-label>Comentarios</mat-label>
-        <textarea matInput rows="8" placeholder=""></textarea>
+        <textarea matInput rows="8" placeholder="" formControlName="comentarios"></textarea>
       </mat-form-field>
     </div>
     </form>
@@ -277,7 +277,7 @@
       <ng-template matStepLabel>Crear Persona</ng-template>
       <p>Texto de Prueba</p>
       <div>
-        <button type="submit" mat-raised-button>Siguente</button>
+        <button (click)="onSubmit()" mat-raised-button>Siguente</button>
         <!-- <button mat-button (click)="">Reset</button> -->
       </div>
     </mat-step>
