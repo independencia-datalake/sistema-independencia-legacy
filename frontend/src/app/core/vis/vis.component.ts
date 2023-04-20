@@ -4,10 +4,15 @@ import * as L from 'leaflet';
 import { HttpClient } from '@angular/common/http';
 import { GeoJSON } from 'leaflet';
 import { MatTableDataSource } from '@angular/material/table';
+import { map } from 'rxjs/operators';
+import { forkJoin } from 'rxjs';
+import { EmpresasServiceService } from 'src/app/service/empresas.service.service';
+import { ChangeDetectorRef } from '@angular/core';
 
 interface unidad_vecinal {
   nombre: any;
   densidad: any;
+  comercial?: any;
 }
 
 @Component({
@@ -18,10 +23,21 @@ interface unidad_vecinal {
 })
 export class VisComponent {
 
+  fechaInicio: Date;
+  fechaFin: Date;
+  minValue: number;
+  maxValue: number;
+  sliderValue: number[] = [0, 100];
+
   result: any[];
   map: Map;
   geoJsonLayer: L.GeoJSON;
   densityData: any;
+  comercialData: any;
+  gslData: any[];
+  empresasData: any[];
+  sumByM: {[key: string]: number} = {};
+  public maximo:any = 101;
 
   infoControl: any;
   info: L.Control;
@@ -29,9 +45,13 @@ export class VisComponent {
   dataTabla: any=[];
 
   unidadesVecinales: unidad_vecinal[] = [];
-  dataSource = new MatTableDataSource<unidad_vecinal>(this.unidadesVecinales);
+  // dataSource = new MatTableDataSource<unidad_vecinal>(this.unidadesVecinales);
+  dataSource = new MatTableDataSource<unidad_vecinal>([...this.unidadesVecinales]);
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private empresas: EmpresasServiceService,
+              private cdr: ChangeDetectorRef,
+              ) {
    }
 
 
@@ -39,42 +59,78 @@ export class VisComponent {
   ngAfterViewInit(): void{
     let geoJsonData: any;  // Definir la variable fuera del método subscribe
 
+  // Realizar ambas solicitudes HTTP en paralelo y esperar a que ambas se completen
+  const gslRequest = this.http.get('../../assets/gsl.json');
+  const uvCoordRequest = this.http.get('../../assets/uv_coordenadas.json');
+  const empresasTotalByUVRequest = this.empresas.getEmpresasTotalByUV();
+  const empresasComercialByUV = this.empresas.getEmpresasComercialByUV();
 
-    // densidad
+  forkJoin([gslRequest, uvCoordRequest, empresasTotalByUVRequest, empresasComercialByUV]).subscribe(([gslData, uvCoordData, empresasTotalByUVData, empresasComercialByUVData]) => {
+    const newData: {[key: string]: number} = {};;
+    const comercialData: {[key: string]: number} = {};;
+    for (const item of this.densityData) {
+      newData[`UV-${item.uv-1}`] = item.densidad;
+    }
+    for (const item of this.comercialData) {
+      comercialData[`UV-${item.uv-1}`] = item.densidad;
+    }
 
-    this.http.get('../../assets/density-test.json').subscribe((data: any) => {
-      this.densityData = data
-      for (const [nombre, densidad] of Object.entries(data)) {
-        this.unidadesVecinales.push({ nombre, densidad });
+    // Lógica relacionada con gslData
+    this.gslData = gslData as any[];
+    // this.sumByM = this.aporteEconomicoUV(this.gslData);
+    // console.log(this.sumByM)
+    this.maximo = Math.max(...Object.values(newData))
+    this.densityData = newData
+    for (const [nombre, densidad] of Object.entries(newData)) {
+      this.unidadesVecinales.push({ nombre, densidad });
+    }
+    // this.dataSource.data = this.unidadesVecinales;
+
+    // Lógica relacionada con uvCoordData
+    geoJsonData = {
+      type: 'FeatureCollection',
+      features: Object.keys(uvCoordData).map((key) => {
+        const coords = Object.values(uvCoordData[key]);
+        const density = this.densityData[key] && this.densityData[key];
+        return {
+          type: 'Feature',
+          properties: {
+            "name": key,
+            "density": density,
+          },
+          geometry: {
+            type: 'Polygon',
+            coordinates: [coords],
+          },
+        };
+      }),
+    };
+
+    this.geoJsonLayer.addData(geoJsonData);
+
+    var legend = new L.Control({position: 'bottomright'})
+    const valorMaximo = this.maximo;
+    const factors = [0, 0.1, 0.3, 0.5, 0.7, 0.9, 1];
+    legend.onAdd = function (map) {
+      var div = L.DomUtil.create('div', 'info legend'),
+      grades = factors.map((factor) => Number((valorMaximo * factor).toFixed(0))),
+      labels = [];
+
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < grades.length; i++) {
+          div.innerHTML +=
+              '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
+              grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
       }
-      this.dataSource.data = this.unidadesVecinales;
-    });
 
-    // Convert the data to GeoJSON
-    this.http.get('../../assets/uv_coordenadas.json').subscribe((data: any) => {
-      geoJsonData = {
-        type: 'FeatureCollection',
-        features: Object.keys(data).map((key) => {
-          const coords = Object.values(data[key]);
-          const density = this.densityData[key]
-          return {
-            type: 'Feature',
-            properties: {
-              "name": key,
-              "density": density,
-            },
-            geometry: {
-              type: 'Polygon',
-              coordinates: [coords],
-            },
-          };
-        }),
-      };
+      return div;
 
-      this.geoJsonLayer.addData(geoJsonData);  // Añadir los datos al layer aquí
+    };
+
+    legend.addTo(this.map)
 
 
-    });
+  });
 
     // this.map = new Map('map').setView([-33.414316, -70.664376], 14); // asignar el valor de la variable map
     this.map = new Map('map').setView([-33.416793, -70.662822], 14); // asignar el valor de la variable map
@@ -108,14 +164,17 @@ export class VisComponent {
       interactive: true
     };
     L.imageOverlay(image, imageBounds, imageOptions).addTo(this.map);
-    function getColor(d) {
-      return d >= 90 ? '#FC3D59' :
-             d >= 70 ? '#FA6378' :
-             d >= 50 ? '#F88A97' :
-             d >= 30 ? '#F6B0B5' :
-             d >= 10 ? '#F4D6D4' :
-                       '#FFC6D9';
+
+    const getColor = (d, max=this.maximo) => {
+      // console.log(this.maximo);
+      return d >= 0.9 * max ? '#FC3D59' :
+             d >= 0.7 * max ? '#FA6378' :
+             d >= 0.5 * max ? '#F88A97' :
+             d >= 0.3 * max ? '#F6B0B5' :
+             d >= 0.1 * max ? '#F4D6D4' :
+                               '#FFC6D9';
     }
+
 
     function style(feature) {
       return {
@@ -188,54 +247,88 @@ const info = L.Control.extend({
 const label = new info(); // label es la etiqueta de arriba a la derecha del mapa
 label.addTo(this.map);
 
-var legend = new L.Control({position: 'bottomright'})
-legend.onAdd = function (map) {
-  var div = L.DomUtil.create('div', 'info legend'),
-  grades = [0, 10, 30, 50, 70, 90, 100],
-  labels = [];
-
-    // loop through our density intervals and generate a label with a colored square for each interval
-    for (var i = 0; i < grades.length; i++) {
-      div.innerHTML +=
-          '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-          grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-  }
-
-  return div;
-
-};
-
-legend.addTo(this.map)
-
-// this.http.get('../../assets/density-test.json').subscribe((data: any) => {
-//   this.densityData = data
-//   console.log(this.densityData)
-// });
-
-// this.tablita
   }
 
 tablita() {
-  this.http.get('../../assets/density-test.json').subscribe((data: any) => {
-  this.densityData = data
-  // console.log([Object.keys(this.densityData)])
-  // console.log(this.densityData)
-  for (let i =0; i<2; i++) {
-    this.dataTabla.push({nombre: Object.keys(this.densityData)[i], densidad: Object.values(this.densityData)[i]})
-  }
-  console.log(this.dataTabla)
-  // console.log([{nombre:'UV-1', densidad: 5},{nombre:'UV-2', densidad: 10}])
-  // return [{nombre:'UV-1', densidad: 5},{nombre:'UV-2', densidad: 10}]
+
+  forkJoin({
+    comercialData: this.empresas.getEmpresasComercialByUV(),
+    densityData: this.empresas.getEmpresasTotalByUV(),
+  }).subscribe(({ comercialData, densityData}) => {
+    // this.dataTabla = this.combineData(comercialData, densityData);
+    // console.log(densityData)
+    this.densityData = densityData
+    this.comercialData = comercialData
+
+    for (let i = 0; i < this.densityData.length; i++) {
+      // this.dataTabla.push({nombre: Object.keys(this.densityData)[i], densidad: Object.values(this.densityData)[i]})
+      this.dataTabla.push({
+        nombre: 'UV-' + (densityData[i].uv-1),
+        total: densityData[i].densidad,
+        comercial: comercialData[i].densidad,
+      });
+    }
+
+    this.dataSource.data = this.dataTabla.map(item => ({
+      nombre: item.nombre,
+      total: item.total,
+      comercial: item.comercial,
+    }));
+
+
+
   });
-  // return [{nombre: Object.keys(this.densityData)[1], densidad: Object.values(this.densityData)[1]}];
-  // return this.kekw
-  // return this.dataTabla
-  return [{nombre:'UV-1', densidad: 5},{nombre:'UV-2', densidad: 10}]
+
 }
 
 // TABLA
-displayedColumns: string[] = ['nombre', 'densidad'];
+displayedColumns: string[] = ['nombre', 'total', 'comercial'];
 pez: any = this.tablita();
+
+logElement(element: any) {
+  console.log(element);
+}
+
+
+
+aporteEconomicoUV(gslData: any[]): any {
+  const sumByM: any = {};
+  // console.log(gslData)
+  gslData.forEach((row) => {
+    if (row['E'] === 'Aporte económico' && row['M'] !== '-' && row['M'] !== 'false') {
+      const m = `UV-${row['M']}`;
+      const count = sumByM[m] || 0;
+      sumByM[m] = count + (Number(row['M']) !== 0 ? 1 : 0);
+    }
+  });
+  // console.log(sumByM)
+
+  const orderedKeys = Object.keys(sumByM).sort((a, b) => {
+    const aNum = parseInt(a.replace('UV-', ''));
+    const bNum = parseInt(b.replace('UV-', ''));
+    return aNum - bNum;
+  });
+
+  const orderedSumByM = {};
+  orderedKeys.forEach(key => {
+    orderedSumByM[key] = sumByM[key];
+  });
+
+  return orderedSumByM;
+}
+
+
+buscar() {
+  const fechaInicio = this.fechaInicio.getTime();
+  const fechaFin = this.fechaFin.getTime();
+
+  // Actualizar el rango del slider
+  this.minValue = fechaInicio;
+  this.maxValue = fechaFin;
+
+  // ... Resto de la lógica de búsqueda
+}
+
 
 
 }

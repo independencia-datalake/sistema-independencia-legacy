@@ -88,7 +88,21 @@ export class AuthService {
     }
 
   }
-
+  async isFarmacia(): Promise<boolean> {
+    const token_check = localStorage.getItem('token');
+    const grupos = this.getGrupos(token_check)
+    try {
+      if (grupos.includes('Farmacia-Farmaceuta')) {
+        console.log('grupo aceptado')
+        return true
+      } else {
+        console.log('grupo no encontrado')
+        return false
+      }
+    } catch (error) {
+      return false
+    }
+  }
 
   // FUNCIONES DEL TOKEN Y DECODE
   decodeToken(access_token) {
@@ -111,6 +125,10 @@ export class AuthService {
   getExpirationDate(access_token) {
     this.decodeToken(access_token);
     return this.decodedToken ? this.decodedToken['exp'] : null
+  }
+  getGrupos(access_token){
+    this.decodeToken(access_token);
+    return this.decodedToken ? this.decodedToken['groups'] : null;
   }
   getUserProfile(access_token): Observable<any> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${access_token}`);

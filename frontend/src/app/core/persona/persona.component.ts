@@ -3,6 +3,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PersonaService } from 'src/app/service/persona.service';
 import { take } from 'rxjs/operators';
+import { ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'app-persona',
@@ -18,6 +19,7 @@ export class PersonaComponent implements OnInit{
   success = false;
 
   personas: any;
+  redireccion: any;
 
   tipo_identificacion: any[] = [
     'Rut',
@@ -25,9 +27,11 @@ export class PersonaComponent implements OnInit{
     'Otro'
   ]
 
-  constructor(private fb: FormBuilder, private personaService: PersonaService, private router: Router) { }
+  constructor(private fb: FormBuilder, private personaService: PersonaService, private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.redireccion = this.route.snapshot.queryParamMap.get('redireccion')
+    console.log(this.redireccion)
     this.formCheckPersona = this.fb.group({
       tipo: '',
       numero_identificacion: ''
@@ -46,13 +50,13 @@ export class PersonaComponent implements OnInit{
 
     try {
       const result = this.personas.find(item => item.numero_identificacion === numero_identificacion)
-      if (typeof result != "undefined") {
+      if (typeof result != "undefined" ) {
         this.success = true
-        console.log(result.id)
-        console.log(this.formCheckPersona.value.numero_identificacion)
-        this.router.navigate(['farmacia/venta'], { queryParams: {id_persona: result.id}})
+        if (this.redireccion === 'farmacia') {
+          this.router.navigate(['farmacia/venta'], { queryParams: {id_persona: result.id}})
+        }
       } else {
-        this.router.navigate(['persona/crear'], { queryParams: {numero_identificacion: numero_identificacion, tipo: tipo_seleccionado }})
+        this.router.navigate(['persona/crear'], { queryParams: {numero_identificacion: numero_identificacion, tipo: tipo_seleccionado, redireccion: this.redireccion }})
 
       }
     } catch(err) {

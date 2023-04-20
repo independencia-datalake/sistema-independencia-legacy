@@ -33,6 +33,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         token['username'] = user.username
 
+        token['groups'] = [group.name for group in user.groups.all()]
+
         return token
 
     def validate(self,attrs):

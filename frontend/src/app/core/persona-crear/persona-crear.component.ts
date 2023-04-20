@@ -5,6 +5,7 @@ import { CallesService } from 'src/app/service/calles.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { format } from 'date-fns';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-persona-crear',
@@ -13,6 +14,7 @@ import { format } from 'date-fns';
   encapsulation: ViewEncapsulation.None,
 })
 export class PersonaCrearComponent implements OnInit{
+  redireccion: any;
 
   numero_identificacion: string;
 
@@ -24,6 +26,12 @@ export class PersonaCrearComponent implements OnInit{
   formInfoSaludPersona: FormGroup;
   formArchivoPersona:FormGroup;
 
+  personaResumen: any;
+  direccionResumen: any;
+  correoResumen: any;
+  telefonoResumen: any;
+  personainfosaludResumen: any;
+
   loading = false;
   success = false;
 
@@ -34,26 +42,32 @@ export class PersonaCrearComponent implements OnInit{
 
   selectedValue: any;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private personaService: PersonaService, private callesIndependencia: CallesService, private route: ActivatedRoute) {
+  constructor(
+    private fb: FormBuilder,
+    private http: HttpClient,
+    private personaService: PersonaService,
+    private callesIndependencia: CallesService,
+    private route: ActivatedRoute,
+    private router: Router) {
 
     this.addArchivo()
   }
 
   ngOnInit(): void {
 
-    console.log(this.route.snapshot.queryParamMap.get('tipo'))
-
+    // console.log(this.route.snapshot.queryParamMap.get('tipo'))
+    this.redireccion = this.route.snapshot.queryParamMap.get('redireccion')
 
     this.formCrearPersona = this.fb.group({
       tipo_identificacion: this.route.snapshot.queryParamMap.get('tipo'),
       numero_identificacion: this.route.snapshot.queryParamMap.get('numero_identificacion'),
-      nombre_persona: 'tavi',
+      nombre_persona: '',
       apellido_paterno: '',
       apellido_materno: '',
       nombre_completo: '',
-      fecha_nacimiento: '',
+      fecha_nacimiento: null,
       estado_civil: '',
-      hijos: '',
+      hijos: 0,
       nacionalidad: '',
       enfermedad: '',
       medicamento: '',
@@ -65,11 +79,11 @@ export class PersonaCrearComponent implements OnInit{
     })
 
     this.formDireccionPersona = this.fb.group({
-      persona:2,
+      persona:'',
       calle:'',
       numero:'',
       complemento_direccion:'',
-      uv:'',
+      uv:1,
     })
     this.formDireccionPersona.get('calle').valueChanges.subscribe(response => {
       // console.log('data is ', response);
@@ -79,16 +93,16 @@ export class PersonaCrearComponent implements OnInit{
 
     this.formCorreoPersona = this.fb.group({
       persona:'',
-      correo:'',
+      correo:null,
 
     })
 
     this.formTelefonoPersona = this.fb.group({
       persona: '',
       telefono:'',
-      tipo_telefono:'',
+      tipo_telefono:null,
       telefono_secundario:'',
-      tipo_telefono_secundario:''
+      tipo_telefono_secundario:null
     })
 
     this.formInfoSaludPersona = this.fb.group({
@@ -156,13 +170,32 @@ export class PersonaCrearComponent implements OnInit{
   this.archivos.removeAt(archivoIndex)
  }
 
+ verResumen() {
+  this.personaResumen = this.formCrearPersona.value;
+  this.direccionResumen = this.formDireccionPersona.value
+  this.correoResumen = this.formCorreoPersona.value
+  this.telefonoResumen = this.formTelefonoPersona.value
+  this.personainfosaludResumen = this.formInfoSaludPersona.value;
+  // console.log(this.personaResumen)
+  // console.log(this.direccionResumen)
+  // console.log(this.correoResumen)
+  // console.log(this.telefonoResumen)
+  // console.log(this.personainfosaludResumen)
+ }
+
  onSubmit() {
   console.log('nom nom nom')
 
   // CREAR PERSONA
   const data_persona = this.formCrearPersona.value;
-  const fechaformateada = format(data_persona.fecha_nacimiento, 'yyyy-MM-dd');
-  data_persona.fecha_nacimiento = fechaformateada
+  // const fechaformateada = format(data_persona.fecha_nacimiento, 'yyyy-MM-dd');
+  // data_persona.fecha_nacimiento = fechaformateada
+
+  if (data_persona.fecha_nacimiento !== null) {
+    const fechaformateada = format(data_persona.fecha_nacimiento, 'yyyy-MM-dd');
+    data_persona.fecha_nacimiento = fechaformateada
+  }
+
   this.personaService.createPersona(data_persona).subscribe(respuesta => {
   const persona_actual = respuesta.id;
 
@@ -212,9 +245,14 @@ export class PersonaCrearComponent implements OnInit{
     })
 
     console.log(respuesta)
+
+  if (this.redireccion === 'farmacia') {
+    this.router.navigate(['farmacia/venta'], {queryParams: {id_persona: persona_actual}})
+  }
   }, (error)=> {
     console.log(error);
   });
+
 
  }
 

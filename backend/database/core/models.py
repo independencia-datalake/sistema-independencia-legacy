@@ -143,7 +143,7 @@ class Telefono(models.Model):
 
 class Correo(models.Model):
     persona = models.ForeignKey(Persona, on_delete=models.CASCADE, verbose_name='Persona')
-    correo = models.EmailField(max_length=40, verbose_name="Email")
+    correo = models.EmailField(max_length=40, verbose_name="Email", blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de creación', editable=False)
     updated = models.DateTimeField(auto_now=True, verbose_name='Fecha de edición', editable=False)
 

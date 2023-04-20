@@ -15,10 +15,16 @@
       </ng-container>
 
 
-      <!-- Columna de correo densidad -->
-      <ng-container matColumnDef="densidad">
-        <th mat-header-cell *matHeaderCellDef>densidad</th>
-        <td mat-cell *matCellDef="let element" >{{element.densidad}}</td>
+      <!-- Columna de densidad -->
+      <ng-container matColumnDef="total">
+        <th mat-header-cell *matHeaderCellDef>total</th>
+        <td mat-cell *matCellDef="let element">{{element.total}}</td>
+      </ng-container>
+
+      <!-- Columna de comercial -->
+      <ng-container matColumnDef="comercial">
+        <th mat-header-cell *matHeaderCellDef>comercial</th>
+        <td mat-cell *matCellDef="let element">{{element.comercial}}</td>
       </ng-container>
 
       <!-- Define las columnas -->
@@ -28,4 +34,27 @@
   </mat-grid-tile>
 
 </mat-grid-list>
+
+<mat-form-field>
+  <input matInput [matDatepicker]="pickerInicio" placeholder="Fecha Inicio" [(ngModel)]="fechaInicio">
+  <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+  <mat-datepicker #pickerInicio></mat-datepicker>
+</mat-form-field>
+
+<mat-form-field>
+  <input matInput [matDatepicker]="pickerFin" placeholder="Fecha Fin" [(ngModel)]="fechaFin">
+  <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+  <mat-datepicker #pickerFin></mat-datepicker>
+</mat-form-field>
+
+<button mat-raised-button color="primary" (click)="buscar()">Buscar</button>
+
+<div>
+  <mat-slider [min]="minValue" [max]="maxValue" [(ngModel)]="sliderValue">
+    <input [value]="minValue" matSliderStartThumb>
+    <input [value]="maxValue" matSliderEndThumb>
+  </mat-slider>
 </div>
+
+</div>
+

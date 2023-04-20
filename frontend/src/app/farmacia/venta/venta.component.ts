@@ -11,12 +11,6 @@ import { UsersService } from 'src/app/service/users.service';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 
-export class Product {
-  name: string='a';
-  price: number=0;
-  cantidad: number=0
-}
-
 @Component({
   selector: 'app-venta',
   templateUrl: './venta.component.html',
@@ -29,8 +23,9 @@ export class VentaComponent implements OnInit {
 
   // persona: Persona[];
   persona: any;
-  personap: any;
+  direccion: any;
   telefono: any;
+  flag_telefono: any;
   correo: any;
   infosalud: any;
 
@@ -62,11 +57,14 @@ export class VentaComponent implements OnInit {
 
 
   ngOnInit(): void {
+    console.log('q onda')
     this.loading = true;
     this.personaService.getPersona(this.id_persona).pipe(take(1)).subscribe(data => {this.persona = data;})
-    this.personaService.getTelefono(this.id_persona).pipe(take(1)).subscribe(data => {this.telefono = data;})
-    this.personaService.getCorreo(this.id_persona).pipe(take(1)).subscribe(data => {this.correo = data;})
-    this.personaService.getPersonaInfoSalud(this.id_persona).pipe(take(1)).subscribe(data => {this.infosalud = data;})
+    this.personaService.getDireccionByPersona(this.id_persona).pipe(take(1)).subscribe(data => {this.direccion = data;})
+    this.personaService.getTelefonoByPersona(this.id_persona).pipe(take(1)).subscribe(data => {this.telefono = data
+                                                                                              this.flag_telefono = data.telefono_secundario;})
+    this.personaService.getCorreoByPersona(this.id_persona).pipe(take(1)).subscribe(data => {this.correo = data;})
+    this.personaService.getPersonaInfoSaludByPersona(this.id_persona).pipe(take(1)).subscribe(data => {this.infosalud = data;})
 
     this.getProductosOptions();
 
@@ -90,6 +88,7 @@ export class VentaComponent implements OnInit {
       nombre: '',
       cantidad: '',
       n_venta:'',
+      precio_venta: '',
 
     });
   }
@@ -115,18 +114,19 @@ export class VentaComponent implements OnInit {
 
   seleccionarProducto(evento: any, i: number) {
     const nombre = evento.value;
+    console.log(nombre)
     this.productos.controls[i].get('nombre').setValue(nombre.id);
+    this.productos.controls[i].get('precio_venta').setValue(nombre.precio)
   }
 
   enviarProductos() {
-
     const venta = this.formComprobanteventa.value;
 
     this.productosfarmacia.createComprobanteventa(venta).subscribe(respuesta => {
       console.log(respuesta);
       const n_venta = respuesta.id; // Obtener el número de venta
       const productos = this.formProductos.value.producto;
-
+      console.log(productos)
       // Actualizar el número de venta para cada producto
       for (const producto of productos) {
         producto.n_venta = n_venta;
@@ -178,4 +178,6 @@ export class VentaComponent implements OnInit {
   onSubmit() {
     this.enviarProductos()
   }
+
+
 }

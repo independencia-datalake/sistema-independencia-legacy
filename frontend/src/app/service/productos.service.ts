@@ -18,7 +18,7 @@ export class ProductosService {
   // ASOCIADO A PRODUCTOS
   getProductos() {
     return this.http.get(`${this.apiUrl}/farmacia/productofarmacia/`)
-      .pipe(map((response: any) => response.map(item => ({ id: item.id, marca_producto: item.marca_producto }))));
+      .pipe(map((response: any) => response.map(item => ({ id: item.id, marca_producto: item.marca_producto, precio: item.precio }))));
   }
 
   getProductoByid(id_producto): Observable<ProductoFarmacia> {
@@ -43,9 +43,16 @@ export class ProductosService {
       .pipe(map((response: any) => response.map(item => ({ id: item.id, nombre: item.nombre, cantidad: item.cantidad, precio_venta: item.precio_venta, n_venta: item.n_venta }))));
   }
 
+  deleteProductoVendido(id_productovendido): Observable<ProductoVendido> {
+    return this.http.delete<ProductoVendido>(`${this.apiUrl}/farmacia/productovendido/delete/${id_productovendido}/`)
+  }
+
   getComprobanteventa() {
     return this.http.get<ProductoVendido>(`${this.apiUrl}/farmacia/comprobanteventa/`)
     .pipe(map((response: any) => response.map(item => ({ id: item.id, created: item.created, comprador: item.comprador, farmaceuta: item.farmaceuta}))));
   }
 
+  deleteComprobanteventa(id_comprobante): Observable<ComprobanteVenta> {
+    return this.http.delete<ComprobanteVenta>(`${this.apiUrl}/farmacia/comprobanteventa/delete/${id_comprobante}/`)
+  }
 }

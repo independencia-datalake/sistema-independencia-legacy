@@ -269,14 +269,41 @@
 
         <div>
           <button mat-raised-button matStepperPrevious>Back</button>
-          <button matStepperNext mat-raised-button style="margin: 6px;">Siguente</button>
+          <button matStepperNext mat-raised-button (click)="verResumen()" style="margin: 6px;">Siguente</button>
         </div>
 
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Crear Persona</ng-template>
-      <p>Texto de Prueba</p>
+      <p>Resumen Formulario Persona</p>
+
+      <div *ngIf="personaResumen">
+        <h2>Info Personal </h2>
+        <p>Nombre: {{ personaResumen.nombre_persona }} {{ personaResumen.apellido_paterno }} {{ personaResumen.apellido_materno }} </p>
+        <p>N° Identificación {{ personaResumen.tipo_identificacion }}: {{personaResumen.numero_identificacion}}</p>
+        <p>Nacionalidad: {{ personaResumen.nacionalidad }}</p>
+        <p>Fecha de nacimiento: {{ personaResumen.fecha_nacimiento }}</p>
+
+        <h2>Direccion</h2>
+        <p>Calle: {{ direccionResumen.calle }}</p>
+        <p>Numeracion: {{ direccionResumen.numero }}</p>
+
+        <h2>Correo</h2>
+        <p>mail: {{ correoResumen.correo }}</p>
+
+        <h2>Telefono</h2>
+        <p>Telefono principal ({{ telefonoResumen.tipo_telefono }}): {{ telefonoResumen.telefono }}</p>
+        <p *ngIf="telefonoResumen.telefono_secundario">Telefono secundario ({{ telefonoResumen.tipo_telefono_secundario }}): {{ telefonoResumen.telefono_secundario }}</p>
+
+        <h2>Info Salud</h2>
+        <p>Prevision: {{ personainfosaludResumen.prevision }}</p>
+        <p>Isapre: {{ personainfosaludResumen.isapre }}</p>
+        <p>Comentarios: {{ personainfosaludResumen.comentarios }}</p>
+
+      </div>
+
       <div>
+        <button (click)="verResumen()" mat-raised-button>Ver Resumen</button>
         <button (click)="onSubmit()" mat-raised-button>Siguente</button>
         <!-- <button mat-button (click)="">Reset</button> -->
       </div>

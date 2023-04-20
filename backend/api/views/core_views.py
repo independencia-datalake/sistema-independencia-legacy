@@ -124,6 +124,11 @@ class TelefonoDetailAPIViw(generics.RetrieveAPIView):
     serializer_class = TelefonoSerializer
     lookup_field = 'pk'
 
+class TelefonoDetailByPersonaAPIViw(generics.RetrieveAPIView):
+    queryset = Telefono.objects.all()
+    serializer_class = TelefonoSerializer
+    lookup_field = 'persona'
+
 class TelefonoUpdateAPIViw(generics.UpdateAPIView):
     queryset = Telefono.objects.all()
     serializer_class = TelefonoSerializer
@@ -155,6 +160,11 @@ class CorreoDetailAPIViw(generics.RetrieveAPIView):
     queryset = Correo.objects.all()
     serializer_class = CorreoSerializer
     lookup_field = 'pk'
+
+class CorreoDetailByPersonaAPIViw(generics.RetrieveAPIView):
+    queryset = Correo.objects.all()
+    serializer_class = CorreoSerializer
+    lookup_field = 'persona'
 
 class CorreoUpdateAPIViw(generics.UpdateAPIView):
     queryset = Correo.objects.all()
@@ -188,6 +198,11 @@ class DireccionDetailAPIViw(generics.RetrieveAPIView):
     serializer_class = DireccionSerializer
     lookup_field = 'pk'
 
+class DireccionDetailByPersonaAPIViw(generics.RetrieveAPIView):
+    queryset = Direccion.objects.all()
+    serializer_class = DireccionSerializer
+    lookup_field = 'persona'   
+
 class DireccionUpdateAPIViw(generics.UpdateAPIView):
     queryset = Direccion.objects.all()
     serializer_class = DireccionSerializer
@@ -219,6 +234,11 @@ class PersonaInfoSaludDetailAPIViw(generics.RetrieveAPIView):
     queryset = PersonaInfoSalud.objects.all()
     serializer_class = PersonaInfoSaludSerializer
     lookup_field = 'pk'
+
+class PersonaInfoSaludDetailByPersonaAPIViw(generics.RetrieveAPIView):
+    queryset = PersonaInfoSalud.objects.all()
+    serializer_class = PersonaInfoSaludSerializer
+    lookup_field = 'persona'
 
 class PersonaInfoSaludUpdateAPIViw(generics.UpdateAPIView):
     queryset = PersonaInfoSalud.objects.all()
