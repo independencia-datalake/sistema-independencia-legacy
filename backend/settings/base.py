@@ -11,9 +11,13 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+import boto3
+from storages.backends.s3boto3 import S3Boto3Storage
 
 from datetime import timedelta
 
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -45,7 +49,7 @@ INSTALLED_APPS = [
     #third-party
     'corsheaders',
     'rest_framework',
-    # 'storages',
+    'storages',
     'rest_framework.authtoken',
 
 
