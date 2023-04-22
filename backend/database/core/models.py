@@ -25,6 +25,16 @@ class UV(models.Model):
         
     def __str__(self):
         return f'{self.numero_uv}'
+    
+
+class CondicionesIndependencia(models.Model):
+    calle = models.ForeignKey(CallesIndependencia, on_delete=models.PROTECT, verbose_name="Calles de Independencia")
+    condicion = models.CharField(max_length=200)
+    conjunto = models.CharField(max_length=200)
+    uv = models.ForeignKey(UV, on_delete=models.PROTECT, verbose_name="Unidad Vecial")
+
+    def __str__(self):
+        return f'{self.calle} | {self.uv}'
 
 class Persona(models.Model):
     uv = models.ForeignKey(UV, on_delete=models.PROTECT, verbose_name="Unidad Vecinal", blank=True, null=True)
