@@ -15,6 +15,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { CrearProductoComponent } from './crear-producto/crear-producto.component';
 import { MatSelectModule } from '@angular/material/select';
 import { ComprobanteventaDetailComponent } from './comprobanteventa-detail/comprobanteventa-detail.component';
+import { ComprobanteventaDetailDialogComponent } from './comprobanteventa-detail/comprobanteventa-detail-dialog/comprobanteventa-detail-dialog.component';
+import { MatDialogModule } from '@angular/material/dialog';
 
 
 
@@ -26,7 +28,8 @@ import { ComprobanteventaDetailComponent } from './comprobanteventa-detail/compr
     InformesFarmaciaComponent,
     VentaComponent,
     CrearProductoComponent,
-    ComprobanteventaDetailComponent
+    ComprobanteventaDetailComponent,
+    ComprobanteventaDetailDialogComponent
   ],
   imports: [
     CommonModule,
@@ -39,6 +42,7 @@ import { ComprobanteventaDetailComponent } from './comprobanteventa-detail/compr
     MatCardModule,
     MatButtonModule,
     MatSelectModule,
+    MatDialogModule
   ],
 
 })

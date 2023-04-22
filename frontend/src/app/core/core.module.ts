@@ -43,6 +43,7 @@ import { DialogUVComponent } from './info-uv/dialog-uv/dialog-uv.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { VisComponent } from './vis/vis.component';
 import { MatTableModule } from '@angular/material/table';
+import { MatSliderModule } from '@angular/material/slider';
 
 
 
@@ -89,6 +90,7 @@ import { MatTableModule } from '@angular/material/table';
     MatTabsModule,
     MatDialogModule,
     MatTableModule,
+    MatSliderModule,
 
 
   ],

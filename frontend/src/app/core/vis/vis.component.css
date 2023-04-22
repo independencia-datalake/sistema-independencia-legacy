@@ -59,3 +59,39 @@ table tr:nth-child(odd) td {
 .leaflet-container {
   background-color: white;
 }
+
+mat-slider {
+  width: 300px;
+}
+
+
+.mat-datepicker-content {
+  box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+  background-color: white;
+  color: black;
+}
+.mat-mdc-button:not(:disabled) {
+  color: #000;
+}
+.mat-calendar-table-header, .mat-calendar-body-label {
+  color: rgba(153, 153, 153, 0.7);
+}
+.mat-datepicker-toggle, .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button {
+  color: #000;
+}
+.mat-calendar-body-cell-content, .mat-date-range-input-separator {
+  color: #000;
+  border-color: rgba(0,0,0,0);
+}
+
+.mat-calendar-body-selected {
+  background-color: #fc3d59;
+  color: #fff;
+}
+
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    background-color: #fc3d59;
+}
+input::placeholder {
+  color: rgb(132, 132, 132) !important;
+}

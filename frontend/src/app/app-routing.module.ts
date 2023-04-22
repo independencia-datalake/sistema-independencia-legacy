@@ -18,6 +18,7 @@ import { VentaComponent } from './farmacia/venta/venta.component';
 import { SeguridadHomeComponent } from './seguridad/seguridad-home/seguridad-home.component';
 
 import { AuthGuard } from './guards/auth.guard';
+import { AuthFarmaciaGuard } from './guards/authFarmacia.guard';
 import { CrearProductoComponent } from './farmacia/crear-producto/crear-producto.component';
 import { ComprobanteventaDetailComponent } from './farmacia/comprobanteventa-detail/comprobanteventa-detail.component';
 
@@ -38,7 +39,7 @@ const routes: Routes = [
 
   // FARMACIA
   {path:'farmacia',component:FarmaciaHomeComponent},
-  {path:'farmacia/informes',component:InformesFarmaciaComponent},
+  {path:'farmacia/informes',component:InformesFarmaciaComponent, canActivate: [AuthFarmaciaGuard]},
   {path:'farmacia/venta',component:VentaComponent},
   {path:'farmacia/comprobanteventa-detail', component:ComprobanteventaDetailComponent},
 

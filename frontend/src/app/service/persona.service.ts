@@ -27,16 +27,32 @@ export class PersonaService {
 
   // test dani
 
-  getTelefono(id_persona): Observable<Telefono> {
-    return this.http.get<Telefono>(`${this.apiUrl}/core/telefono/${id_persona}`);
+  getDireccionByPersona(id_persona): Observable<Direccion> {
+    return this.http.get<Direccion>(`${this.apiUrl}/core/direccion-by-persona/${id_persona}`);
   }
 
-  getCorreo(id_persona): Observable<Correo> {
-    return this.http.get<Correo>(`${this.apiUrl}/core/correo/${id_persona}`);
+  getTelefono(id): Observable<Telefono> {
+    return this.http.get<Telefono>(`${this.apiUrl}/core/telefono/${id}`);
   }
 
-  getPersonaInfoSalud(id_persona): Observable<PersonaInfoSalud> {
-    return this.http.get<PersonaInfoSalud>(`${this.apiUrl}/core/personainfosalud/${id_persona}`);
+  getTelefonoByPersona(id_persona): Observable<Telefono> {
+    return this.http.get<Telefono>(`${this.apiUrl}/core/telefono-by-persona/${id_persona}`);
+  }
+
+  getCorreo(id): Observable<Correo> {
+    return this.http.get<Correo>(`${this.apiUrl}/core/correo/${id}`);
+  }
+
+  getCorreoByPersona(id_persona): Observable<Correo> {
+    return this.http.get<Correo>(`${this.apiUrl}/core/correo-by-persona/${id_persona}`);
+  }
+
+  getPersonaInfoSalud(id): Observable<PersonaInfoSalud> {
+    return this.http.get<PersonaInfoSalud>(`${this.apiUrl}/core/personainfosalud/${id}`);
+  }
+
+  getPersonaInfoSaludByPersona(id_persona): Observable<PersonaInfoSalud> {
+    return this.http.get<PersonaInfoSalud>(`${this.apiUrl}/core/personainfosalud-by-persona/${id_persona}`);
   }
 
   createPersona(persona: Persona): Observable<Persona> {
