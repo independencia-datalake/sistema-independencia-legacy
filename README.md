@@ -129,3 +129,11 @@ Antes de hacer una contribución, asegúrate de que no exista un problema abiert
 ## Documentación adicional
 
 Para obtener más documentación o ayuda adicional, puedes ponerte en contacto con Independencia Ciudadana. Estamos disponibles para responder tus preguntas y proporcionarte la información que necesites.
+
+## Licencia
+
+Este proyecto está bajo la Licencia MIT - mira el archivo [LICENSE](LICENSE) para más detalles.
+
+La Licencia MIT es una licencia de código abierto que permite a los usuarios modificar y distribuir el código fuente del proyecto, siempre y cuando se incluya el aviso de copyright y la licencia en todas las copias.
+
+Puedes encontrar más información sobre la Licencia MIT en [opensource.org/licenses/MIT](https://opensource.org/licenses/MIT).
