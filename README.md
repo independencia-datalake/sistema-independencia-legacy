@@ -65,7 +65,7 @@ Debes ponerte en contacto con los administradores del proyecto para obtener el a
 
 Una vez que obtengas el archivo .env, colócalo en el directorio raíz de django (sistema-independencia/backend/).
 
-Para provar aqui hay un ejemplo de archivo .env para iniciar la aplicacion 
+Aqui hay un ejemplo de archivo .env para iniciar la aplicacion 
 ```
 DJANGO_SETTINGS_MODULE=settings.test
 DEBUG=True
