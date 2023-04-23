@@ -5,9 +5,9 @@ import platform
 def obtener_uv(calle, numero):
 
   if platform.system() == 'Windows':
-    df = pd.read_csv('{}\\static\\assets\\streets_uv.csv'.format(os.getcwd()))
+    df = pd.read_csv('{}\\utils\\assets\\streets_uv.csv'.format(os.getcwd()))
   else:
-    df = pd.read_csv('{}/static/assets/streets_uv.csv'.format(os.getcwd()))
+    df = pd.read_csv('{}/utils/assets/streets_uv.csv'.format(os.getcwd()))
   # path('{}/static/assets/streats_uv.csv'.format(os.getcwd()))
   # df = None
   validaciones = df[df['calle']==calle]
