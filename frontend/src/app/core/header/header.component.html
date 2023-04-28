@@ -1,22 +1,23 @@
-<p>
-  <mat-toolbar class="header">
-    <button mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon>Menu</button>
-        <mat-menu #menu="matMenu">
-        <button routerLink="quienes" mat-menu-item>Quienes Somos</button>
-        <button routerLink="qna" mat-menu-item>Preguntas y Respuestas</button>
-        <button mat-menu-item>Calculadora UV</button>
-        <button routerLink="vis" mat-menu-item>Visualización</button>
-        <button routerLink="conoce-tu-area" mat-menu-item>Conoce tu area</button>
-        <button routerLink="conoce-tu-uv" mat-menu-item>Conoce tu UV</button>
-        </mat-menu>
-    <span class="spacer"></span>
+<mat-toolbar class="header">
+  <span class="spacer"></span>
+  <button mat-icon-button class="example-icon favorite-icon usuario" routerLink="login"></button>
+  <div class="nombre_usuario">{{ usuarioActual }} </div>
+  <button mat-icon-button class="example-icon favorite-icon log-out" (click)="onButtonClick()"></button>
+  <button routerLink="" mat-icon-button class="inicio"></button>
+</mat-toolbar>
+<div class="logo-menusection container">
+  <div>
+    <img src="../../../assets/form-independencia.png">
+  </div>
+  <span class="spacer"></span>
+  <button mat-button [matMenuTriggerFor]="menu" class="menu-button"><mat-icon>menu</mat-icon></button>
+  <mat-menu #menu="matMenu">
+    <button routerLink="quienes" mat-menu-item>Quienes Somos</button>
+    <button routerLink="qna" mat-menu-item>Preguntas y Respuestas</button>
+    <button mat-menu-item>Calculadora UV</button>
+    <button routerLink="vis" mat-menu-item>Visualización</button>
+    <button routerLink="conoce-tu-area" mat-menu-item>Conoce tu area</button>
+    <button routerLink="conoce-tu-uv" mat-menu-item>Conoce tu UV</button>
+  </mat-menu>
 
-    <button mat-icon-button class="example-icon favorite-icon usuario" routerLink="login"></button><div class="nombre_usuario">{{ usuarioActual }} </div>
-    <button mat-icon-button class="example-icon favorite-icon log-out" (click)="onButtonClick()"></button>
-    <button routerLink="" mat-icon-button class="inicio"></button>
-
-  </mat-toolbar>
-</p>
-
-
-
+</div>

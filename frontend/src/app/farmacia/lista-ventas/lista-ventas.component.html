@@ -1,0 +1,48 @@
+<div class="container">
+  Pink title
+</div>
+<div class="container contenedor-wrap">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="salesNumber">
+      <th mat-header-cell *matHeaderCellDef> N° de Venta </th>
+      <td mat-cell *matCellDef="let element"> {{element.salesNumber}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="idPerson">
+      <th mat-header-cell *matHeaderCellDef> N° de Identidad de la Persona </th>
+      <td mat-cell *matCellDef="let element"> {{element.idPerson}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="namePerson">
+      <th mat-header-cell *matHeaderCellDef> Nombre Persona </th>
+      <td mat-cell *matCellDef="let element"> {{element.namePerson}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="professional">
+      <th mat-header-cell *matHeaderCellDef> Profesional </th>
+      <td mat-cell *matCellDef="let element"> {{element.professional}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef='button'>
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let element"> naDA </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</div>
+
+<!--
+  name: string;
+  supplier: string;
+  price: number;
+  activeComponent: string;
+  dose: string;
+  presentation: string;
+  cenabast: boolean;
+  bioequivalent: boolean;
+  laboratory: string;
+-->

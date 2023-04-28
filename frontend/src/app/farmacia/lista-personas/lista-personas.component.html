@@ -1,0 +1,53 @@
+<div class="container">
+  Pink title
+</div>
+<div class="container contenedor-wrap">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Nombre </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="rut">
+      <th mat-header-cell *matHeaderCellDef> Rut </th>
+      <td mat-cell *matCellDef="let element"> {{element.rut}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="healthInsurance">
+      <th mat-header-cell *matHeaderCellDef> Previcion </th>
+      <td mat-cell *matCellDef="let element"> {{element.healthInsurance}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="isapre">
+      <th mat-header-cell *matHeaderCellDef> Isapre </th>
+      <td mat-cell *matCellDef="let element"> {{element.isapre}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="comments">
+      <th mat-header-cell *matHeaderCellDef> Comentarios </th>
+      <td mat-cell *matCellDef="let element"> {{element.comments}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef='button'>
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let element"> naDA </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</div>
+
+<!--
+  name: string;
+  supplier: string;
+  price: number;
+  activeComponent: string;
+  dose: string;
+  presentation: string;
+  cenabast: boolean;
+  bioequivalent: boolean;
+  laboratory: string;
+-->

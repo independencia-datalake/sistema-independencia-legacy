@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation  } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormControl, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { take } from 'rxjs/operators';
@@ -10,6 +10,7 @@ import { ProductosService } from 'src/app/service/productos.service';
 import { UsersService } from 'src/app/service/users.service';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
+import { el } from 'date-fns/locale';
 
 @Component({
   selector: 'app-venta',
@@ -18,6 +19,8 @@ import { Observable, Subject } from 'rxjs';
   encapsulation: ViewEncapsulation.None,
 })
 export class VentaComponent implements OnInit {
+
+  showInputFile: boolean = false
 
   id_persona = this.route.snapshot.queryParamMap.get('id_persona')
 
@@ -43,14 +46,14 @@ export class VentaComponent implements OnInit {
   options = [];
   filteredOptions;
 
-  constructor(private fb:FormBuilder,
-              private userSercive: UsersService,
-              private authService: AuthService,
-              private productosfarmacia: ProductosService,
-              private personaService: PersonaService,
-              // private telefonoService: TelefonoService,
-              private route: ActivatedRoute,
-              private router: Router) {
+  constructor(private fb: FormBuilder,
+    private userSercive: UsersService,
+    private authService: AuthService,
+    private productosfarmacia: ProductosService,
+    private personaService: PersonaService,
+    // private telefonoService: TelefonoService,
+    private route: ActivatedRoute,
+    private router: Router) {
 
     // this.addProducto()
   }
@@ -59,12 +62,14 @@ export class VentaComponent implements OnInit {
   ngOnInit(): void {
     console.log('q onda')
     this.loading = true;
-    this.personaService.getPersona(this.id_persona).pipe(take(1)).subscribe(data => {this.persona = data;})
-    this.personaService.getDireccionByPersona(this.id_persona).pipe(take(1)).subscribe(data => {this.direccion = data;})
-    this.personaService.getTelefonoByPersona(this.id_persona).pipe(take(1)).subscribe(data => {this.telefono = data
-                                                                                              this.flag_telefono = data.telefono_secundario;})
-    this.personaService.getCorreoByPersona(this.id_persona).pipe(take(1)).subscribe(data => {this.correo = data;})
-    this.personaService.getPersonaInfoSaludByPersona(this.id_persona).pipe(take(1)).subscribe(data => {this.infosalud = data;})
+    this.personaService.getPersona(this.id_persona).pipe(take(1)).subscribe(data => { this.persona = data; })
+    this.personaService.getDireccionByPersona(this.id_persona).pipe(take(1)).subscribe(data => { this.direccion = data; })
+    this.personaService.getTelefonoByPersona(this.id_persona).pipe(take(1)).subscribe(data => {
+      this.telefono = data
+      this.flag_telefono = data.telefono_secundario;
+    })
+    this.personaService.getCorreoByPersona(this.id_persona).pipe(take(1)).subscribe(data => { this.correo = data; })
+    this.personaService.getPersonaInfoSaludByPersona(this.id_persona).pipe(take(1)).subscribe(data => { this.infosalud = data; })
 
     this.getProductosOptions();
 
@@ -87,7 +92,7 @@ export class VentaComponent implements OnInit {
     return this.fb.group({
       nombre: '',
       cantidad: '',
-      n_venta:'',
+      n_venta: '',
       precio_venta: '',
 
     });
@@ -108,7 +113,7 @@ export class VentaComponent implements OnInit {
     // console.log(this.personas)
   }
 
-  deleteProducto(productoIndex: number){
+  deleteProducto(productoIndex: number) {
     this.productos.removeAt(productoIndex);
   }
 
@@ -132,11 +137,11 @@ export class VentaComponent implements OnInit {
         producto.n_venta = n_venta;
         this.productosfarmacia.venderProducto(producto).subscribe(respuesta => {
           console.log(respuesta);
-        }, (error)=> {
+        }, (error) => {
           console.log(error);
         });
       }
-      this.router.navigate(['farmacia/comprobanteventa-detail'], { queryParams: {id_comprobante: n_venta}})
+      this.router.navigate(['farmacia/comprobanteventa-detail'], { queryParams: { id_comprobante: n_venta } })
     }, (error) => {
       console.log(error);
     });
@@ -151,12 +156,26 @@ export class VentaComponent implements OnInit {
   }
 
   selectedFile: any = null;
+  selectedFiles: any[] = [];
+  displayedColumns: string[] = ['index',
+    //'name', 'type', 'delete'
+  ]
 
   onFileSelected(event: any): void {
-      this.selectedFile = event.target.files[0] ?? null;
+    event.target.files.length > 0 ? Object.keys(event.target.files).forEach(el => this.selectedFiles.push(event.target.files[el])) : null;
+    console.log(event.target.files)
+    console.log(this.selectedFiles)
+    this.selectedFile = event.target.files[0] ?? null;
 
   }
-
+  onFileDeleted(event: any, index: number) {
+    this.selectedFiles.splice(index, 1);
+    this.selectedFile = null;
+    console.log(this.selectedFiles)
+  }
+  cl(el) {
+    console.log(el)
+  }
   // CHAT GPT
 
   addFileInput() {
@@ -178,6 +197,8 @@ export class VentaComponent implements OnInit {
   onSubmit() {
     this.enviarProductos()
   }
+
+  dataSource = this.selectedFiles;
 
 
 }

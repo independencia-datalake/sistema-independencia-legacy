@@ -1,0 +1,14 @@
+.container {
+  max-width: 1140px;
+  margin: auto;
+}
+
+tr td {
+  background-color: #F0F0F0 !important;
+  color: #4a4a4a !important;
+}
+
+tr:nth-child(odd) td {
+  background-color: #FFF !important;
+  color: #4a4a4a !important;
+}

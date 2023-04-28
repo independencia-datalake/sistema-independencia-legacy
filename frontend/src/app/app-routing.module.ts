@@ -21,34 +21,42 @@ import { AuthGuard } from './guards/auth.guard';
 import { AuthFarmaciaGuard } from './guards/authFarmacia.guard';
 import { CrearProductoComponent } from './farmacia/crear-producto/crear-producto.component';
 import { ComprobanteventaDetailComponent } from './farmacia/comprobanteventa-detail/comprobanteventa-detail.component';
+import { InformesProductosComponent } from './farmacia/informes-productos/informes-productos.component';
+import { InformesStockComponent } from './farmacia/informes-stock/informes-stock.component';
+import { ResumenPersonaComponent } from './farmacia/lista-personas/lista-personas.component';
+import { ListaVentaComponent } from './farmacia/lista-ventas/lista-ventas.component';
 
 
 const routes: Routes = [
   // AUTH
-  { path: 'login', component: LoginComponent},
-  { path: 'signup', component: SignupComponent},
+  { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent },
   // CORE
-  {path:'',component:HomeComponent},
-  {path:'quienes',component:QuienesSomosComponent, canActivate: [AuthGuard]},
-  {path:'qna',component:QnaComponent},
-  {path:'persona',component:PersonaComponent},
-  {path:'persona/crear',component:PersonaCrearComponent},
-  {path:'vis',component:VisComponent, canActivate: [AuthGuard]},
-  {path: 'conoce-tu-area', component:InfoComunaComponent},
-  {path: 'conoce-tu-uv', component:InfoUvComponent},
+  { path: '', component: HomeComponent },
+  { path: 'quienes', component: QuienesSomosComponent, canActivate: [AuthGuard] },
+  { path: 'qna', component: QnaComponent },
+  { path: 'persona', component: PersonaComponent },
+  { path: 'persona/crear', component: PersonaCrearComponent },
+  { path: 'vis', component: VisComponent, canActivate: [AuthGuard] },
+  { path: 'conoce-tu-area', component: InfoComunaComponent },
+  { path: 'conoce-tu-uv', component: InfoUvComponent },
 
   // FARMACIA
-  {path:'farmacia',component:FarmaciaHomeComponent},
-  {path:'farmacia/informes',component:InformesFarmaciaComponent, canActivate: [AuthFarmaciaGuard]},
-  {path:'farmacia/venta',component:VentaComponent},
-  {path:'farmacia/comprobanteventa-detail', component:ComprobanteventaDetailComponent},
+  { path: 'farmacia', component: FarmaciaHomeComponent },
+  { path: 'farmacia/informes', component: InformesFarmaciaComponent },
+  { path: 'farmacia/venta', component: VentaComponent },
+  { path: 'farmacia/informe-productos', component: InformesProductosComponent },
+  { path: 'farmacia/informe-stock', component: InformesStockComponent },
+  { path: 'farmacia/resumen-persona', component: ResumenPersonaComponent },
+  { path: 'farmacia/lista-venta', component: ListaVentaComponent },
+  { path: 'farmacia/comprobanteventa-detail', component: ComprobanteventaDetailComponent },
 
 
   // STOCK
-  {path:'stock',component:StockProductosComponent},
-  {path:'stock/crear-producto',component:CrearProductoComponent},
+  { path: 'stock', component: StockProductosComponent },
+  { path: 'stock/crear-producto', component: CrearProductoComponent },
   // SEGURIDAD
-  {path:'seguridad', component:SeguridadHomeComponent},
+  { path: 'seguridad', component: SeguridadHomeComponent },
 ];
 
 @NgModule({

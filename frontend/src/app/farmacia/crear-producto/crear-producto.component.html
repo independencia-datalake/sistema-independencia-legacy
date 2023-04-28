@@ -1,37 +1,56 @@
+<div class="subtitulo">
+  <h2>Crear Nuevo Producto</h2>
+</div>
 <div class="container contenedor-wrap text-container">
   <form [formGroup]="formCrearProducto" (submit)="createProducto()">
-
-    <mat-form-field class="info">
+    <mat-form-field class="info" appearance="outline">
       <mat-label>Nombre del producto </mat-label>
-        <input formControlName="marca_producto" matInput placeholder="" required>
-      </mat-form-field>
+      <input formControlName="marca_producto" matInput placeholder="" required>
+    </mat-form-field>
 
     <mat-form-field class="info">
       <mat-label>Componente Activo </mat-label>
-        <input formControlName="p_a" matInput placeholder="" required>
-      </mat-form-field>
-
+      <input formControlName="p_a" matInput placeholder="" required>
+    </mat-form-field>
     <mat-form-field class="info">
       <mat-label>Dosis </mat-label>
-        <input formControlName="dosis" matInput placeholder="" required>
-      </mat-form-field>
-
+      <input formControlName="dosis" matInput placeholder="" required>
+    </mat-form-field>
     <mat-form-field class="info">
       <mat-label>Presentacion </mat-label>
-        <input formControlName="presentacion" matInput placeholder="" required>
-      </mat-form-field>
-
+      <input formControlName="presentacion" matInput placeholder="" required>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Bioequivalencia</mat-label>
+      <mat-select disableRipple="">
+        <mat-option value="si">Si</mat-option>
+        <mat-option value="no">No</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Cenabast</mat-label>
+      <mat-select disableRipple="">
+        <mat-option value="si">Si</mat-option>
+        <mat-option value="no">No</mat-option>
+      </mat-select>
+    </mat-form-field>
     <mat-form-field class="info">
       <mat-label>Proovedor </mat-label>
-        <input formControlName="p_a" matInput placeholder="" required>
-      </mat-form-field>
+      <input matInput placeholder="" required>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Laboratorio</mat-label>
+      <mat-select disableRipple="">
 
-      <div>
-        <button type="submit" mat-raised-button>Crear producto</button>
-        <!-- <button mat-button (click)="">Reset</button> -->
-      </div>
-
-
-
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="info">
+      <mat-label>Stock minimo del producto</mat-label>
+      <input matInput placeholder="" required type="number">
+    </mat-form-field>
+    <div>
+      <button type="submit" mat-raised-button>Crear producto</button>
+      <!-- <button mat-button (click)="">Reset</button> -->
+    </div>
   </form>
 </div>

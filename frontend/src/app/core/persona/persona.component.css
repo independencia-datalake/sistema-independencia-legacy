@@ -21,6 +21,7 @@
 label {
   display: inline-block;
   margin-bottom: 0rem;
+  font-size: 15px !important;
 }
 
 .mat-mdc-card {
@@ -51,4 +52,21 @@ label {
 
 .saltar {
   text-align: center;
+}
+
+h1 {
+  font-family: 'Mulish', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 40px !important;
+}
+
+h3 {
+  padding-top: 30px;
+  font-family: 'Mulish', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 28px !important;
+}
+
+.white-text {
+  color: white !important;
 }

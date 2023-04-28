@@ -1,57 +1,102 @@
 <div class="container contenedor-wrap">
   <div class="container contenidos-comprobante-venta">
-      <div class="row">
-          <div class="col">
-              <!-- <h2 *ngIf="persona.nombre_persona"> Nombre <span class="magenta"> {{ persona.nombre_persona }} </span></h2> -->
-              <h2 *ngIf="persona"> Nombre <span class="magenta"> {{ persona.nombre_completo }} </span></h2>
-              <h4 class="magenta">Nº de Identificación:</h4>
-              <p *ngIf="persona">{{ persona.numero_identificacion }}</p>
-              <h4 class="magenta">Nº de Teléfono</h4>
-              <p *ngIf="telefono">{{ telefono.telefono }} ({{ telefono.tipo_telefono }})</p>
-              <h4 class="magenta" *ngIf="telefono"> N° de Teléfono Secundario</h4>
-              <p *ngIf="flag_telefono">{{ telefono.telefono_secundario }} ({{ telefono.tipo_telefono_secundario }})</p>
-              <h4 class="magenta">Correo:</h4>
-              <p *ngIf="correo">{{ correo.correo }}</p>
-          </div>
-          <div class="col">
-              <h2> UV: <span class="magenta" *ngIf="direccion"> {{ direccion.uv }} </span></h2>
-              <h4 class="magenta">Fecha de nacimiento:</h4>
-              <p *ngIf="persona">{{ persona.fecha_nacimiento }}</p>
-              <h4 class="magenta">Dirección:</h4>
-              <p *ngIf="direccion"> {{ direccion.calle }}, {{ direccion.numero }}</p>
-          </div>
-          <div class="col">
-              <h2>Antecedentes de Salud</h2>
-              <h4 class="magenta">Prevision</h4>
-              <p *ngIf="infosalud">{{ infosalud.prevision }}</p>
-              <h4 class="magenta">Isapre</h4>
-              <p *ngIf="infosalud">{{ infosalud.isapre }}</p>
-              <h4 class="magenta">Observaciones</h4>
-              <p *ngIf="infosalud">{{ infosalud.comentarios }}</p>
-
-          </div>
+    <div class="row">
+      <div class="col">
+        <!-- <h2> Nombre <span class="magenta"> {{ persona.nombre_completo }} </span></h2> -->
+        <h2 *ngIf="persona"> Nombre <span class="magenta"> {{ persona.nombre_completo }} </span></h2>
+        <h4 class="magenta">Nº de Identificación:</h4>
+        <p *ngIf="persona">{{ persona.numero_identificacion }}</p>
+        <h4 class="magenta">Nº de Teléfono</h4>
+        <p *ngIf="telefono">{{ telefono.telefono }} ({{ telefono.tipo_telefono }})</p>
+        <h4 class="magenta"> N° de Teléfono Secundario</h4>
+        <p *ngIf="flag_telefono">{{ telefono.telefono_secundario }} ({{ telefono.tipo_telefono_secundario }})</p>
+        <h4 class="magenta">Correo:</h4>
+        <p *ngIf="correo">{{ correo.correo }}</p>
       </div>
+      <div class="col">
+        <h2> UV: <span class="magenta" *ngIf="direccion"> {{ persona.uv }} </span></h2>
+        <h4 class="magenta">Fecha de nacimiento:</h4>
+        <p *ngIf="persona">{{ persona.fecha_nacimiento }}</p>
+        <h4 class="magenta">Dirección:</h4>
+        <p *ngIf="direccion"> {{ direccion.calle }}, {{ direccion.numero }}</p>
+      </div>
+      <div class="col">
+        <h2>Antecedentes de Salud</h2>
+        <h4 class="magenta">Prevision</h4>
+        <p *ngIf="infosalud">{{ infosalud.prevision }}</p>
+        <h4 class="magenta">Isapre</h4>
+        <p *ngIf="infosalud">{{ infosalud.isapre }}</p>
+        <h4 class="magenta">Observaciones</h4>
+        <p *ngIf="infosalud">{{ infosalud.comentarios }}</p>
+
+      </div>
+    </div>
   </div>
 </div>
 <hr>
 
 <div class="container contenedor-wrap">
-  <h1>Venta</h1>
+  <h3>Venta</h3>
 
-  <mat-card >
-    <h2> Archivos </h2>
+  <mat-card>
+    <h5> Archivos </h5>
+    <div class="flex pl-6" *ngIf="selectedFiles.length > 0">
+      <div class="file-table-column table-head">
+        <div class="h-41 w-41 p-10 file-table-row index">
+          N
+        </div>
+      </div>
+      <div class="file-table-column table-head">
+        <div class="h-41 w-250 ellipsis-text p-10 file-table-row">
+          Nombre Archivo
+        </div>
+      </div>
+      <div class="file-table-column table-head">
+        <div class="h-41 p-10 w-130p file-table-row">
+          Tipo de Archivo
+        </div>
+      </div>
+      <div class="file-table-column table-head">
+        <div class="h-41 w-60 p-10 file-table-row">
+          Quitar
+        </div>
+      </div>
+    </div>
     <form>
-    <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
-    <input hidden (change)="onFileSelected($event)" #fileInput type="file" multiple>
-    <span class="file-name">{{selectedFile?.name}}</span>
-    <hr>
-    <button>+</button>
-  </form>
+      <div class="flex" *ngIf="selectedFiles.length > 0">
+        <div class="file-table-column">
+          <div class="h-41 w-41 p-10 file-table-row index" *ngFor="let file of selectedFiles; let i = index">
+            {{i+1}}
+          </div>
+        </div>
+        <div class="file-table-column">
+          <div class="h-41 w-250 ellipsis-text p-10 file-table-row" *ngFor="let fileName of selectedFiles">
+            {{fileName.name}}
+          </div>
+        </div>
+        <div class="file-table-column">
+          <div class="h-41 p-10 w-130p file-table-row" *ngFor="let fileType of selectedFiles">
+            {{fileType.type}}
+          </div>
+        </div>
+        <div class="file-table-column">
+          <div class="h-41 w-60 p-10 file-table-row text-center" *ngFor="let file of selectedFiles; let i = index">
+            <mat-icon class="delete-file" (click)="onFileDeleted($event,i)">cancel</mat-icon>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <button class="rounded-pink-button pl-6" type="button" mat-raised-button (click)="fileInput.click()"><mat-icon>
+          attach_file</mat-icon>{{ selectedFiles.length > 0 ? "Agregar otro archivo" : "Selecciona un
+        archivo"}}</button>
+      <input hidden (change)="onFileSelected($event)" #fileInput type="file" multiple>
+      <hr>
+    </form>
 
   </mat-card>
   <hr>
-  <mat-card >
-    <h2>Productos</h2>
+  <mat-card>
+    <h5>Productos</h5>
     <form [formGroup]="formProductos">
 
       <ng-container formArrayName="producto">
@@ -59,20 +104,21 @@
           <div class="producto-form-row">
             <mat-form-field class="info">
               <mat-label>Nombre del producto </mat-label>
-                <mat-select (selectionChange)="seleccionarProducto($event, i)">
-                  <mat-option *ngFor="let producto of filteredOptions" [value]="producto">
-                    {{ producto.marca_producto }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
+              <mat-select (selectionChange)="seleccionarProducto($event, i)">
+                <mat-option *ngFor="let producto of filteredOptions" [value]="producto">
+                  {{ producto.marca_producto }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
 
-            <mat-form-field >
+            <mat-form-field>
               <mat-label>Cantidad</mat-label>
               <input type="number" formControlName="cantidad" matInput placeholder="0">
               <span matTextSuffix>unidades</span>
             </mat-form-field>
 
-            <button class="btn ver-o-editar eliminar" (click)="deleteProducto(i)"><mat-icon class="icon-display">delete_forever</mat-icon></button>
+            <button class="btn ver-o-editar eliminar" (click)="deleteProducto(i)"><mat-icon
+                class="icon-display">delete_forever</mat-icon></button>
 
           </div>
 
@@ -82,12 +128,13 @@
 
     </form>
 
-    <div>
-      <button mat-raised-button (click)="addProducto()">
+    <div class="pl-6">
+      <button class="rounded-pink-button" mat-raised-button (click)="addProducto()">
+        <mat-icon>add_shopping_cart</mat-icon>
         Agregar Producto
       </button>
 
-      <button (click)="onSubmit()" mat-raised-button style="float:right">Siguiente </button>
+      <button class="rounded-pink-button" (click)="onSubmit()" mat-raised-button style="float:right">Siguiente </button>
     </div>
   </mat-card>
 
@@ -98,20 +145,20 @@
 </div>
 
 <script>
-document.getElementById("add_file").onclick=function (ev) {
-            var image = document.getElementById("files");
+  document.getElementById("add_file").onclick = function (ev) {
+    var image = document.getElementById("files");
 
-            var newInput = document.createElement("input");
-            newInput.type="file";
-            newInput.name = "file[]";
-            newInput.style = "width: 100%";
+    var newInput = document.createElement("input");
+    newInput.type = "file";
+    newInput.name = "file[]";
+    newInput.style = "width: 100%";
 
-            var br=document.createElement("br");
-            var br1=document.createElement("br");
+    var br = document.createElement("br");
+    var br1 = document.createElement("br");
 
-            image.appendChild(newInput);
-            image.appendChild(br);
-            image.appendChild(br1);
+    image.appendChild(newInput);
+    image.appendChild(br);
+    image.appendChild(br1);
 
-        }
+  }
 </script>

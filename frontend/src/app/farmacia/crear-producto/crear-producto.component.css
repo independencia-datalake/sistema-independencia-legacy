@@ -12,6 +12,7 @@
   --mat-mdc-radio-ripple-color: #000;
   --mat-mdc-radio-checked-ripple-color: #fc3d59;
 }
+
 .mat-mdc-slide-toggle.mat-accent {
   --mdc-switch-selected-focus-state-layer-color: #90a4ae;
   --mdc-switch-selected-handle-color: #90a4ae;
@@ -24,6 +25,24 @@
   --mdc-switch-selected-hover-track-color: #FC3D59;
   --mdc-switch-selected-pressed-track-color: #FC3D59;
   --mdc-switch-selected-track-color: #FC3D59;
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+  border-color: #5a5a5a;
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):hover .mdc-notched-outline .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):hover .mdc-notched-outline .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):hover .mdc-notched-outline .mdc-notched-outline__trailing {
+  border-color: #5a5a5a;
+}
+
+.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-notched-outline__leading,
+.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-notched-outline__notch,
+.mdc-text-field--invalid:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing {
+  border-color: var(--mdc-theme-error, #f44336);
 }
 
 
@@ -42,7 +61,7 @@ label {
 }
 
 .mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
-  color: #b1b1b1;
+  color: #5a5a5a;
 }
 
 .mat-mdc-raised-button.mat-unthemed {
@@ -67,173 +86,211 @@ label {
 }
 
 .mat-step-text-label {
-text-overflow: ellipsis;
-overflow: hidden;
-color: black;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: black;
 }
 
 .mat-step-header .mat-step-icon {
-background-color: #222222;
-color: #fff;
+  background-color: #222222;
+  color: #fff;
 }
 
-.mat-step-header .mat-step-icon-selected, .mat-step-header .mat-step-icon-state-done, .mat-step-header .mat-step-icon-state-edit {
-background-color: #fc3d59;
-color: #fff;
+.mat-step-header .mat-step-icon-selected,
+.mat-step-header .mat-step-icon-state-done,
+.mat-step-header .mat-step-icon-state-edit {
+  background-color: #fc3d59;
+  color: #fff;
 }
 
 .mat-horizontal-content-container {
-overflow: hidden;
-padding: 0 24px 24px 24px;
-background-color: #FFF;
+  overflow: hidden;
+  padding: 0 24px 24px 24px;
+  background-color: #FFF;
 }
 
 t-mdc-slide-toggle {
---mdc-switch-disabled-selected-handle-color: green;
---mdc-switch-disabled-unselected-handle-color: green;
---mdc-switch-disabled-selected-track-color: #FC3D59;
---mdc-switch-disabled-unselected-track-color: black;
---mdc-switch-unselected-focus-state-layer-color: black;
---mdc-switch-unselected-pressed-state-layer-color: black;
---mdc-switch-unselected-hover-state-layer-color: black;
---mdc-switch-unselected-focus-track-color: black;
---mdc-switch-unselected-hover-track-color: black;
---mdc-switch-unselected-pressed-track-color: black;
---mdc-switch-unselected-track-color: black;
---mdc-switch-unselected-focus-handle-color: black;
---mdc-switch-unselected-hover-handle-color: black;
---mdc-switch-unselected-pressed-handle-color: black;
---mdc-switch-handle-surface-color: var(--mdc-theme-surface, black);
---mdc-switch-unselected-handle-color: black;
---mdc-switch-selected-icon-color: black;
---mdc-switch-disabled-selected-icon-color: black;
---mdc-switch-disabled-unselected-icon-color: black;
---mdc-switch-unselected-icon-color: black;
+  --mdc-switch-disabled-selected-handle-color: green;
+  --mdc-switch-disabled-unselected-handle-color: green;
+  --mdc-switch-disabled-selected-track-color: #FC3D59;
+  --mdc-switch-disabled-unselected-track-color: black;
+  --mdc-switch-unselected-focus-state-layer-color: black;
+  --mdc-switch-unselected-pressed-state-layer-color: black;
+  --mdc-switch-unselected-hover-state-layer-color: black;
+  --mdc-switch-unselected-focus-track-color: black;
+  --mdc-switch-unselected-hover-track-color: black;
+  --mdc-switch-unselected-pressed-track-color: black;
+  --mdc-switch-unselected-track-color: black;
+  --mdc-switch-unselected-focus-handle-color: black;
+  --mdc-switch-unselected-hover-handle-color: black;
+  --mdc-switch-unselected-pressed-handle-color: black;
+  --mdc-switch-handle-surface-color: var(--mdc-theme-surface, black);
+  --mdc-switch-unselected-handle-color: black;
+  --mdc-switch-selected-icon-color: black;
+  --mdc-switch-disabled-selected-icon-color: black;
+  --mdc-switch-disabled-unselected-icon-color: black;
+  --mdc-switch-unselected-icon-color: black;
 }
 
 .mdc-form-field>label {
-margin-left: 0;
-margin-right: auto;
-padding-left: 4px;
-padding-right: 0;
-color:#000;
-order: 0;
+  margin-left: 0;
+  margin-right: auto;
+  padding-left: 4px;
+  padding-right: 0;
+  color: #000;
+  order: 0;
 }
 
 .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
-padding-top: 16px;
-padding-bottom: 16px;
-background-color:  #f5f5f5;
+  padding-top: 16px;
+  padding-bottom: 16px;
+  background-color: #f5f5f5;
 }
 
 .mat-mdc-form-field-flex {
-display: inline-flex;
-align-items: baseline;
-box-sizing: border-box;
-width: 100%;
-background-color:  #f5f5f5;
+  display: inline-flex;
+  align-items: baseline;
+  box-sizing: border-box;
+  width: 100%;
+  background-color: #f5f5f5;
 }
 
 .mat-mdc-slide-toggle.mat-accent {
-margin-left: 10px;
+  margin-left: 10px;
 }
 
 .siguiente {
-margin-top: 15px;
+  margin-top: 15px;
 }
 
 .mat-mdc-text-field-wrapper {
-background-color: #f5f5f5;
+  background-color: #f5f5f5;
 
 }
 
 input::placeholder {
-color: rgb(132, 132, 132) !important;
+  color: rgb(132, 132, 132) !important;
 }
 
 .mdc-menu-surface.mat-mdc-autocomplete-panel {
-width: 100%;
-max-height: 256px;
-position: static;
-visibility: hidden;
-transform-origin: center top;
-margin: 0;
-padding: 0px 0 !important;
-list-style-type: none;
+  width: 100%;
+  max-height: 256px;
+  position: static;
+  visibility: hidden;
+  transform-origin: center top;
+  margin: 0;
+  padding: 0px 0 !important;
+  list-style-type: none;
 }
 
 .mat-mdc-card {
-position: relative;
-border-radius: var(--mdc-elevated-card-container-shape, var(--mdc-shape-medium, 4px));
-background-color: white;
-border-width: 0;
-border-style: solid;
-border-color: white;
+  position: relative;
+  border-radius: var(--mdc-elevated-card-container-shape, var(--mdc-shape-medium, 4px));
+  background-color: white;
+  border-width: 0;
+  border-style: solid;
+  border-color: white;
 }
 
 .mat-mdc-select-value {
-color: rgba(0, 0, 0, 0.87);
+  color: rgba(0, 0, 0, 0.87);
 }
 
 .eliminar {
-font-size: 0.8em;
-color: #fff;
-background-color: #FC3D59;
-/* border-color: #000000; */
-margin-left: 10px;
-transform: scale(0.65);
+  font-size: 0.8em;
+  color: #fff;
+  background-color: #FC3D59;
+  /* border-color: #000000; */
+  margin-left: 10px;
+  transform: scale(0.65);
 
 }
 
 .mdc-menu-surface.mat-mdc-select-panel {
-width: 100%;
-max-height: 275px;
-position: static;
-outline: 0;
-margin: 0;
-padding: 0px 0 !important;
-list-style-type: none;
+  width: 100%;
+  max-height: 275px;
+  position: static;
+  outline: 0;
+  margin: 0;
+  padding: 0px 0 !important;
+  list-style-type: none;
 }
 
 .mat-datepicker-content {
-box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
-background-color: white;
-color: black;
+  box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+  background-color: white;
+  color: black;
 }
+
 .mat-mdc-button:not(:disabled) {
-color: #000;
+  color: #000;
 }
-.mat-calendar-table-header, .mat-calendar-body-label {
-color: rgba(153, 153, 153, 0.7);
+
+.mat-calendar-table-header,
+.mat-calendar-body-label {
+  color: rgba(153, 153, 153, 0.7);
 }
-.mat-datepicker-toggle, .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button {
-color: #000;
+
+.mat-datepicker-toggle,
+.mat-datepicker-content .mat-calendar-next-button,
+.mat-datepicker-content .mat-calendar-previous-button {
+  color: #000;
 }
-.mat-calendar-body-cell-content, .mat-date-range-input-separator {
-color: #000;
-border-color: rgba(0,0,0,0);
+
+.mat-calendar-body-cell-content,
+.mat-date-range-input-separator {
+  color: #000;
+  border-color: rgba(0, 0, 0, 0);
 }
+
 table tr:nth-child(1) td {
-background-color: #fff !important;
-color: #000 !important;
+  background-color: #fff !important;
+  color: #000 !important;
 }
+
 tr:nth-child(odd) td {
-background-color: #ffffff;
-color: #222;
+  background-color: #ffffff;
+  color: #222;
 }
-button.btn:hover, button:hover {
-background-color: #ffffff;
-border: 1px solid #fff;
+
+button.btn:hover,
+button:hover {
+  background-color: #ffffff;
+  border: 1px solid #fff;
 }
+
 .mat-calendar-body-selected {
-background-color: #fc3d59;
-color: #fff;
+  background-color: #fc3d59;
+  color: #fff;
 }
 
 .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
   background-color: #fc3d59;
 }
 
-.info {
-margin-right: 15px;
+/* .info {
+  margin-right: 15px;
+} */
+
+.subtitulo {
+  padding: 20px;
+  background-color: #FC3D59;
+  display: flex;
+  align-items: center;
+  max-width: 1140px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.subtitulo h2 {
+  margin: 0;
+}
+
+.container form {
+  display: flex;
+  flex-direction: column;
+  padding-left: 5px;
+  align-items: stretch;
 }

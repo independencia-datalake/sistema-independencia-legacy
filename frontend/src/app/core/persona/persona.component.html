@@ -1,39 +1,42 @@
 <mat-card class="container contenedor-wrap">
   <form [formGroup]="formCheckPersona" (ngSubmit)="onCheckPersona()">
-  <mat-card-content >
-    <b><h1>Verificación Identidad</h1></b>
-    <b><h3>Usuaria(o)</h3></b>
-    <div>
-      <label>Tipo de identificación: </label>
-      <mat-radio-group aria-label="Select an option" formControlName="tipo">
+    <mat-card-content>
+      <b>
+        <h1>Verificación Identidad</h1>
+      </b>
+      <b>
+        <h3>Usuaria(o)</h3>
+      </b>
       <div>
-        <mat-radio-button value="RUT">Rut</mat-radio-button>
+        <label>Tipo de identificación: </label>
+        <mat-radio-group aria-label="Select an option" formControlName="tipo" (change)="focusOnInput($event,idNumber)">
+          <div>
+            <mat-radio-button value="RUT">Rut</mat-radio-button>
+          </div>
+          <div>
+            <mat-radio-button value="PASAPORTE">Pasaporte</mat-radio-button>
+          </div>
+          <div>
+            <mat-radio-button value="OTRO">Otro</mat-radio-button>
+          </div>
+        </mat-radio-group>
+      </div>
+      <hr>
+      <div>
+        <mat-form-field class="example-full-width">
+          <mat-label>Nº Identificación</mat-label>
+          <input #idNumber formControlName="numero_identificacion" matInput placeholder="18.465.635-3">
+        </mat-form-field>
       </div>
       <div>
-        <mat-radio-button value="PASAPORTE">Pasaporte</mat-radio-button>
+        <button type="submit" mat-raised-button>Siguente</button>
       </div>
-      <div>
-        <mat-radio-button value="OTRO">Otro</mat-radio-button>
-      </div>
-      </mat-radio-group>
-    </div>
-    <hr>
-    <div>
-      <mat-form-field class="example-full-width">
-        <mat-label>Nº Identificación</mat-label>
-        <input formControlName="numero_identificacion" matInput placeholder="18.465.635-3">
-      </mat-form-field>
-    </div>
-    <div>
-      <button type="submit" mat-raised-button>Siguente</button>
-    </div>
-  </mat-card-content>
+    </mat-card-content>
   </form>
   <hr>
   <mat-card-content style="text-align: center;">
-    <a mat-raised-button (click)="ventaSaltar()">Saltar ...</a>
+    <a mat-raised-button class="white-text" (click)="ventaSaltar()">Saltar</a>
   </mat-card-content>
 </mat-card>
 
 <!-- {{personas|json}} -->
-

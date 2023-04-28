@@ -14,6 +14,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { CrearProductoComponent } from './crear-producto/crear-producto.component';
 import { MatSelectModule } from '@angular/material/select';
+import { InformesProductosComponent } from './informes-productos/informes-productos.component';
+import { MatTableModule } from '@angular/material/table';
+import { InformesStockComponent } from './informes-stock/informes-stock.component';
+import { ResumenPersonaComponent } from './lista-personas/lista-personas.component';
+import { ListaVentaComponent } from './lista-ventas/lista-ventas.component';
 import { ComprobanteventaDetailComponent } from './comprobanteventa-detail/comprobanteventa-detail.component';
 import { ComprobanteventaDetailDialogComponent } from './comprobanteventa-detail/comprobanteventa-detail-dialog/comprobanteventa-detail-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -28,6 +33,10 @@ import { MatDialogModule } from '@angular/material/dialog';
     InformesFarmaciaComponent,
     VentaComponent,
     CrearProductoComponent,
+    InformesProductosComponent,
+    InformesStockComponent,
+    ResumenPersonaComponent,
+    ListaVentaComponent,
     ComprobanteventaDetailComponent,
     ComprobanteventaDetailDialogComponent
   ],
@@ -42,7 +51,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatCardModule,
     MatButtonModule,
     MatSelectModule,
-    MatDialogModule
+    MatDialogModule,
+    MatTableModule,
   ],
 
 })

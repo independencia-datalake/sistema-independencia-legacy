@@ -1,0 +1,73 @@
+<div class="container">
+  Pink title container
+</div>
+<div class="container contenedor-wrap">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Nombre del Producto </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="supplier">
+      <th mat-header-cell *matHeaderCellDef> Proveedor </th>
+      <td mat-cell *matCellDef="let element"> {{element.supplier}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef> Precio </th>
+      <td mat-cell *matCellDef="let element"> {{element.price}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="activeComponent">
+      <th mat-header-cell *matHeaderCellDef> Componente Activo </th>
+      <td mat-cell *matCellDef="let element"> {{element.activeComponent}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dose">
+      <th mat-header-cell *matHeaderCellDef> Dosis </th>
+      <td mat-cell *matCellDef="let element"> {{element.dose}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="presentation">
+      <th mat-header-cell *matHeaderCellDef> Presentacion </th>
+      <td mat-cell *matCellDef="let element"> {{element.presentation}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cenabast">
+      <th mat-header-cell *matHeaderCellDef> Cenabast </th>
+      <td mat-cell *matCellDef="let element"> {{element.cenabast}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="bioequivalent">
+      <th mat-header-cell *matHeaderCellDef> Bioequivalencia </th>
+      <td mat-cell *matCellDef="let element"> {{element.bioequivalent}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="laboratory">
+      <th mat-header-cell *matHeaderCellDef> Laboratorio </th>
+      <td mat-cell *matCellDef="let element"> {{element.laboratory}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef='button'>
+      <th mat-header-cell *matHeaderCellDef> </th>
+      <td mat-cell *matCellDef="let element"> naDA </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</div>
+
+<!--
+  name: string;
+  supplier: string;
+  price: number;
+  activeComponent: string;
+  dose: string;
+  presentation: string;
+  cenabast: boolean;
+  bioequivalent: boolean;
+  laboratory: string;
+-->

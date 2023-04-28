@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { PersonaService } from 'src/app/service/persona.service';
@@ -11,7 +11,14 @@ import { ActivatedRoute, Params } from '@angular/router';
   styleUrls: ['./persona.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
-export class PersonaComponent implements OnInit{
+export class PersonaComponent implements OnInit {
+
+  @ViewChild("idInputForm") firstNameField;
+  focusOnID() {
+    this.firstNameField.nativeElement.focus();
+  }
+
+  idNumber: string;
 
   formCheckPersona: FormGroup;
 
@@ -37,7 +44,11 @@ export class PersonaComponent implements OnInit{
       numero_identificacion: ''
     })
 
-    this.personaService.getPersonas().pipe(take(1)).subscribe(data => {this.personas = data;})
+    this.personaService.getPersonas().pipe(take(1)).subscribe(data => { this.personas = data; })
+  }
+
+  focusOnInput(e: any, next: any) {
+    next.focus()
   }
 
   onCheckPersona(): void {
@@ -47,25 +58,25 @@ export class PersonaComponent implements OnInit{
     console.log(this.formCheckPersona.value)
     console.log(this.personas)
     const tipo_seleccionado = this.formCheckPersona.value.tipo;
-
     try {
+      this.focusOnID();
       const result = this.personas.find(item => item.numero_identificacion === numero_identificacion)
-      if (typeof result != "undefined" ) {
+      if (typeof result != "undefined") {
         this.success = true
-        if (this.redireccion === 'farmacia') {
-          this.router.navigate(['farmacia/venta'], { queryParams: {id_persona: result.id}})
-        }
+        console.log(result.id)
+        console.log(this.formCheckPersona.value.numero_identificacion)
+        this.router.navigate(['farmacia/venta'], { queryParams: { id_persona: result.id } })
       } else {
-        this.router.navigate(['persona/crear'], { queryParams: {numero_identificacion: numero_identificacion, tipo: tipo_seleccionado, redireccion: this.redireccion }})
+        this.router.navigate(['persona/crear'], { queryParams: { numero_identificacion: numero_identificacion, tipo: tipo_seleccionado } })
 
       }
-    } catch(err) {
+    } catch (err) {
       console.log(err)
     }
     this.loading = false;
   }
   ventaSaltar(): void {
-    this.router.navigate(['farmacia/venta'], { queryParams: {id_persona: 1}})
+    this.router.navigate(['farmacia/venta'], { queryParams: { id_persona: 1 } })
   }
 
 }
