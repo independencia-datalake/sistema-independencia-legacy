@@ -21,4 +21,9 @@ export class EmpresasServiceService {
     return this.http.get<Empresas>(`${this.apiUrl}/mapa_legacy/empresas-comercial/`);
 }
 
+// ASOCIADO A EMPRESAS POR FECHA
+  getEmpresasTotalByUvFecha(fecha_inicio, fecha_fin): Observable<Empresas> {
+    return this.http.get<Empresas>(`${this.apiUrl}/mapa_legacy/empresas-total-fecha/${fecha_inicio}/${fecha_fin}`);
+  }
+
 }

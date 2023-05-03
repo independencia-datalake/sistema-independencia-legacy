@@ -61,7 +61,7 @@ table tr:nth-child(odd) td {
 }
 
 mat-slider {
-  width: 300px;
+  width: 225px !important;
 }
 
 
@@ -94,4 +94,67 @@ mat-slider {
 }
 input::placeholder {
   color: rgb(132, 132, 132) !important;
+}
+
+
+.resaltado {
+  font-weight: bold;
+}
+
+.subrayado {
+  text-decoration: underline;
+}
+
+.mat-form-field-appearance-fill .mat-form-field-infix {
+  background-color: blue;
+}
+
+.slider-labels {
+  display: flex;
+  justify-content: space-between;
+}
+
+.float-right {
+  float: right;
+}
+
+.mdc-slider__value-indicator-text {
+  width: 74px !important;
+  /* font-size: 30px !important; */
+}
+
+.values-container {
+  display: inline !important;
+}
+
+.slider-container {
+  position: relative;
+}
+
+.top-slider {
+  position: absolute;
+  z-index: 1;
+}
+
+.bottom-slider {
+  position: absolute;
+  z-index: 0;
+}
+
+.slider-container {
+  display: flex;
+  align-items: center;
+}
+
+.ngx-slider{
+  width: 550px !important;
+}
+
+.ngx-slider .ngx-slider-selection {
+  z-index: 2;
+  background: #FC3D59 !important;
+  border-radius: 2px;
+}
+.ngx-slider .ngx-slider-pointer:after{
+  background-color: #F0F0F0 !important;
 }

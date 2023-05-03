@@ -42,19 +42,19 @@ const routes: Routes = [
   { path: 'conoce-tu-uv', component: InfoUvComponent },
 
   // FARMACIA
-  { path: 'farmacia', component: FarmaciaHomeComponent },
-  { path: 'farmacia/informes', component: InformesFarmaciaComponent },
-  { path: 'farmacia/venta', component: VentaComponent },
-  { path: 'farmacia/informe-productos', component: InformesProductosComponent },
-  { path: 'farmacia/informe-stock', component: InformesStockComponent },
-  { path: 'farmacia/resumen-persona', component: ResumenPersonaComponent },
-  { path: 'farmacia/lista-venta', component: ListaVentaComponent },
-  { path: 'farmacia/comprobanteventa-detail', component: ComprobanteventaDetailComponent },
+  { path: 'farmacia', component: FarmaciaHomeComponent, canActivate: [AuthFarmaciaGuard] },
+  { path: 'farmacia/informes', component: InformesFarmaciaComponent, canActivate: [AuthFarmaciaGuard] },
+  { path: 'farmacia/venta', component: VentaComponent, canActivate: [AuthFarmaciaGuard] },
+  { path: 'farmacia/informe-productos', component: InformesProductosComponent, canActivate: [AuthFarmaciaGuard] },
+  { path: 'farmacia/informe-stock', component: InformesStockComponent, canActivate: [AuthFarmaciaGuard] },
+  { path: 'farmacia/resumen-persona', component: ResumenPersonaComponent, canActivate: [AuthFarmaciaGuard] },
+  { path: 'farmacia/lista-venta', component: ListaVentaComponent, canActivate: [AuthFarmaciaGuard] },
+  { path: 'farmacia/comprobanteventa-detail', component: ComprobanteventaDetailComponent, canActivate: [AuthFarmaciaGuard] },
 
 
   // STOCK
-  { path: 'stock', component: StockProductosComponent },
-  { path: 'stock/crear-producto', component: CrearProductoComponent },
+  { path: 'stock', component: StockProductosComponent, canActivate: [AuthFarmaciaGuard] },
+  { path: 'stock/crear-producto', component: CrearProductoComponent, canActivate: [AuthFarmaciaGuard] },
   // SEGURIDAD
   { path: 'seguridad', component: SeguridadHomeComponent },
 ];

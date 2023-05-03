@@ -44,8 +44,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { VisComponent } from './vis/vis.component';
 import { MatTableModule } from '@angular/material/table';
 import { MatSliderModule } from '@angular/material/slider';
-
-
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { NgxSliderModule } from '@angular-slider/ngx-slider';
 
 
 
@@ -91,8 +91,8 @@ import { MatSliderModule } from '@angular/material/slider';
     MatDialogModule,
     MatTableModule,
     MatSliderModule,
-
-
+    MatTooltipModule,
+    NgxSliderModule,
   ],
   providers: [
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}},

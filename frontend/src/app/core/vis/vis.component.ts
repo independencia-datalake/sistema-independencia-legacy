@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
 import { EmpresasServiceService } from 'src/app/service/empresas.service.service';
 import { ChangeDetectorRef } from '@angular/core';
+import { Options, PointerType } from "@angular-slider/ngx-slider";
 
 interface unidad_vecinal {
   nombre: any;
@@ -21,13 +22,36 @@ interface unidad_vecinal {
   styleUrls: ['./vis.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
+
+
 export class VisComponent {
 
+  columnaResaltada: string;
+
   fechaInicio: Date;
+  fechaInicioFormateada: any;
   fechaFin: Date;
-  minValue: number;
-  maxValue: number;
-  sliderValue: number[] = [0, 100];
+  fechaFinFormateada;
+
+  minValue: number= new Date('2020-01-01').getTime();
+  maxValue: number= new Date('2022-12-31').getTime();
+
+  step = (this.maxValue-this.minValue)/100
+  minSliderValue:number= new Date('2020-01-01').getTime();
+  maxSliderValue:number= new Date('2022-12-31').getTime();
+
+  value: number = this.minSliderValue;
+  highValue: number = this.maxSliderValue;
+  options: Options = {
+    floor: this.minSliderValue,
+    ceil: this.maxSliderValue,
+    step: this.step,
+    noSwitching: true,
+    translate: (value: number): string => {
+      return this.formatDate(value)
+    },
+    getPointerColor: (value:number): string => {return '#FC3D59'},
+  };
 
   result: any[];
   map: Map;
@@ -37,35 +61,49 @@ export class VisComponent {
   gslData: any[];
   empresasData: any[];
   sumByM: {[key: string]: number} = {};
-  public maximo:any = 101;
+  public maximo:any;
 
   infoControl: any;
   info: L.Control;
 
   dataTabla: any=[];
 
+  legend: L.Control;
+
+  dateFlag: boolean = false;
+
   unidadesVecinales: unidad_vecinal[] = [];
   // dataSource = new MatTableDataSource<unidad_vecinal>(this.unidadesVecinales);
   dataSource = new MatTableDataSource<unidad_vecinal>([...this.unidadesVecinales]);
+
+  formatLabel(value: number): string {
+    const texto_label = new Date(value);
+    // return `${texto_label}`;
+    return `${texto_label.getDate()}-${texto_label.getMonth() + 1}-${texto_label.getFullYear()}`;
+  }
 
   constructor(private http: HttpClient,
               private empresas: EmpresasServiceService,
               private cdr: ChangeDetectorRef,
               ) {
+
    }
 
 
 
   ngAfterViewInit(): void{
-    let geoJsonData: any;  // Definir la variable fuera del método subscribe
+
+  localStorage.setItem('Columna', 'total')
+
+  let geoJsonData: any;  // Definir la variable fuera del método subscribe
 
   // Realizar ambas solicitudes HTTP en paralelo y esperar a que ambas se completen
-  const gslRequest = this.http.get('../../assets/gsl.json');
+  // const gslRequest = this.http.get('../../assets/gsl.json');
   const uvCoordRequest = this.http.get('../../assets/uv_coordenadas.json');
   const empresasTotalByUVRequest = this.empresas.getEmpresasTotalByUV();
   const empresasComercialByUV = this.empresas.getEmpresasComercialByUV();
 
-  forkJoin([gslRequest, uvCoordRequest, empresasTotalByUVRequest, empresasComercialByUV]).subscribe(([gslData, uvCoordData, empresasTotalByUVData, empresasComercialByUVData]) => {
+  forkJoin([uvCoordRequest, empresasTotalByUVRequest, empresasComercialByUV]).subscribe(([uvCoordData, empresasTotalByUVData, empresasComercialByUVData]) => {
     const newData: {[key: string]: number} = {};;
     const comercialData: {[key: string]: number} = {};;
     for (const item of this.densityData) {
@@ -76,7 +114,6 @@ export class VisComponent {
     }
 
     // Lógica relacionada con gslData
-    this.gslData = gslData as any[];
     // this.sumByM = this.aporteEconomicoUV(this.gslData);
     // console.log(this.sumByM)
     this.maximo = Math.max(...Object.values(newData))
@@ -108,26 +145,11 @@ export class VisComponent {
 
     this.geoJsonLayer.addData(geoJsonData);
 
-    var legend = new L.Control({position: 'bottomright'})
-    const valorMaximo = this.maximo;
-    const factors = [0, 0.1, 0.3, 0.5, 0.7, 0.9, 1];
-    legend.onAdd = function (map) {
-      var div = L.DomUtil.create('div', 'info legend'),
-      grades = factors.map((factor) => Number((valorMaximo * factor).toFixed(0))),
-      labels = [];
+    this.legend = new L.Control({ position: 'bottomright' });
 
-        // loop through our density intervals and generate a label with a colored square for each interval
-        for (var i = 0; i < grades.length; i++) {
-          div.innerHTML +=
-              '<i style="background:' + getColor(grades[i] + 1) + '"></i> ' +
-              grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-      }
+    this.updateLegend(this.maximo);
 
-      return div;
-
-    };
-
-    legend.addTo(this.map)
+    this.legend.addTo(this.map);
 
 
   });
@@ -167,13 +189,20 @@ export class VisComponent {
 
     const getColor = (d, max=this.maximo) => {
       // console.log(this.maximo);
-      return d >= 0.9 * max ? '#FC3D59' :
-             d >= 0.7 * max ? '#FA6378' :
-             d >= 0.5 * max ? '#F88A97' :
-             d >= 0.3 * max ? '#F6B0B5' :
-             d >= 0.1 * max ? '#F4D6D4' :
-                               '#FFC6D9';
-    }
+    //   return d >= 0.9 * max ? '#FC3D59' :
+    //          d >= 0.7 * max ? '#FA6378' :
+    //          d >= 0.5 * max ? '#F88A97' :
+    //          d >= 0.3 * max ? '#F6B0B5' :
+    //          d >= 0.1 * max ? '#F4D6D4' :
+    //                            '#FFC6D9';
+    // }
+    return d >= 0.8 * max ? '#FC3D59' :
+    d >= 0.6 * max ? '#FA527F' :
+    d >= 0.4 * max ? '#F886A8' :
+    d >= 0.2 * max ? '#FBB5C5' :
+    d >= 0   * max ? '#FDE5ED' :
+                     '#FFFFFF';
+}
 
 
     function style(feature) {
@@ -188,13 +217,13 @@ export class VisComponent {
     }
 function onEachFeature(feature, layer) {
   layer.on({
-    mouseover: highlightFeature,
+    mouseover: (e:any) => highlightFeature(e, localStorage.getItem('Columna')),
     mouseout: resetHighlight,
 
   });
 }
 
-function highlightFeature(e:any) {
+function highlightFeature(e:any, columnita: string) {
   const layer: GeoJSON = e.target;
 
   layer.setStyle({
@@ -212,10 +241,9 @@ function highlightFeature(e:any) {
   const properties = (layer.feature as GeoJSON.Feature).properties
   // console.log(properties['density'])
 
-  label.updateContent( '<h4>Visualizador de XXXX</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density']);
-
-
+  label.updateContent( '<h4>Patentes de tipo ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
 }
+
 
 function resetHighlight(e) {
   const layer: GeoJSON = e.target;
@@ -231,7 +259,7 @@ function resetHighlight(e) {
 const info = L.Control.extend({
   onAdd: function(map) {
     const div = L.DomUtil.create('div', 'info');
-    div.innerHTML =  '<h4>Visualizador de XXXX</h4>' + '<b>UV</b>' + '<br />Cantidad numerica';
+    div.innerHTML =  '<h4>Impuestos y Derechos </h4>' + '<b>Patentes y sus tipos</b>';
     // Guardar una referencia al div para actualizarlo más tarde
     this._div = div;
 
@@ -246,19 +274,80 @@ const info = L.Control.extend({
 
 const label = new info(); // label es la etiqueta de arriba a la derecha del mapa
 label.addTo(this.map);
-
   }
 
-tablita() {
+  getColor2(d, max) {
+    max = max || this.maximo; // asignar un valor por defecto para max
+  //   return d >= 0.9 * max ? '#FC3D59' :
+  //          d >= 0.7 * max ? '#FA6378' :
+  //          d >= 0.5 * max ? '#F88A97' :
+  //          d >= 0.3 * max ? '#F6B0B5' :
+  //          d >= 0.1 * max ? '#F4D6D4' :
+  //                            '#FFC6D9';
+  // }
+    return d >= 0.8 * max ? '#FC3D59' :
+    d >= 0.6 * max ? '#FA527F' :
+    d >= 0.4 * max ? '#F886A8' :
+    d >= 0.2 * max ? '#FBB5C5' :
+    d >= 0   * max ? '#FDE5ED' :
+                    '#FFFFFF';
+    }
+
+updateMapData(newData: {[key: string]: number}) {
+  // Calcular el valor máximo en los nuevos datos
+  // console.log(newData)
+  this.maximo = Math.max(...Object.values(newData));
+  // console.log(this.maximo)
+
+  // Actualizar el contenido de la capa geoJSON
+  this.geoJsonLayer.eachLayer((layer: L.Layer) => {
+    const feature = (layer as L.GeoJSON).feature as GeoJSON.Feature;
+    const key = feature.properties["name"];
+    const density = newData[key] && newData[key];
+    feature.properties["density"] = density;
+    // Actualizar el estilo de la capa
+    (layer as L.GeoJSON).setStyle({
+      fillColor: this.getColor2(density, this.maximo),
+      weight: 2,
+      opacity: 1,
+      color: 'white',
+      dashArray: '3',
+      fillOpacity: 0.7
+    });
+  });
+}
+
+
+tablita(flag) {
+
+  // console.log(this.densityData)
+
+  let densityDataObservable = null;
+  if (flag === false) {
+    console.log('huh')
+    densityDataObservable = this.empresas.getEmpresasTotalByUV()
+  } else {
+    // console.log(this.fechaInicioFormateada)
+    // console.log(this.fechaFinFormateada)
+    this.fechaInicioFormateada
+    densityDataObservable = this.empresas.getEmpresasTotalByUvFecha(this.fechaInicioFormateada, this.fechaFinFormateada)
+  }
+  // console.log(this.densityData)
 
   forkJoin({
     comercialData: this.empresas.getEmpresasComercialByUV(),
-    densityData: this.empresas.getEmpresasTotalByUV(),
+    // densityData: this.empresas.getEmpresasTotalByUV(),
+    densityData: densityDataObservable,
+
+
   }).subscribe(({ comercialData, densityData}) => {
     // this.dataTabla = this.combineData(comercialData, densityData);
     // console.log(densityData)
     this.densityData = densityData
+    // console.log(this.densityData)
     this.comercialData = comercialData
+
+    this.dataTabla.splice(0, this.dataTabla.length);
 
     for (let i = 0; i < this.densityData.length; i++) {
       // this.dataTabla.push({nombre: Object.keys(this.densityData)[i], densidad: Object.values(this.densityData)[i]})
@@ -278,59 +367,157 @@ tablita() {
 
 
   });
-
 }
 
 // TABLA
 displayedColumns: string[] = ['nombre', 'total', 'comercial'];
-pez: any = this.tablita();
+display_tabla: any = this.tablita(this.dateFlag);
 
-logElement(element: any) {
-  console.log(element);
-}
+updateColumn(columna: string) {
+  if (columna === "total" && this.dateFlag===false) {
+    // console.log(this.densityData)
+    this.updateMapData(this.densityData);
 
-
-
-aporteEconomicoUV(gslData: any[]): any {
-  const sumByM: any = {};
-  // console.log(gslData)
-  gslData.forEach((row) => {
-    if (row['E'] === 'Aporte económico' && row['M'] !== '-' && row['M'] !== 'false') {
-      const m = `UV-${row['M']}`;
-      const count = sumByM[m] || 0;
-      sumByM[m] = count + (Number(row['M']) !== 0 ? 1 : 0);
+  }else if (columna ==="total" && this.dateFlag===true) {
+    // console.log(this.densityData)
+    const totalData: { [key: string]: number } = {};
+    for (const item of this.densityData) {
+      totalData[`UV-${item.uv - 1}`] = item.densidad;
     }
-  });
-  // console.log(sumByM)
-
-  const orderedKeys = Object.keys(sumByM).sort((a, b) => {
-    const aNum = parseInt(a.replace('UV-', ''));
-    const bNum = parseInt(b.replace('UV-', ''));
-    return aNum - bNum;
-  });
-
-  const orderedSumByM = {};
-  orderedKeys.forEach(key => {
-    orderedSumByM[key] = sumByM[key];
-  });
-
-  return orderedSumByM;
+    this.updateMapData(totalData);
+  } else if (columna === "comercial") {
+    const comercialData: { [key: string]: number } = {};
+    for (const item of this.comercialData) {
+      comercialData[`UV-${item.uv - 1}`] = item.densidad;
+    }
+    this.updateMapData(comercialData);
+  }
 }
 
+resaltarColumna(columna: string) {
+  // console.log(columna)
+  this.columnaResaltada = columna;
+  localStorage.setItem('Columna',columna)
+  this.updateColumn(columna);
+  // this.updateLegend(1408)
+  this.onMaxValueChanged(this.maximo)
 
+
+
+}
+
+updateLegend(valorMaximo: number): void {
+  this.legend.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'info legend');
+    const factors = [0, 0.2, 0.4, 0.6, 0.8];
+    var grades = factors.map((factor) => Number((valorMaximo * factor).toFixed(0)));
+    var labels = [];
+
+    for (var i = 0; i < grades.length; i++) {
+      div.innerHTML +=
+        '<i style="background:' + getColorLegend(grades[i] + 1, valorMaximo) + '"></i> ' +
+        grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '&ndash;'+valorMaximo);
+    }
+
+    return div;
+  };
+}
+
+  // Llama a esta función cada vez que el valor máximo cambie
+  onMaxValueChanged(newValue: number): void {
+    this.maximo = newValue;
+    this.legend.remove();
+    this.updateLegend(this.maximo);
+    this.legend.addTo(this.map);
+  }
+
+// ASOCIADO A LA FECHA
 buscar() {
-  const fechaInicio = this.fechaInicio.getTime();
-  const fechaFin = this.fechaFin.getTime();
-
+  const fechaInicio = new Date(this.fechaInicio.getTime());
+  const fechaFin = new Date(this.fechaFin.getTime());
+  const fechaInicioF = `${fechaInicio.getFullYear()}-${fechaInicio.getMonth() + 1}-${fechaInicio.getDate()}`;
+  const fechaFinF = `${fechaFin.getFullYear()}-${fechaFin.getMonth() + 1}-${fechaFin.getDate()}`;
   // Actualizar el rango del slider
-  this.minValue = fechaInicio;
-  this.maxValue = fechaFin;
+  this.minValue = this.fechaInicio.getTime()
+  this.maxValue = this.fechaFin.getTime();
 
-  // ... Resto de la lógica de búsqueda
+  this.value = this.fechaInicio.getTime()
+  this.highValue = this.fechaFin.getTime();
+  this.options = {
+    floor: this.minValue,
+    ceil: this.maxValue,
+    step: this.step,
+    noSwitching: true,
+    translate: (value: number): string => {
+      return this.formatDate(value);
+    },
+    getPointerColor: (value: number): string => {
+      return '#FC3D59';
+    },
+  }
+  // this.options.ceil = this.fechaFin.getTime();
+
+  this.fechaInicioFormateada = fechaInicioF
+  this.fechaFinFormateada = fechaFinF
+
+  this.dateFlag = true
+  this.tablita(true)
+  this.resaltarColumna(localStorage.getItem('Columna'))
+
+}
+
+  // Función para convertir milisegundos en una cadena de fecha legible
+  formatDate(milliseconds: number): string {
+    const date = new Date(milliseconds);
+    return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+  }
+
+  formatDatedjango(milliseconds: number): string {
+    const date = new Date(milliseconds);
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+  }
+
+
+  onSliderChange(event) {
+    if (event.pointerType === PointerType.Min) {
+      const minValue = event.value;
+      const formattedMinValue = this.formatDate(minValue);
+      const formattedMinValueDJ = this.formatDatedjango(minValue)
+      this.fechaInicioFormateada = formattedMinValueDJ
+      // console.log(this.fechaInicioFormateada)
+      this.dateFlag = true;
+      this.tablita(true)
+      this.resaltarColumna(localStorage.getItem('Columna'))
+
+      // console.log('Valor del slider mínimo:', formattedMinValue);
+    } else if (event.pointerType === PointerType.Max) {
+      const maxValue = event.highValue;
+      const formattedMaxValue = this.formatDate(maxValue);
+      const formattedMaxValueDJ = this.formatDatedjango(maxValue)
+      this.fechaFinFormateada = formattedMaxValueDJ
+      this.dateFlag = true
+      this.tablita(true)
+      this.resaltarColumna(localStorage.getItem('Columna'))
+      // console.log('Valor del slider máximo:', formattedMaxValue);
+    }
+  }
+
 }
 
 
-
+function getColorLegend(d, max: number) {
+  max = max || this.maximo; // asignar un valor por defecto para max
+//   return d >= 0.9 * max ? '#FC3D59' :
+//          d >= 0.7 * max ? '#FA6378' :
+//          d >= 0.5 * max ? '#F88A97' :
+//          d >= 0.3 * max ? '#F6B0B5' :
+//          d >= 0.1 * max ? '#F4D6D4' :
+//                            '#FFC6D9';
+// }
+return d >= 0.8 * max ? '#FC3D59' :
+d >= 0.6 * max ? '#FA527F' :
+d >= 0.4 * max ? '#F886A8' :
+d >= 0.2 * max ? '#FBB5C5' :
+d >= 0   * max ? '#FDE5ED' :
+                 '#FFFFFF';
 }
-
-

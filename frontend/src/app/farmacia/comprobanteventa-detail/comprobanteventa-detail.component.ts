@@ -4,11 +4,13 @@ import { Observable, map } from 'rxjs';
 import { PersonaService } from 'src/app/service/persona.service';
 import { ProductosService } from 'src/app/service/productos.service';
 import { UsersService } from 'src/app/service/users.service';
+import { ComprobanteventaDetailDialogComponent } from './comprobanteventa-detail-dialog/comprobanteventa-detail-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 const PRODUCT_DATA = [
   {
     nombre: 'ACERDIL',
-    cantidad: 1,
+    cantidad: 2,
     precio_venta: 17750,
   },
 ]
@@ -41,14 +43,16 @@ export class ComprobanteventaDetailComponent {
     private route: ActivatedRoute,
     private productosfarmacia: ProductosService,
     private personaService: PersonaService,
-    private userService: UsersService,) { }
+    private userService: UsersService,
+    public dialog: MatDialog,
+    private router: Router,) { }
 
   ngOnInit() {
 
 
     this.filtroProductos().subscribe((productosFiltrados: any[]) => {
       this.productos = productosFiltrados;
-      console.log(this.productos);
+      // console.log(this.productos);
       for (const producto of this.productos) {
         this.productosfarmacia.getProductoByid(Number(producto.nombre)).subscribe((productoEncontrado: any) => {
           producto.nombre = productoEncontrado.marca_producto;
@@ -92,6 +96,62 @@ export class ComprobanteventaDetailComponent {
         total + producto.precio_venta * producto.cantidad,
       0,
     );
+  }
+
+  agregarProducto() {
+    const dialogRef = this.dialog.open(ComprobanteventaDetailDialogComponent, {
+      // width: '100%'
+    data: { id_comprobante: this.id_comprobante}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('dialog cerrado')
+      if (result === 'actualizar') {
+        console.log('ñom')
+        window.location.reload();
+      }
+    });
+
+  }
+
+  eliminarProduto(producto) {
+    // console.log(producto.id)
+    this.productosfarmacia.deleteProductoVendido(producto.id).subscribe(
+      data => {
+        window.location.reload();
+      },
+      error => {
+        console.log(error)
+      }
+    )
+  }
+
+  eliminarVenta() {
+    this.productosfarmacia.deleteComprobanteventa(this.id_comprobante).subscribe(
+      data => {
+        this.router.navigate(['farmacia'],)
+      },
+      error => {
+        console.log(error)
+      }
+    )
+  }
+
+  imprimir() {
+    // const contenido = document.getElementById("printData").innerHTML;
+    // const ventana = window.open("", "", "height=1000, width=1000");
+    // ventana.document.write("<html><head><title>Contenido a imprimir</title>");
+    // ventana.document.write("</head><body >");
+    // ventana.document.write(contenido);
+    // ventana.document.write("</body></html>");
+    // ventana.document.close();
+    // ventana.print();
+
+    window.print();
+  }
+
+  finVenta() {
+    this.router.navigate(['farmacia/lista-venta'])
   }
 
 }

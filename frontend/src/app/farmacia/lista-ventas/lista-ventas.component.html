@@ -26,7 +26,10 @@
 
     <ng-container matColumnDef='button'>
       <th mat-header-cell *matHeaderCellDef> </th>
-      <td mat-cell *matCellDef="let element"> naDA </td>
+      <td mat-cell *matCellDef="let element"> <button (click)="editarVenta(element.salesNumber)"
+        class="f-acenter-jarround square-pink-button"><span>editar</span><mat-icon>edit</mat-icon>
+
+      </button> </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

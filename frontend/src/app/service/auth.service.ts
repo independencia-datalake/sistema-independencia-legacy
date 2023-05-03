@@ -72,10 +72,10 @@ export class AuthService {
     const ahora = new Date().getTime(); // Obtiene la fecha actual en formato epoch
     const fechaExpiracion = new Date(exp_date).getTime(); // convierte la fecha de expiración a formato epoch
     if (fechaExpiracion > ahora) {
-      console.log('El token ha expirado'); // el token ha expirado
+      // console.log('El token ha expirado'); // el token ha expirado
       return false
     } else {
-      console.log('El token aun no expira'); // el token es válido
+      // console.log('El token aun no expira'); // el token es válido
     }
 
     // console.log(exp_date)
@@ -91,12 +91,13 @@ export class AuthService {
   async isFarmacia(): Promise<boolean> {
     const token_check = localStorage.getItem('token');
     const grupos = this.getGrupos(token_check)
+    // console.log(grupos)
     try {
-      if (grupos.includes('Farmacia-Farmaceuta')) {
-        console.log('grupo aceptado')
+      if (grupos.includes('Farmacia-Farmaceuta') || grupos.includes('Farmacia-Vendedor') ) {
+        // console.log('grupo aceptado')
         return true
       } else {
-        console.log('grupo no encontrado')
+        // console.log('grupo no encontrado')
         return false
       }
     } catch (error) {
@@ -115,7 +116,7 @@ export class AuthService {
   }
   getUser(access_token) {
     this.decodeToken(access_token);
-    console.log(this.decodedToken)
+    // console.log(this.decodedToken)
     return this.decodedToken ? this.decodedToken['username'] : null;
   }
   getUserId(access_token) {

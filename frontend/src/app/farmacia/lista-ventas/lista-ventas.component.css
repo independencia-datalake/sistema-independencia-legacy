@@ -12,3 +12,12 @@ tr:nth-child(odd) td {
   background-color: #FFF !important;
   color: #4a4a4a !important;
 }
+
+.square-pink-button {
+  background-color: rgb(249, 34, 72);
+  width: auto;
+  color: #FFF;
+  border: none;
+  padding: 5px;
+  font-size: 14px;
+}

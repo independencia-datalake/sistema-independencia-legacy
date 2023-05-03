@@ -160,3 +160,7 @@ form {
 .pl-6 {
   padding-left: 6px;
 }
+
+.mat-mdc-select-value {
+  color: black;
+}

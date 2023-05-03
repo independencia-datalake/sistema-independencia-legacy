@@ -6,6 +6,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { format } from 'date-fns';
 import { Router } from '@angular/router';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
 
 @Component({
   selector: 'app-persona-crear',
@@ -102,7 +103,7 @@ export class PersonaCrearComponent implements OnInit{
       telefono:'',
       tipo_telefono:null,
       telefono_secundario:'',
-      tipo_telefono_secundario:null
+      tipo_telefono_secundario:['NO APLICA']
     })
 
     this.formInfoSaludPersona = this.fb.group({
@@ -148,7 +149,7 @@ export class PersonaCrearComponent implements OnInit{
   }
 
   onItemChange(value){
-    console.log(" Value is : ", value );
+    // console.log(" Value is : ", value );
  }
 
  form = this.fb.group({
@@ -176,15 +177,15 @@ export class PersonaCrearComponent implements OnInit{
   this.correoResumen = this.formCorreoPersona.value
   this.telefonoResumen = this.formTelefonoPersona.value
   this.personainfosaludResumen = this.formInfoSaludPersona.value;
-  // console.log(this.personaResumen)
-  // console.log(this.direccionResumen)
-  // console.log(this.correoResumen)
-  // console.log(this.telefonoResumen)
-  // console.log(this.personainfosaludResumen)
  }
 
+ onStepChanged(event: StepperSelectionEvent): void {
+  if (event.selectedIndex === 3) {
+    this.verResumen()
+  }
+}
+
  onSubmit() {
-  console.log('nom nom nom')
 
   // CREAR PERSONA
   const data_persona = this.formCrearPersona.value;
@@ -205,7 +206,7 @@ export class PersonaCrearComponent implements OnInit{
   data_direccion.persona = persona_actual;
   // console.log(data_direccion)
   this.personaService.createDireccion(data_direccion).subscribe(respuesta =>{
-    console.log(respuesta)
+    // console.log(respuesta)
   }, (error)=> {
     console.log(error);
   });
@@ -214,7 +215,7 @@ export class PersonaCrearComponent implements OnInit{
   const data_correo = this.formCorreoPersona.value;
   data_correo.persona = persona_actual;
     this.personaService.createCorreo(data_correo).subscribe(respuesta => {
-      console.log(respuesta)
+      // console.log(respuesta)
     }, (error)=>{
       console.log(error)
     })
@@ -223,7 +224,7 @@ export class PersonaCrearComponent implements OnInit{
   const data_telefono = this.formTelefonoPersona.value;
   data_telefono.persona = persona_actual
     this.personaService.createTelefono(data_telefono).subscribe(respuesta => {
-      console.log(respuesta)
+      // console.log(respuesta)
     }, (error)=>{
       console.log(error)
     })
@@ -239,12 +240,12 @@ export class PersonaCrearComponent implements OnInit{
 
   // console.log(data_infosalud)
     this.personaService.createInfosalud(data_infosalud).subscribe(respuesta => {
-      console.log(respuesta)
+      // console.log(respuesta)
     }, (error)=>{
       console.log(error)
     })
 
-    console.log(respuesta)
+    // console.log(respuesta)
 
   if (this.redireccion === 'farmacia') {
     this.router.navigate(['farmacia/venta'], {queryParams: {id_persona: persona_actual}})
@@ -252,8 +253,8 @@ export class PersonaCrearComponent implements OnInit{
   }, (error)=> {
     console.log(error);
   });
-
-
  }
+
+
 
 }

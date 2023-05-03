@@ -3,6 +3,7 @@ from rest_framework import generics
 from django_filters import rest_framework as filters
 from django.db.models import Count
 from rest_framework.views import APIView
+from datetime import datetime
 
 from api.serializers.mapa_legacy_serializers import *
 from database.mapa_legacy.models import (
@@ -38,5 +39,13 @@ class CountComercialEmpresasByUV(APIView):
 
     def get(self, request):
         queryset = Empresas.objects.filter(tipo="comercial").values('uv').annotate(densidad=Count('id')).order_by('uv')
+        serializer = CountEmpresasByUVSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+# POR FECHA
+
+class countEmpresasByUVFecha(APIView):
+    def get(self, request, fecha_inicio, fecha_fin):
+        queryset = Empresas.objects.filter(created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(densidad=Count('id')).order_by('uv')
         serializer = CountEmpresasByUVSerializer(queryset, many=True)
         return Response(serializer.data)

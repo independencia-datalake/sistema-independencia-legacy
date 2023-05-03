@@ -6,4 +6,7 @@ urlpatterns = [
     path('empresas-uv/<int:uv_id>/', views.EmpresasByUVAPIViw.as_view()),
     path('empresas-total/', views.CountEmpresasByUV.as_view()),
     path('empresas-comercial/', views.CountComercialEmpresasByUV.as_view()),
+
+    # POR FECHA
+    path('empresas-total-fecha/<str:fecha_inicio>/<str:fecha_fin>/', views.countEmpresasByUVFecha.as_view()),
 ] 

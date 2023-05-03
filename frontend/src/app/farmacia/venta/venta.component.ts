@@ -60,7 +60,7 @@ export class VentaComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log('q onda')
+    // console.log('q onda')
     this.loading = true;
     this.personaService.getPersona(this.id_persona).pipe(take(1)).subscribe(data => { this.persona = data; })
     this.personaService.getDireccionByPersona(this.id_persona).pipe(take(1)).subscribe(data => { this.direccion = data; })
@@ -119,7 +119,7 @@ export class VentaComponent implements OnInit {
 
   seleccionarProducto(evento: any, i: number) {
     const nombre = evento.value;
-    console.log(nombre)
+    // console.log(nombre)
     this.productos.controls[i].get('nombre').setValue(nombre.id);
     this.productos.controls[i].get('precio_venta').setValue(nombre.precio)
   }
@@ -128,22 +128,22 @@ export class VentaComponent implements OnInit {
     const venta = this.formComprobanteventa.value;
 
     this.productosfarmacia.createComprobanteventa(venta).subscribe(respuesta => {
-      console.log(respuesta);
+      // console.log(respuesta);
       const n_venta = respuesta.id; // Obtener el número de venta
       const productos = this.formProductos.value.producto;
-      console.log(productos)
+      // console.log(productos)
       // Actualizar el número de venta para cada producto
       for (const producto of productos) {
         producto.n_venta = n_venta;
         this.productosfarmacia.venderProducto(producto).subscribe(respuesta => {
-          console.log(respuesta);
+          // console.log(respuesta);
         }, (error) => {
           console.log(error);
         });
       }
       this.router.navigate(['farmacia/comprobanteventa-detail'], { queryParams: { id_comprobante: n_venta } })
     }, (error) => {
-      console.log(error);
+      // console.log(error);
     });
 
   }

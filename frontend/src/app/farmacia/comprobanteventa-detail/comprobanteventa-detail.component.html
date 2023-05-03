@@ -1,27 +1,27 @@
-<div id="printData">
+<div id="printData" >
   <div class="pink-banner container">
     <h1>Resumen de Venta</h1>
     <span class="spacer"></span>
     <div>
-      <button class="f-acenter-jarround delete"><span>Eliminar</span><mat-icon>chevron_right</mat-icon></button>
+      <button class="f-acenter-jarround delete" (click)="eliminarVenta()" ><span>Eliminar</span><mat-icon>chevron_right</mat-icon></button>
     </div>
   </div>
   <div class="container contenedor-wrap flex mg-top-15">
     <div class="d-100 intern-card">
-      <div class="pink-text-content w-700 fs-20"><span class="text-b">N° de Venta:</span> asdas {{ id_comprobante }}
+      <div class="pink-text-content w-700 fs-20"><span class="text-b">N° de Venta:</span> {{ id_comprobante }}
       </div>
       <div class="flex f-col fs-16 w-100 text-grey"><span class="pink-text-content w-800 fs-12">N° de
-          identificacion:</span> asdasd {{
+          identificacion:</span> {{
         n_identificacion }}
       </div>
       <div class="flex f-col fs-16 w-100 text-grey"><span class="pink-text-content w-800 fs-12">Receta:</span></div>
     </div>
     <div class="d-100 intern-card">
-      <div class="pink-text-content w-700 fs-20"><span class="text-b">Precio total:</span> asdasd {{ totalVenta }}</div>
+      <div class="pink-text-content w-700 fs-20"><span class="text-b">Precio total:</span> {{ totalVenta }}</div>
       <div class="flex f-col fs-16 w-100 text-grey"><span class="pink-text-content w-800 fs-12">Fecha de venta:</span>
-        asdasd {{ fecha_venta }}</div>
+        {{ fecha_venta }}</div>
       <div class="flex f-col fs-16 w-100 text-grey"><span class="pink-text-content w-800 fs-12">atentido por:</span>
-        asdasd {{ profesional }}</div>
+       {{ profesional }}</div>
     </div>
   </div>
   <div class="container mg-top-15">
@@ -30,7 +30,7 @@
 
   <div class="container contenedor-wrap">
     <div>
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <table mat-table [dataSource]="productos" class="mat-elevation-z8">
 
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Producto </th>
@@ -57,7 +57,7 @@
 
         <ng-container matColumnDef='button'>
           <th mat-header-cell *matHeaderCellDef> </th>
-          <td mat-cell *matCellDef="let element"> <mat-icon class="icon-display">delete_forever</mat-icon> </td>
+          <td mat-cell *matCellDef="let producto"> <mat-icon class="icon-display" (click)="eliminarProduto(producto)">delete_forever</mat-icon> </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -65,22 +65,18 @@
       </table>
 
     </div>
-    <ul>
-      <li *ngFor="let producto of productos">nombre: {{ producto.nombre }} | Cantidad: {{ producto.cantidad }} | Precio
-        venta: {{ producto.precio_venta }}</li>
-    </ul>
   </div>
   <div class="mg-top-15">
     <div class="mg-top-15 container">
-      <button class="f-acenter-jarround rounded-pink-button"><span>Agregar
+      <button class="f-acenter-jarround rounded-pink-button" (click)="agregarProducto()"><span>Agregar
           Producto</span><mat-icon>add_shopping_cart</mat-icon></button>
     </div>
     <div class="mg-top-15 container">
       <div class="flex f-ajcenter fs-20">Usted está por confirmar esta venta</div>
       <div class="flex f-ajcenter">
-        <button class="f-acenter-jarround rounded-pink-button"><span>Imprimir
+        <button class="f-acenter-jarround rounded-pink-button" (click)="imprimir()"><span>Imprimir
             Pagina</span><mat-icon>print</mat-icon></button>
-        <button class="f-acenter-jarround rounded-pink-button"><span>Finalizar Venta</span><mat-icon>error</mat-icon>
+        <button class="f-acenter-jarround rounded-pink-button" (click)="finVenta()"><span>Finalizar Venta</span><mat-icon>error</mat-icon>
         </button>
       </div>
 

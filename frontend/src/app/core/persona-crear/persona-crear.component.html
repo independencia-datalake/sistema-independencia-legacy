@@ -1,11 +1,12 @@
 <div class="container contenedor-wrap">
 
-  <mat-stepper [linear]="isLinear" #stepper>
+  <mat-stepper [linear]="isLinear" #stepper (selectionChange)="onStepChanged($event)">
     <mat-step [stepControl]="formCrearPersona">
       <form [formGroup]="formCrearPersona">
         <ng-template matStepLabel>Informacion Basica</ng-template>
         <label>Tipo de identificación: </label>
-        <mat-radio-group #idType formControlName="tipo_identificacion" aria-label="Select an option" required ()>
+        <mat-radio-group #idType formControlName="tipo_identificacion" aria-label="Select an option" required>
+        <!-- <mat-radio-group formControlName="tipo_identificacion" aria-label="Select an option" required> -->
           <div>
             <mat-radio-button value="RUT">Rut</mat-radio-button>
           </div>
@@ -165,32 +166,35 @@
                   </mat-radio-group>
                 </div>
 
-                <div class="col">
-                  <mat-form-field>
-                    <mat-label>Telefono secundario</mat-label>
-                    <input formControlName="telefono_secundario" matInput placeholder="+569xxxxxxxx" required>
-                  </mat-form-field>
-                  <label>Tipo Telefono secundario</label>
-                  <mat-radio-group formControlName="tipo_telefono_secundario" aria-label="Select an option" required>
-                    <div>
-                      <mat-radio-button value="MOVIL">Movil</mat-radio-button>
-                    </div>
-                    <div>
-                      <mat-radio-button value="CASA">Casa</mat-radio-button>
-                    </div>
-                    <div>
-                      <mat-radio-button value="TRABAJO">Trabajo</mat-radio-button>
-                    </div>
-                    <div>
-                      <mat-radio-button value="OTRO">Otro</mat-radio-button>
-                    </div>
-                  </mat-radio-group>
-                </div>
-              </div>
-            </form>
+          <div class="col">
+            <mat-form-field>
+              <mat-label>Telefono secundario</mat-label>
+                <input formControlName="telefono_secundario" matInput placeholder="+569xxxxxxxx" required>
+              </mat-form-field>
+            <label>Tipo Telefono secundario</label>
+          <mat-radio-group formControlName="tipo_telefono_secundario" aria-label="Select an option" required>
+            <div>
+              <mat-radio-button value="MOVIL">Movil</mat-radio-button>
+            </div>
+            <div>
+              <mat-radio-button value="CASA">Casa</mat-radio-button>
+            </div>
+            <div>
+              <mat-radio-button value="TRABAJO">Trabajo</mat-radio-button>
+            </div>
+            <div>
+              <mat-radio-button value="OTRO">Otro</mat-radio-button>
+            </div>
+            <div>
+              <mat-radio-button value="NO APLICA" checked>No Aplica</mat-radio-button>
+            </div>
+          </mat-radio-group>
           </div>
         </div>
-      </div>
+      </form>
+    </div>
+  </div>
+</div>
       <div>
         <button mat-raised-button matStepperPrevious>Back</button>
         <button matStepperNext mat-raised-button style="margin: 6px;">Siguente</button>
@@ -281,37 +285,45 @@
     </mat-step>
     <mat-step>
       <ng-template matStepLabel>Crear Persona</ng-template>
-      <p>Resumen Formulario Persona</p>
+      <h1>Resumen Persona</h1>
 
       <div *ngIf="personaResumen">
-        <h2>Info Personal </h2>
-        <p>Nombre: {{ personaResumen.nombre_persona }} {{ personaResumen.apellido_paterno }} {{
-          personaResumen.apellido_materno }} </p>
-        <p>N° Identificación {{ personaResumen.tipo_identificacion }}: {{personaResumen.numero_identificacion}}</p>
-        <p>Nacionalidad: {{ personaResumen.nacionalidad }}</p>
-        <p>Fecha de nacimiento: {{ personaResumen.fecha_nacimiento }}</p>
+        <div class="row">
+          <div class="col">
+            <h2>Info Personal </h2>
+            <p>Nombre: {{ personaResumen.nombre_persona }} {{ personaResumen.apellido_paterno }} {{ personaResumen.apellido_materno }} </p>
+            <p>N° Identificación: {{personaResumen.numero_identificacion}} ({{ personaResumen.tipo_identificacion }})</p>
+            <p>Fecha de nacimiento: {{ personaResumen.fecha_nacimiento }}</p>
 
-        <h2>Direccion</h2>
-        <p>Calle: {{ direccionResumen.calle }}</p>
-        <p>Numeracion: {{ direccionResumen.numero }}</p>
-
-        <h2>Correo</h2>
-        <p>mail: {{ correoResumen.correo }}</p>
+            <h2>Direccion</h2>
+            <p>Calle: {{ direccionResumen.calle }}</p>
+            <p>Numeracion: {{ direccionResumen.numero }}</p>
 
         <h2>Telefono</h2>
         <p>Telefono principal ({{ telefonoResumen.tipo_telefono }}): {{ telefonoResumen.telefono }}</p>
         <p *ngIf="telefonoResumen.telefono_secundario">Telefono secundario ({{ telefonoResumen.tipo_telefono_secundario
           }}): {{ telefonoResumen.telefono_secundario }}</p>
 
-        <h2>Info Salud</h2>
-        <p>Prevision: {{ personainfosaludResumen.prevision }}</p>
-        <p>Isapre: {{ personainfosaludResumen.isapre }}</p>
-        <p>Comentarios: {{ personainfosaludResumen.comentarios }}</p>
+          </div>
+          <div class="col">
+            <h2>Correo</h2>
+            <p>mail: {{ correoResumen.correo }}</p>
+
+            <h2>Telefono</h2>
+            <p *ngIf="telefonoResumen.telefono !== null">Telefono principal ({{ telefonoResumen.tipo_telefono }}): {{ telefonoResumen.telefono }}</p>
+            <p *ngIf="telefonoResumen.telefono === null">Telefono principal: No especificado</p>
+            <p *ngIf="telefonoResumen.telefono_secundario">Telefono secundario ({{ telefonoResumen.tipo_telefono_secundario }}): {{ telefonoResumen.telefono_secundario }}</p>
+
+            <h2>Info Salud</h2>
+            <p>Prevision: {{ personainfosaludResumen.prevision }}</p>
+            <p *ngIf="personainfosaludResumen.prevision === 'ISAPRE'">Isapre: {{ personainfosaludResumen.isapre }}</p>
+            <p>Comentarios: {{ personainfosaludResumen.comentarios }}</p>
+          </div>
+        </div>
 
       </div>
 
       <div>
-        <button (click)="verResumen()" mat-raised-button>Ver Resumen</button>
         <button (click)="onSubmit()" mat-raised-button>Siguente</button>
         <!-- <button mat-button (click)="">Reset</button> -->
       </div>

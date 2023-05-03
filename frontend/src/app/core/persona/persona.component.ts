@@ -38,7 +38,7 @@ export class PersonaComponent implements OnInit {
 
   ngOnInit(): void {
     this.redireccion = this.route.snapshot.queryParamMap.get('redireccion')
-    console.log(this.redireccion)
+    // console.log(this.redireccion)
     this.formCheckPersona = this.fb.group({
       tipo: '',
       numero_identificacion: ''
@@ -53,20 +53,22 @@ export class PersonaComponent implements OnInit {
 
   onCheckPersona(): void {
     this.loading = true;
-
     const numero_identificacion = this.formCheckPersona.value.numero_identificacion;
-    console.log(this.formCheckPersona.value)
-    console.log(this.personas)
+    // console.log(this.formCheckPersona.value)
+    // console.log(this.personas)
     const tipo_seleccionado = this.formCheckPersona.value.tipo;
     try {
-      this.focusOnID();
+      // this.focusOnID();
       const result = this.personas.find(item => item.numero_identificacion === numero_identificacion)
       if (typeof result != "undefined") {
         this.success = true
-        console.log(result.id)
-        console.log(this.formCheckPersona.value.numero_identificacion)
+        // console.log(result.id)
+        // console.log(this.formCheckPersona.value.numero_identificacion)
         this.router.navigate(['farmacia/venta'], { queryParams: { id_persona: result.id } })
       } else {
+        // console.log('no encontrado')
+        // console.log(numero_identificacion)
+        // console.log(tipo_seleccionado)
         this.router.navigate(['persona/crear'], { queryParams: { numero_identificacion: numero_identificacion, tipo: tipo_seleccionado } })
 
       }
