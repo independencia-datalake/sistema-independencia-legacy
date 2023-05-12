@@ -1,4 +1,11 @@
 <div class="container">
+  <mat-form-field>
+    <mat-label>Filtrar por Nombre</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Escriba el nombre a buscar">
+  </mat-form-field>
+  <button class="f-acenter-jarround delete" (click)="nuevaVenta()"><span>Nueva Venta</span><mat-icon>chevron_right</mat-icon></button>
+</div>
+<div class="container">
   Pink title
 </div>
 <div class="container contenedor-wrap">
@@ -7,6 +14,11 @@
     <ng-container matColumnDef="salesNumber">
       <th mat-header-cell *matHeaderCellDef> N° de Venta </th>
       <td mat-cell *matCellDef="let element"> {{element.salesNumber}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fecha">
+      <th mat-header-cell *matHeaderCellDef> Fecha Venta </th>
+      <td mat-cell *matCellDef="let element"> {{element.fecha}} </td>
     </ng-container>
 
     <ng-container matColumnDef="idPerson">
@@ -36,16 +48,10 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
+  <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+  </mat-paginator>
+
 </div>
 
-<!--
-  name: string;
-  supplier: string;
-  price: number;
-  activeComponent: string;
-  dose: string;
-  presentation: string;
-  cenabast: boolean;
-  bioequivalent: boolean;
-  laboratory: string;
--->
