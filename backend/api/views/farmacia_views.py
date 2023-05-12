@@ -1,5 +1,9 @@
 from rest_framework.response import Response
 from rest_framework import generics
+from rest_framework.parsers import MultiPartParser
+from rest_framework.viewsets import ModelViewSet
+from rest_framework import status
+from django.shortcuts import get_object_or_404
 
 from api.serializers.farmacia_serializers import *
 from database.farmacia.models import (
@@ -114,6 +118,15 @@ class RecetasListCreateAPIViw(generics.ListCreateAPIView):
 
     def perfrom_create(self, serializer):
         instance = serializer.save()
+
+class RecetasPorVentaAPIView(generics.ListAPIView):
+    serializer_class = RecetasSerializer
+
+    def get_queryset(self):
+        venta_id = self.kwargs['venta_id']
+        venta = get_object_or_404(ComprobanteVenta, id=venta_id)
+        return Recetas.objects.filter(comprobante_venta=venta)
+
 
 class RecetasDetailAPIViw(generics.RetrieveAPIView):
     queryset = Recetas.objects.all()

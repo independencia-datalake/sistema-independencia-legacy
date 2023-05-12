@@ -11,3 +11,12 @@ class CountEmpresasByUVSerializer(serializers.Serializer):
     uv = serializers.IntegerField()
     densidad = serializers.IntegerField()
 
+class CountEmpresasByUVRankSerializer(serializers.Serializer):
+    uv = serializers.IntegerField()
+    densidad = serializers.IntegerField()
+    rank = serializers.IntegerField()
+
+class RangoFechasByTipo(serializers.Serializer):
+    fecha_inicio = serializers.DateField()
+    fecha_fin = serializers.DateField()
+
