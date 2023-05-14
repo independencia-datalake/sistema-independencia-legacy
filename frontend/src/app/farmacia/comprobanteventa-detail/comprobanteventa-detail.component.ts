@@ -5,7 +5,9 @@ import { PersonaService } from 'src/app/service/persona.service';
 import { ProductosService } from 'src/app/service/productos.service';
 import { UsersService } from 'src/app/service/users.service';
 import { ComprobanteventaDetailDialogComponent } from './comprobanteventa-detail-dialog/comprobanteventa-detail-dialog.component';
+import { AddRecetaDialogComponent } from './add-receta-dialog/add-receta-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
+import { EditarProductovendidoDialogComponent } from './editar-productovendido-dialog/editar-productovendido-dialog.component';
 
 const PRODUCT_DATA = [
   {
@@ -39,6 +41,8 @@ export class ComprobanteventaDetailComponent {
   profesional: any;
   totalVenta: number;
 
+  recetas: any[];
+
   constructor(
     private route: ActivatedRoute,
     private productosfarmacia: ProductosService,
@@ -63,7 +67,17 @@ export class ComprobanteventaDetailComponent {
     });
 
     this.filtroComprobante().subscribe((comprobante: any) => {
-      this.fecha_venta = comprobante[0].created;
+
+      const fecha = new Date(comprobante[0].created);
+      const [dia, mes, anio, hora, minutos] = [
+        fecha.getDate(),
+        fecha.getMonth() + 1,
+        fecha.getFullYear(),
+        fecha.getHours().toString().padStart(2, '0'),
+        fecha.getMinutes().toString().padStart(2, '0')
+      ];
+
+      this.fecha_venta = `${hora}:${minutos} - ${dia}/${mes}/${anio}`;
       this.userService.getUserByid(comprobante[0].farmaceuta).subscribe((valor: any) => {
         this.profesional = valor.username
       })
@@ -71,6 +85,15 @@ export class ComprobanteventaDetailComponent {
         this.n_identificacion = valor.numero_identificacion
       })
     });
+
+  this.productosfarmacia.getRecetasPorVenta(this.id_comprobante).subscribe(
+    (response) => {
+      this.recetas = response;
+    },
+    (error) => {
+      console.log('Error al obtener las recetas por venta', error);
+    }
+  );
 
   }
 
@@ -104,14 +127,25 @@ export class ComprobanteventaDetailComponent {
     data: { id_comprobante: this.id_comprobante}
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('dialog cerrado')
+    dialogRef.componentInstance.productoAgregado.subscribe((result) => {
       if (result === 'actualizar') {
-        console.log('ñom')
         window.location.reload();
       }
     });
 
+  }
+
+  editarProducto(producto) {
+    console.log(producto)
+    const dialogRef = this.dialog.open(EditarProductovendidoDialogComponent, {
+      data: { id_comprobante: this.id_comprobante, producto: producto}
+    });
+    // Suscribirse al evento recetaCreada
+    dialogRef.componentInstance.productoEditado.subscribe((result) => {
+      if (result === 'actualizar') {
+        window.location.reload();
+      }
+    });
   }
 
   eliminarProduto(producto) {
@@ -124,6 +158,23 @@ export class ComprobanteventaDetailComponent {
         console.log(error)
       }
     )
+
+  }
+
+  add_receta() {
+    console.log('pog receta')
+    const dialogRef = this.dialog.open(AddRecetaDialogComponent, {
+      // width: '100%'
+    data: { id_comprobante: this.id_comprobante}
+    });
+
+  // Suscribirse al evento recetaCreada
+    dialogRef.componentInstance.recetaCreada.subscribe((result) => {
+      if (result === 'actualizar') {
+        window.location.reload();
+      }
+    });
+
   }
 
   eliminarVenta() {

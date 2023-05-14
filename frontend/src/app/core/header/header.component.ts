@@ -1,4 +1,6 @@
 import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/service/auth.service';
 
 @Component({
@@ -11,7 +13,10 @@ export class HeaderComponent implements OnInit {
 
   usuarioActual: string;
 
-  constructor(private authService: AuthService) { }
+  constructor(
+    private router: Router,
+    private _snackBar: MatSnackBar,
+    private authService: AuthService) { }
 
   // ngOnInit(): void {
   //   this.authService.usuarioActual$.subscribe((usuario) => {
@@ -27,9 +32,23 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  async logInClick() {
+    const flag_usuario = await this.authService.isAuthenticated();
+    if (flag_usuario === true) {
+      this.openSnackBar()
+    } else {
+      this.router.navigate(['login'])
+    }
+
+  }
+
   onButtonClick(): void {
 
     this.authService.logOut();
+  }
+
+  openSnackBar() {
+    this._snackBar.open('Error: Ya esta Logueado. Si desea cambiar de usuario, desconéctese primero', 'Aceptar');
   }
 
 }

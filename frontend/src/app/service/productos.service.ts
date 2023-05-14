@@ -6,6 +6,7 @@ import { environment } from 'src/environment/environment';
 import { ComprobanteVenta } from '../interface/farmacia/comprobanteventa';
 import { ProductoFarmacia } from '../interface/farmacia/productofarmacia';
 import { ProductoVendido } from '../interface/farmacia/productovendido';
+import { Recetas } from '../interface/farmacia/recetas';
 
 @Injectable({
   providedIn: 'root'
@@ -43,6 +44,11 @@ export class ProductosService {
       .pipe(map((response: any) => response.map(item => ({ id: item.id, nombre: item.nombre, cantidad: item.cantidad, precio_venta: item.precio_venta, n_venta: item.n_venta }))));
   }
 
+  updateProductoVendido(id_productovendido, producto_editado): Observable<any> {
+    const url = `${this.apiUrl}/farmacia/productovendido/update/${id_productovendido}/`;
+    return this.http.patch<any>(url, producto_editado);
+  }
+
   deleteProductoVendido(id_productovendido): Observable<ProductoVendido> {
     return this.http.delete<ProductoVendido>(`${this.apiUrl}/farmacia/productovendido/delete/${id_productovendido}/`)
   }
@@ -54,5 +60,18 @@ export class ProductosService {
 
   deleteComprobanteventa(id_comprobante): Observable<ComprobanteVenta> {
     return this.http.delete<ComprobanteVenta>(`${this.apiUrl}/farmacia/comprobanteventa/delete/${id_comprobante}/`)
+  }
+
+  // RECETAS
+
+  createReceta(receta, comprobante_venta_id): Observable<Recetas> {
+    const formData = new FormData();
+    formData.append('receta', receta);
+    formData.append('comprobante_venta', comprobante_venta_id);
+    return this.http.post<Recetas>(`${this.apiUrl}/farmacia/recetas/`, formData);
+}
+
+  getRecetasPorVenta(venta_id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/farmacia/recetas-por-venta/${venta_id}/`);
   }
 }

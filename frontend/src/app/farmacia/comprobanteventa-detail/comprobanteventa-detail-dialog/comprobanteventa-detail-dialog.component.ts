@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ProductosService } from 'src/app/service/productos.service';
@@ -72,16 +72,19 @@ seleccionarProducto(evento: any, i: number) {
   this.productos.controls[i].get('precio_venta').setValue(nombre.precio)
 }
 
+@Output() productoAgregado = new EventEmitter();
+
 agregarProducto() {
   const producto_adicional = this.formProductos.value.producto[0]
   producto_adicional.n_venta = this.data.id_comprobante
-  console.log(producto_adicional)
   this.productosfarmacia.venderProducto(producto_adicional).subscribe(respuesta => {
     console.log(respuesta);
+    this.productoAgregado.emit('actualizar');
+    this.dialogRef.close();
   }, (error)=> {
     console.log(error);
   });
-  this.dialogRef.close('actualizar');
+
 }
 
 }

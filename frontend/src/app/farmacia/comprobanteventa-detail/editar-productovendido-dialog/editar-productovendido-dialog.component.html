@@ -1,0 +1,20 @@
+
+    <div class="producto-form-row">
+      <mat-form-field class="info">
+        <mat-label>Nombre del producto </mat-label>
+        <input matInput [value]="nombre_producto" [disabled]="true">
+        </mat-form-field>
+
+      <mat-form-field >
+        <mat-label>Cantidad</mat-label>
+        <input type="number" matInput [(ngModel)]="cantidad_producto" matInput placeholder="0">
+        <span matTextSuffix>unidades</span>
+      </mat-form-field>
+    </div>
+
+
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button (click)="editarProducto()">Ok</button>
+</div>

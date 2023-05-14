@@ -6,15 +6,16 @@ import jwt_decode from "jwt-decode";
 import { catchError, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { CdkAccordion } from '@angular/cdk/accordion';
+import { environment } from 'src/environment/environment';
 
 @Injectable({
   providedIn: 'root'
 
-
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8000/api/users/login/';
-  // private apiUrl = 'http://127.0.0.1:8000/api/auth/login/'
+  // private apiUrl = 'http://localhost:8000/api/users/login/';
+  apiUrl = environment.apiURL;
+
   private token: string;
   public usuarioActual: string; // Nueva propiedad para el nombre de usuario
   public usuarioActual$: Subject<string> = new Subject<string>();
@@ -33,7 +34,7 @@ export class AuthService {
     const body = {username, password};
     // return this.http.post<any>(this.apiUrl, body, {  headers });
 
-    return this.http.post<any>(this.apiUrl, body, {  withCredentials: true, headers });
+    return this.http.post<any>(this.apiUrl+'/users/login/', body, {  withCredentials: true, headers });
 
   }
 
@@ -73,6 +74,8 @@ export class AuthService {
     const fechaExpiracion = new Date(exp_date).getTime(); // convierte la fecha de expiración a formato epoch
     if (fechaExpiracion > ahora) {
       // console.log('El token ha expirado'); // el token ha expirado
+      // localStorage.removeItem('token');
+      localStorage.removeItem('username')
       return false
     } else {
       // console.log('El token aun no expira'); // el token es válido
@@ -133,12 +136,12 @@ export class AuthService {
   }
   getUserProfile(access_token): Observable<any> {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${access_token}`);
-    return this.http.get<any>(`http://localhost:8000/api/users/profile/`, { headers: headers});
+    return this.http.get<any>(`${this.apiUrl}/users/profile/`, { headers: headers});
   }
   async checkUserProfile(access_token: string): Promise<boolean> {
     try {
       const headers = new HttpHeaders().set('Authorization', `Bearer ${access_token}`);
-      const response = await this.http.get<any>('http://localhost:8000/api/users/profile/', { headers }).toPromise();
+      const response = await this.http.get<any>(`${this.apiUrl}/users/profile/`, { headers }).toPromise();
       return !!response.id; // Devuelve true si existe un ID en la respuesta
     } catch (error) {
       console.error(error);

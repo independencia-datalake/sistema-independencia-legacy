@@ -93,6 +93,7 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
     MatSliderModule,
     MatTooltipModule,
     NgxSliderModule,
+    MatIconModule,
   ],
   providers: [
     {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}},

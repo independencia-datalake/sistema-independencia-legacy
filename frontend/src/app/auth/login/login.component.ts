@@ -51,7 +51,6 @@ export class LoginComponent {
       },
       (error) => {
         // Maneja el error de la solicitud HTTP
-        console.log('Sadge')
         console.log(error)
         this.openSnackBar();
       }

@@ -1,6 +1,6 @@
 <mat-toolbar class="header">
   <span class="spacer"></span>
-  <button mat-icon-button class="example-icon favorite-icon usuario" routerLink="login"></button>
+  <button mat-icon-button class="example-icon favorite-icon usuario" (click)="logInClick()"></button>
   <div class="nombre_usuario">{{ usuarioActual }} </div>
   <button mat-icon-button class="example-icon favorite-icon log-out" (click)="onButtonClick()"></button>
   <button routerLink="" mat-icon-button class="inicio"></button>

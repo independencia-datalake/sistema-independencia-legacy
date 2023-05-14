@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>File Upload</h1>
+<div mat-dialog-content>
+  <input type="file" (change)="onFileSelected($event)">
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="selectedFile" (click)="addReceta(selectedFile, id_comprobante)" cdkFocusInitial>Ok</button>
+</div>

@@ -158,3 +158,37 @@ input::placeholder {
 .ngx-slider .ngx-slider-pointer:after{
   background-color: #F0F0F0 !important;
 }
+
+.arrow-icon {
+  font-size: 16px; /* Tamaño del icono personalizado */
+  vertical-align: middle;
+}
+
+.up-arrow {
+  color: green; /* Color de flecha hacia arriba */
+}
+
+.down-arrow {
+  color: red; /* Color de flecha hacia abajo */
+}
+.mat-mdc-select-value {
+  color: black;
+}
+
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
+  color: black;
+}
+
+.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  background-color: #f5f5f5;
+}
+
+.mat-mdc-text-field-wrapper {
+  background-color: #f5f5f5;
+}
+
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: #000000;
+}

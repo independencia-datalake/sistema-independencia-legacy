@@ -11,6 +11,7 @@ import { UsersService } from 'src/app/service/users.service';
 import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { el } from 'date-fns/locale';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-venta',
@@ -53,7 +54,8 @@ export class VentaComponent implements OnInit {
     private personaService: PersonaService,
     // private telefonoService: TelefonoService,
     private route: ActivatedRoute,
-    private router: Router) {
+    private router: Router,
+    private http: HttpClient) {
 
     // this.addProducto()
   }
@@ -125,13 +127,14 @@ export class VentaComponent implements OnInit {
   }
 
   enviarProductos() {
+
     const venta = this.formComprobanteventa.value;
 
     this.productosfarmacia.createComprobanteventa(venta).subscribe(respuesta => {
       // console.log(respuesta);
       const n_venta = respuesta.id; // Obtener el número de venta
       const productos = this.formProductos.value.producto;
-      // console.log(productos)
+      console.log(productos)
       // Actualizar el número de venta para cada producto
       for (const producto of productos) {
         producto.n_venta = n_venta;
@@ -141,6 +144,8 @@ export class VentaComponent implements OnInit {
           console.log(error);
         });
       }
+      // Subir los archivos de recetas
+      this.submitFiles(n_venta);
       this.router.navigate(['farmacia/comprobanteventa-detail'], { queryParams: { id_comprobante: n_venta } })
     }, (error) => {
       // console.log(error);
@@ -163,19 +168,46 @@ export class VentaComponent implements OnInit {
 
   onFileSelected(event: any): void {
     event.target.files.length > 0 ? Object.keys(event.target.files).forEach(el => this.selectedFiles.push(event.target.files[el])) : null;
-    console.log(event.target.files)
-    console.log(this.selectedFiles)
+    // console.log(event.target.files)
+    // console.log(this.selectedFiles)
     this.selectedFile = event.target.files[0] ?? null;
 
   }
   onFileDeleted(event: any, index: number) {
     this.selectedFiles.splice(index, 1);
     this.selectedFile = null;
-    console.log(this.selectedFiles)
+    // console.log(this.selectedFiles)
   }
   cl(el) {
     console.log(el)
   }
+
+  submitFiles(n_venta: number) {
+    // Itera sobre todos los archivos seleccionados
+    this.selectedFiles.forEach((file, index) => {
+      // console.log(file)
+      const formData = new FormData();
+
+      // Agrega el número de venta al FormData
+      formData.append('comprobante_venta', n_venta.toString());
+
+      // Agrega el archivo actual a FormData
+      formData.append(`receta`, file, file.name);
+      // console.log(formData)
+
+      // Realiza una solicitud HTTP POST con FormData
+      this.http.post('http://127.0.0.1:8000/api/farmacia/recetas/', formData).subscribe(
+        (response) => {
+          console.log(`Archivo ${index + 1} subido con éxito`, response);
+        },
+        (error) => {
+          console.log(`Error al subir el archivo ${index + 1}`, error);
+        }
+      );
+    });
+  }
+
+
   // CHAT GPT
 
   addFileInput() {

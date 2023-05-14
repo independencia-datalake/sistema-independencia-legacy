@@ -22,6 +22,9 @@ import { ListaVentaComponent } from './lista-ventas/lista-ventas.component';
 import { ComprobanteventaDetailComponent } from './comprobanteventa-detail/comprobanteventa-detail.component';
 import { ComprobanteventaDetailDialogComponent } from './comprobanteventa-detail/comprobanteventa-detail-dialog/comprobanteventa-detail-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { AddRecetaDialogComponent } from './comprobanteventa-detail/add-receta-dialog/add-receta-dialog.component';
+import { EditarProductovendidoDialogComponent } from './comprobanteventa-detail/editar-productovendido-dialog/editar-productovendido-dialog.component';
 
 
 
@@ -38,7 +41,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     ResumenPersonaComponent,
     ListaVentaComponent,
     ComprobanteventaDetailComponent,
-    ComprobanteventaDetailDialogComponent
+    ComprobanteventaDetailDialogComponent,
+    AddRecetaDialogComponent,
+    EditarProductovendidoDialogComponent
   ],
   imports: [
     CommonModule,
@@ -53,6 +58,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatSelectModule,
     MatDialogModule,
     MatTableModule,
+    MatPaginatorModule,
   ],
 
 })
