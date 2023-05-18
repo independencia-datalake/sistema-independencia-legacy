@@ -133,10 +133,23 @@ export class VentaComponent implements OnInit {
       return this.stockService.getBodegaByProducto(producto.nombre).toPromise().then(response => {
         let cantidad_postventa = response.stock - producto.cantidad
         if (cantidad_postventa < 0) {
-          this.productosfarmacia.getProductoByid(producto.nombre).subscribe(response => {this.openSnackBar(1,response);})
+          this.productosfarmacia.getProductoByid(producto.nombre).subscribe(response2 => {
+            const producto_alerta = {
+              nombre: response2.marca_producto,
+              stock: response.stock,
+              cantidad: producto.cantidad
+            }
+            console.log(producto_alerta)
+            this.openSnackBar(1,producto_alerta);})
           flag_stock = false
         } else if (cantidad_postventa < response.stock_min) {
-          this.productosfarmacia.getProductoByid(producto.nombre).subscribe(response => {this.openSnackBar(2,response);})
+          this.productosfarmacia.getProductoByid(producto.nombre).subscribe(response2 => {
+            const producto_alerta = {
+              nombre: response2.marca_producto,
+              stock: response.stock,
+              cantidad: producto.cantidad
+            }
+            this.openSnackBar(2,producto_alerta);})
           // this.openSnackBar(2,'algo')
         }
       })
@@ -245,12 +258,10 @@ export class VentaComponent implements OnInit {
   openSnackBar(mensaje, producto) {
     if (mensaje === 1) { //NO HAY STOCK
       this._snackBar.openFromComponent(ventaAlertaComponent, {
-        duration: 5000,
         data: { caso: 1, producto: producto },
       });
     } else if (mensaje === 2) { // ALERTA DE BAJO STOCK
       this._snackBar.openFromComponent(ventaAlertaComponent, {
-        duration: 5000,
         data: { caso: 2, producto: producto },
       });
     }

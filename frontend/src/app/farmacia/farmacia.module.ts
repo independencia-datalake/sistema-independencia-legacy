@@ -20,7 +20,7 @@ import { InformesStockComponent } from './informes-stock/informes-stock.componen
 import { ResumenPersonaComponent } from './lista-personas/lista-personas.component';
 import { ListaVentaComponent } from './lista-ventas/lista-ventas.component';
 import { ComprobanteventaDetailComponent } from './comprobanteventa-detail/comprobanteventa-detail.component';
-import { ComprobanteventaDetailDialogComponent } from './comprobanteventa-detail/comprobanteventa-detail-dialog/comprobanteventa-detail-dialog.component';
+import { ComprobanteventaDetailDialogComponent, addProductoAlertaComponent } from './comprobanteventa-detail/comprobanteventa-detail-dialog/comprobanteventa-detail-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { AddRecetaDialogComponent } from './comprobanteventa-detail/add-receta-dialog/add-receta-dialog.component';
@@ -45,9 +45,10 @@ import { MatRadioModule } from '@angular/material/radio';
     ListaVentaComponent,
     ComprobanteventaDetailComponent,
     ComprobanteventaDetailDialogComponent,
+    addProductoAlertaComponent,
     AddRecetaDialogComponent,
     EditarProductovendidoDialogComponent,
-    FichaSalidaComponent
+    FichaSalidaComponent,
   ],
   imports: [
     CommonModule,

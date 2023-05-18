@@ -1,9 +1,12 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Inject } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ProductosService } from 'src/app/service/productos.service';
-import { Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_SNACK_BAR_DATA, MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
+import { StockService } from 'src/app/service/stock.service';
+import { CommonModule } from '@angular/common';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-comprobanteventa-detail-dialog',
@@ -23,7 +26,9 @@ constructor(
   @Inject(MAT_DIALOG_DATA) public data: any,
   private fb:FormBuilder,
   private productosfarmacia: ProductosService,
+  private stockService: StockService,
   private formBuilder: FormBuilder,
+  private _snackBar: MatSnackBar,
   public dialogRef: MatDialogRef<ComprobanteventaDetailDialogComponent>
 ) {
 
@@ -75,16 +80,85 @@ seleccionarProducto(evento: any, i: number) {
 @Output() productoAgregado = new EventEmitter();
 
 agregarProducto() {
-  const producto_adicional = this.formProductos.value.producto[0]
-  producto_adicional.n_venta = this.data.id_comprobante
-  this.productosfarmacia.venderProducto(producto_adicional).subscribe(respuesta => {
-    console.log(respuesta);
-    this.productoAgregado.emit('actualizar');
-    this.dialogRef.close();
-  }, (error)=> {
-    console.log(error);
+  var flag_stock = true
+  const producto_adicional = this.formProductos.value.producto[0];
+  producto_adicional.n_venta = this.data.id_comprobante;
+
+  this.stockService.getBodegaByProducto(producto_adicional.nombre).pipe(
+    tap(response => {
+      let cantidad_postventa = response.stock - producto_adicional.cantidad;
+      if (cantidad_postventa < 0) {
+        this.productosfarmacia.getProductoByid(producto_adicional.nombre).subscribe(response2 => {
+          const producto_alerta = {
+            nombre: response2.marca_producto,
+            stock: response.stock,
+            cantidad: producto_adicional.cantidad
+          }
+          this.openSnackBar(1, producto_alerta)
+        })
+        flag_stock = false;
+      } else if (cantidad_postventa < response.stock_min) {
+        this.productosfarmacia.getProductoByid(producto_adicional.nombre).subscribe(response2 => {
+          const producto_alerta = {
+            nombre: response2.marca_producto,
+            stock: response.stock,
+            cantidad: producto_adicional.cantidad
+          }
+          this.openSnackBar(2, producto_alerta)
+        })
+      }
+    })
+  ).subscribe(() => {
+    if (flag_stock) {
+      this.productosfarmacia.venderProducto(producto_adicional).subscribe(respuesta => {
+        // this.productoAgregado.emit('actualizar');
+        // this.dialogRef.close();
+      }, (error)=> {
+        console.log(error);
+      });
+    }
   });
+}
+
+openSnackBar(mensaje, producto) {
+  if (mensaje === 1) { //NO HAY STOCK
+    const snackBarRef = this._snackBar.openFromComponent(addProductoAlertaComponent, {
+      data: { caso: 1, producto: producto },
+    });
+    snackBarRef.instance.aceptarClicked.subscribe(() => {
+      this.productoAgregado.emit('actualizar');
+    });
+  } else if (mensaje === 2) { // ALERTA DE BAJO STOCK
+    const snackBarRef = this._snackBar.openFromComponent(addProductoAlertaComponent, {
+      data: { caso: 2, producto: producto },
+    });
+    snackBarRef.instance.aceptarClicked.subscribe(() => {
+      this.productoAgregado.emit('actualizar');
+    });
+  }
+}
 
 }
+
+@Component({
+  selector: 'add-producto.alerta',
+  templateUrl: 'add-producto.alerta.html',
+  styles: [
+    `
+    .example-pizza-party {
+      color: hotpink;
+    }
+  `,
+  ],
+})
+export class addProductoAlertaComponent {
+  @Output() aceptarClicked = new EventEmitter<void>();
+
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any, public snackBarRef: MatSnackBarRef<addProductoAlertaComponent>) { }
+
+  aceptar() {
+    this.aceptarClicked.emit();
+    this.snackBarRef.dismiss();
+  }
 
 }

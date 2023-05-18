@@ -91,7 +91,7 @@ export class ComprobanteventaDetailComponent {
       this.recetas = response;
     },
     (error) => {
-      console.log('Error al obtener las recetas por venta', error);
+      // console.log('Error al obtener las recetas por venta', error);
     }
   );
 
