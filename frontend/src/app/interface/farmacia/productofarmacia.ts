@@ -11,7 +11,7 @@ export interface ProductoFarmacia {
   precio?: any;
   cenabast?: boolean;
   bioequivalencia?: boolean;
-  laboratorio?: Laboratorios;
+  laboratorio_id: Laboratorios | null;
+  laboratorio?: string;
   autor?: User;
   }
-  

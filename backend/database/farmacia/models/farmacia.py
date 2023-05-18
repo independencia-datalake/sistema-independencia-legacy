@@ -21,7 +21,8 @@ class ProductoFarmacia(models.Model):
     dosis = models.CharField(max_length=200, verbose_name="Dosis del Producto",null=True, blank=True)
     presentacion = models.CharField(max_length=200, verbose_name="Presentacion del Producto",null=True, blank=True)
     precio = models.PositiveIntegerField(default=1, verbose_name="Precio Producto",null=True, blank=True)
-    laboratorio = models.ForeignKey(Laboratorios, on_delete=models.PROTECT, verbose_name="Laboratorio")
+    laboratorio_id = models.ForeignKey(Laboratorios, on_delete=models.PROTECT, verbose_name=" Id Laboratorio")
+    laboratorio = models.CharField(max_length=200, verbose_name="Nombre Laboratorio",null=True, blank=True)
     cenabast = models.BooleanField(default = False, verbose_name = "Cenabast",null=True, blank=True)
     bioequivalencia = models.BooleanField(default = False, verbose_name = "Bioequivalencia",null=True, blank=True)
     
@@ -33,6 +34,16 @@ class ProductoFarmacia(models.Model):
         verbose_name = "Producto Farmacia"
         verbose_name_plural = "Productos de Farmacia"
         ordering = ['marca_producto','dosis']
+
+    def save(self, *args, **kwargs ):
+        laboratorio = Laboratorios.objects.filter(nombre_laboratorio__exact=self.laboratorio)
+        if laboratorio.exists():
+            self.laboratorio_id = Laboratorios.objects.get(id=laboratorio[0].id)
+        else:
+
+            laboratorio_crear = Laboratorios.objects.create(nombre_laboratorio = self.laboratorio)
+            self.laboratorio_id = laboratorio_crear
+        return super(ProductoFarmacia, self).save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.marca_producto} | {self.dosis} x {self.presentacion} | {self.p_a} | Proovedor: {self.proveedor} | Lab: {self.laboratorio} '

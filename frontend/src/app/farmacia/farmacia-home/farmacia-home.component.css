@@ -2,3 +2,8 @@
   max-width: 1140px;
   margin: auto;
 }
+
+a.link:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}

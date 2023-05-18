@@ -22,31 +22,29 @@
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Bioequivalencia</mat-label>
-      <mat-select disableRipple="">
-        <mat-option value="si">Si</mat-option>
-        <mat-option value="no">No</mat-option>
+      <mat-select formControlName="bioequivalencia" disableRipple="">
+        <mat-option value="true">Si</mat-option>
+        <mat-option value="false">No</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Cenabast</mat-label>
-      <mat-select disableRipple="">
-        <mat-option value="si">Si</mat-option>
-        <mat-option value="no">No</mat-option>
+      <mat-select formControlName="cenabast" disableRipple="">
+        <mat-option value="true">Si</mat-option>
+        <mat-option value="false">No</mat-option>
       </mat-select>
     </mat-form-field>
     <mat-form-field class="info">
       <mat-label>Proovedor </mat-label>
-      <input matInput placeholder="" required>
+      <input formControlName="proveedor" matInput placeholder="" required>
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Laboratorio</mat-label>
-      <mat-select disableRipple="">
-
-      </mat-select>
+      <input formControlName="laboratorio" matInput placeholder="" required>
     </mat-form-field>
     <mat-form-field class="info">
       <mat-label>Stock minimo del producto</mat-label>
-      <input matInput placeholder="" required type="number">
+      <input formControlName="stock_minimo" matInput placeholder="" required type="number">
     </mat-form-field>
     <div>
       <button type="submit" mat-raised-button>Crear producto</button>

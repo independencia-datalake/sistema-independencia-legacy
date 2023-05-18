@@ -1,0 +1,27 @@
+<div class="subtitulo">
+  <h2>Ficha de Salida de Producto</h2>
+</div>
+<div class="container contenedor-wrap text-container">
+  <form [formGroup]="formSalidaProducto" (submit)="salidaProducto()">
+    <mat-form-field class="info" appearance="outline">
+      <mat-label>Nombre del producto </mat-label>
+      <mat-select formControlName="nombre">
+        <mat-option *ngFor="let producto of filteredOptions" [value]="producto">
+          {{ producto.marca_producto }} | {{producto.dosis}} x {{producto.presentacion}} | {{producto.p_a}} | Proveedor: {{producto.proveedor}} | Lab
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="info">
+      <mat-label>Cantidad Mermada</mat-label>
+      <input formControlName="cantidad" matInput placeholder="" required type="number">
+    </mat-form-field>
+      <mat-label>Motivo</mat-label>
+      <mat-radio-group formControlName="motivo">
+        <mat-radio-button *ngFor="let m of motivo" [value]="m">{{m}}</mat-radio-button>
+      </mat-radio-group>
+    <div>
+      <button type="submit" mat-raised-button>Quitar producto</button>
+      <!-- <button mat-button (click)="">Reset</button> -->
+    </div>
+  </form>
+</div>

@@ -25,6 +25,11 @@ class BodegaVirtualDetailAPIViw(generics.RetrieveAPIView):
     serializer_class = BodegaVirtualSerializer
     lookup_field = 'pk'
 
+class BodegaVirtualDetailByProductoAPIViw(generics.RetrieveAPIView):
+    queryset = BodegaVirtual.objects.all()
+    serializer_class = BodegaVirtualSerializer
+    lookup_field = 'nombre'    
+
 class BodegaVirtualUpdateAPIViw(generics.UpdateAPIView):
     queryset = BodegaVirtual.objects.all()
     serializer_class = BodegaVirtualSerializer

@@ -7,6 +7,7 @@ import { ComprobanteVenta } from '../interface/farmacia/comprobanteventa';
 import { ProductoFarmacia } from '../interface/farmacia/productofarmacia';
 import { ProductoVendido } from '../interface/farmacia/productovendido';
 import { Recetas } from '../interface/farmacia/recetas';
+import { Laboratorios } from '../interface/farmacia/laboratorios';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class ProductosService {
   // ASOCIADO A PRODUCTOS
   getProductos() {
     return this.http.get(`${this.apiUrl}/farmacia/productofarmacia/`)
-      .pipe(map((response: any) => response.map(item => ({ id: item.id, marca_producto: item.marca_producto, precio: item.precio }))));
+      .pipe(map((response: any) => response.map(item => ({ id: item.id, marca_producto: item.marca_producto, precio: item.precio, dosis: item.dosis, proveedor: item.proveedor, presentacion: item.presentacion, p_a: item.p_a }))));
   }
 
   getProductoByid(id_producto): Observable<ProductoFarmacia> {
@@ -73,5 +74,17 @@ export class ProductosService {
 
   getRecetasPorVenta(venta_id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/farmacia/recetas-por-venta/${venta_id}/`);
+  }
+
+  // LABORATORIOS
+  createLab(lab): Observable<Laboratorios> {
+    const laboratorio: Laboratorios = {
+      nombre_laboratorio: lab
+    }
+    return this.http.post<Laboratorios>(`${this.apiUrl}/farmacia/laboratorios/`, laboratorio);
+  }
+
+  getLabByNombre(nombre: any): Observable<Laboratorios> {
+    return this.http.get(`${this.apiUrl}/farmacia/laboratorios-by-nombre/${nombre}/`);
   }
 }

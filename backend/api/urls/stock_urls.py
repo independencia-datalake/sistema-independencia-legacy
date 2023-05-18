@@ -4,6 +4,7 @@ from api.views import stock_views as views
 urlpatterns = [
     path('bodegavirtual/', views.BodegaVirtualListCreateAPIViw.as_view()),
     path('bodegavirtual/<int:pk>/', views.BodegaVirtualDetailAPIViw.as_view()),
+    path('bodegavirtual-by-producto/<int:nombre>/', views.BodegaVirtualDetailByProductoAPIViw.as_view()),
     path('bodegavirtual/update/<int:pk>/', views.BodegaVirtualUpdateAPIViw.as_view()),
     path('bodegavirtual/delete/<int:pk>/', views.BodegaVirtualDeleteAPIViw.as_view()),
     path('ordeningresoproducto/', views.OrdenIngresoProductoListCreateAPIViw.as_view()),

@@ -16,6 +16,7 @@ from .models import (
 
 @receiver(pre_save, sender=ProductoMermado)
 def update_bodega_by_mermado(sender, instance, **kwargs):
+    print('something')
     key = instance.nombre.id
     cantidad_mermada = instance.cantidad
     nombre = instance.nombre

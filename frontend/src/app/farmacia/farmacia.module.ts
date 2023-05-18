@@ -25,6 +25,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { AddRecetaDialogComponent } from './comprobanteventa-detail/add-receta-dialog/add-receta-dialog.component';
 import { EditarProductovendidoDialogComponent } from './comprobanteventa-detail/editar-productovendido-dialog/editar-productovendido-dialog.component';
+import { FichaSalidaComponent } from './ficha-salida/ficha-salida.component';
+import { MatRadioModule } from '@angular/material/radio';
 
 
 
@@ -43,7 +45,8 @@ import { EditarProductovendidoDialogComponent } from './comprobanteventa-detail/
     ComprobanteventaDetailComponent,
     ComprobanteventaDetailDialogComponent,
     AddRecetaDialogComponent,
-    EditarProductovendidoDialogComponent
+    EditarProductovendidoDialogComponent,
+    FichaSalidaComponent
   ],
   imports: [
     CommonModule,
@@ -59,6 +62,9 @@ import { EditarProductovendidoDialogComponent } from './comprobanteventa-detail/
     MatDialogModule,
     MatTableModule,
     MatPaginatorModule,
+    MatRadioModule,
+    MatFormFieldModule,
+    MatInputModule,
   ],
 
 })

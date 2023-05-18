@@ -1,10 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { response } from 'express';
 import { ProductoFarmacia } from 'src/app/interface/farmacia/productofarmacia';
 import { ProductosService } from 'src/app/service/productos.service';
 import { AuthService } from 'src/app/service/auth.service'
+import { StockService } from 'src/app/service/stock.service';
+import { BodegaVirtual } from 'src/app/interface/farmacia/bodegavirtual';
+import { Router } from '@angular/router';
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-crear-producto',
@@ -16,8 +20,16 @@ export class CrearProductoComponent {
 
   formCrearProducto: FormGroup;
   producto: ProductoFarmacia
+  bodega: BodegaVirtual
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private productosfarmacia: ProductosService, private authService: AuthService) {
+
+  constructor(private fb: FormBuilder,
+              private http: HttpClient,
+              private _snackBar: MatSnackBar,
+              private router: Router,
+              private productosfarmacia: ProductosService,
+              private stockService: StockService,
+              private authService: AuthService) {
 
   }
 
@@ -32,21 +44,40 @@ export class CrearProductoComponent {
       precio: '0',
       cenabast: '',
       bioequivalencia: '',
-      laboratorio: '1',
+      laboratorio_id: 1,
+      laboratorio: '',
       autor: this.authService.getUserId(localStorage.getItem('token')),
     })
 
+    this.formCrearProducto.addControl('stock_minimo', new FormControl(''));
   }
-
-
 
   createProducto() {
-    const producto = this.formCrearProducto.value;
+    let producto = this.formCrearProducto.value;
+    producto.laboratorio = this.formCrearProducto.get('laboratorio').value;
+
+    const stockMinimo = this.formCrearProducto.get('stock_minimo').value;
     this.productosfarmacia.createProducto(producto).subscribe(response => {
-      console.log(response);
+      // console.log(response);
+      const idProducto = response.id;
+
+      this.stockService.createBodega(idProducto, stockMinimo).subscribe(bodegaResponse => {
+        // console.log('Bodega creada:', bodegaResponse);
+      }, error => {
+        console.log('Error al crear la bodega:', error);
+      });
+
     }, (error) => {
-      console.log(error)
+      console.log(error);
     });
+    this.openSnackBar(producto)
+    this.router.navigate(['stock'])
   }
 
+  openSnackBar(producto) {
+    this._snackBar.open(`Se ha creado el producto: ${producto.marca_producto}. Recuerde que por defecto se ha creado con 0 stock en bodega, para evitar problemas edite la bodega`, 'Aceptar', {
+      duration: 5000,
+      panelClass: ['multiline-snackbar']
+    });
+  }
 }

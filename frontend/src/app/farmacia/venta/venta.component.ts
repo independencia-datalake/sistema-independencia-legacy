@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { el } from 'date-fns/locale';
 import { HttpClient } from '@angular/common/http';
+import { StockService } from 'src/app/service/stock.service';
 
 @Component({
   selector: 'app-venta',
@@ -48,6 +49,7 @@ export class VentaComponent implements OnInit {
   filteredOptions;
 
   constructor(private fb: FormBuilder,
+    private stockService: StockService,
     private userSercive: UsersService,
     private authService: AuthService,
     private productosfarmacia: ProductosService,
@@ -62,7 +64,6 @@ export class VentaComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // console.log('q onda')
     this.loading = true;
     this.personaService.getPersona(this.id_persona).pipe(take(1)).subscribe(data => { this.persona = data; })
     this.personaService.getDireccionByPersona(this.id_persona).pipe(take(1)).subscribe(data => { this.direccion = data; })
@@ -80,7 +81,6 @@ export class VentaComponent implements OnInit {
     });
 
     this.formProductos.valueChanges.subscribe(valor => {
-      // console.log(valor.producto);
     })
 
     this.formComprobanteventa = this.fb.group({
@@ -127,8 +127,26 @@ export class VentaComponent implements OnInit {
   }
 
   enviarProductos() {
-
+    var flag_stock = true
     const venta = this.formComprobanteventa.value;
+    // const productos = this.formProductos.value.producto;
+    // for (const producto of productos) {
+    //   // console.log(producto)
+    //   this.stockService.getBodegaByProducto(producto.nombre).subscribe(response => {
+    //     // console.log('Cantidad:',producto)
+    //     // console.log('Producto', response)
+    //     // console.log('Dif', response.stock-producto.cantidad)
+
+    //     let cantidad_postventa = response.stock - producto.cantidad
+    //     if (cantidad_postventa < 0) {
+    //       console.log('no hay stock suficiente')
+    //       flag_stock = false
+    //       return
+    //     } else if (cantidad_postventa < response.stock_min) {
+    //       console.log('stock quedara bajo el minimo')
+    //     }
+    //   })
+    // }
 
     this.productosfarmacia.createComprobanteventa(venta).subscribe(respuesta => {
       // console.log(respuesta);

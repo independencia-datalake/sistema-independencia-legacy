@@ -4,6 +4,7 @@ from api.views import farmacia_views as views
 
 urlpatterns = [
     path('laboratorios/', views.LaboratoriosListCreateAPIViw.as_view()),
+    path('laboratorios-by-nombre/<str:nombre>/', views.LaboratoriosListByNombreAPIViw.as_view()),
     path('laboratorios/<int:pk>/', views.LaboratoriosDetailAPIViw.as_view()),
     path('laboratorios/update/<int:pk>/', views.LaboratoriosUpdateAPIViw.as_view()),
     path('laboratorios/delete/<int:pk>/', views.LaboratoriosDeleteAPIViw.as_view()),

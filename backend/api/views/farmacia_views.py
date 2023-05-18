@@ -25,6 +25,13 @@ class LaboratoriosListCreateAPIViw(generics.ListCreateAPIView):
     def perfrom_create(self, serializer):
         instance = serializer.save()
 
+class LaboratoriosListByNombreAPIViw(generics.ListAPIView):
+    serializer_class = LaboratoriosSerializer
+
+    def get_queryset(self):
+        nombre = self.kwargs['nombre']
+        return Laboratorios.objects.filter(nombre_laboratorio__iexact=nombre)
+
 class LaboratoriosDetailAPIViw(generics.RetrieveAPIView):
     queryset = Laboratorios.objects.all()
     serializer_class = LaboratoriosSerializer

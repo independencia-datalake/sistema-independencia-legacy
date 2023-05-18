@@ -64,12 +64,14 @@ export class PersonaComponent implements OnInit {
         this.success = true
         // console.log(result.id)
         // console.log(this.formCheckPersona.value.numero_identificacion)
-        this.router.navigate(['farmacia/venta'], { queryParams: { id_persona: result.id } })
-      } else {
+        if (this.redireccion === 'farmacia') {
+          this.router.navigate(['farmacia/venta'], { queryParams: { id_persona: result.id } })
+        }
+        } else {
         // console.log('no encontrado')
         // console.log(numero_identificacion)
         // console.log(tipo_seleccionado)
-        this.router.navigate(['persona/crear'], { queryParams: { numero_identificacion: numero_identificacion, tipo: tipo_seleccionado } })
+        this.router.navigate(['persona/crear'], { queryParams: { numero_identificacion: numero_identificacion, tipo: tipo_seleccionado, redireccion: this.redireccion } })
 
       }
     } catch (err) {

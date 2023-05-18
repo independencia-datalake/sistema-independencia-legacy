@@ -24,7 +24,7 @@ export class LoginComponent {
   }
 
   onLogin(form: NgForm) {
-    console.log(form.value)
+    // console.log(form.value)
     // this.usuario = form.value.username
     // this.contraseña = form.value.password
     // this.usuario = 'daniel-datalake'
@@ -70,7 +70,6 @@ export class LoginComponent {
         // Maneja la respuesta de la API de Django
         this.authService.setToken(response.token);
         console.log('Token:', response.token);
-        console.log('pog')
       },
       (error) => {
         // Maneja el error de la solicitud HTTP
