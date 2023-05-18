@@ -5,13 +5,18 @@ import { HttpClient } from '@angular/common/http';
 import { GeoJSON } from 'leaflet';
 import { MatTableDataSource } from '@angular/material/table';
 import { map } from 'rxjs/operators';
-import { forkJoin } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import { EmpresasServiceService } from 'src/app/service/empresas.service.service';
 import { ChangeDetectorRef } from '@angular/core';
 import { Options, PointerType } from "@angular-slider/ngx-slider";
+import { of } from 'rxjs';
+import { MatSelectModule } from '@angular/material/select';
+
 
 interface unidad_vecinal {
   nombre: any;
+  rank?:any;
+  lp?: any; // Last Periodo de tiempo
   densidad: any;
   comercial?: any;
 }
@@ -26,7 +31,7 @@ interface unidad_vecinal {
 
 export class VisComponent {
 
-  columnaResaltada: string;
+  columnaResaltada: string = 'total';
 
   fechaInicio: Date;
   fechaInicioFormateada: any;
@@ -57,8 +62,8 @@ export class VisComponent {
   map: Map;
   geoJsonLayer: L.GeoJSON;
   densityData: any;
+  densityDataRank; any
   comercialData: any;
-  gslData: any[];
   empresasData: any[];
   sumByM: {[key: string]: number} = {};
   public maximo:any;
@@ -84,7 +89,6 @@ export class VisComponent {
 
   constructor(private http: HttpClient,
               private empresas: EmpresasServiceService,
-              private cdr: ChangeDetectorRef,
               ) {
 
    }
@@ -94,6 +98,7 @@ export class VisComponent {
   ngAfterViewInit(): void{
 
   localStorage.setItem('Columna', 'total')
+  this.rangoFechas()
 
   let geoJsonData: any;  // Definir la variable fuera del método subscribe
 
@@ -113,9 +118,6 @@ export class VisComponent {
       comercialData[`UV-${item.uv-1}`] = item.densidad;
     }
 
-    // Lógica relacionada con gslData
-    // this.sumByM = this.aporteEconomicoUV(this.gslData);
-    // console.log(this.sumByM)
     this.maximo = Math.max(...Object.values(newData))
     this.densityData = newData
     for (const [nombre, densidad] of Object.entries(newData)) {
@@ -154,7 +156,6 @@ export class VisComponent {
 
   });
 
-    // this.map = new Map('map').setView([-33.414316, -70.664376], 14); // asignar el valor de la variable map
     this.map = new Map('map').setView([-33.416793, -70.662822], 14); // asignar el valor de la variable map
 
     tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -188,14 +189,7 @@ export class VisComponent {
     L.imageOverlay(image, imageBounds, imageOptions).addTo(this.map);
 
     const getColor = (d, max=this.maximo) => {
-      // console.log(this.maximo);
-    //   return d >= 0.9 * max ? '#FC3D59' :
-    //          d >= 0.7 * max ? '#FA6378' :
-    //          d >= 0.5 * max ? '#F88A97' :
-    //          d >= 0.3 * max ? '#F6B0B5' :
-    //          d >= 0.1 * max ? '#F4D6D4' :
-    //                            '#FFC6D9';
-    // }
+
     return d >= 0.8 * max ? '#FC3D59' :
     d >= 0.6 * max ? '#FA527F' :
     d >= 0.4 * max ? '#F886A8' :
@@ -278,13 +272,7 @@ label.addTo(this.map);
 
   getColor2(d, max) {
     max = max || this.maximo; // asignar un valor por defecto para max
-  //   return d >= 0.9 * max ? '#FC3D59' :
-  //          d >= 0.7 * max ? '#FA6378' :
-  //          d >= 0.5 * max ? '#F88A97' :
-  //          d >= 0.3 * max ? '#F6B0B5' :
-  //          d >= 0.1 * max ? '#F4D6D4' :
-  //                            '#FFC6D9';
-  // }
+
     return d >= 0.8 * max ? '#FC3D59' :
     d >= 0.6 * max ? '#FA527F' :
     d >= 0.4 * max ? '#F886A8' :
@@ -295,9 +283,7 @@ label.addTo(this.map);
 
 updateMapData(newData: {[key: string]: number}) {
   // Calcular el valor máximo en los nuevos datos
-  // console.log(newData)
   this.maximo = Math.max(...Object.values(newData));
-  // console.log(this.maximo)
 
   // Actualizar el contenido de la capa geoJSON
   this.geoJsonLayer.eachLayer((layer: L.Layer) => {
@@ -323,27 +309,55 @@ tablita(flag) {
   // console.log(this.densityData)
 
   let densityDataObservable = null;
+  let densityDataObservableRank = null;
+  let densityDataObservableRankLP = null;
+  let comercialObservable = null;
+
   if (flag === false) {
-    console.log('huh')
     densityDataObservable = this.empresas.getEmpresasTotalByUV()
+    // densityDataObservable = this.empresas.getEmpresasTotalByUvFecha(this.formatDatedjango(this.minValue),this.formatDatedjango(this.maxValue));
+    densityDataObservableRank = this.empresas.getEmpresasTotalByUV()
+    densityDataObservableRankLP = this.empresas.getEmpresasTotalByUV()
+    comercialObservable = this.empresas.getEmpresasComercialByUV()
   } else {
+    console.log(this.fechaInicioFormateada)
+    console.log(this.fechaFinFormateada)
+
+    const fechaFinAnterior = new Date(this.fechaFinFormateada);
+    fechaFinAnterior.setFullYear(fechaFinAnterior.getFullYear() - 1);
+    const fechaInicioUnAnioAntes = fechaFinAnterior.toISOString().split('T')[0];
     // console.log(this.fechaInicioFormateada)
-    // console.log(this.fechaFinFormateada)
-    this.fechaInicioFormateada
+    // console.log(this.minValue)
+    // console.log(this.formatDatedjango(this.minValue))
     densityDataObservable = this.empresas.getEmpresasTotalByUvFecha(this.fechaInicioFormateada, this.fechaFinFormateada)
+    // densityDataObservable = this.empresas.getEmpresasTotalByUvFecha(this.formatDatedjango(this.minValue),this.formatDatedjango(this.maxValue));
+    densityDataObservableRank = this.empresas.getEmpresasTotalByUvFechaRank(this.fechaInicioFormateada, this.fechaFinFormateada)
+    densityDataObservableRankLP = this.empresas.getEmpresasTotalByUvFechaRank(this.fechaInicioFormateada, fechaInicioUnAnioAntes)
+
+    comercialObservable =  this.empresas.getEmpresasByUvFechaTipo(this.fechaInicioFormateada, this.fechaFinFormateada,'comercial')
+
+
   }
+
   // console.log(this.densityData)
 
   forkJoin({
-    comercialData: this.empresas.getEmpresasComercialByUV(),
+    // comercialData: this.empresas.getEmpresasComercialByUV(),
+    comercialData: comercialObservable,
     // densityData: this.empresas.getEmpresasTotalByUV(),
     densityData: densityDataObservable,
+    densityDataRank: densityDataObservableRank,
+    densityDataRankLP: densityDataObservableRankLP
 
 
-  }).subscribe(({ comercialData, densityData}) => {
+  }).subscribe(({ comercialData, densityData, densityDataRank, densityDataRankLP}) => {
     // this.dataTabla = this.combineData(comercialData, densityData);
     // console.log(densityData)
+    // console.log(densityDataRank)
     this.densityData = densityData
+    this.densityDataRank = densityDataRank
+    // console.log(this.densityData)
+    // console.log(this.densityDataRank)
     // console.log(this.densityData)
     this.comercialData = comercialData
 
@@ -353,6 +367,8 @@ tablita(flag) {
       // this.dataTabla.push({nombre: Object.keys(this.densityData)[i], densidad: Object.values(this.densityData)[i]})
       this.dataTabla.push({
         nombre: 'UV-' + (densityData[i].uv-1),
+        rank: [densityDataRank[i].rank,densityDataRank[i].rank-densityDataRankLP[i].rank],
+        lp: densityDataRankLP[i].rank,
         total: densityData[i].densidad,
         comercial: comercialData[i].densidad,
       });
@@ -360,17 +376,17 @@ tablita(flag) {
 
     this.dataSource.data = this.dataTabla.map(item => ({
       nombre: item.nombre,
+      rank: item.rank,
+      lp: item.lp,
       total: item.total,
       comercial: item.comercial,
     }));
-
-
 
   });
 }
 
 // TABLA
-displayedColumns: string[] = ['nombre', 'total', 'comercial'];
+displayedColumns: string[] = ['nombre', 'rank', 'lp', 'total', 'comercial'];
 display_tabla: any = this.tablita(this.dateFlag);
 
 updateColumn(columna: string) {
@@ -401,6 +417,7 @@ resaltarColumna(columna: string) {
   this.updateColumn(columna);
   // this.updateLegend(1408)
   this.onMaxValueChanged(this.maximo)
+  this.rangoFechas()
 
 
 
@@ -502,18 +519,30 @@ buscar() {
     }
   }
 
+rangoFechas() {
+  this.empresas.getRangoFechasByTipo(this.columnaResaltada).subscribe(
+    (data) => {
+      this.fechaInicio = new Date(data.fecha_inicio)
+      this.fechaFin = new Date(data.fecha_fin)
+
+    },
+    (error) => {
+      // Manejo de errores
+      console.error(error);
+    }
+  );
+  // this.buscar()
+}
+
+selectMapa() {
+  console.log('map')
+}
+
 }
 
 
 function getColorLegend(d, max: number) {
   max = max || this.maximo; // asignar un valor por defecto para max
-//   return d >= 0.9 * max ? '#FC3D59' :
-//          d >= 0.7 * max ? '#FA6378' :
-//          d >= 0.5 * max ? '#F88A97' :
-//          d >= 0.3 * max ? '#F6B0B5' :
-//          d >= 0.1 * max ? '#F4D6D4' :
-//                            '#FFC6D9';
-// }
 return d >= 0.8 * max ? '#FC3D59' :
 d >= 0.6 * max ? '#FA527F' :
 d >= 0.4 * max ? '#F886A8' :

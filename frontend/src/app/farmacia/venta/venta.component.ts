@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation , Inject } from '@angular/core';
 import { FormGroup, FormControl, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { take } from 'rxjs/operators';
@@ -13,6 +13,8 @@ import { Observable, Subject } from 'rxjs';
 import { el } from 'date-fns/locale';
 import { HttpClient } from '@angular/common/http';
 import { StockService } from 'src/app/service/stock.service';
+import { MatSnackBar, MAT_SNACK_BAR_DATA, MatSnackBarRef  } from '@angular/material/snack-bar';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-venta',
@@ -57,6 +59,7 @@ export class VentaComponent implements OnInit {
     // private telefonoService: TelefonoService,
     private route: ActivatedRoute,
     private router: Router,
+    private _snackBar: MatSnackBar,
     private http: HttpClient) {
 
     // this.addProducto()
@@ -106,13 +109,7 @@ export class VentaComponent implements OnInit {
 
   addProducto() {
 
-    // const productoForm = this.fb.group({
-    //   nombre: ['', Validators.required],
-    //   cantidad: ['', Validators.required]
-    // });
-
     this.productos.push(this.createProducto())
-    // console.log(this.personas)
   }
 
   deleteProducto(productoIndex: number) {
@@ -126,33 +123,31 @@ export class VentaComponent implements OnInit {
     this.productos.controls[i].get('precio_venta').setValue(nombre.precio)
   }
 
+
   enviarProductos() {
     var flag_stock = true
     const venta = this.formComprobanteventa.value;
-    // const productos = this.formProductos.value.producto;
-    // for (const producto of productos) {
-    //   // console.log(producto)
-    //   this.stockService.getBodegaByProducto(producto.nombre).subscribe(response => {
-    //     // console.log('Cantidad:',producto)
-    //     // console.log('Producto', response)
-    //     // console.log('Dif', response.stock-producto.cantidad)
+    const productos = this.formProductos.value.producto;
 
-    //     let cantidad_postventa = response.stock - producto.cantidad
-    //     if (cantidad_postventa < 0) {
-    //       console.log('no hay stock suficiente')
-    //       flag_stock = false
-    //       return
-    //     } else if (cantidad_postventa < response.stock_min) {
-    //       console.log('stock quedara bajo el minimo')
-    //     }
-    //   })
-    // }
+    const stockPromises = productos.map(producto => {
+      return this.stockService.getBodegaByProducto(producto.nombre).toPromise().then(response => {
+        let cantidad_postventa = response.stock - producto.cantidad
+        if (cantidad_postventa < 0) {
+          this.productosfarmacia.getProductoByid(producto.nombre).subscribe(response => {this.openSnackBar(1,response);})
+          flag_stock = false
+        } else if (cantidad_postventa < response.stock_min) {
+          this.productosfarmacia.getProductoByid(producto.nombre).subscribe(response => {this.openSnackBar(2,response);})
+          // this.openSnackBar(2,'algo')
+        }
+      })
+    })
 
-    this.productosfarmacia.createComprobanteventa(venta).subscribe(respuesta => {
-      // console.log(respuesta);
+    Promise.all(stockPromises).then(() => {
+      if (flag_stock) {
+        this.productosfarmacia.createComprobanteventa(venta).subscribe(respuesta => {
+                // console.log(respuesta);
       const n_venta = respuesta.id; // Obtener el número de venta
       const productos = this.formProductos.value.producto;
-      console.log(productos)
       // Actualizar el número de venta para cada producto
       for (const producto of productos) {
         producto.n_venta = n_venta;
@@ -165,10 +160,10 @@ export class VentaComponent implements OnInit {
       // Subir los archivos de recetas
       this.submitFiles(n_venta);
       this.router.navigate(['farmacia/comprobanteventa-detail'], { queryParams: { id_comprobante: n_venta } })
-    }, (error) => {
-      // console.log(error);
-    });
-
+        })
+      } else {
+      }
+    })
   }
 
   getProductosOptions(): void {
@@ -195,9 +190,6 @@ export class VentaComponent implements OnInit {
     this.selectedFiles.splice(index, 1);
     this.selectedFile = null;
     // console.log(this.selectedFiles)
-  }
-  cl(el) {
-    console.log(el)
   }
 
   submitFiles(n_venta: number) {
@@ -250,5 +242,35 @@ export class VentaComponent implements OnInit {
 
   dataSource = this.selectedFiles;
 
+  openSnackBar(mensaje, producto) {
+    if (mensaje === 1) { //NO HAY STOCK
+      this._snackBar.openFromComponent(ventaAlertaComponent, {
+        duration: 5000,
+        data: { caso: 1, producto: producto },
+      });
+    } else if (mensaje === 2) { // ALERTA DE BAJO STOCK
+      this._snackBar.openFromComponent(ventaAlertaComponent, {
+        duration: 5000,
+        data: { caso: 2, producto: producto },
+      });
+    }
 
+  }
+
+
+}
+
+@Component({
+  selector: 'venta.alerta',
+  templateUrl: 'venta.alerta.html',
+  styles: [
+    `
+    .example-pizza-party {
+      color: hotpink;
+    }
+  `,
+  ],
+})
+export class ventaAlertaComponent {
+  constructor(@Inject(MAT_SNACK_BAR_DATA) public data: any, public snackBarRef: MatSnackBarRef<ventaAlertaComponent>) { }
 }

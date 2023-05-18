@@ -173,7 +173,7 @@ export class PersonaCrearComponent implements OnInit{
 
  verResumen() {
   this.personaResumen = this.formCrearPersona.value;
-  this.personaResumen.fecha_nacimiento = format(new Date(this.personaResumen.fecha_nacimiento), 'dd-MM-yyyy');
+  if (this.personaResumen.fecha_nacimiento) {this.personaResumen.fecha_nacimiento = format(new Date(this.personaResumen.fecha_nacimiento), 'dd-MM-yyyy');}
   this.direccionResumen = this.formDireccionPersona.value
   this.correoResumen = this.formCorreoPersona.value
   this.telefonoResumen = this.formTelefonoPersona.value
@@ -194,7 +194,7 @@ export class PersonaCrearComponent implements OnInit{
   // data_persona.fecha_nacimiento = fechaformateada
 
   if (data_persona.fecha_nacimiento !== null) {
-    const fechaformateada = format(data_persona.fecha_nacimiento, 'yyyy-MM-dd');
+    const fechaformateada = format(new Date(data_persona.fecha_nacimiento), 'yyyy-MM-dd');
     data_persona.fecha_nacimiento = fechaformateada
   }
 

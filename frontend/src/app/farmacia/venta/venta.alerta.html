@@ -1,0 +1,9 @@
+<div *ngIf="data.caso == 1">
+  No se pudo crear la venta debido a falta de stock del producto {{ data.producto.marca_producto }}
+  <br>
+  Solo quedan 20 unidades
+</div>
+<div *ngIf="data.caso == 2">
+  Luego de esta venta, el producto {{ data.producto.marca_producto }} quedará con bajo stock.
+</div>
+<button mat-button (click)="snackBarRef.dismiss()">Aceptar</button>

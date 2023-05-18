@@ -14,19 +14,19 @@
     <mat-datepicker #pickerFin></mat-datepicker>
   </mat-form-field>
 
-  <button mat-raised-button color="primary">Buscar</button>
+  <button mat-raised-button color="primary" (click)="buscar()">Buscar</button>
 
   <mat-form-field style="text-align: right !important">
     <mat-label>Selecciona una opción</mat-label>
-    <mat-select >
-      <mat-option value="farmacia">FARMACIA MUNICIPAL</mat-option>
-      <mat-option value="dimap">HIGIENE AMBIENTAL - DIMAP</mat-option>
-      <mat-option value="seguridad">SEGURIDAD MUNICIPAL</mat-option>
-      <mat-option value="impuestosyderechos">IMPUESTOS Y DERECHOS</mat-option>
-      <mat-option value="ayudasocial">AYUDA SOCIAL - PANDEMIA</mat-option>
-      <mat-option value="excencionbasura">EXCENCIÓN BASURA</mat-option>
-      <mat-option value="obrasmunicipales">OBRAS MUNICIPALES</mat-option>
-      <mat-option value="transito">TRANSITO</mat-option>
+    <mat-select>
+      <mat-option value="opcion1">FARMACIA MUNICIPAL</mat-option>
+      <mat-option value="opcion2">HIGIENE AMBIENTAL - DIMAP</mat-option>
+      <mat-option value="opcion3">SEGURIDAD MUNICIPAL</mat-option>
+      <mat-option value="opcion4">IMPUESTOS Y DERECHOS</mat-option>
+      <mat-option value="opcion5">AYUDA SOCIAL - PANDEMIA</mat-option>
+      <mat-option value="opcion6">EXCENCIÓN BASURA</mat-option>
+      <mat-option value="opcion7">OBRAS MUNICIPALES</mat-option>
+      <mat-option value="opcion8">TRANSITO</mat-option>
     </mat-select>
   </mat-form-field>
 
@@ -36,11 +36,53 @@
   </mat-grid-tile>
   <mat-grid-tile [colspan]="4">
 
+    <table mat-table [dataSource]="dataSource" class="mi-tabla">
+      <!-- Columna de nombre -->
+      <ng-container matColumnDef="nombre">
+        <th mat-header-cell *matHeaderCellDef>Nombre</th>
+        <td mat-cell *matCellDef="let element">{{element.nombre}}</td>
+      </ng-container>
 
+      <ng-container matColumnDef="rank">
+        <th mat-header-cell *matHeaderCellDef>Rank</th>
+        <td mat-cell *matCellDef="let element">
+          {{ element.rank[0] }}
+          <mat-icon class="arrow-icon"
+                    [ngClass]="{ 'up-arrow': element.rank[1] < 0, 'down-arrow': element.rank[1] > 0, 'static-arrow': element.rank[1] === 0 }">
+            {{ element.rank[1] < 0 ? 'keyboard_arrow_up' : (element.rank[1] > 0 ? 'keyboard_arrow_down' : 'keyboard_arrow_right') }}
+          </mat-icon>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lp">
+        <th mat-header-cell *matHeaderCellDef>Last Year</th>
+        <td mat-cell *matCellDef="let element">{{element.lp}}
+      </ng-container>
+
+    <!-- Columna de densidad -->
+    <ng-container matColumnDef="total">
+      <th mat-header-cell *matHeaderCellDef>
+        <span (click)="resaltarColumna('total')" [class.resaltado]="columnaResaltada === 'total'" [class.subrayado]="columnaResaltada === 'total'">total</span>
+      </th>
+      <td mat-cell *matCellDef="let element" [class.resaltado]="columnaResaltada === 'total'">{{element.total}} </td>
+    </ng-container>
+
+    <!-- Columna de comercial -->
+    <ng-container matColumnDef="comercial">
+      <th mat-header-cell *matHeaderCellDef>
+        <span (click)="resaltarColumna('comercial')" [class.resaltado]="columnaResaltada === 'comercial'" [class.subrayado]="columnaResaltada === 'comercial'">comercial</span>
+      </th>
+      <td mat-cell *matCellDef="let element" [class.resaltado]="columnaResaltada === 'comercial'">{{element.comercial}}</td>
+    </ng-container>
+
+      <!-- Define las columnas -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
   </mat-grid-tile>
 
 </mat-grid-list>
 
 <div class="slider-container">
-  <ngx-slider [(value)]="value" [(highValue)]="highValue" [options]="options"></ngx-slider>
+  <ngx-slider [(value)]="value" [(highValue)]="highValue" [options]="options" (userChangeEnd)="onSliderChange($event)"></ngx-slider>
 </div>
