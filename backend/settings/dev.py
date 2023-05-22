@@ -19,14 +19,6 @@ DATABASES = {
     }
 }
 
-# Configuración de CORS del proyecto
-CORS_ALLOWED_ORIGINS = [
-    'http://localhost:4200',
-    'https://dev.farmacia.atencion.independencia.cl',
-]
-CORS_ALLOWED_ORIGIN_REGEXES = r'^/api/.*'
-CORS_ALLOW_CREDENTIALS = True
-
 # Configuración para usar S3 como almacenamiento de archivos media
 AWS_ACCESS_KEY_ID=os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY=os.getenv('AWS_SECRET_ACCESS_KEY')
