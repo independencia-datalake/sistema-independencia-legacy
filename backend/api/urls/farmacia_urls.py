@@ -13,6 +13,7 @@ urlpatterns = [
     path('productofarmacia/update/<int:pk>/', views.ProductoFarmaciaUpdateAPIViw.as_view()),
     path('productofarmacia/delete/<int:pk>/', views.ProductoFarmaciaDeleteAPIViw.as_view()),
     path('comprobanteventa/', views.ComprobanteVentaListCreateAPIViw.as_view()),
+    path('comprobanteventa/ultimo/', views.UltimoComprobanteVentaAPIViw.as_view()),
     path('comprobanteventa/<int:pk>/', views.ComprobanteVentasDetailAPIViw.as_view()),
     path('comprobanteventa/update/<int:pk>/', views.ComprobanteVentaUpdateAPIViw.as_view()),
     path('comprobanteventa/delete/<int:pk>/', views.ComprobanteVentaDeleteAPIViw.as_view()),

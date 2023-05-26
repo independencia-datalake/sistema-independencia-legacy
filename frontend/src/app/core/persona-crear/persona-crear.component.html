@@ -254,32 +254,68 @@
             </div>
           </form>
 
-          <div class="col" style="width: 33%;">
-            <h2>Adjunte Archivos</h2>
-            <div [formGroup]="form">
-              <ng-container formArrayName="archivos">
-                <ng-container *ngFor="let archivoForm of archivos.controls; let i = index" [formGroupName]="i">
-                  <div class="archivo-form-row">
-                    <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
-                    <input hidden (change)="onFileSelected($event,i)" #fileInput type="file">
-                    <span class="file-name">{{selectedFile?.name}}</span>
-                    <button class="btn ver-o-editar eliminar" (click)="deleteArchivo(i)"><mat-icon
-                        class="icon-display">delete_forever</mat-icon></button>
-                  </div>
-                </ng-container>
-              </ng-container>
+          <mat-card>
+            <h5> Archivos </h5>
+            <div class="flex pl-6" *ngIf="selectedFiles.length > 0">
+              <div class="file-table-column table-head">
+                <div class="h-41 w-41 p-10 file-table-row index">
+                  N
+                </div>
+              </div>
+              <div class="file-table-column table-head">
+                <div class="h-41 w-250 ellipsis-text p-10 file-table-row">
+                  Nombre Archivo
+                </div>
+              </div>
+              <div class="file-table-column table-head">
+                <div class="h-41 p-10 w-130p file-table-row">
+                  Tipo de Archivo
+                </div>
+              </div>
+              <div class="file-table-column table-head">
+                <div class="h-41 w-60 p-10 file-table-row">
+                  Quitar
+                </div>
+              </div>
             </div>
-            <hr>
-            <button mat-raised-button (click)="addArchivo()">
-              +
-            </button>
-          </div>
+            <form>
+              <div class="flex" *ngIf="selectedFiles.length > 0">
+                <div class="file-table-column">
+                  <div class="h-41 w-41 p-10 file-table-row index" *ngFor="let file of selectedFiles; let i = index">
+                    {{i+1}}
+                  </div>
+                </div>
+                <div class="file-table-column">
+                  <div class="h-41 w-250 ellipsis-text p-10 file-table-row" *ngFor="let fileName of selectedFiles">
+                    {{fileName.name}}
+                  </div>
+                </div>
+                <div class="file-table-column">
+                  <div class="h-41 p-10 w-130p file-table-row" *ngFor="let fileType of selectedFiles">
+                    {{fileType.type}}
+                  </div>
+                </div>
+                <div class="file-table-column">
+                  <div class="h-41 w-60 p-10 file-table-row text-center" *ngFor="let file of selectedFiles; let i = index">
+                    <mat-icon class="delete-file" (click)="onFileDeleted($event,i)">cancel</mat-icon>
+                  </div>
+                </div>
+              </div>
+              <hr>
+              <button class="rounded-pink-button pl-6" type="button" mat-raised-button (click)="fileInput.click()"><mat-icon>
+                  attach_file</mat-icon>{{ selectedFiles.length > 0 ? "Agregar otro archivo" : "Selecciona un
+                archivo"}}</button>
+              <input hidden (change)="onFileSelected($event)" #fileInput type="file" multiple>
+              <hr>
+            </form>
+
+          </mat-card>
         </div>
       </div>
 
       <div>
         <button mat-raised-button matStepperPrevious>Back</button>
-        <button matStepperNext mat-raised-button (click)="verResumen()" style="margin: 6px;">Siguente</button>
+        <button matStepperNext mat-raised-button style="margin: 6px;">Siguente</button>
       </div>
 
     </mat-step>

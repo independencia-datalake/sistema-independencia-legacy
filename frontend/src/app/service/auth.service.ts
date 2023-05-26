@@ -7,13 +7,13 @@ import { catchError, map } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { CdkAccordion } from '@angular/cdk/accordion';
 import { environment } from 'src/environment/environment';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 
 })
 export class AuthService {
-  // private apiUrl = 'http://localhost:8000/api/users/login/';
   apiUrl = environment.apiURL;
 
   private token: string;
@@ -76,6 +76,7 @@ export class AuthService {
       // console.log('El token ha expirado'); // el token ha expirado
       // localStorage.removeItem('token');
       localStorage.removeItem('username')
+      this.emitUserAuthStatus(false);
       return false
     } else {
       // console.log('El token aun no expira'); // el token es válido
@@ -89,8 +90,8 @@ export class AuthService {
       // console.log('El usuario no existe');
       return false
     }
-
   }
+
   async isFarmacia(): Promise<boolean> {
     const token_check = localStorage.getItem('token');
     const grupos = this.getGrupos(token_check)
@@ -149,4 +150,9 @@ export class AuthService {
     }
   }
 
+  public userAuthStatus = new BehaviorSubject<boolean>(false);
+
+  emitUserAuthStatus(status: boolean) {
+    this.userAuthStatus.next(status);
+  }
 }

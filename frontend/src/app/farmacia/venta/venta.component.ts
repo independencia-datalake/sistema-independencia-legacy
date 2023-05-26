@@ -15,6 +15,9 @@ import { HttpClient } from '@angular/common/http';
 import { StockService } from 'src/app/service/stock.service';
 import { MatSnackBar, MAT_SNACK_BAR_DATA, MatSnackBarRef  } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
+import { environment } from 'src/environment/environment';
+import { VentaPendienteDialogComponent } from './venta-pendiente-dialog/venta-pendiente-dialog.component'
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-venta',
@@ -23,7 +26,7 @@ import { CommonModule } from '@angular/common';
   encapsulation: ViewEncapsulation.None,
 })
 export class VentaComponent implements OnInit {
-
+  apiUrl = environment.apiURL;
   showInputFile: boolean = false
 
   id_persona = this.route.snapshot.queryParamMap.get('id_persona')
@@ -60,6 +63,7 @@ export class VentaComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private _snackBar: MatSnackBar,
+    public dialog: MatDialog,
     private http: HttpClient) {
 
     // this.addProducto()
@@ -67,6 +71,27 @@ export class VentaComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.productosfarmacia.getLastComprobante().subscribe(response => {
+      console.log(response)
+      if (response.estado === 'EN PROGRESO') {
+        const dialogRef: MatDialogRef<VentaPendienteDialogComponent> = this.dialog.open(VentaPendienteDialogComponent);
+
+        dialogRef.afterClosed().subscribe(result => {
+          if (result === false) {
+            // Continuar con la venta
+            console.log('Retomar venta');
+            this.router.navigate(['farmacia/comprobanteventa-detail'], { queryParams: { id_comprobante: response.id, estado_venta: 'EN PROGRESO' } })
+
+          } else if (result === true) {
+            // Cancelar y empezar una nueva venta
+            console.log('Cancelar y empezar nueva venta');
+          }
+        })
+
+
+      }
+    })
+
     this.loading = true;
     this.personaService.getPersona(this.id_persona).pipe(take(1)).subscribe(data => { this.persona = data; })
     this.personaService.getDireccionByPersona(this.id_persona).pipe(take(1)).subscribe(data => { this.direccion = data; })
@@ -172,7 +197,7 @@ export class VentaComponent implements OnInit {
       }
       // Subir los archivos de recetas
       this.submitFiles(n_venta);
-      this.router.navigate(['farmacia/comprobanteventa-detail'], { queryParams: { id_comprobante: n_venta } })
+      this.router.navigate(['farmacia/comprobanteventa-detail'], { queryParams: { id_comprobante: n_venta, estado_venta: 'EN PROGRESO' } })
         })
       } else {
       }
@@ -194,15 +219,11 @@ export class VentaComponent implements OnInit {
 
   onFileSelected(event: any): void {
     event.target.files.length > 0 ? Object.keys(event.target.files).forEach(el => this.selectedFiles.push(event.target.files[el])) : null;
-    // console.log(event.target.files)
-    // console.log(this.selectedFiles)
     this.selectedFile = event.target.files[0] ?? null;
-
   }
   onFileDeleted(event: any, index: number) {
     this.selectedFiles.splice(index, 1);
     this.selectedFile = null;
-    // console.log(this.selectedFiles)
   }
 
   submitFiles(n_venta: number) {
@@ -219,7 +240,7 @@ export class VentaComponent implements OnInit {
       // console.log(formData)
 
       // Realiza una solicitud HTTP POST con FormData
-      this.http.post('http://127.0.0.1:8000/api/farmacia/recetas/', formData).subscribe(
+      this.http.post(`${this.apiUrl}/farmacia/recetas/`, formData).subscribe(
         (response) => {
           console.log(`Archivo ${index + 1} subido con éxito`, response);
         },

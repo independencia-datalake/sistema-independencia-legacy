@@ -95,6 +95,13 @@ class ComprobanteVentaListCreateAPIViw(generics.ListCreateAPIView):
     def perfrom_create(self, serializer):
         instance = serializer.save()
 
+class UltimoComprobanteVentaAPIViw(generics.RetrieveAPIView):
+    serializer_class = ComprobanteVentaSerializer
+
+    def get_object(self):
+        latest_comprobante = ComprobanteVenta.objects.latest('created')
+        return latest_comprobante
+
 class ComprobanteVentasDetailAPIViw(generics.RetrieveAPIView):
     queryset = ComprobanteVenta.objects.all()
     serializer_class = ComprobanteVentaSerializer

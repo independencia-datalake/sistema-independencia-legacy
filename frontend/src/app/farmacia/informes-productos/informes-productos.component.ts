@@ -1,4 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Router, ActivatedRoute } from '@angular/router';
+import { take, of, forkJoin, switchMap, map } from 'rxjs';
+import { PersonaService } from 'src/app/service/persona.service';
+import { ProductosService } from 'src/app/service/productos.service';
+import { StockService } from 'src/app/service/stock.service';
 
 export interface products {
   name: string;
@@ -12,35 +19,11 @@ export interface products {
   laboratory: string;
 }
 
-const PRODUCT_DATA: products[] = [
-  {
-    name: 'ACERDIL',
-    supplier: 'None',
-    price: 17750,
-    activeComponent: 'LISINOPRIL',
-    dose: '20 MG	',
-    presentation: '30 COMP',
-    cenabast: false,
-    bioequivalent: false,
-    laboratory: 'ABBOTT'
-  }, {
-    name: 'ACERDIL',
-    supplier: 'None',
-    price: 6630,
-    activeComponent: 'LISINOPRIL',
-    dose: '5 MG',
-    presentation: '30 COMP',
-    cenabast: false,
-    bioequivalent: false,
-    laboratory: 'ABBOTT',
-  }
-]
-
-
 @Component({
   selector: 'app-informes-productos',
   templateUrl: './informes-productos.component.html',
-  styleUrls: ['./informes-productos.component.css']
+  styleUrls: ['./informes-productos.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 
 export class InformesProductosComponent {
@@ -52,16 +35,44 @@ export class InformesProductosComponent {
     'cenabast',
     'bioequivalent',
     'laboratory', 'button'];
-  dataSource = PRODUCT_DATA;
+    dataSource = new MatTableDataSource<products>();
+
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+
+    constructor(
+      private stockService: StockService,
+      private productosService: ProductosService,
+      private personaService: PersonaService,
+      private router: Router,
+    ) {}
+
+    ngOnInit() {
+      this.getData();
+    }
+
+    ngAfterViewInit(): void {
+      this.dataSource.paginator = this.paginator;
+    }
+
+    getData(): void {
+      this.productosService.getProductos().subscribe(response => {
+        this.dataSource.data = response
+        console.log(this.dataSource.data)
+      })
+    }
+
+    editarProducto(id) {
+      console.log(id)
+    }
+
+    nuevoProducto() {
+      console.log('nuevo producto')
+    }
+
+    applyFilter(event: Event) {
+      const filterValue = (event.target as HTMLInputElement).value;
+      this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
+
 }
 
-
-// 
-// ACETAZOLAMIDA	None	1520	ACETAZOLAMIDA	250 MG	20 COMP	Si	No	LAB CHILE	
-// ACETAZOLAMIDA	None	2100	ACETAZOLAMIDA	250 MG	20 COMP	Si	No	BDH	
-// ACICLOVIR	None	2410	ACICLOVIR	400 MG	32 COMP	Si	No	HETERO	
-// ACIDO FOLICO	None	290	ACIDO FOLICO	1 MG	25 COMP	No	No	ITF	
-// ACIDO FOLICO	None	320	ACIDO FOLICO	5 MG	25 COMP	No	No	ITF	
-// ACIDO URSODEOXICOLICO 250 MG * 60 CAPSULAS	DFM PHARMA	13700	ACIDO URSODEOXICOLICO	250 MG	60 CAPSULAS	Si	No	DIFEM LABORATORIOS	
-// ACIDO VALPROICO	None	14050	ACIDO VALPROICO	500 MG	50 TAB	Si	No	ANDROMACO	
-// ACIDO VALPROICO 500 MG *100 COMP	ANDROMACO	14050	ACIDO VALPROICO	500 MG	100 COMPRIMIDOS	Si	No	6

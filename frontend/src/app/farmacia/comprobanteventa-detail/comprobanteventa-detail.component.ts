@@ -9,14 +9,6 @@ import { AddRecetaDialogComponent } from './add-receta-dialog/add-receta-dialog.
 import { MatDialog } from '@angular/material/dialog';
 import { EditarProductovendidoDialogComponent } from './editar-productovendido-dialog/editar-productovendido-dialog.component';
 
-const PRODUCT_DATA = [
-  {
-    nombre: 'ACERDIL',
-    cantidad: 2,
-    precio_venta: 17750,
-  },
-]
-
 @Component({
   selector: 'app-comprobanteventa-detail',
   templateUrl: './comprobanteventa-detail.component.html',
@@ -27,9 +19,9 @@ export class ComprobanteventaDetailComponent {
     'precio_venta',
     'edit', 'button'];
 
-  dataSource = PRODUCT_DATA;
 
   id_comprobante = Number(this.route.snapshot.queryParamMap.get('id_comprobante'));
+  estado_venta = this.route.snapshot.queryParamMap.get('estado_venta');
   productos: any[];
   productosFiltrados: any[];
   comprobante: any;
@@ -52,14 +44,16 @@ export class ComprobanteventaDetailComponent {
     private router: Router,) { }
 
   ngOnInit() {
-
+    console.log(this.estado_venta)
 
     this.filtroProductos().subscribe((productosFiltrados: any[]) => {
       this.productos = productosFiltrados;
       // console.log(this.productos);
       for (const producto of this.productos) {
         this.productosfarmacia.getProductoByid(Number(producto.nombre)).subscribe((productoEncontrado: any) => {
-          producto.nombre = productoEncontrado.marca_producto;
+          producto.id_producto = producto.nombre
+          // producto.nombre = productoEncontrado.marca_producto;
+          producto.nombre = `${productoEncontrado.marca_producto} | ${productoEncontrado.dosis} x ${productoEncontrado.presentacion} | ${productoEncontrado.p_a} | Proveedor: ${productoEncontrado.proveedor} | Lab: ${productoEncontrado.laboratorio}`
         });
       }
       this.totalVenta = this.calcularTotalVenta();
@@ -129,21 +123,22 @@ export class ComprobanteventaDetailComponent {
 
     dialogRef.componentInstance.productoAgregado.subscribe((result) => {
       if (result === 'actualizar') {
-        window.location.reload();
+        // window.location.reload();
+        this.ngOnInit()
       }
     });
 
   }
 
   editarProducto(producto) {
-    console.log(producto)
+    // console.log(producto)
     const dialogRef = this.dialog.open(EditarProductovendidoDialogComponent, {
       data: { id_comprobante: this.id_comprobante, producto: producto}
     });
     // Suscribirse al evento recetaCreada
     dialogRef.componentInstance.productoEditado.subscribe((result) => {
       if (result === 'actualizar') {
-        window.location.reload();
+        this.ngOnInit()
       }
     });
   }
@@ -152,7 +147,8 @@ export class ComprobanteventaDetailComponent {
     // console.log(producto.id)
     this.productosfarmacia.deleteProductoVendido(producto.id).subscribe(
       data => {
-        window.location.reload();
+        // window.location.reload();
+        this.ngOnInit()
       },
       error => {
         console.log(error)
@@ -162,7 +158,6 @@ export class ComprobanteventaDetailComponent {
   }
 
   add_receta() {
-    console.log('pog receta')
     const dialogRef = this.dialog.open(AddRecetaDialogComponent, {
       // width: '100%'
     data: { id_comprobante: this.id_comprobante}
@@ -171,21 +166,37 @@ export class ComprobanteventaDetailComponent {
   // Suscribirse al evento recetaCreada
     dialogRef.componentInstance.recetaCreada.subscribe((result) => {
       if (result === 'actualizar') {
-        window.location.reload();
+        this.ngOnInit()
       }
     });
 
   }
 
   eliminarVenta() {
-    this.productosfarmacia.deleteComprobanteventa(this.id_comprobante).subscribe(
-      data => {
-        this.router.navigate(['farmacia'],)
-      },
-      error => {
-        console.log(error)
-      }
-    )
+    // this.productosfarmacia.deleteComprobanteventa(this.id_comprobante).subscribe(
+    //   data => {
+    //     this.router.navigate(['farmacia'],)
+    //   },
+    //   error => {
+    //     console.log(error)
+    //   }
+    // )
+    const comprobante_venta = { id: this.id_comprobante, estado: 'CANCELADA' }
+    this.productosfarmacia.updateComprobanteventa(this.id_comprobante, comprobante_venta).subscribe( response => {
+      console.log(response)
+    }, error => {
+      console.log(error)
+    })
+    this.router.navigate(['farmacia/lista-venta'])
+
+  }
+
+  restaurarVenta() {
+    console.log('restaurar')
+  }
+
+  irAListaVentas() {
+    this.router.navigate(['farmacia/lista-venta'])
   }
 
   imprimir() {
@@ -202,6 +213,12 @@ export class ComprobanteventaDetailComponent {
   }
 
   finVenta() {
+    const comprobante_venta = { id: this.id_comprobante, estado: 'FINALIZADA' }
+    this.productosfarmacia.updateComprobanteventa(this.id_comprobante, comprobante_venta).subscribe( response => {
+      console.log(response)
+    }, error => {
+      console.log(error)
+    })
     this.router.navigate(['farmacia/lista-venta'])
   }
 

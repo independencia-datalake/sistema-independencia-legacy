@@ -13,7 +13,10 @@ export class HomeComponent {
   }
 
   ngOnInit(): void {
-    this.authService.isAuthenticated()
+    // this.authService.isAuthenticated()
+    if(localStorage.getItem('token')) {
+      this.authService.isAuthenticated()
+    }
   }
 
 }

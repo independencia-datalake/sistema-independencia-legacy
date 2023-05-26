@@ -1,6 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ViewEncapsulation } from '@angular/core';
+import { take, of, forkJoin, switchMap, map } from 'rxjs';
+import { ProductosService } from 'src/app/service/productos.service';
+import { PersonaService } from 'src/app/service/persona.service';
+import { UsersService } from 'src/app/service/users.service';
+import { Router, ActivatedRoute } from '@angular/router';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
-export interface products {
+export interface persona {
   name: string;
   rut: string;
   healthInsurance: string;
@@ -8,27 +15,12 @@ export interface products {
   comments: string;
 }
 
-const PRODUCT_DATA: products[] = [
-  {
-    name: 'JUANA GABRIELA RIVERO ZAMORANO',
-    rut: '11.143.029-2',
-    healthInsurance: 'FONASA',
-    isapre: 'NO aplica',
-    comments: '20 MG	',
-  }, {
-    name: 'ELENA SOLEDAD PAULICH MORENO',
-    rut: '13.480.924-8',
-    healthInsurance: 'FONASA',
-    isapre: 'No aplica',
-    comments: '5 MG',
-  }
-]
-
 
 @Component({
   selector: 'app-lista-personas',
   templateUrl: './lista-personas.component.html',
-  styleUrls: ['./lista-personas.component.css']
+  styleUrls: ['./lista-personas.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 
 export class ResumenPersonaComponent {
@@ -37,16 +29,59 @@ export class ResumenPersonaComponent {
     'isapre',
     'comments',
     'button'];
-  dataSource = PRODUCT_DATA;
+  dataSource = new MatTableDataSource<persona>();
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  constructor(
+    private ventasService: ProductosService,
+    private personaService: PersonaService,
+    private usersService: UsersService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    this.fetchData();
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  fetchData(): void {
+    this.personaService.getPersonas().pipe(
+      switchMap((personas: any[]) => {
+        const requests = personas.map(persona => {
+          return this.personaService.getPersonaInfoSaludByPersona(persona.id).pipe(
+            map(infoSalud => ({
+              ...persona,
+              healthInsurance: infoSalud.prevision,
+              isapre: infoSalud.isapre,
+              comments: infoSalud.comentarios
+            }))
+          );
+        });
+        return forkJoin(requests);
+      })
+    ).subscribe((results: any[]) => {
+      this.dataSource.data = results;
+    });
+  }
+
+  nuevaPersona(): void {
+    this.router.navigate(['persona/crear'], {queryParams: {redireccion: 'lista_persona'}})
+  }
+
+  editarPersona(id_comprobante): void {
+    console.log(id_comprobante)
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 }
 
 
-// 
-// ACETAZOLAMIDA	None	1520	ACETAZOLAMIDA	250 MG	20 COMP	Si	No	LAB CHILE	
-// ACETAZOLAMIDA	None	2100	ACETAZOLAMIDA	250 MG	20 COMP	Si	No	BDH	
-// ACICLOVIR	None	2410	ACICLOVIR	400 MG	32 COMP	Si	No	HETERO	
-// ACIDO FOLICO	None	290	ACIDO FOLICO	1 MG	25 COMP	No	No	ITF	
-// ACIDO FOLICO	None	320	ACIDO FOLICO	5 MG	25 COMP	No	No	ITF	
-// ACIDO URSODEOXICOLICO 250 MG * 60 CAPSULAS	DFM PHARMA	13700	ACIDO URSODEOXICOLICO	250 MG	60 CAPSULAS	Si	No	DIFEM LABORATORIOS	
-// ACIDO VALPROICO	None	14050	ACIDO VALPROICO	500 MG	50 TAB	Si	No	ANDROMACO	
-// ACIDO VALPROICO 500 MG *100 COMP	ANDROMACO	14050	ACIDO VALPROICO	500 MG	100 COMPRIMIDOS	Si	No	6
+

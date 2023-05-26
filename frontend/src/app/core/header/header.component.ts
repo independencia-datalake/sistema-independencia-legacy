@@ -18,24 +18,33 @@ export class HeaderComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private authService: AuthService) { }
 
-  // ngOnInit(): void {
-  //   this.authService.usuarioActual$.subscribe((usuario) => {
-  //     this.usuarioActual = usuario;
-  //   });
-  // }
   ngOnInit(): void {
-    if (!!localStorage.getItem('username')){
-      this.usuarioActual = localStorage.getItem('username');
-    }
-    else{
-      this.usuarioActual = 'ninguno'
-    }
+    this.authService.userAuthStatus.subscribe(status => {
+      if (status === false) {
+        if (!!localStorage.getItem('username')){
+          this.usuarioActual = localStorage.getItem('username');
+        }
+        else{
+          this.usuarioActual = 'ninguno'
+        }
+      }
+    });
   }
 
   async logInClick() {
-    const flag_usuario = await this.authService.isAuthenticated();
-    if (flag_usuario === true) {
-      this.openSnackBar()
+    // const flag_usuario = await this.authService.isAuthenticated();
+    // if (flag_usuario === true) {
+    //   this.openSnackBar()
+    // } else {
+    //   this.router.navigate(['login'])
+    // }
+    if(localStorage.getItem('token')) {
+      const flag_usuario = await this.authService.isAuthenticated();
+        if (flag_usuario === true) {
+          this.openSnackBar()
+      } else {
+        this.router.navigate(['login'])
+      }
     } else {
       this.router.navigate(['login'])
     }

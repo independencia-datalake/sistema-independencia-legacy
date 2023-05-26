@@ -12,3 +12,46 @@ tr:nth-child(odd) td {
   background-color: #FFF !important;
   color: #4a4a4a !important;
 }
+
+.square-pink-button {
+  background-color: rgb(249, 34, 72);
+  width: auto;
+  color: #FFF;
+  border: none;
+  padding: 5px;
+  font-size: 14px;
+}
+
+table tr:nth-child(1) td {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+input::placeholder {
+  color: rgb(132, 132, 132) !important;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: #ffffff;
+}
+
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: #b1b1b1;
+}
+
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.low-stock {
+  font-weight: bold;
+}
+
+.icon-container {
+  display: flex;
+  align-items: center;
+}
+
+.warning-icon {
+  color: red;
+}

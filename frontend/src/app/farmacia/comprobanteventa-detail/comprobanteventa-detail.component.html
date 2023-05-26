@@ -2,8 +2,11 @@
   <div class="pink-banner container">
     <h1>Resumen de Venta</h1>
     <span class="spacer"></span>
-    <div>
-      <button class="f-acenter-jarround delete" (click)="eliminarVenta()" ><span>Eliminar</span><mat-icon>chevron_right</mat-icon></button>
+    <div *ngIf="estado_venta === 'EN PROGRESO'">
+      <button class="f-acenter-jarround delete" (click)="eliminarVenta()"><span>Eliminar</span><mat-icon>chevron_right</mat-icon></button>
+    </div>
+    <div *ngIf="estado_venta === 'CANCELADA'">
+      <button class="f-acenter-jarround delete" (click)="restaurarVenta()"><span>Restaurar Venta</span><mat-icon>chevron_right</mat-icon></button>
     </div>
   </div>
   <div class="container contenedor-wrap flex mg-top-15">
@@ -23,11 +26,13 @@
             <a [href]="receta.receta" target="_blank">Receta N° {{ receta.id }}</a>
           </li>
         </ul>
-        <a (click)="add_receta()" style="color: #0000EE; cursor: pointer;">Agregar receta</a>
+        <a *ngIf="estado_venta !== 'CANCELADA'" (click)="add_receta()" style="color: #0000EE; cursor: pointer;">Agregar receta</a>
+        <a *ngIf="estado_venta === 'CANCELADA'" style="color: #0000EE;">Agregar receta</a>
       </div>
       <div *ngIf="!recetas || recetas.length === 0">
         <p>No se adjuntaron documentos.</p>
-        <a (click)="add_receta()" style="color: #0000EE; cursor: pointer;">Agregar receta</a>
+        <a *ngIf="estado_venta !== 'CANCELADA'" (click)="add_receta()" style="color: #0000EE; cursor: pointer;">Agregar receta</a>
+        <a *ngIf="estado_venta === 'CANCELADA'" style="color: #0000EE;">Agregar receta</a>
       </div>
 
     </div>
@@ -64,7 +69,7 @@
 
         <ng-container matColumnDef="edit">
           <th mat-header-cell *matHeaderCellDef> </th>
-          <td mat-cell *matCellDef="let producto"> <span><button (click)="editarProducto(producto)"
+          <td mat-cell *matCellDef="let producto"> <span><button [disabled]="estado_venta === 'CANCELADA'" (click)="editarProducto(producto)"
                 class="f-acenter-jarround square-pink-button"><span>editar</span><mat-icon>edit</mat-icon>
 
               </button></span> </td>
@@ -72,7 +77,10 @@
 
         <ng-container matColumnDef='button'>
           <th mat-header-cell *matHeaderCellDef> </th>
-          <td mat-cell *matCellDef="let producto"> <mat-icon class="icon-display" (click)="eliminarProduto(producto)">delete_forever</mat-icon> </td>
+          <td mat-cell *matCellDef="let producto">
+            <mat-icon *ngIf="estado_venta !== 'CANCELADA'" class="icon-display" (click)="eliminarProduto(producto)">delete_forever</mat-icon>
+            <mat-icon *ngIf="estado_venta === 'CANCELADA'" class="icon-display">delete_forever</mat-icon>
+          </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -83,16 +91,18 @@
   </div>
   <div class="mg-top-15">
     <div class="mg-top-15 container">
-      <button class="f-acenter-jarround rounded-pink-button" (click)="agregarProducto()"><span>Agregar
+      <button class="f-acenter-jarround rounded-pink-button" [disabled]="estado_venta === 'CANCELADA'" (click)="agregarProducto()"><span>Agregar
           Producto</span><mat-icon>add_shopping_cart</mat-icon></button>
     </div>
     <div class="mg-top-15 container">
       <div class="flex f-ajcenter fs-20">Usted está por confirmar esta venta</div>
       <div class="flex f-ajcenter">
-        <button class="f-acenter-jarround rounded-pink-button" (click)="imprimir()"><span>Imprimir
+        <button class="f-acenter-jarround rounded-pink-button" [disabled]="estado_venta === 'CANCELADA'" (click)="imprimir()"><span>Imprimir
             Pagina</span><mat-icon>print</mat-icon></button>
-        <button class="f-acenter-jarround rounded-pink-button" (click)="finVenta()"><span>Finalizar Venta</span><mat-icon>error</mat-icon>
-        </button>
+        <button *ngIf="estado_venta !== 'CANCELADA'" class="f-acenter-jarround rounded-pink-button" (click)="finVenta()"><span>Finalizar Venta</span><mat-icon>error</mat-icon></button>
+        <div *ngIf="estado_venta === 'FINALIZADA' || estado_venta === 'CANCELADA'">
+          <button class="f-acenter-jarround rounded-pink-button" (click)="irAListaVentas()"><span>Ir a lista Ventas</span><mat-icon>chevron_right</mat-icon></button>
+        </div>
       </div>
 
     </div>

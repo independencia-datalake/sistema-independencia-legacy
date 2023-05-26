@@ -1,4 +1,10 @@
 <div class="container">
+  <mat-form-field>
+    <mat-label>Filtrar por Nombre</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Escriba el nombre a buscar">
+  </mat-form-field>
+</div>
+<div class="container">
   Pink title
 </div>
 <div class="container contenedor-wrap">
@@ -6,6 +12,7 @@
 
     <ng-container matColumnDef="brand">
       <th mat-header-cell *matHeaderCellDef> Marca del producto </th>
+      <!-- <td mat-cell *matCellDef="let element"> {{element.brand.marca_producto}} | {{ element.brand.dosis}} x {{ element.brand.presentacion }} | {{ element.brand.p_a }} | Proveedor: {{element.brand.proveedor}} | Lab: {{ element.brand.laboratorio }} </td> -->
       <td mat-cell *matCellDef="let element"> {{element.brand}} </td>
     </ng-container>
 
@@ -16,33 +23,31 @@
 
     <ng-container matColumnDef="minimunStock">
       <th mat-header-cell *matHeaderCellDef> Stock minimo </th>
-      <td mat-cell *matCellDef="let element"> {{element.minimunStock}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.stock_min}} </td>
     </ng-container>
 
     <ng-container matColumnDef="slack">
       <th mat-header-cell *matHeaderCellDef> Holgura </th>
-      <td mat-cell *matCellDef="let element"> {{element.slack}} </td>
+      <td mat-cell *matCellDef="let element" [ngClass]="{'low-stock': element.holgura <= 0}">{{element.holgura}} <mat-icon class="warning-icon" *ngIf="element.holgura <= 0">warning</mat-icon></td>
     </ng-container>
+
 
     <ng-container matColumnDef='button'>
       <th mat-header-cell *matHeaderCellDef> </th>
-      <td mat-cell *matCellDef="let element"> naDA </td>
+      <td mat-cell *matCellDef="let element"> <button (click)="editarBodega(element.id)"
+        class="f-acenter-jarround square-pink-button"><span>editar</span><mat-icon>edit</mat-icon>
+
+      </button> </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
+  <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+  </mat-paginator>
+
 </div>
 
-<!--
-  name: string;
-  supplier: string;
-  price: number;
-  activeComponent: string;
-  dose: string;
-  presentation: string;
-  cenabast: boolean;
-  bioequivalent: boolean;
-  laboratory: string;
--->

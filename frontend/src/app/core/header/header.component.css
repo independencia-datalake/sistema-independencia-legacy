@@ -67,3 +67,16 @@
   height: 100% !important;
   width: 100% !important;
 }
+
+.img-link {
+  cursor: pointer;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.img-link:hover {
+  opacity: 0.8;
+}
+
+.icon-display {
+  cursor: pointer;
+}

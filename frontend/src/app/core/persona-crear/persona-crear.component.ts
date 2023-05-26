@@ -4,9 +4,10 @@ import { PersonaService } from 'src/app/service/persona.service';
 import { CallesService } from 'src/app/service/calles.service';
 import { ActivatedRoute, Params } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 import { Router } from '@angular/router';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { environment } from 'src/environment/environment';
 
 @Component({
   selector: 'app-persona-crear',
@@ -15,6 +16,8 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
   encapsulation: ViewEncapsulation.None,
 })
 export class PersonaCrearComponent implements OnInit{
+  apiUrl = environment.apiURL;
+  showInputFile: boolean = false
   redireccion: any;
 
   numero_identificacion: string;
@@ -36,6 +39,10 @@ export class PersonaCrearComponent implements OnInit{
   loading = false;
   success = false;
 
+  formArchivos = this.fb.group({
+    files: this.fb.array([])
+  });
+
   persona: any;
 
   options = [];
@@ -51,7 +58,6 @@ export class PersonaCrearComponent implements OnInit{
     private route: ActivatedRoute,
     private router: Router) {
 
-    this.addArchivo()
   }
 
   ngOnInit(): void {
@@ -142,10 +148,42 @@ export class PersonaCrearComponent implements OnInit{
   }
 
   selectedFile: any = null;
+  selectedFiles: any[] = [];
+  displayedColumns: string[] = ['index',
+    //'name', 'type', 'delete'
+  ]
 
-  onFileSelected(event: any,archivoIndex:number): void {
-      this.selectedFile = event.target.files[archivoIndex] ?? null;
+  onFileSelected(event: any): void {
+    event.target.files.length > 0 ? Object.keys(event.target.files).forEach(el => this.selectedFiles.push(event.target.files[el])) : null;
+    this.selectedFile = event.target.files[0] ?? null;
+  }
+  onFileDeleted(event: any, index: number) {
+    this.selectedFiles.splice(index, 1);
+    this.selectedFile = null;
+  }
+  submitFiles(id_persona: number) {
+    // Itera sobre todos los archivos seleccionados
+    this.selectedFiles.forEach((file, index) => {
+      // console.log(file)
+      const formData = new FormData();
 
+      // Agrega el número de venta al FormData
+      formData.append('persona', id_persona.toString());
+
+      // Agrega el archivo actual a FormData
+      formData.append(`archivo`, file, file.name);
+      // console.log(formData)
+
+      // Realiza una solicitud HTTP POST con FormData
+      this.http.post(`${this.apiUrl}/core/personaarchivos/`, formData).subscribe(
+        (response) => {
+          console.log(`Archivo ${index + 1} subido con éxito`, response);
+        },
+        (error) => {
+          console.log(`Error al subir el archivo ${index + 1}`, error);
+        }
+      );
+    });
   }
 
   onItemChange(value){
@@ -173,7 +211,14 @@ export class PersonaCrearComponent implements OnInit{
 
  verResumen() {
   this.personaResumen = this.formCrearPersona.value;
-  if (this.personaResumen.fecha_nacimiento) {this.personaResumen.fecha_nacimiento = format(new Date(this.personaResumen.fecha_nacimiento), 'dd-MM-yyyy');}
+  if (this.personaResumen.fecha_nacimiento) {
+    // Verificar si la fecha ya está en el formato 'dd-MM-yyyy'
+    const fechaFormatoCorrecto = /^\d{2}-\d{2}-\d{4}$/.test(this.personaResumen.fecha_nacimiento);
+
+    if (!fechaFormatoCorrecto) {
+      this.personaResumen.fecha_nacimiento = format(new Date(this.personaResumen.fecha_nacimiento), 'dd-MM-yyyy');
+    }
+  }
   this.direccionResumen = this.formDireccionPersona.value
   this.correoResumen = this.formCorreoPersona.value
   this.telefonoResumen = this.formTelefonoPersona.value
@@ -194,8 +239,16 @@ export class PersonaCrearComponent implements OnInit{
   // data_persona.fecha_nacimiento = fechaformateada
 
   if (data_persona.fecha_nacimiento !== null) {
-    const fechaformateada = format(new Date(data_persona.fecha_nacimiento), 'yyyy-MM-dd');
-    data_persona.fecha_nacimiento = fechaformateada
+    console.log(data_persona.fecha_nacimiento)
+    const fechaFormatoCorrecto = /^\d{4}-\d{2}-\d{2}$/.test(data_persona.fecha_nacimiento);
+    console.log(fechaFormatoCorrecto)
+    if (!fechaFormatoCorrecto) {
+      data_persona.fecha_nacimiento = format(new Date(data_persona.fecha_nacimiento), 'yyyy-MM-dd');
+    }
+
+    // const fechaformateada = format(new Date(data_persona.fecha_nacimiento), 'yyyy-MM-dd');
+    // data_persona.fecha_nacimiento = fechaformateada
+    // console.log(data_persona.fecha_nacimiento)
   }
 
   this.personaService.createPersona(data_persona).subscribe(respuesta => {
@@ -245,16 +298,21 @@ export class PersonaCrearComponent implements OnInit{
     }, (error)=>{
       console.log(error)
     })
+  this.submitFiles(persona_actual)
 
     // console.log(respuesta)
 
   if (this.redireccion === 'farmacia') {
     this.router.navigate(['farmacia/venta'], {queryParams: {id_persona: persona_actual}})
+  } else if (this.redireccion ==='lista_persona') {
+    this.router.navigate(['farmacia/resumen-persona'])
   }
   }, (error)=> {
     console.log(error);
   });
  }
+
+//ARCHIVOS
 
 
 

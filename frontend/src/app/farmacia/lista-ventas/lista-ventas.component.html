@@ -36,9 +36,14 @@
       <td mat-cell *matCellDef="let element"> {{element.professional}} </td>
     </ng-container>
 
+    <ng-container matColumnDef="estado">
+      <th mat-header-cell *matHeaderCellDef> Estado Venta </th>
+      <td mat-cell *matCellDef="let element"> {{element.estado}} </td>
+    </ng-container>
+
     <ng-container matColumnDef='button'>
       <th mat-header-cell *matHeaderCellDef> </th>
-      <td mat-cell *matCellDef="let element"> <button (click)="editarVenta(element.salesNumber)"
+      <td mat-cell *matCellDef="let element"> <button (click)="editarVenta(element.salesNumber, element.estado)"
         class="f-acenter-jarround square-pink-button"><span>editar</span><mat-icon>edit</mat-icon>
 
       </button> </td>

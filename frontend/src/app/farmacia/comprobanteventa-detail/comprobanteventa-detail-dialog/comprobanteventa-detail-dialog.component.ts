@@ -81,6 +81,7 @@ seleccionarProducto(evento: any, i: number) {
 
 agregarProducto() {
   var flag_stock = true
+  var flag_np = true
   const producto_adicional = this.formProductos.value.producto[0];
   producto_adicional.n_venta = this.data.id_comprobante;
 
@@ -97,6 +98,7 @@ agregarProducto() {
           this.openSnackBar(1, producto_alerta)
         })
         flag_stock = false;
+        flag_np = false
       } else if (cantidad_postventa < response.stock_min) {
         this.productosfarmacia.getProductoByid(producto_adicional.nombre).subscribe(response2 => {
           const producto_alerta = {
@@ -106,13 +108,21 @@ agregarProducto() {
           }
           this.openSnackBar(2, producto_alerta)
         })
+        flag_np = false
       }
     })
   ).subscribe(() => {
-    if (flag_stock) {
+    if (flag_np) {
       this.productosfarmacia.venderProducto(producto_adicional).subscribe(respuesta => {
-        // this.productoAgregado.emit('actualizar');
-        // this.dialogRef.close();
+        this.productoAgregado.emit('actualizar');
+        this.dialogRef.close();
+      }, (error)=> {
+        console.log(error);
+      });
+    } else if (flag_stock) {
+      this.productosfarmacia.venderProducto(producto_adicional).subscribe(respuesta => {
+        this.productoAgregado.emit('actualizar');
+        this.dialogRef.close();
       }, (error)=> {
         console.log(error);
       });
@@ -126,14 +136,14 @@ openSnackBar(mensaje, producto) {
       data: { caso: 1, producto: producto },
     });
     snackBarRef.instance.aceptarClicked.subscribe(() => {
-      this.productoAgregado.emit('actualizar');
+      // this.productoAgregado.emit('actualizar');
     });
   } else if (mensaje === 2) { // ALERTA DE BAJO STOCK
     const snackBarRef = this._snackBar.openFromComponent(addProductoAlertaComponent, {
       data: { caso: 2, producto: producto },
     });
     snackBarRef.instance.aceptarClicked.subscribe(() => {
-      this.productoAgregado.emit('actualizar');
+      // this.productoAgregado.emit('actualizar');
     });
   }
 }

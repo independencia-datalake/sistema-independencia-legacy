@@ -29,6 +29,7 @@ export class ListaVentaComponent implements AfterViewInit {
     'idPerson',
     'namePerson',
     'professional',
+    'estado',
     'button',
   ];
   dataSource = new MatTableDataSource<products>();
@@ -75,6 +76,7 @@ export class ListaVentaComponent implements AfterViewInit {
               idPerson: datapersona.numero_identificacion,
               namePerson: datapersona.nombre_completo,
               professional: profesional.username,
+              estado: data[index].estado
             };
           });
 
@@ -100,9 +102,9 @@ export class ListaVentaComponent implements AfterViewInit {
     this.router.navigate(['persona'], {queryParams: {redireccion: 'farmacia'}})
   }
 
-  editarVenta(id_comprobante): void {
+  editarVenta(id_comprobante, estado): void {
     this.router.navigate(['farmacia/comprobanteventa-detail'], {
-      queryParams: { id_comprobante: id_comprobante },
+      queryParams: { id_comprobante: id_comprobante, estado_venta:  estado},
     });
   }
   applyFilter(event: Event) {

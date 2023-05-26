@@ -20,7 +20,7 @@ export class ProductosService {
   // ASOCIADO A PRODUCTOS
   getProductos() {
     return this.http.get(`${this.apiUrl}/farmacia/productofarmacia/`)
-      .pipe(map((response: any) => response.map(item => ({ id: item.id, marca_producto: item.marca_producto, precio: item.precio, dosis: item.dosis, proveedor: item.proveedor, presentacion: item.presentacion, p_a: item.p_a }))));
+      .pipe(map((response: any) => response.map(item => ({ id: item.id, marca_producto: item.marca_producto, precio: item.precio, dosis: item.dosis, proveedor: item.proveedor, presentacion: item.presentacion, p_a: item.p_a, laboratorio: item.laboratorio, cenabast: item.cenabast, bioequivalencia: item.bioequivalencia }))));
   }
 
   getProductoByid(id_producto): Observable<ProductoFarmacia> {
@@ -40,6 +40,10 @@ export class ProductosService {
     return this.http.post<ComprobanteVenta>(`${this.apiUrl}/farmacia/comprobanteventa/`, comprobanteventa)
   }
 
+  getLastComprobante(): Observable<ComprobanteVenta> {
+    return this.http.get<ComprobanteVenta>(`${this.apiUrl}/farmacia/comprobanteventa/ultimo/`)
+  }
+
   getProductosvendidos() {
     return this.http.get<ProductoVendido>(`${this.apiUrl}/farmacia/productovendido/`)
       .pipe(map((response: any) => response.map(item => ({ id: item.id, nombre: item.nombre, cantidad: item.cantidad, precio_venta: item.precio_venta, n_venta: item.n_venta }))));
@@ -56,7 +60,11 @@ export class ProductosService {
 
   getComprobanteventa() {
     return this.http.get<ProductoVendido>(`${this.apiUrl}/farmacia/comprobanteventa/`)
-    .pipe(map((response: any) => response.map(item => ({ id: item.id, created: item.created, comprador: item.comprador, farmaceuta: item.farmaceuta}))));
+    .pipe(map((response: any) => response.map(item => ({ id: item.id, created: item.created, comprador: item.comprador, farmaceuta: item.farmaceuta, estado: item.estado}))));
+  }
+
+  updateComprobanteventa(id_productovendido, producto_nuevo_estado): Observable<any> {
+    return this.http.patch<any>(`${this.apiUrl}/farmacia/comprobanteventa/update/${id_productovendido}/`,producto_nuevo_estado)
   }
 
   deleteComprobanteventa(id_comprobante): Observable<ComprobanteVenta> {

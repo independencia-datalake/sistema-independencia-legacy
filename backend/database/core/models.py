@@ -48,8 +48,8 @@ class Persona(models.Model):
     numero_identificacion = models.CharField(max_length=200, blank=True, verbose_name="Número de Identidad", unique=True)
 
     nombre_persona = models.CharField(max_length=200, verbose_name="Nombre Persona")
-    apellido_paterno = models.CharField(max_length=200, verbose_name="Apellido Paterno")
-    apellido_materno = models.CharField(max_length=200, verbose_name="Apellido Materno")
+    apellido_paterno = models.CharField(max_length=200, verbose_name="Apellido Paterno",null=True, blank=True)
+    apellido_materno = models.CharField(max_length=200, verbose_name="Apellido Materno",null=True, blank=True)
     nombre_completo = models.CharField(max_length=200, verbose_name="Nombre Completo",blank=True, null=True )
     fecha_nacimiento = models.DateField(verbose_name='Fecha de Nacimiento', blank=True, null=True)
     estado_civil = models.CharField(
@@ -62,7 +62,7 @@ class Persona(models.Model):
             ('CASADO/A','Casado/a'),
             ('VIUDO/A','Viudo/a'),
             ('UNION CIVIL','Union Civil'),
-            ('DIVORSIADO/A','Divorsiado/a')
+            ('DIVORCIADO/A','Divorciado/a')
             ),
         verbose_name='Estado Civil'
         )
@@ -208,7 +208,7 @@ class PersonaInfoSalud(models.Model):
             ('ISALUD','Isalud'),
             ('COLMENA','Colmena'),
             ('CONSALUD','Consalud'),
-            ('CRUZBLANCA','Cruz Blanca'),
+            ('CRUZ BLANCA','Cruz Blanca'),
             ('CRUZ DEL NORTE','Cruz del Norte'),
             ('NUEVA MASVIDA', 'Nueva Masvida'),
             ('FUNDACION','Fundacion'),

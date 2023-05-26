@@ -1,9 +1,11 @@
 from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
+from django.db.models import F
 
 from .models import (
     ProductoFarmacia,
     ProductoVendido,
+    ComprobanteVenta,
 )
 from .models import (
     BodegaVirtual,
@@ -30,7 +32,6 @@ def update_bodega_by_mermado(sender, instance, **kwargs):
 @receiver(pre_save, sender=ProductoVendido)
 def update_bodega_by_venta(sender, instance, **kwargs):
     num = ProductoVendido.objects.filter(pk=instance.pk).count()
-    print('pez')
     if num == 0:        
         key = instance.nombre.id
         cantidad_vendida = instance.cantidad
@@ -82,7 +83,20 @@ def update_bodega_by_ingreso(sender, instance, **kwargs):
         prod_farm.precio = precio_venta_ingreso
         prod_farm.save()
 
-
-
-
+@receiver(pre_save, sender=ComprobanteVenta)
+def update_stock(sender, instance, **kwargs):
+    # Se comprueba si la instancia ya existía antes (es decir, si se está editando una instancia existente)
+    if instance.pk is not None:
+        # Se obtiene la instancia original antes de la edición
+        original_instance = sender.objects.get(pk=instance.pk)
+        # Si el estado ha cambiado a 'CANCELADA'
+        if original_instance.estado != instance.estado and instance.estado == 'CANCELADA':
+            # Se obtienen los productos vendidos en el comprobante de venta que se está cancelando
+            productos_vendidos = ProductoVendido.objects.filter(n_venta=instance)
+            for producto_vendido in productos_vendidos:
+                # Se obtiene la instancia correspondiente en BodegaVirtual
+                bodega_virtual = BodegaVirtual.objects.get(nombre=producto_vendido.nombre)
+                # Se incrementa el stock en BodegaVirtual en la cantidad vendida
+                bodega_virtual.stock = F('stock') + producto_vendido.cantidad
+                bodega_virtual.save()
 

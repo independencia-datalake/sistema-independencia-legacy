@@ -1,4 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ViewEncapsulation } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { Router, ActivatedRoute } from '@angular/router';
+import { take, of, forkJoin, switchMap, map } from 'rxjs';
+import { PersonaService } from 'src/app/service/persona.service';
+import { ProductosService } from 'src/app/service/productos.service';
+import { StockService } from 'src/app/service/stock.service';
 
 export interface products {
   brand: string;
@@ -7,25 +14,13 @@ export interface products {
   slack: number;
 }
 
-const PRODUCT_DATA: products[] = [
-  {
-    brand: 'ACERDIL | 20 MG x 30 COMP | LISINOPRIL | Proovedor: None | Lab: ABBOTT',
-    stock: 999,
-    minimunStock: 5,
-    slack: 994,
-  }, {
-    brand: 'ACERDIL | 5 MG x 30 COMP | LISINOPRIL | Proovedor: None | Lab: ABBOTT',
-    stock: 1000,
-    minimunStock: 5,
-    slack: 995,
-  }
-]
 
 
 @Component({
   selector: 'app-informes-stock',
   templateUrl: './informes-stock.component.html',
-  styleUrls: ['./informes-stock.component.css']
+  styleUrls: ['./informes-stock.component.css'],
+  encapsulation: ViewEncapsulation.None,
 })
 
 export class InformesStockComponent {
@@ -33,5 +28,55 @@ export class InformesStockComponent {
     'minimunStock',
     'slack',
     'button'];
-  dataSource = PRODUCT_DATA;
+    dataSource = new MatTableDataSource<products>();
+
+    @ViewChild(MatPaginator) paginator: MatPaginator;
+
+    constructor(
+      private stockService: StockService,
+      private productosService: ProductosService,
+      private personaService: PersonaService,
+      private router: Router,
+    ) {}
+
+    ngOnInit() {
+      this.getData();
+    }
+
+    ngAfterViewInit(): void {
+      this.dataSource.paginator = this.paginator;
+    }
+
+    getData(): void {
+      this.stockService.getBodega().pipe(
+        switchMap((data: any[]) => {
+          if (data.length > 0) {
+            const productRequests = data.map(item => {
+              return this.productosService.getProductoByid(item.id_producto).pipe(
+                map(producto => ({
+                  id: item.id,
+                  stock: item.stock,
+                  stock_min: item.stock_min,
+                  holgura: item.holgura,
+                  brand: `${producto.marca_producto} | ${producto.dosis} x ${producto.presentacion} | ${producto.p_a} | Proveedor: ${producto.proveedor} | Lab: ${producto.laboratorio}`
+                }))
+              );
+            });
+            return forkJoin(productRequests);
+          } else {
+            return of([]);
+          }
+        })
+      ).subscribe((results: any[]) => {
+        this.dataSource.data = results;
+      });
+    }
+
+    editarBodega(id) {
+      console.log(id)
+    }
+    applyFilter(event: Event) {
+      const filterValue = (event.target as HTMLInputElement).value;
+      this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
 }
