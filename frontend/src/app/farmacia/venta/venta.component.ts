@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Inject } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation , Inject } from '@angular/core';
 import { FormGroup, FormControl, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Params } from '@angular/router';
 import { take } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { Observable, Subject } from 'rxjs';
 import { el } from 'date-fns/locale';
 import { HttpClient } from '@angular/common/http';
 import { StockService } from 'src/app/service/stock.service';
-import { MatSnackBar, MAT_SNACK_BAR_DATA, MatSnackBarRef } from '@angular/material/snack-bar';
+import { MatSnackBar, MAT_SNACK_BAR_DATA, MatSnackBarRef  } from '@angular/material/snack-bar';
 import { CommonModule } from '@angular/common';
 import { environment } from 'src/environment/environment';
 import { VentaPendienteDialogComponent } from './venta-pendiente-dialog/venta-pendiente-dialog.component'
@@ -143,6 +143,7 @@ export class VentaComponent implements OnInit {
 
   seleccionarProducto(evento: any, i: number) {
     const nombre = evento.value;
+    // console.log(nombre)
     this.productos.controls[i].get('nombre').setValue(nombre.id);
     this.productos.controls[i].get('precio_venta').setValue(nombre.precio)
   }
@@ -164,8 +165,7 @@ export class VentaComponent implements OnInit {
               cantidad: producto.cantidad
             }
             console.log(producto_alerta)
-            this.openSnackBar(1, producto_alerta);
-          })
+            this.openSnackBar(1,producto_alerta);})
           flag_stock = false
         } else if (cantidad_postventa < response.stock_min) {
           this.productosfarmacia.getProductoByid(producto.nombre).subscribe(response2 => {
@@ -174,8 +174,7 @@ export class VentaComponent implements OnInit {
               stock: response.stock,
               cantidad: producto.cantidad
             }
-            this.openSnackBar(2, producto_alerta);
-          })
+            this.openSnackBar(2,producto_alerta);})
           // this.openSnackBar(2,'algo')
         }
       })
@@ -184,20 +183,21 @@ export class VentaComponent implements OnInit {
     Promise.all(stockPromises).then(() => {
       if (flag_stock) {
         this.productosfarmacia.createComprobanteventa(venta).subscribe(respuesta => {
+                // console.log(respuesta);
+      const n_venta = respuesta.id; // Obtener el número de venta
+      const productos = this.formProductos.value.producto;
+      // Actualizar el número de venta para cada producto
+      for (const producto of productos) {
+        producto.n_venta = n_venta;
+        this.productosfarmacia.venderProducto(producto).subscribe(respuesta => {
           // console.log(respuesta);
-          const n_venta = respuesta.id; // Obtener el número de venta
-          const productos = this.formProductos.value.producto;
-          // Actualizar el número de venta para cada producto
-          for (const producto of productos) {
-            producto.n_venta = n_venta;
-            this.productosfarmacia.venderProducto(producto).subscribe(respuesta => {
-            }, (error) => {
-              console.log(error);
-            });
-          }
-          // Subir los archivos de recetas
-          this.submitFiles(n_venta);
-          this.router.navigate(['farmacia/comprobanteventa-detail'], { queryParams: { id_comprobante: n_venta } })
+        }, (error) => {
+          console.log(error);
+        });
+      }
+      // Subir los archivos de recetas
+      this.submitFiles(n_venta);
+      this.router.navigate(['farmacia/comprobanteventa-detail'], { queryParams: { id_comprobante: n_venta, estado_venta: 'EN PROGRESO' } })
         })
       } else {
       }
@@ -225,13 +225,11 @@ export class VentaComponent implements OnInit {
     this.selectedFiles.splice(index, 1);
     this.selectedFile = null;
   }
-  cl(el) {
-
-  }
 
   submitFiles(n_venta: number) {
     // Itera sobre todos los archivos seleccionados
     this.selectedFiles.forEach((file, index) => {
+      // console.log(file)
       const formData = new FormData();
 
       // Agrega el número de venta al FormData
@@ -239,6 +237,7 @@ export class VentaComponent implements OnInit {
 
       // Agrega el archivo actual a FormData
       formData.append(`receta`, file, file.name);
+      // console.log(formData)
 
       // Realiza una solicitud HTTP POST con FormData
       this.http.post(`${this.apiUrl}/farmacia/recetas/`, formData).subscribe(

@@ -7,7 +7,7 @@ import { UsersService } from './service/users.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit{
   title = 'frontend';
 
   private user: User = {
@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
     'username': 'Esoeratodo',
   }
 
-  constructor(private userService: UsersService) { }
+  constructor(private userService: UsersService) {}
 
   ngOnInit(): void {
 
@@ -26,6 +26,7 @@ export class AppComponent implements OnInit {
     this.userService.getUsers().subscribe(
       (response) => console.table(response),
       (error: any) => console.log(error),
+      () => console.log('Done Users')
     )
   }
 
@@ -33,6 +34,7 @@ export class AppComponent implements OnInit {
     this.userService.getUser().subscribe(
       (response) => console.table(response),
       (error: any) => console.log(error),
+      () => console.log('Done User')
     )
   }
 
@@ -40,6 +42,7 @@ export class AppComponent implements OnInit {
     this.userService.createUser(this.user).subscribe(
       (response) => console.log(response),
       (error: any) => console.log(error),
+      () => console.log('Done create user')
     )
   }
 
@@ -47,6 +50,7 @@ export class AppComponent implements OnInit {
     this.userService.updateUser(this.user).subscribe(
       (response) => console.log(response),
       (error: any) => console.log(error),
+      () => console.log('Done update user')
     )
   }
 
@@ -54,6 +58,7 @@ export class AppComponent implements OnInit {
     this.userService.deleteUser(4).subscribe(
       (response) => console.log(response),
       (error: any) => console.log(error),
+      () => console.log('Delete User')
     )
   }
 

@@ -328,6 +328,7 @@ export class VisComponent {
 
     let densityDataObservable = null;
     if (flag === false) {
+      console.log('huh')
       densityDataObservable = this.empresas.getEmpresasTotalByUV()
     } else {
       // console.log(this.fechaInicioFormateada)
@@ -505,7 +506,7 @@ export class VisComponent {
     }
   }
   setMapType(event) {
-
+    console.log(event);
   }
 
   rangoFechas() {
