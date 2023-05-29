@@ -13,6 +13,13 @@
   --mat-mdc-radio-checked-ripple-color: #fc3d59;
 }
 
+h2 {
+  font-family: 'Mulish', sans-serif !important;
+  font-size: 1.9em !important;
+  font-weight: 900 !important;
+  color: white !important;
+}
+
 .mat-mdc-slide-toggle.mat-accent {
   --mdc-switch-selected-focus-state-layer-color: #90a4ae;
   --mdc-switch-selected-handle-color: #90a4ae;

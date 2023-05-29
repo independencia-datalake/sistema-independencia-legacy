@@ -1,69 +1,74 @@
 .mat-mdc-radio-button.mat-accent {
-    --mdc-radio-disabled-selected-icon-color: #000;
-    --mdc-radio-disabled-unselected-icon-color: #000;
-    --mdc-radio-unselected-focus-icon-color: #212121;
-    --mdc-radio-unselected-hover-icon-color: #212121;
-    --mdc-radio-unselected-icon-color: rgba(0, 0, 0, .54);
-    --mdc-radio-unselected-pressed-icon-color: rgba(0, 0, 0, .54);
-    --mdc-radio-selected-focus-icon-color: #fc3d59;
-    --mdc-radio-selected-hover-icon-color: #fc3d59;
-    --mdc-radio-selected-icon-color: #fc3d59;
-    --mdc-radio-selected-pressed-icon-color: #fc3d59;
-    --mat-mdc-radio-ripple-color: #000;
-    --mat-mdc-radio-checked-ripple-color: #fc3d59;
-  }
-  .mat-mdc-slide-toggle.mat-accent {
-    --mdc-switch-selected-focus-state-layer-color: #90a4ae;
-    --mdc-switch-selected-handle-color: #90a4ae;
-    --mdc-switch-selected-hover-state-layer-color: #90a4ae;
-    --mdc-switch-selected-pressed-state-layer-color: #90a4ae;
-    --mdc-switch-selected-focus-handle-color: #b0bec5;
-    --mdc-switch-selected-hover-handle-color: #b0bec5;
-    --mdc-switch-selected-pressed-handle-color: #b0bec5;
-    --mdc-switch-selected-focus-track-color: #FC3D59;
-    --mdc-switch-selected-hover-track-color: #FC3D59;
-    --mdc-switch-selected-pressed-track-color: #FC3D59;
-    --mdc-switch-selected-track-color: #FC3D59;
+  --mdc-radio-disabled-selected-icon-color: #000;
+  --mdc-radio-disabled-unselected-icon-color: #000;
+  --mdc-radio-unselected-focus-icon-color: #212121;
+  --mdc-radio-unselected-hover-icon-color: #212121;
+  --mdc-radio-unselected-icon-color: rgba(0, 0, 0, .54);
+  --mdc-radio-unselected-pressed-icon-color: rgba(0, 0, 0, .54);
+  --mdc-radio-selected-focus-icon-color: #fc3d59;
+  --mdc-radio-selected-hover-icon-color: #fc3d59;
+  --mdc-radio-selected-icon-color: #fc3d59;
+  --mdc-radio-selected-pressed-icon-color: #fc3d59;
+  --mat-mdc-radio-ripple-color: #000;
+  --mat-mdc-radio-checked-ripple-color: #fc3d59;
+}
+
+.mat-mdc-slide-toggle.mat-accent {
+  --mdc-switch-selected-focus-state-layer-color: #90a4ae;
+  --mdc-switch-selected-handle-color: #90a4ae;
+  --mdc-switch-selected-hover-state-layer-color: #90a4ae;
+  --mdc-switch-selected-pressed-state-layer-color: #90a4ae;
+  --mdc-switch-selected-focus-handle-color: #b0bec5;
+  --mdc-switch-selected-hover-handle-color: #b0bec5;
+  --mdc-switch-selected-pressed-handle-color: #b0bec5;
+  --mdc-switch-selected-focus-track-color: #FC3D59;
+  --mdc-switch-selected-hover-track-color: #FC3D59;
+  --mdc-switch-selected-pressed-track-color: #FC3D59;
+  --mdc-switch-selected-track-color: #FC3D59;
+}
+
+.f-m {
+  font-family: 'Mulish', sans-serif;
 }
 
 
-  .mat-mdc-radio-button .mdc-form-field {
-    color: #000000;
-  }
-
-  label {
-    display: inline-block;
-    margin-bottom: 0rem;
-  }
-
-
-  .mdc-text-field--filled:not(.mdc-text-field--disabled) {
-    background-color: #ffffff;
-  }
-
-  .mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
-    color: #b1b1b1;
+.mat-mdc-radio-button .mdc-form-field {
+  color: #000000;
 }
 
-  .mat-mdc-raised-button.mat-unthemed {
-    --mdc-protected-button-container-color: #fc3d59;
-    --mdc-protected-button-label-text-color: #fff;
-  }
+label {
+  display: inline-block;
+  margin-bottom: 0rem;
+}
 
-  .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
-    color: black;
-  }
 
-  .saltar {
-    text-align: center;
-  }
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: #ffffff;
+}
 
-  .mat-horizontal-stepper-header-container {
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    background-color: #FFF;
-    color: black;
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: #b1b1b1;
+}
+
+.mat-mdc-raised-button.mat-unthemed {
+  --mdc-protected-button-container-color: #fc3d59;
+  --mdc-protected-button-label-text-color: #fff;
+}
+
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
+  color: black;
+}
+
+.saltar {
+  text-align: center;
+}
+
+.mat-horizontal-stepper-header-container {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  background-color: #FFF;
+  color: black;
 }
 
 .mat-step-text-label {
@@ -77,7 +82,9 @@
   color: #fff;
 }
 
-.mat-step-header .mat-step-icon-selected, .mat-step-header .mat-step-icon-state-done, .mat-step-header .mat-step-icon-state-edit {
+.mat-step-header .mat-step-icon-selected,
+.mat-step-header .mat-step-icon-state-done,
+.mat-step-header .mat-step-icon-state-edit {
   background-color: #fc3d59;
   color: #fff;
 }
@@ -116,14 +123,14 @@ t-mdc-slide-toggle {
   margin-right: auto;
   padding-left: 4px;
   padding-right: 0;
-  color:#000;
+  color: #000;
   order: 0;
 }
 
 .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
   padding-top: 16px;
   padding-bottom: 16px;
- background-color:  #f5f5f5;
+  background-color: #f5f5f5;
 }
 
 .mat-mdc-form-field-flex {
@@ -131,7 +138,7 @@ t-mdc-slide-toggle {
   align-items: baseline;
   box-sizing: border-box;
   width: 100%;
-  background-color:  #f5f5f5;
+  background-color: #f5f5f5;
 }
 
 .mat-mdc-slide-toggle.mat-accent {
@@ -139,7 +146,7 @@ t-mdc-slide-toggle {
 }
 
 .siguiente {
-  margin-top: 15px;
+  margin-top: 55px;
 }
 
 .mat-mdc-text-field-wrapper {
@@ -185,6 +192,45 @@ input::placeholder {
 
 }
 
+button.mdc-switch .mdc-switch__handle-track .mdc-switch__handle .mdc-switch__shadow {
+  background-color: rgba(34, 34, 34, 1);
+}
+
+button.mdc-switch:hover .mdc-switch__track::before,
+button.mdc-switch:hover .mdc-switch__track::after {
+  background-color: rgba(34, 34, 34, 0.9);
+}
+
+button.mdc-switch:hover .mdc-switch__handle-track .mdc-switch__handle .mdc-switch__shadow {
+  background-color: rgba(252, 61, 89, 0.3) !important;
+}
+
+button.mdc-switch:hover .mdc-switch__track::before,
+button.mdc-switch:hover .mdc-switch__track::after {
+  background-color: rgba(252, 61, 89, 0.1) !important;
+}
+
+button.mdc-switch.mdc-switch--selected.mdc-switch--checked .mdc-switch__handle-track .mdc-switch__handle .mdc-switch__shadow {
+  background-color: rgba(252, 61, 89, 1) !important;
+}
+
+button.mdc-switch-mdc-switch--selected.mdc-switch--checked .mdc-switch__track::before,
+button.mdc-switch:hover .mdc-switch__track::after {
+  background-color: rgba(252, 61, 89, 0.8) !important;
+}
+
+.mdc-switch__icon.mdc-switch__icon--on {
+  fill: #fefefe !important;
+  transition: fill .2s ease-in-out !important;
+}
+
+.mdc-switch__icon.mdc-switch__icon--off {
+  fill: #FC3D59 !important;
+  transition: fill .2s ease-in-out !important;
+}
+
+
+
 .mdc-menu-surface.mat-mdc-select-panel {
   width: 100%;
   max-height: 275px;
@@ -200,38 +246,51 @@ input::placeholder {
   background-color: white;
   color: black;
 }
+
 .mat-mdc-button:not(:disabled) {
   color: #000;
 }
-.mat-calendar-table-header, .mat-calendar-body-label {
+
+.mat-calendar-table-header,
+.mat-calendar-body-label {
   color: rgba(153, 153, 153, 0.7);
 }
-.mat-datepicker-toggle, .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button {
+
+.mat-datepicker-toggle,
+.mat-datepicker-content .mat-calendar-next-button,
+.mat-datepicker-content .mat-calendar-previous-button {
   color: #000;
 }
-.mat-calendar-body-cell-content, .mat-date-range-input-separator {
+
+.mat-calendar-body-cell-content,
+.mat-date-range-input-separator {
   color: #000;
-  border-color: rgba(0,0,0,0);
+  border-color: rgba(0, 0, 0, 0);
 }
+
 table tr:nth-child(1) td {
   background-color: #fff !important;
   color: #000 !important;
 }
+
 tr:nth-child(odd) td {
   background-color: #ffffff;
   color: #222;
 }
-button.btn:hover, button:hover {
+
+button.btn:hover,
+button:hover {
   background-color: #ffffff;
   border: 1px solid #fff;
 }
+
 .mat-calendar-body-selected {
   background-color: #fc3d59;
   color: #fff;
 }
 
 .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
-    background-color: #fc3d59;
+  background-color: #fc3d59;
 }
 
 .info {
@@ -363,3 +422,33 @@ form {
   color: black;
 }
 
+.margin-t-b-10 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.mat-radio-button-group {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 15px 0 40px 0;
+}
+
+.label-type {
+  font-weight: 900;
+  font-size: 17px;
+  padding-top: 30px;
+}
+
+.mdc-radio {
+  padding-left: 0 !important;
+}
+
+.mdc-form-field {
+  padding-right: 30px !important;
+}
+
+.flex-content-wrap {
+  display: flex;
+  flex-wrap: wrap;
+}

@@ -4,9 +4,10 @@
     <mat-step [stepControl]="formCrearPersona">
       <form [formGroup]="formCrearPersona">
         <ng-template matStepLabel>Informacion Basica</ng-template>
-        <label>Tipo de identificación: </label>
-        <mat-radio-group #idType formControlName="tipo_identificacion" aria-label="Select an option" required>
-        <!-- <mat-radio-group formControlName="tipo_identificacion" aria-label="Select an option" required> -->
+        <label class="margin-t-b-10 f-m label-type">Tipo de identificación: </label>
+        <mat-radio-group class="mat-radio-button-group" #idType formControlName="tipo_identificacion"
+          aria-label="Select an option" required>
+          <!-- <mat-radio-group formControlName="tipo_identificacion" aria-label="Select an option" required> -->
           <div>
             <mat-radio-button value="RUT">Rut</mat-radio-button>
           </div>
@@ -18,74 +19,77 @@
           </div>
         </mat-radio-group>
 
-        <mat-form-field class="info">
-          <mat-label>Nº Identificación</mat-label>
-          <input formControlName="numero_identificacion" matInput placeholder="18.465.635-3" required>
-        </mat-form-field>
+        <div class="lex-content-wrap">
+          <mat-form-field class="info">
+            <mat-label>Nº Identificación</mat-label>
+            <input formControlName="numero_identificacion" matInput placeholder="18.465.635-3" required>
+          </mat-form-field>
 
-        <mat-form-field class="info">
-          <mat-label>Nombre Persona</mat-label>
-          <input formControlName="nombre_persona" matInput placeholder="Octavio" required>
-        </mat-form-field>
+          <mat-form-field class="info">
+            <mat-label>Nombre Persona</mat-label>
+            <input formControlName="nombre_persona" matInput placeholder="Octavio" required>
+          </mat-form-field>
 
-        <mat-form-field class="info">
-          <mat-label>Apellido Paterno</mat-label>
-          <input #idNumberInput formControlName="apellido_paterno" matInput placeholder="Montt">
-        </mat-form-field>
+          <mat-form-field class="info">
+            <mat-label>Apellido Paterno</mat-label>
+            <input #idNumberInput formControlName="apellido_paterno" matInput placeholder="Montt">
+          </mat-form-field>
 
-        <mat-form-field class="info">
-          <mat-label>Apellido Materno</mat-label>
-          <input formControlName="apellido_materno" matInput placeholder="Maray">
-        </mat-form-field>
+          <mat-form-field class="info">
+            <mat-label>Apellido Materno</mat-label>
+            <input formControlName="apellido_materno" matInput placeholder="Maray">
+          </mat-form-field>
 
-        <br>
+          <br>
 
-        <mat-form-field class="info">
-          <mat-label>Nacionalidad</mat-label>
-          <input formControlName="nacionalidad" matInput placeholder="Chileno">
-        </mat-form-field>
+          <mat-form-field class="info">
+            <mat-label>Nacionalidad</mat-label>
+            <input formControlName="nacionalidad" matInput placeholder="Chileno">
+          </mat-form-field>
 
-        <mat-form-field appearance="outline" class="info">
-          <mat-label>Estado</mat-label>
-          <mat-select matNativeControl formControlName="estado_civil">
-            <!-- <mat-option value=""></mat-option> -->
-            <mat-option value="SOLTEO/A'">Soltero/a</mat-option>
-            <mat-option value="CASADO/A">Casado/a</mat-option>
-            <mat-option value="VIUDO/A">Viudo/a</mat-option>
-            <mat-option value="UNION CIVIL">Union Civil</mat-option>
-            <mat-option value="DIVORSIADO/A">Divorsiado/a</mat-option>
-          </mat-select>
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="info">
+            <mat-label>Estado</mat-label>
+            <mat-select matNativeControl formControlName="estado_civil">
+              <!-- <mat-option value=""></mat-option> -->
+              <mat-option value="SOLTEO/A'">Soltero/a</mat-option>
+              <mat-option value="CASADO/A">Casado/a</mat-option>
+              <mat-option value="VIUDO/A">Viudo/a</mat-option>
+              <mat-option value="UNION CIVIL">Union Civil</mat-option>
+              <mat-option value="DIVORSIADO/A">Divorsiado/a</mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <mat-form-field class="info">
-          <mat-label>Hijos</mat-label>
-          <input matInput placeholder="0" formControlName="hijos" type="number" />
-        </mat-form-field>
+          <mat-form-field class="info">
+            <mat-label>Hijos</mat-label>
+            <input matInput placeholder="0" formControlName="hijos" type="number" />
+          </mat-form-field>
 
-        <mat-form-field class="info">
-          <mat-label>Enfermedad</mat-label>
-          <input formControlName="enfermedad" matInput placeholder="">
-        </mat-form-field>
+          <mat-form-field class="info">
+            <mat-label>Enfermedad</mat-label>
+            <input formControlName="enfermedad" matInput placeholder="">
+          </mat-form-field>
 
-        <br>
+          <br>
 
-        <mat-form-field class="info">
-          <mat-label>Medicamento</mat-label>
-          <input formControlName="medicamento" matInput placeholder="">
-        </mat-form-field>
+          <mat-form-field class="info">
+            <mat-label>Medicamento</mat-label>
+            <input formControlName="medicamento" matInput placeholder="">
+          </mat-form-field>
 
-        <mat-form-field class="info">
-          <mat-label>Lugar De Atencion</mat-label>
-          <input formControlName="lugar_de_atencion" matInput placeholder="">
-        </mat-form-field>
+          <mat-form-field class="info">
+            <mat-label>Lugar De Atencion</mat-label>
+            <input formControlName="lugar_de_atencion" matInput placeholder="">
+          </mat-form-field>
 
-        <mat-form-field style="width: 212px;">
-          <mat-label>Fecha de Nacimiento</mat-label>
-          <input matInput [matDatepicker]="picker1" autocomplete="off"
-            formControlName="fecha_nacimiento">
-          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-          <mat-datepicker #picker1 color="primary"></mat-datepicker>
-        </mat-form-field>
+          <mat-form-field style="width: 212px;">
+            <mat-label>Fecha de Nacimiento</mat-label>
+            <input matInput [matDatepicker]="picker1" autocomplete="off" placeholder="and placeholder"
+              formControlName="fecha_nacimiento">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1 color="primary"></mat-datepicker>
+          </mat-form-field>
+
+        </div>
 
         <br>
 
@@ -166,35 +170,35 @@
                   </mat-radio-group>
                 </div>
 
-          <div class="col">
-            <mat-form-field>
-              <mat-label>Telefono secundario</mat-label>
-                <input formControlName="telefono_secundario" matInput placeholder="+569xxxxxxxx" required>
-              </mat-form-field>
-            <label>Tipo Telefono secundario</label>
-          <mat-radio-group formControlName="tipo_telefono_secundario" aria-label="Select an option" required>
-            <div>
-              <mat-radio-button value="MOVIL">Movil</mat-radio-button>
-            </div>
-            <div>
-              <mat-radio-button value="CASA">Casa</mat-radio-button>
-            </div>
-            <div>
-              <mat-radio-button value="TRABAJO">Trabajo</mat-radio-button>
-            </div>
-            <div>
-              <mat-radio-button value="OTRO">Otro</mat-radio-button>
-            </div>
-            <div>
-              <mat-radio-button value="NO APLICA" checked>No Aplica</mat-radio-button>
-            </div>
-          </mat-radio-group>
+                <div class="col">
+                  <mat-form-field>
+                    <mat-label>Telefono secundario</mat-label>
+                    <input formControlName="telefono_secundario" matInput placeholder="+569xxxxxxxx" required>
+                  </mat-form-field>
+                  <label>Tipo Telefono secundario</label>
+                  <mat-radio-group formControlName="tipo_telefono_secundario" aria-label="Select an option" required>
+                    <div>
+                      <mat-radio-button value="MOVIL">Movil</mat-radio-button>
+                    </div>
+                    <div>
+                      <mat-radio-button value="CASA">Casa</mat-radio-button>
+                    </div>
+                    <div>
+                      <mat-radio-button value="TRABAJO">Trabajo</mat-radio-button>
+                    </div>
+                    <div>
+                      <mat-radio-button value="OTRO">Otro</mat-radio-button>
+                    </div>
+                    <div>
+                      <mat-radio-button value="NO APLICA" checked>No Aplica</mat-radio-button>
+                    </div>
+                  </mat-radio-group>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
-      </form>
-    </div>
-  </div>
-</div>
+      </div>
       <div>
         <button mat-raised-button matStepperPrevious>Back</button>
         <button matStepperNext mat-raised-button style="margin: 6px;">Siguente</button>
@@ -296,13 +300,15 @@
                   </div>
                 </div>
                 <div class="file-table-column">
-                  <div class="h-41 w-60 p-10 file-table-row text-center" *ngFor="let file of selectedFiles; let i = index">
+                  <div class="h-41 w-60 p-10 file-table-row text-center"
+                    *ngFor="let file of selectedFiles; let i = index">
                     <mat-icon class="delete-file" (click)="onFileDeleted($event,i)">cancel</mat-icon>
                   </div>
                 </div>
               </div>
               <hr>
-              <button class="rounded-pink-button pl-6" type="button" mat-raised-button (click)="fileInput.click()"><mat-icon>
+              <button class="rounded-pink-button pl-6" type="button" mat-raised-button
+                (click)="fileInput.click()"><mat-icon>
                   attach_file</mat-icon>{{ selectedFiles.length > 0 ? "Agregar otro archivo" : "Selecciona un
                 archivo"}}</button>
               <input hidden (change)="onFileSelected($event)" #fileInput type="file" multiple>
@@ -327,18 +333,21 @@
         <div class="row">
           <div class="col">
             <h2>Info Personal </h2>
-            <p>Nombre: {{ personaResumen.nombre_persona }} {{ personaResumen.apellido_paterno }} {{ personaResumen.apellido_materno }} </p>
-            <p>N° Identificación: {{personaResumen.numero_identificacion}} ({{ personaResumen.tipo_identificacion }})</p>
+            <p>Nombre: {{ personaResumen.nombre_persona }} {{ personaResumen.apellido_paterno }} {{
+              personaResumen.apellido_materno }} </p>
+            <p>N° Identificación: {{personaResumen.numero_identificacion}} ({{ personaResumen.tipo_identificacion }})
+            </p>
             <p>Fecha de nacimiento: {{ personaResumen.fecha_nacimiento }}</p>
 
             <h2>Direccion</h2>
             <p>Calle: {{ direccionResumen.calle }}</p>
             <p>Numeracion: {{ direccionResumen.numero }}</p>
 
-        <h2>Telefono</h2>
-        <p>Telefono principal ({{ telefonoResumen.tipo_telefono }}): {{ telefonoResumen.telefono }}</p>
-        <p *ngIf="telefonoResumen.telefono_secundario">Telefono secundario ({{ telefonoResumen.tipo_telefono_secundario
-          }}): {{ telefonoResumen.telefono_secundario }}</p>
+            <h2>Telefono</h2>
+            <p>Telefono principal ({{ telefonoResumen.tipo_telefono }}): {{ telefonoResumen.telefono }}</p>
+            <p *ngIf="telefonoResumen.telefono_secundario">Telefono secundario ({{
+              telefonoResumen.tipo_telefono_secundario
+              }}): {{ telefonoResumen.telefono_secundario }}</p>
 
           </div>
           <div class="col">
@@ -346,9 +355,11 @@
             <p>mail: {{ correoResumen.correo }}</p>
 
             <h2>Telefono</h2>
-            <p *ngIf="telefonoResumen.telefono !== null">Telefono principal ({{ telefonoResumen.tipo_telefono }}): {{ telefonoResumen.telefono }}</p>
+            <p *ngIf="telefonoResumen.telefono !== null">Telefono principal ({{ telefonoResumen.tipo_telefono }}): {{
+              telefonoResumen.telefono }}</p>
             <p *ngIf="telefonoResumen.telefono === null">Telefono principal: No especificado</p>
-            <p *ngIf="telefonoResumen.telefono_secundario">Telefono secundario ({{ telefonoResumen.tipo_telefono_secundario }}): {{ telefonoResumen.telefono_secundario }}</p>
+            <p *ngIf="telefonoResumen.telefono_secundario">Telefono secundario ({{
+              telefonoResumen.tipo_telefono_secundario }}): {{ telefonoResumen.telefono_secundario }}</p>
 
             <h2>Info Salud</h2>
             <p>Prevision: {{ personainfosaludResumen.prevision }}</p>
