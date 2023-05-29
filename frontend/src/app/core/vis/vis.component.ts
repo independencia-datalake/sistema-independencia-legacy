@@ -505,9 +505,6 @@ export class VisComponent {
       // console.log('Valor del slider máximo:', formattedMaxValue);
     }
   }
-  setMapType(event) {
-    console.log(event);
-  }
 
   rangoFechas() {
     this.empresas.getRangoFechasByTipo(this.columnaResaltada).subscribe(
@@ -547,5 +544,3 @@ function getColorLegend(d, max: number) {
           d >= 0 * max ? '#FDE5ED' :
             '#FFFFFF';
 }
-
-

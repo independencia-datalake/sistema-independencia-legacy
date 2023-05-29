@@ -1,25 +1,19 @@
+
 <form [formGroup]="formProductos">
 
   <ng-container formArrayName="producto">
     <ng-container *ngFor="let productoForm of productos.controls; let i = index" [formGroupName]="i">
-      <div class="producto-form-row close-row">
-        <button class="close-button"> <mat-icon>close</mat-icon> </button>
-      </div>
       <div class="producto-form-row">
-        <h2 class="modal-head">Agregar Producto</h2>
-      </div>
-      <div class="producto-form-row product">
         <mat-form-field class="info">
-          <mat-label class="modal-title">Nombre del producto </mat-label>
-          <mat-select (selectionChange)="seleccionarProducto($event, i)">
-            <mat-option *ngFor="let producto of filteredOptions" [value]="producto">
-              {{ producto.marca_producto }} | {{producto.dosis}} x {{producto.presentacion}} | {{producto.p_a}} |
-              Proveedor: {{producto.proveedor}} | Lab: {{ producto.laboratorio }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+          <mat-label>Nombre del producto </mat-label>
+            <mat-select (selectionChange)="seleccionarProducto($event, i)">
+              <mat-option *ngFor="let producto of filteredOptions" [value]="producto">
+                {{ producto.marca_producto }} | {{producto.dosis}} x {{producto.presentacion}} | {{producto.p_a}} | Proveedor: {{producto.proveedor}} | Lab: {{ producto.laboratorio }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
 
-        <mat-form-field>
+        <mat-form-field >
           <mat-label>Cantidad</mat-label>
           <input type="number" formControlName="cantidad" matInput placeholder="0">
           <span matTextSuffix>unidades</span>
@@ -33,6 +27,5 @@
 
 
 </form>
-<div class="producto-form-row add-row">
-  <button class="agregar-producto rounded-pink-button" (click)="agregarProducto()"> Agregar</button>
-</div>
+
+<button (click)="agregarProducto()"> Add</button>
