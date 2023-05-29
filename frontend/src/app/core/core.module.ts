@@ -12,7 +12,7 @@ import { QnaComponent } from './qna/qna.component';
 import { HomeComponent } from './home/home.component';
 import { PersonaComponent } from './persona/persona.component';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatRadioModule } from '@angular/material/radio';
 
 
@@ -27,18 +27,18 @@ import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import {  MAT_RADIO_DEFAULT_OPTIONS } from '@angular/material/radio';
+import {  MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectModule} from '@angular/material/select';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { InfoComunaComponent } from './info-comuna/info-comuna.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { InfoUvComponent } from './info-uv/info-uv.component'
-import { MatTabsModule } from '@angular/material/tabs';
+import {MatTabsModule} from '@angular/material/tabs';
 import { DialogUVComponent } from './info-uv/dialog-uv/dialog-uv.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { VisComponent } from './vis/vis.component';
@@ -96,7 +96,7 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
     MatIconModule,
   ],
   providers: [
-    { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
+    {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {appearance: 'outline'}},
     {
       provide: MAT_RADIO_DEFAULT_OPTIONS,
       useValue: { color: 'accent' },
