@@ -22,7 +22,7 @@ export class SignupComponent {
   usuario: usuario;
 
 
-  constructor( private usersService: UsersService) {
+  constructor(private usersService: UsersService) {
 
   }
 
@@ -39,13 +39,11 @@ export class SignupComponent {
 
   createUser(usuario): void {
     this.usersService.createUser(usuario).subscribe(response => {
-      console.log(response)
     })
   }
 
   deteleUser(usuario): void {
-    this.usersService.deleteUser(usuario).subscribe(response =>{
-      console.log(response)
+    this.usersService.deleteUser(usuario).subscribe(response => {
     })
   }
 

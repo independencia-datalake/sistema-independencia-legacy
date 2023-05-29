@@ -19,24 +19,22 @@ export class LoginComponent {
   usuario: string;
   contraseña: string;
 
-  constructor( private usersService: UsersService, private authService: AuthService, private _snackBar: MatSnackBar, private router: Router) {
+  constructor(private usersService: UsersService, private authService: AuthService, private _snackBar: MatSnackBar, private router: Router) {
 
   }
 
   onLogin(form: NgForm) {
-    // console.log(form.value)
     // this.usuario = form.value.username
     // this.contraseña = form.value.password
     // this.usuario = 'daniel-datalake'
     // this.contraseña = 'danipa55re'
 
     // this.authService.login(this.usuario, this.contraseña).subscribe(
-      this.authService.login(form.value.usuario, form.value.password).subscribe(
+    this.authService.login(form.value.usuario, form.value.password).subscribe(
       (response) => {
         // Maneja la respuesta de la API de Django
         const token = response.token;
         const access_token = response.access
-        console.log(response.id)
         this.authService.setToken(token);
 
         // console.log('Token guardado:', token);
@@ -45,9 +43,9 @@ export class LoginComponent {
         // console.log(this.authService.getUser(access_token))
         localStorage.setItem('username', response.username)
         this.router.navigate(['/'])
-        .then(() => {
-          window.location.reload();
-        });
+          .then(() => {
+            window.location.reload();
+          });
       },
       (error) => {
         // Maneja el error de la solicitud HTTP
@@ -60,7 +58,7 @@ export class LoginComponent {
 
   getUser(usuario): void {
     this.usersService.getUser2(usuario).subscribe(response => {
-      console.log(response)
+
     })
   }
 
@@ -69,7 +67,6 @@ export class LoginComponent {
       (response) => {
         // Maneja la respuesta de la API de Django
         this.authService.setToken(response.token);
-        console.log('Token:', response.token);
       },
       (error) => {
         // Maneja el error de la solicitud HTTP

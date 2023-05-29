@@ -26,18 +26,17 @@ export class AddRecetaDialogComponent {
 
   addReceta(file, comprobante_venta_id) {
     this.productosService.createReceta(file, comprobante_venta_id).subscribe(
-        (response) => {
-            console.log('Archivo subido con éxito', response);
-            this.recetaCreada.emit('actualizar');
-            this.dialogRef.close();
+      (response) => {
+        this.recetaCreada.emit('actualizar');
+        this.dialogRef.close();
 
-        },
-        (error) => {
-            console.log('Error al subir el archivo', error);
-        }
+      },
+      (error) => {
+        console.log('Error al subir el archivo', error);
+      }
     );
 
-}
+  }
 
   onNoClick(): void {
     this.dialogRef.close();

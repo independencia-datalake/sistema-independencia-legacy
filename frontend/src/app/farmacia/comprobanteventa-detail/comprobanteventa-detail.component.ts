@@ -80,14 +80,14 @@ export class ComprobanteventaDetailComponent {
       })
     });
 
-  this.productosfarmacia.getRecetasPorVenta(this.id_comprobante).subscribe(
-    (response) => {
-      this.recetas = response;
-    },
-    (error) => {
-      // console.log('Error al obtener las recetas por venta', error);
-    }
-  );
+    this.productosfarmacia.getRecetasPorVenta(this.id_comprobante).subscribe(
+      (response) => {
+        this.recetas = response;
+      },
+      (error) => {
+        console.log('Error al obtener las recetas por venta', error);
+      }
+    );
 
   }
 
@@ -118,7 +118,7 @@ export class ComprobanteventaDetailComponent {
   agregarProducto() {
     const dialogRef = this.dialog.open(ComprobanteventaDetailDialogComponent, {
       // width: '100%'
-    data: { id_comprobante: this.id_comprobante}
+      data: { id_comprobante: this.id_comprobante }
     });
 
     dialogRef.componentInstance.productoAgregado.subscribe((result) => {
@@ -131,9 +131,8 @@ export class ComprobanteventaDetailComponent {
   }
 
   editarProducto(producto) {
-    // console.log(producto)
     const dialogRef = this.dialog.open(EditarProductovendidoDialogComponent, {
-      data: { id_comprobante: this.id_comprobante, producto: producto}
+      data: { id_comprobante: this.id_comprobante, producto: producto }
     });
     // Suscribirse al evento recetaCreada
     dialogRef.componentInstance.productoEditado.subscribe((result) => {
@@ -160,10 +159,10 @@ export class ComprobanteventaDetailComponent {
   add_receta() {
     const dialogRef = this.dialog.open(AddRecetaDialogComponent, {
       // width: '100%'
-    data: { id_comprobante: this.id_comprobante}
+      data: { id_comprobante: this.id_comprobante }
     });
 
-  // Suscribirse al evento recetaCreada
+    // Suscribirse al evento recetaCreada
     dialogRef.componentInstance.recetaCreada.subscribe((result) => {
       if (result === 'actualizar') {
         this.ngOnInit()
@@ -182,7 +181,7 @@ export class ComprobanteventaDetailComponent {
     //   }
     // )
     const comprobante_venta = { id: this.id_comprobante, estado: 'CANCELADA' }
-    this.productosfarmacia.updateComprobanteventa(this.id_comprobante, comprobante_venta).subscribe( response => {
+    this.productosfarmacia.updateComprobanteventa(this.id_comprobante, comprobante_venta).subscribe(response => {
       console.log(response)
     }, error => {
       console.log(error)
@@ -214,7 +213,7 @@ export class ComprobanteventaDetailComponent {
 
   finVenta() {
     const comprobante_venta = { id: this.id_comprobante, estado: 'FINALIZADA' }
-    this.productosfarmacia.updateComprobanteventa(this.id_comprobante, comprobante_venta).subscribe( response => {
+    this.productosfarmacia.updateComprobanteventa(this.id_comprobante, comprobante_venta).subscribe(response => {
       console.log(response)
     }, error => {
       console.log(error)
