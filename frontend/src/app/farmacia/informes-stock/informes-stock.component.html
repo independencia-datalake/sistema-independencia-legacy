@@ -1,4 +1,11 @@
 <div class="container">
+  <mat-form-field>
+    <mat-label>Filtrar por Nombre</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Escriba el nombre a buscar">
+  </mat-form-field>
+</div>
+<div class="container">
+  Pink title
 </div>
 <div class="container contenedor-wrap">
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -21,24 +28,26 @@
 
     <ng-container matColumnDef="slack">
       <th mat-header-cell *matHeaderCellDef> Holgura </th>
-      <td mat-cell *matCellDef="let element" [ngClass]="{'low-stock': element.holgura <= 0}">{{element.holgura}}
-        <mat-icon class="warning-icon" *ngIf="element.holgura <= 0">warning</mat-icon></td>
+      <td mat-cell *matCellDef="let element" [ngClass]="{'low-stock': element.holgura <= 0}">{{element.holgura}} <mat-icon class="warning-icon" *ngIf="element.holgura <= 0">warning</mat-icon></td>
     </ng-container>
 
 
     <ng-container matColumnDef='button'>
       <th mat-header-cell *matHeaderCellDef> </th>
       <td mat-cell *matCellDef="let element"> <button (click)="editarBodega(element.id)"
-          class="f-acenter-jarround square-pink-button"><span>editar</span><mat-icon>edit</mat-icon>
+        class="f-acenter-jarround square-pink-button"><span>editar</span><mat-icon>edit</mat-icon>
 
-        </button> </td>
+      </button> </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons aria-label="Select page of periodic elements">
+  <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
   </mat-paginator>
 
 </div>
+
