@@ -1,3 +1,4 @@
+
 import { Component, ViewEncapsulation } from '@angular/core';
 import { Map, tileLayer, polygon, marker } from 'leaflet';
 import * as L from 'leaflet';
@@ -10,16 +11,22 @@ import { EmpresasServiceService } from 'src/app/service/empresas.service.service
 import { ChangeDetectorRef } from '@angular/core';
 import { Options, PointerType } from "@angular-slider/ngx-slider";
 import { of } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 import { MatSelectModule } from '@angular/material/select';
+import { MapaLegacyService } from 'src/app/service/mapa-legacy.service';
 
-
-interface unidad_vecinal {
+interface data_UV {
   nombre: any;
   rank?:any;
   lp?: any; // Last Periodo de tiempo
   densidad: any;
   comercial?: any;
+  // PARA TRANSITO
+  licencia_conducir?: any;
+  permiso_circulacion?: any;
+
 }
+
 
 @Component({
   selector: 'app-vis',
@@ -30,133 +37,354 @@ interface unidad_vecinal {
 
 
 export class VisComponent {
-
+  uvCoordRequest = this.http.get('../../assets/uv_coordenadas.json');
+  geoJsonData: any;
+  tipo_mapa: any = 'ninguna';
   columnaResaltada: string = 'total';
-
-  fechaInicio: Date;
-  fechaInicioFormateada: any;
-  fechaFin: Date;
-  fechaFinFormateada;
-
-  minValue: number= new Date('2020-01-01').getTime();
-  maxValue: number= new Date('2022-12-31').getTime();
-
-  step = (this.maxValue-this.minValue)/100
-  minSliderValue:number= new Date('2020-01-01').getTime();
-  maxSliderValue:number= new Date('2022-12-31').getTime();
-
-  value: number = this.minSliderValue;
-  highValue: number = this.maxSliderValue;
-  options: Options = {
-    floor: this.minSliderValue,
-    ceil: this.maxSliderValue,
-    step: this.step,
-    noSwitching: true,
-    translate: (value: number): string => {
-      return this.formatDate(value)
-    },
-    getPointerColor: (value:number): string => {return '#FC3D59'},
-  };
-
-  result: any[];
   map: Map;
+  label: any;
   geoJsonLayer: L.GeoJSON;
-  densityData: any;
-  densityDataRank; any
-  comercialData: any;
-  empresasData: any[];
-  sumByM: {[key: string]: number} = {};
   public maximo:any;
-
-  infoControl: any;
-  info: L.Control;
-
-  dataTabla: any=[];
 
   legend: L.Control;
 
-  dateFlag: boolean = false;
 
-  unidadesVecinales: unidad_vecinal[] = [];
-  // dataSource = new MatTableDataSource<unidad_vecinal>(this.unidadesVecinales);
-  dataSource = new MatTableDataSource<unidad_vecinal>([...this.unidadesVecinales]);
+  // dataSource = new MatTableDataSource<data_UV>([...this.dataByUV]);
+  dataSource: any[] = [];
+  displayedColumns: string[] = ['nombre', 'total', 'comercial'];
 
-  formatLabel(value: number): string {
-    const texto_label = new Date(value);
-    // return `${texto_label}`;
-    return `${texto_label.getDate()}-${texto_label.getMonth() + 1}-${texto_label.getFullYear()}`;
-  }
+  fechaInicio: any;
+  fechaFin: any;
+
+  // SLIDER
+
+  // HARD CODE
+  slider_value=0
+  slider_highvalue=100
+
+  slider_options: Options = {
+    floor: 0,
+    ceil: 100,
+    noSwitching: true,
+    getPointerColor: (value:number): string => {return '#FC3D59'},
+  };
+
+  dummy_value=0
+  dummy_highvalue=100
+
+  dummy_options: Options = {
+    floor: 0,
+    ceil: 100,
+    noSwitching: true,
+    getPointerColor: (value:number): string => {return '#FC3D59'},
+  };
 
   constructor(private http: HttpClient,
               private empresas: EmpresasServiceService,
+              private mapa_legacy: MapaLegacyService,
               ) {
 
    }
 
 
+   ngOnInit(): void {
+    this.initializeMapData()
+   }
+
+   initializeMapData(fecha_inicio_init = null, fecha_fin_init = null, flag_slider = false) {
+
+    // Si geoJsonLayer y legend ya existen, removerlos del mapa
+    if (this.geoJsonLayer) {
+      this.map.removeLayer(this.geoJsonLayer);
+      this.geoJsonLayer = null;
+    }
+    if (this.legend) {
+      this.legend.remove();
+      this.legend = null;
+    }
+
+    if (this.tipo_mapa === 'ninguna') {
+      this.uvCoordRequest.subscribe(uvCoordData => {
+        const newData: {[key: string]: number} = {};
+        // console.log(uvCoordData)
+        this.maximo = Math.max(...Object.values(newData));
+
+        // Lógica relacionada con uvCoordData
+        this.geoJsonData = {
+          type: 'FeatureCollection',
+          features: Object.keys(uvCoordData).map((key) => {
+            const coords = Object.values(uvCoordData[key]);
+            return {
+              type: 'Feature',
+              properties: {
+                "name": key,
+                "density": 0,
+              },
+              geometry: {
+                type: 'Polygon',
+                coordinates: [coords],
+              },
+            };
+          }),
+        };
+
+        this.geoJsonLayer.addData(this.geoJsonData);
+
+        // this.legend = new L.Control({ position: 'bottomright' });
+
+
+      });
+    } else if (this.tipo_mapa === 'farmacia') {
+      // console.log('farmacia')
+    }else if (this.tipo_mapa === 'impuestosyderechos') {
+      // console.log('impuestos y derechos')
+
+      this.mapa_legacy.getRangoFechasGeneralByTipo(this.tipo_mapa, this.columnaResaltada).pipe(
+        switchMap(fechas => {
+          if (fecha_inicio_init && fecha_fin_init) {
+            this.fechaInicio = fecha_inicio_init
+            this.fechaFin = fecha_fin_init
+          } else {
+            this.fechaInicio = fechas.fecha_inicio
+            this.fechaFin = fechas.fecha_fin
+          }
+          if (flag_slider === true) {
+          } else if (flag_slider === false) {
+            this.initializeSlider(this.fechaInicio,this.fechaFin)
+          }
+
+          return forkJoin([this.mapa_legacy.getEmpresasByUV(this.fechaInicio, this.fechaFin), this.uvCoordRequest]);
+        })
+      ).subscribe(([empresasTotalByUVData, uvCoordData]) => {
+        let densidadPorUV = {};
+        const values = Object.values(empresasTotalByUVData);
+        if (this.columnaResaltada === 'total') {
+          values.forEach(element => {
+            densidadPorUV[element.uv-1] = element.total
+          });
+          let densidades = (empresasTotalByUVData as any[]).map(item => item.total);
+          this.maximo = Math.max(...densidades);
+        } else if (this.columnaResaltada === 'comercial') {
+          values.forEach(element => {
+            densidadPorUV[element.uv-1] = element.comercial
+          });
+          let densidades = (empresasTotalByUVData as any[]).map(item => item.comercial);
+          this.maximo = Math.max(...densidades);
+        } else if (this.columnaResaltada === 'alcohol') {
+          values.forEach(element => {
+            densidadPorUV[element.uv-1] = element.alcohol
+          });
+          let densidades = (empresasTotalByUVData as any[]).map(item => item.alcohol);
+          this.maximo = Math.max(...densidades);
+        }
+        this.dataSource = empresasTotalByUVData.map(item => {
+          return { nombre:'UV-' + (item.uv-1), total: item.total, comercial: item.comercial, alcohol: item.alcohol}
+        })
+
+        // Utilizar los datos al crear geoJsonData
+        this.geoJsonData = {
+          type: 'FeatureCollection',
+          features: Object.keys(uvCoordData).map((key) => {
+            const coords = Object.values(uvCoordData[key]);
+            // La clave de UV se asume que está en formato 'UV-#' y se extrae el número
+            let uvNumber = parseInt(key.split('-')[1]);
+            // Obtener la densidad correspondiente de densidadPorUV, o 0 si no hay datos
+            let densidad = densidadPorUV[uvNumber] || 0;
+            return {
+              type: 'Feature',
+              properties: {
+                "name": key,
+                "density": densidad,
+              },
+              geometry: {
+                type: 'Polygon',
+                coordinates: [coords],
+              },
+            };
+          }),
+        };
+
+        // Luego puedes actualizar la data del layer geoJson con los nuevos datos
+        this.geoJsonLayer.clearLayers();
+        this.geoJsonLayer.addData(this.geoJsonData);
+
+        this.legend = new L.Control({ position: 'bottomright' });
+        this.updateLegend(this.maximo);
+        this.legend.addTo(this.map);
+      })
+
+      this.displayedColumns = ['nombre', 'total', 'comercial', 'alcohol'];
+
+
+    } else if (this.tipo_mapa === 'obrasmunicipales') {
+      this.columnaResaltada = 'total'
+      // this.mapa_legacy.getRangoFechasGeneralByTipo(this.tipo_mapa, this.columnaResaltada).pipe(
+      //   switchMap(fechas => {
+      //     if (fecha_inicio_init && fecha_fin_init) {
+      //       this.fechaInicio = fecha_inicio_init
+      //       this.fechaFin = fecha_fin_init
+      //     } else {
+      //       this.fechaInicio = fechas.fecha_inicio
+      //       this.fechaFin = fechas.fecha_fin
+      //     }
+
+      //     if (flag_slider === true) {
+      //     } else if (flag_slider === false) {
+      //       this.initializeSlider(this.fechaInicio,this.fechaFin)
+      //     }
+
+      //     return forkJoin([this.mapa_legacy.getObrasMunicipalesTotalByUV])
+      //   })
+      // )
+
+
+      const ObrasMunicipalesTotalByUV = this.mapa_legacy.getObrasMunicipalesTotalByUV();
+      forkJoin([ObrasMunicipalesTotalByUV, this.uvCoordRequest]).subscribe(([ObrasMunicipalesTotalByUVData, uvCoordData]) => {
+        let densidadPorUV = {};
+        const values = Object.values(ObrasMunicipalesTotalByUVData);
+        values.forEach(element => {
+          densidadPorUV[element.uv-1] = element.densidad;
+        });
+
+        let densidades = (ObrasMunicipalesTotalByUVData as any[]).map(item => item.densidad);
+        this.maximo = Math.max(...densidades);
+
+        this.dataSource = ObrasMunicipalesTotalByUVData.map(item => {
+          return { nombre:'UV-' + (item.uv-1), total: item.densidad}
+        })
+
+        // Utilizar los datos al crear geoJsonData
+        this.geoJsonData = {
+          type: 'FeatureCollection',
+          features: Object.keys(uvCoordData).map((key) => {
+            const coords = Object.values(uvCoordData[key]);
+            // La clave de UV se asume que está en formato 'UV-#' y se extrae el número
+            let uvNumber = parseInt(key.split('-')[1]);
+            // Obtener la densidad correspondiente de densidadPorUV, o 0 si no hay datos
+            let densidad = densidadPorUV[uvNumber] || 0;
+            return {
+              type: 'Feature',
+              properties: {
+                "name": key,
+                "density": densidad,
+              },
+              geometry: {
+                type: 'Polygon',
+                coordinates: [coords],
+              },
+            };
+          }),
+        };
+        this.geoJsonLayer.clearLayers();
+        this.geoJsonLayer.addData(this.geoJsonData);
+
+        this.legend = new L.Control({ position: 'bottomright' });
+        this.updateLegend(this.maximo);
+        this.legend.addTo(this.map);
+      })
+      this.displayedColumns = ['nombre', 'total'];
+
+    } else if (this.tipo_mapa === 'transito') {
+
+      this.mapa_legacy.getRangoFechasGeneralByTipo(this.tipo_mapa, this.columnaResaltada).pipe(
+        switchMap(fechas => {
+          if (fecha_inicio_init && fecha_fin_init) {
+            this.fechaInicio = fecha_inicio_init
+            this.fechaFin = fecha_fin_init
+          } else {
+            this.fechaInicio = fechas.fecha_inicio
+            this.fechaFin = fechas.fecha_fin
+          }
+
+          if (flag_slider === true) {
+          } else if (flag_slider === false) {
+            this.initializeSlider(this.fechaInicio,this.fechaFin)
+          }
+
+          // this.initializeSlider(this.fechaInicio,this.fechaFin)
+          return forkJoin([this.mapa_legacy.getTransitoByUV(this.fechaInicio,this.fechaFin), this.uvCoordRequest]);
+        })
+      ).subscribe(([licenciasTotalByUVData, uvCoordData]) => {
+        let densidadPorUV = {};
+        const values = Object.values(licenciasTotalByUVData);
+
+        if (this.columnaResaltada === 'licencia conducir') {
+          values.forEach(element => {
+            densidadPorUV[element.uv-1] = element.licencia_conducir;
+          });
+
+          let densidades = (licenciasTotalByUVData as any[]).map(item => item.licencia_conducir);
+          this.maximo = Math.max(...densidades);
+        } else if (this.columnaResaltada === 'permiso circulacion') {
+          values.forEach(element => {
+            densidadPorUV[element.uv-1] = element.permiso_circulacion;
+          });
+
+          let densidades = (licenciasTotalByUVData as any[]).map(item => item.permiso_circulacion);
+          this.maximo = Math.max(...densidades);
+        }
+
+        this.dataSource = licenciasTotalByUVData.map(item => {
+          return { nombre:'UV-' + (item.uv-1), licencia_conducir: item.licencia_conducir, permiso_circulacion: item.permiso_circulacion}
+        })
+
+        // Utilizar los datos al crear geoJsonData
+        this.geoJsonData = {
+          type: 'FeatureCollection',
+          features: Object.keys(uvCoordData).map((key) => {
+            const coords = Object.values(uvCoordData[key]);
+            // La clave de UV se asume que está en formato 'UV-#' y se extrae el número
+            let uvNumber = parseInt(key.split('-')[1]);
+            // Obtener la densidad correspondiente de densidadPorUV, o 0 si no hay datos
+            let densidad = densidadPorUV[uvNumber] || 0;
+            return {
+              type: 'Feature',
+              properties: {
+                "name": key,
+                "density": densidad,
+              },
+              geometry: {
+                type: 'Polygon',
+                coordinates: [coords],
+              },
+            };
+          }),
+        };
+        this.geoJsonLayer.clearLayers();
+        this.geoJsonLayer.addData(this.geoJsonData);
+
+        this.legend = new L.Control({ position: 'bottomright' });
+        this.updateLegend(this.maximo);
+        this.legend.addTo(this.map);
+      })
+      this.displayedColumns = ['nombre', 'licencia conducir', 'permiso circulacion'];
+    }
+
+    if (this.tipo_mapa !== 'ninguna') {
+      this.geoJsonLayer = L.geoJSON(null, {
+        style: this.style,
+        onEachFeature: (feature, layer) => this.onEachFeature(feature, layer)
+      }).addTo(this.map);
+
+    }
+
+
+
+   }
 
   ngAfterViewInit(): void{
 
+
   localStorage.setItem('Columna', 'total')
-  this.rangoFechas()
 
-  let geoJsonData: any;  // Definir la variable fuera del método subscribe
-
-  // Realizar ambas solicitudes HTTP en paralelo y esperar a que ambas se completen
-  // const gslRequest = this.http.get('../../assets/gsl.json');
-  const uvCoordRequest = this.http.get('../../assets/uv_coordenadas.json');
-  const empresasTotalByUVRequest = this.empresas.getEmpresasTotalByUV();
-  const empresasComercialByUV = this.empresas.getEmpresasComercialByUV();
-
-  forkJoin([uvCoordRequest, empresasTotalByUVRequest, empresasComercialByUV]).subscribe(([uvCoordData, empresasTotalByUVData, empresasComercialByUVData]) => {
-    const newData: {[key: string]: number} = {};;
-    const comercialData: {[key: string]: number} = {};;
-    for (const item of this.densityData) {
-      newData[`UV-${item.uv-1}`] = item.densidad;
-    }
-    for (const item of this.comercialData) {
-      comercialData[`UV-${item.uv-1}`] = item.densidad;
-    }
-
-    this.maximo = Math.max(...Object.values(newData))
-    this.densityData = newData
-    for (const [nombre, densidad] of Object.entries(newData)) {
-      this.unidadesVecinales.push({ nombre, densidad });
-    }
-    // this.dataSource.data = this.unidadesVecinales;
-
-    // Lógica relacionada con uvCoordData
-    geoJsonData = {
-      type: 'FeatureCollection',
-      features: Object.keys(uvCoordData).map((key) => {
-        const coords = Object.values(uvCoordData[key]);
-        const density = this.densityData[key] && this.densityData[key];
-        return {
-          type: 'Feature',
-          properties: {
-            "name": key,
-            "density": density,
-          },
-          geometry: {
-            type: 'Polygon',
-            coordinates: [coords],
-          },
-        };
-      }),
+    // this.map = new Map('map').setView([-33.414316, -70.664376], 14); // asignar el valor de la variable map
+    const mapOptions = {
+      dragging: false,     // Deshabilitar el arrastre del mapa
+      zoomControl: false,   // Deshabilitar el control de zoom
+      scrollWheelZoom: false
     };
+    this.map = new Map('map', mapOptions).setView([-33.416793, -70.662822], 14);
 
-    this.geoJsonLayer.addData(geoJsonData);
-
-    this.legend = new L.Control({ position: 'bottomright' });
-
-    this.updateLegend(this.maximo);
-
-    this.legend.addTo(this.map);
-
-
-  });
-
-    this.map = new Map('map').setView([-33.416793, -70.662822], 14); // asignar el valor de la variable map
 
     tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
@@ -165,21 +393,11 @@ export class VisComponent {
       // maxZoom: 14
     }).addTo(this.map); // Usar this.map en lugar de map
 
-    // this.geoJsonLayer = L.geoJSON().addTo(this.map);
-    this.geoJsonLayer = L.geoJSON(null, {
-      style: style,
-      onEachFeature: onEachFeature
-    }).addTo(this.map);
-
-    // const image = '../../../assets/PREDIOS_INDEPENDENCIA.mid.Png';
+    if (this.tipo_mapa === 'ninguna') {
+      this.geoJsonLayer = L.geoJSON(null, {style: {color: '#FC3D59',}}).addTo(this.map);
+    }
     const image = '../../../assets/PREDIOS_INDEPENDENCIA.neo.Png';
-    // const image = '../../../assets/PREDIOS_INDEPENDENCIA.small.Png';
     const imageBounds = L.latLngBounds([[-33.3988667, -70.681777777], [-33.4322444, -70.650155555]]);
-    // const imageBounds = L.latLngBounds([[-33.3988667, -70.68177815372947], [-33.43226186336609, -70.65015499735182]]);
-
-    // L.rectangle(imageBounds).addTo(this.map);
-    // this.map.fitBounds(imageBounds);
-
     const imageOptions = {
       opacity: 0.5,
       zIndex: 1,
@@ -188,365 +406,213 @@ export class VisComponent {
     };
     L.imageOverlay(image, imageBounds, imageOptions).addTo(this.map);
 
-    const getColor = (d, max=this.maximo) => {
+    const info = L.Control.extend({
+      onAdd: function(map) {
+        const div = L.DomUtil.create('div', 'info');
+        div.innerHTML =  '<h4>Mapa de visualizacion de data </h4>' + '<b>Elija un tipo de mapa</b>';
+        // Guardar una referencia al div para actualizarlo más tarde
+        this._div = div;
+        return div;
+      },
+      updateContent: function(content) {
+        this._div.innerHTML = content;
+      }});
 
-    return d >= 0.8 * max ? '#FC3D59' :
-    d >= 0.6 * max ? '#FA527F' :
-    d >= 0.4 * max ? '#F886A8' :
-    d >= 0.2 * max ? '#FBB5C5' :
-    d >= 0   * max ? '#FDE5ED' :
-                     '#FFFFFF';
-}
+    this.label = new info(); // label es la etiqueta de arriba a la derecha del mapa
+    this.label.addTo(this.map);
+  }
 
+  tipoMapaChange(opcion: string) {
+    this.tipo_mapa = opcion
+    if (this.tipo_mapa === 'farmacia') {
 
-    function style(feature) {
-      return {
-          fillColor: getColor(feature.properties.density),
-          weight: 2,
-          opacity: 1,
-          color: 'white',
-          dashArray: '3',
-          fillOpacity: 0.7
-      };
+    } else if(this.tipo_mapa === 'impuestosyderechos') {
+      this.columnaResaltada = 'total'
+      localStorage.setItem('Columna', 'total')
+    } else if (this.tipo_mapa === 'transito') {
+      this.columnaResaltada = 'licencia conducir'
+      localStorage.setItem('Columna', 'licencia conducir')
     }
-function onEachFeature(feature, layer) {
-  layer.on({
-    mouseover: (e:any) => highlightFeature(e, localStorage.getItem('Columna')),
-    mouseout: resetHighlight,
-
-  });
-}
-
-function highlightFeature(e:any, columnita: string) {
-  const layer: GeoJSON = e.target;
-
-  layer.setStyle({
-    weight: 5,
-    color: 'black',
-    dashArray: '',
-    fillOpacity: 0.7
-  });
-
-  if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-    layer.bringToFront();
+    this.initializeMapData()
   }
 
-  // console.log((layer.feature as GeoJSON.Feature).properties);
-  const properties = (layer.feature as GeoJSON.Feature).properties
-  // console.log(properties['density'])
+  fechaChange(flag_slider = false) {
 
-  label.updateContent( '<h4>Patentes de tipo ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
-}
+    let fechaInicioString = this.formatDate(this.fechaInicio);
+    let fechaFinString = this.formatDate(this.fechaFin);
+
+    // console.log(fechaInicioString)
+    // console.log(fechaFinString)
+
+    this.initializeMapData(fechaInicioString, fechaFinString, flag_slider);
 
 
-function resetHighlight(e) {
-  const layer: GeoJSON = e.target;
-  layer.setStyle({
-          weight: 2,
-          opacity: 1,
-          color: 'white',
-          dashArray: '3',
-          fillOpacity: 0.7
-  });
-}
-
-const info = L.Control.extend({
-  onAdd: function(map) {
-    const div = L.DomUtil.create('div', 'info');
-    div.innerHTML =  '<h4>Impuestos y Derechos </h4>' + '<b>Patentes y sus tipos</b>';
-    // Guardar una referencia al div para actualizarlo más tarde
-    this._div = div;
-
-    return div;
-  },
-
-  updateContent: function(newContent) {
-    // Actualizar el contenido del div
-    this._div.innerHTML = newContent;
-  }
-});
-
-const label = new info(); // label es la etiqueta de arriba a la derecha del mapa
-label.addTo(this.map);
   }
 
-  getColor2(d, max) {
-    max = max || this.maximo; // asignar un valor por defecto para max
+  sliderChange(event) {
 
-    return d >= 0.8 * max ? '#FC3D59' :
-    d >= 0.6 * max ? '#FA527F' :
-    d >= 0.4 * max ? '#F886A8' :
-    d >= 0.2 * max ? '#FBB5C5' :
-    d >= 0   * max ? '#FDE5ED' :
-                    '#FFFFFF';
+    if (event.pointerType === PointerType.Min) {
+      // console.log(this.formatDateSlider(event.value, true))
+      this.fechaInicio = this.formatDateSlider(event.value, true)
+    } else if (event.pointerType === PointerType.Max) {
+      // console.log(this.formatDateSlider(event.highValue, true))
+      this.fechaFin = this.formatDateSlider(event.highValue, true)
     }
 
-updateMapData(newData: {[key: string]: number}) {
-  // Calcular el valor máximo en los nuevos datos
-  this.maximo = Math.max(...Object.values(newData));
+    this.fechaChange(true)
+  }
 
-  // Actualizar el contenido de la capa geoJSON
-  this.geoJsonLayer.eachLayer((layer: L.Layer) => {
-    const feature = (layer as L.GeoJSON).feature as GeoJSON.Feature;
-    const key = feature.properties["name"];
-    const density = newData[key] && newData[key];
-    feature.properties["density"] = density;
-    // Actualizar el estilo de la capa
-    (layer as L.GeoJSON).setStyle({
-      fillColor: this.getColor2(density, this.maximo),
+  // FUNCIONES
+
+  style = (feature) => {
+    return {
+      fillColor: this.getColor(feature.properties.density, this.maximo),
       weight: 2,
       opacity: 1,
       color: 'white',
       dashArray: '3',
       fillOpacity: 0.7
+    };
+  }
+
+  getColor = (d, max) => {
+    max = max || this.maximo; // asignar un valor por defecto para max
+
+    return d >= 0.8 * max ? '#FC3D59' :
+      d >= 0.6 * max ? '#FA527F' :
+      d >= 0.4 * max ? '#F886A8' :
+      d >= 0.2 * max ? '#FBB5C5' :
+      d >= 0   * max ? '#FDE5ED' :
+                      '#FFFFFF';
+  }
+
+  onEachFeature(feature, layer) {
+    layer.on({
+      mouseover: (e:any) => this.highlightFeature(e, localStorage.getItem('Columna')),
+      // mouseout: this.resetHighlight,
+      mouseout: (e:any) => this.resetHighlight(e),
+
     });
-  });
-}
-
-
-tablita(flag) {
-
-  // console.log(this.densityData)
-
-  let densityDataObservable = null;
-  let densityDataObservableRank = null;
-  let densityDataObservableRankLP = null;
-  let comercialObservable = null;
-
-  if (flag === false) {
-    densityDataObservable = this.empresas.getEmpresasTotalByUV()
-    // densityDataObservable = this.empresas.getEmpresasTotalByUvFecha(this.formatDatedjango(this.minValue),this.formatDatedjango(this.maxValue));
-    densityDataObservableRank = this.empresas.getEmpresasTotalByUV()
-    densityDataObservableRankLP = this.empresas.getEmpresasTotalByUV()
-    comercialObservable = this.empresas.getEmpresasComercialByUV()
-  } else {
-    console.log(this.fechaInicioFormateada)
-    console.log(this.fechaFinFormateada)
-
-    const fechaFinAnterior = new Date(this.fechaFinFormateada);
-    fechaFinAnterior.setFullYear(fechaFinAnterior.getFullYear() - 1);
-    const fechaInicioUnAnioAntes = fechaFinAnterior.toISOString().split('T')[0];
-    // console.log(this.fechaInicioFormateada)
-    // console.log(this.minValue)
-    // console.log(this.formatDatedjango(this.minValue))
-    densityDataObservable = this.empresas.getEmpresasTotalByUvFecha(this.fechaInicioFormateada, this.fechaFinFormateada)
-    // densityDataObservable = this.empresas.getEmpresasTotalByUvFecha(this.formatDatedjango(this.minValue),this.formatDatedjango(this.maxValue));
-    densityDataObservableRank = this.empresas.getEmpresasTotalByUvFechaRank(this.fechaInicioFormateada, this.fechaFinFormateada)
-    densityDataObservableRankLP = this.empresas.getEmpresasTotalByUvFechaRank(this.fechaInicioFormateada, fechaInicioUnAnioAntes)
-
-    comercialObservable =  this.empresas.getEmpresasByUvFechaTipo(this.fechaInicioFormateada, this.fechaFinFormateada,'comercial')
-
-
   }
 
-  // console.log(this.densityData)
+  highlightFeature(e:any, columnita: string) {
+    const layer: GeoJSON = e.target;
 
-  forkJoin({
-    // comercialData: this.empresas.getEmpresasComercialByUV(),
-    comercialData: comercialObservable,
-    // densityData: this.empresas.getEmpresasTotalByUV(),
-    densityData: densityDataObservable,
-    densityDataRank: densityDataObservableRank,
-    densityDataRankLP: densityDataObservableRankLP
+    layer.setStyle({
+      weight: 5,
+      color: 'black',
+      dashArray: '',
+      fillOpacity: 0.7
+    });
 
-
-  }).subscribe(({ comercialData, densityData, densityDataRank, densityDataRankLP}) => {
-    // this.dataTabla = this.combineData(comercialData, densityData);
-    // console.log(densityData)
-    // console.log(densityDataRank)
-    this.densityData = densityData
-    this.densityDataRank = densityDataRank
-    // console.log(this.densityData)
-    // console.log(this.densityDataRank)
-    // console.log(this.densityData)
-    this.comercialData = comercialData
-
-    this.dataTabla.splice(0, this.dataTabla.length);
-
-    for (let i = 0; i < this.densityData.length; i++) {
-      // this.dataTabla.push({nombre: Object.keys(this.densityData)[i], densidad: Object.values(this.densityData)[i]})
-      this.dataTabla.push({
-        nombre: 'UV-' + (densityData[i].uv-1),
-        rank: [densityDataRank[i].rank,densityDataRank[i].rank-densityDataRankLP[i].rank],
-        lp: densityDataRankLP[i].rank,
-        total: densityData[i].densidad,
-        comercial: comercialData[i].densidad,
-      });
+    if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+      layer.bringToFront();
     }
 
-    this.dataSource.data = this.dataTabla.map(item => ({
-      nombre: item.nombre,
-      rank: item.rank,
-      lp: item.lp,
-      total: item.total,
-      comercial: item.comercial,
-    }));
+    // console.log((layer.feature as GeoJSON.Feature).properties);
+    const properties = (layer.feature as GeoJSON.Feature).properties
+    // console.log(properties['density'])
+    // console.log(properties['name'])
 
-  });
-}
+    //Tipo de label
+    if (this.tipo_mapa === 'farmacia') {
 
-// TABLA
-displayedColumns: string[] = ['nombre', 'rank', 'lp', 'total', 'comercial'];
-display_tabla: any = this.tablita(this.dateFlag);
+    } else if (this.tipo_mapa === 'impuestosyderechos') {
+      this.label.updateContent( '<h4>Patentes de tipo ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+    } else if (this.tipo_mapa === 'obrasmunicipales'){
+      this.label.updateContent( '<h4>Obras Municipales ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+    } else if (this.tipo_mapa ==='transito') {
+    this.label.updateContent( '<h4>'+columnita +  ': </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
 
-updateColumn(columna: string) {
-  if (columna === "total" && this.dateFlag===false) {
-    // console.log(this.densityData)
-    this.updateMapData(this.densityData);
-
-  }else if (columna ==="total" && this.dateFlag===true) {
-    // console.log(this.densityData)
-    const totalData: { [key: string]: number } = {};
-    for (const item of this.densityData) {
-      totalData[`UV-${item.uv - 1}`] = item.densidad;
     }
-    this.updateMapData(totalData);
-  } else if (columna === "comercial") {
-    const comercialData: { [key: string]: number } = {};
-    for (const item of this.comercialData) {
-      comercialData[`UV-${item.uv - 1}`] = item.densidad;
-    }
-    this.updateMapData(comercialData);
-  }
-}
-
-resaltarColumna(columna: string) {
-  // console.log(columna)
-  this.columnaResaltada = columna;
-  localStorage.setItem('Columna',columna)
-  this.updateColumn(columna);
-  // this.updateLegend(1408)
-  this.onMaxValueChanged(this.maximo)
-  this.rangoFechas()
-
-
-
-}
-
-updateLegend(valorMaximo: number): void {
-  this.legend.onAdd = function (map) {
-    var div = L.DomUtil.create('div', 'info legend');
-    const factors = [0, 0.2, 0.4, 0.6, 0.8];
-    var grades = factors.map((factor) => Number((valorMaximo * factor).toFixed(0)));
-    var labels = [];
-
-    for (var i = 0; i < grades.length; i++) {
-      div.innerHTML +=
-        '<i style="background:' + getColorLegend(grades[i] + 1, valorMaximo) + '"></i> ' +
-        grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '&ndash;'+valorMaximo);
-    }
-
-    return div;
-  };
-}
-
-  // Llama a esta función cada vez que el valor máximo cambie
-  onMaxValueChanged(newValue: number): void {
-    this.maximo = newValue;
-    this.legend.remove();
-    this.updateLegend(this.maximo);
-    this.legend.addTo(this.map);
   }
 
-// ASOCIADO A LA FECHA
-buscar() {
-  const fechaInicio = new Date(this.fechaInicio.getTime());
-  const fechaFin = new Date(this.fechaFin.getTime());
-  const fechaInicioF = `${fechaInicio.getFullYear()}-${fechaInicio.getMonth() + 1}-${fechaInicio.getDate()}`;
-  const fechaFinF = `${fechaFin.getFullYear()}-${fechaFin.getMonth() + 1}-${fechaFin.getDate()}`;
-  // Actualizar el rango del slider
-  this.minValue = this.fechaInicio.getTime()
-  this.maxValue = this.fechaFin.getTime();
-
-  this.value = this.fechaInicio.getTime()
-  this.highValue = this.fechaFin.getTime();
-  this.options = {
-    floor: this.minValue,
-    ceil: this.maxValue,
-    step: this.step,
-    noSwitching: true,
-    translate: (value: number): string => {
-      return this.formatDate(value);
-    },
-    getPointerColor: (value: number): string => {
-      return '#FC3D59';
-    },
+  resetHighlight = (e) => {
+    const layer: GeoJSON = e.target;
+    layer.setStyle({
+            weight: 2,
+            opacity: 1,
+            color: 'white',
+            dashArray: '3',
+            fillOpacity: 0.7
+    });
   }
-  // this.options.ceil = this.fechaFin.getTime();
 
-  this.fechaInicioFormateada = fechaInicioF
-  this.fechaFinFormateada = fechaFinF
+  updateLegend(valorMaximo: number): void {
+    const self = this; // Captura `this` en una variable
+    this.legend.onAdd = function (map) {
+      var div = L.DomUtil.create('div', 'info legend');
+      const factors = [0, 0.2, 0.4, 0.6, 0.8];
+      var grades = factors.map((factor) => Number((valorMaximo * factor).toFixed(0)));
+      var labels = [];
 
-  this.dateFlag = true
-  this.tablita(true)
-  this.resaltarColumna(localStorage.getItem('Columna'))
+      for (var i = 0; i < grades.length; i++) {
+        div.innerHTML +=
+          '<i style="background:' + self.getColor(grades[i] + 1, valorMaximo) + '"></i> ' +
+          grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '&ndash;'+valorMaximo);
+      }
 
-}
+      return div;
+    };
+  }
+
+  updateColumna(columna) {
+    this.columnaResaltada = columna
+    localStorage.setItem('Columna', columna)
+    this.initializeMapData()
+  }
+
+  formatDate(dateInput) {
+    if (typeof dateInput === 'string') {
+      // Si ya es una cadena, asumimos que está en el formato correcto
+      return dateInput;
+    } else if (dateInput instanceof Date) {
+      // Si es un objeto Date, convertimos a 'yyyy-mm-dd'
+      return dateInput.toISOString().split('T')[0];
+    } else {
+      // Si no es ninguno de los anteriores, devolvemos null o puedes manejarlo de la manera que prefieras
+      return null;
+    }
+  }
+
+  initializeSlider(fecha_inicio, fecha_fin) {
+    // console.log('inicializando slider')
+
+    let minValue = new Date(fecha_inicio).getTime();
+    let maxValue = new Date(fecha_fin).getTime();
+
+    const yearms = 31536000000
+    const step = yearms
+
+    const minSliderValue= new Date(fecha_inicio).getTime();
+    const maxSliderValue= new Date(fecha_fin).getTime();
+
+    this.slider_value = minSliderValue;
+    this.slider_highvalue= maxSliderValue;
+    this.slider_options = {
+      floor: minSliderValue,
+      ceil: maxSliderValue,
+      step: step,
+      noSwitching: true,
+      translate: (value: number): string => {
+        return this.formatDateSlider(value)
+      },
+      getPointerColor: (value:number): string => {return '#FC3D59'},
+    };
+
+  }
 
   // Función para convertir milisegundos en una cadena de fecha legible
-  formatDate(milliseconds: number): string {
+  formatDateSlider(milliseconds: number, fecha_django = false): string {
     const date = new Date(milliseconds);
-    return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
-  }
-
-  formatDatedjango(milliseconds: number): string {
-    const date = new Date(milliseconds);
-    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-  }
-
-
-  onSliderChange(event) {
-    if (event.pointerType === PointerType.Min) {
-      const minValue = event.value;
-      const formattedMinValue = this.formatDate(minValue);
-      const formattedMinValueDJ = this.formatDatedjango(minValue)
-      this.fechaInicioFormateada = formattedMinValueDJ
-      // console.log(this.fechaInicioFormateada)
-      this.dateFlag = true;
-      this.tablita(true)
-      this.resaltarColumna(localStorage.getItem('Columna'))
-
-      // console.log('Valor del slider mínimo:', formattedMinValue);
-    } else if (event.pointerType === PointerType.Max) {
-      const maxValue = event.highValue;
-      const formattedMaxValue = this.formatDate(maxValue);
-      const formattedMaxValueDJ = this.formatDatedjango(maxValue)
-      this.fechaFinFormateada = formattedMaxValueDJ
-      this.dateFlag = true
-      this.tablita(true)
-      this.resaltarColumna(localStorage.getItem('Columna'))
-      // console.log('Valor del slider máximo:', formattedMaxValue);
+    if (fecha_django === false) {
+      return `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`;
+    } else if (fecha_django === true) {
+      return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    }
+    else {
+      return 'error'
     }
   }
 
-rangoFechas() {
-  this.empresas.getRangoFechasByTipo(this.columnaResaltada).subscribe(
-    (data) => {
-      this.fechaInicio = new Date(data.fecha_inicio)
-      this.fechaFin = new Date(data.fecha_fin)
-
-    },
-    (error) => {
-      // Manejo de errores
-      console.error(error);
-    }
-  );
-  // this.buscar()
-}
-
-selectMapa() {
-  console.log('map')
-}
-
-}
-
-
-function getColorLegend(d, max: number) {
-  max = max || this.maximo; // asignar un valor por defecto para max
-return d >= 0.8 * max ? '#FC3D59' :
-d >= 0.6 * max ? '#FA527F' :
-d >= 0.4 * max ? '#F886A8' :
-d >= 0.2 * max ? '#FBB5C5' :
-d >= 0   * max ? '#FDE5ED' :
-                 '#FFFFFF';
 }

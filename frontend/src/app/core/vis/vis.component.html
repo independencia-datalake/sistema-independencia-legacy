@@ -5,7 +5,7 @@
   <mat-form-field appearance="fill" class="my-datepicker">
     <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio">
     <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
-    <mat-datepicker #pickerInicio></mat-datepicker>
+    <mat-datepicker #pickerInicio color="primary"></mat-datepicker>
   </mat-form-field>
 
   <mat-form-field appearance="fill" class="my-datepicker">
@@ -14,55 +14,36 @@
     <mat-datepicker #pickerFin></mat-datepicker>
   </mat-form-field>
 
-  <button mat-raised-button color="primary" (click)="buscar()">Buscar</button>
+  <button mat-raised-button color="primary" (click)="fechaChange()">Buscar</button>
 
   <mat-form-field style="text-align: right !important">
     <mat-label>Selecciona una opción</mat-label>
-    <mat-select>
-      <mat-option value="opcion1">FARMACIA MUNICIPAL</mat-option>
-      <mat-option value="opcion2">HIGIENE AMBIENTAL - DIMAP</mat-option>
-      <mat-option value="opcion3">SEGURIDAD MUNICIPAL</mat-option>
-      <mat-option value="opcion4">IMPUESTOS Y DERECHOS</mat-option>
-      <mat-option value="opcion5">AYUDA SOCIAL - PANDEMIA</mat-option>
-      <mat-option value="opcion6">EXCENCIÓN BASURA</mat-option>
-      <mat-option value="opcion7">OBRAS MUNICIPALES</mat-option>
-      <mat-option value="opcion8">TRANSITO</mat-option>
+    <mat-select (selectionChange)="tipoMapaChange($event.value)">
+      <mat-option value="farmacia">FARMACIA MUNICIPAL</mat-option>
+      <mat-option value="dimap">HIGIENE AMBIENTAL - DIMAP</mat-option>
+      <mat-option value="seguridad">SEGURIDAD MUNICIPAL</mat-option>
+      <mat-option value="impuestosyderechos">IMPUESTOS Y DERECHOS</mat-option>
+      <mat-option value="ayudasocial">AYUDA SOCIAL - PANDEMIA</mat-option>
+      <mat-option value="excencionbasura">EXCENCIÓN BASURA</mat-option>
+      <mat-option value="obrasmunicipales">OBRAS MUNICIPALES</mat-option>
+      <mat-option value="transito">TRANSITO</mat-option>
     </mat-select>
   </mat-form-field>
-
 <mat-grid-list cols="10" rowHeight="555px">
   <mat-grid-tile [colspan]="6">
     <div id="map"></div>
   </mat-grid-tile>
   <mat-grid-tile [colspan]="4">
-
     <table mat-table [dataSource]="dataSource" class="mi-tabla">
       <!-- Columna de nombre -->
       <ng-container matColumnDef="nombre">
         <th mat-header-cell *matHeaderCellDef>Nombre</th>
         <td mat-cell *matCellDef="let element">{{element.nombre}}</td>
       </ng-container>
-
-      <ng-container matColumnDef="rank">
-        <th mat-header-cell *matHeaderCellDef>Rank</th>
-        <td mat-cell *matCellDef="let element">
-          {{ element.rank[0] }}
-          <mat-icon class="arrow-icon"
-                    [ngClass]="{ 'up-arrow': element.rank[1] < 0, 'down-arrow': element.rank[1] > 0, 'static-arrow': element.rank[1] === 0 }">
-            {{ element.rank[1] < 0 ? 'keyboard_arrow_up' : (element.rank[1] > 0 ? 'keyboard_arrow_down' : 'keyboard_arrow_right') }}
-          </mat-icon>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="lp">
-        <th mat-header-cell *matHeaderCellDef>Last Year</th>
-        <td mat-cell *matCellDef="let element">{{element.lp}}
-      </ng-container>
-
     <!-- Columna de densidad -->
     <ng-container matColumnDef="total">
       <th mat-header-cell *matHeaderCellDef>
-        <span (click)="resaltarColumna('total')" [class.resaltado]="columnaResaltada === 'total'" [class.subrayado]="columnaResaltada === 'total'">total</span>
+        <span (click)="updateColumna('total')" [class.resaltado]="columnaResaltada === 'total'" [class.subrayado]="columnaResaltada === 'total'">total</span>
       </th>
       <td mat-cell *matCellDef="let element" [class.resaltado]="columnaResaltada === 'total'">{{element.total}} </td>
     </ng-container>
@@ -70,19 +51,48 @@
     <!-- Columna de comercial -->
     <ng-container matColumnDef="comercial">
       <th mat-header-cell *matHeaderCellDef>
-        <span (click)="resaltarColumna('comercial')" [class.resaltado]="columnaResaltada === 'comercial'" [class.subrayado]="columnaResaltada === 'comercial'">comercial</span>
+        <span (click)="updateColumna('comercial')" [class.resaltado]="columnaResaltada === 'comercial'" [class.subrayado]="columnaResaltada === 'comercial'">comercial</span>
       </th>
       <td mat-cell *matCellDef="let element" [class.resaltado]="columnaResaltada === 'comercial'">{{element.comercial}}</td>
     </ng-container>
 
+    <!-- Columna de alcohol -->
+    <ng-container matColumnDef="alcohol">
+      <th mat-header-cell *matHeaderCellDef>
+        <span (click)="updateColumna('alcohol')" [class.resaltado]="columnaResaltada === 'alcohol'" [class.subrayado]="columnaResaltada === 'alcohol'">alcohol</span>
+      </th>
+      <td mat-cell *matCellDef="let element" [class.resaltado]="columnaResaltada === 'alcohol'">{{element.alcohol}}</td>
+    </ng-container>
+
+    <!-- Columna licencia conducir-->
+    <ng-container matColumnDef="licencia conducir">
+      <th mat-header-cell *matHeaderCellDef>
+        <span (click)="updateColumna('licencia conducir')" [class.resaltado]="columnaResaltada === 'licencia conducir'" [class.subrayado]="columnaResaltada === 'licencia conducir'">licencia conducir</span>
+      </th>
+      <td mat-cell *matCellDef="let element" [class.resaltado]="columnaResaltada === 'licencia conducir'">{{element.licencia_conducir}}</td>
+    </ng-container>
+
+    <!-- Columna Permiso circulacion-->
+    <ng-container matColumnDef="permiso circulacion">
+      <th mat-header-cell *matHeaderCellDef>
+        <span (click)="updateColumna('permiso circulacion')" [class.resaltado]="columnaResaltada === 'permiso circulacion'" [class.subrayado]="columnaResaltada === 'permiso circulacion'">permiso circulacion</span>
+      </th>
+      <td mat-cell *matCellDef="let element" [class.resaltado]="columnaResaltada === 'permiso circulacion'">{{element.permiso_circulacion}}</td>
+    </ng-container>
+
       <!-- Define las columnas -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns, sticky: true"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
+
   </mat-grid-tile>
 
 </mat-grid-list>
 
-<div class="slider-container">
-  <ngx-slider [(value)]="value" [(highValue)]="highValue" [options]="options" (userChangeEnd)="onSliderChange($event)"></ngx-slider>
+<div class="slider-container" *ngIf="tipo_mapa === 'ninguna'">
+  <ngx-slider [(value)]="dummy_value" [(highValue)]="dummy_highvalue" [options]="dummy_options"></ngx-slider>
+</div>
+
+<div class="slider-container" *ngIf="tipo_mapa !== 'ninguna'">
+  <ngx-slider [(value)]="slider_value" [(highValue)]="slider_highvalue" [options]="slider_options" (userChangeEnd)="sliderChange($event)"></ngx-slider>
 </div>

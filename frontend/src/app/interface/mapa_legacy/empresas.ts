@@ -2,7 +2,7 @@ import { Uv } from "../core/uv"
 
 
 export interface Empresas {
-  map(arg0: ({ uv, count }: { uv: any; count: any; }) => { nombre: string; densidad: any; }): unknown;
+  map(arg0: (item: any) => { nombre: string; total: any; comercial: any; alcohol: any;}): any[];
   uv?: Uv;
   rol?: number;
   razon_social?: string;
