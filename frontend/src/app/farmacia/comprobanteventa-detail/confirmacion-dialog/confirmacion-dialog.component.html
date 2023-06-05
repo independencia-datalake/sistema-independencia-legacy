@@ -1,0 +1,23 @@
+<!-- Caso 1 -->
+<div *ngIf="caso === 1">
+  <h1 mat-dialog-title>¿Quieres eliminar esta venta?</h1>
+  <div mat-dialog-content>
+    <p>¿Estas seguro/a de eliminar esta venta?</p>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="true">Eliminar</button>
+    <button mat-button [mat-dialog-close]="false">Cancelar</button>
+  </div>
+</div>
+
+<!-- Caso 2 -->
+<div *ngIf="caso === 2">
+  <h1 mat-dialog-title>¿Quieres eliminar este producto?</h1>
+  <div mat-dialog-content>
+    <p>¿Estas seguro/a de eliminar este producto de la venta?</p>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="true">Eliminar</button>
+    <button mat-button [mat-dialog-close]="false">Cancelar</button>
+  </div>
+</div>

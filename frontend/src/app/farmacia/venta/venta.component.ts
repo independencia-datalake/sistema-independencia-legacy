@@ -72,7 +72,7 @@ export class VentaComponent implements OnInit {
 
   ngOnInit(): void {
     this.productosfarmacia.getLastComprobante().subscribe(response => {
-      console.log(response)
+      // console.log(response)
       if (response.estado === 'EN PROGRESO') {
         const dialogRef: MatDialogRef<VentaPendienteDialogComponent> = this.dialog.open(VentaPendienteDialogComponent);
 
