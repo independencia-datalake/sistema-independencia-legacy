@@ -68,7 +68,11 @@ export class PersonaComponent implements OnInit {
             this.router.navigate(['farmacia/venta'], { queryParams: { id_persona: result.id } })
           }
           } else {
-
+          localStorage.removeItem('formTelefonoPersona')
+          localStorage.removeItem('formInfoSaludPersona')
+          localStorage.removeItem('formCorreoPersona')
+          localStorage.removeItem('formCrearPersona')
+          localStorage.removeItem('formDireccionPersona')
           this.router.navigate(['persona/crear'], { queryParams: { numero_identificacion: numero_identificacion, tipo: tipo_seleccionado, redireccion: this.redireccion } })
 
         }
@@ -86,7 +90,11 @@ export class PersonaComponent implements OnInit {
           this.router.navigate(['farmacia/venta'], { queryParams: { id_persona: result.id } })
         }
         } else {
-
+        localStorage.removeItem('formTelefonoPersona')
+        localStorage.removeItem('formInfoSaludPersona')
+        localStorage.removeItem('formCorreoPersona')
+        localStorage.removeItem('formCrearPersona')
+        localStorage.removeItem('formDireccionPersona')
         this.router.navigate(['persona/crear'], { queryParams: { numero_identificacion: numero_identificacion, tipo: tipo_seleccionado, redireccion: this.redireccion } })
 
       }

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PersonaService } from 'src/app/service/persona.service';
 import { CallesService } from 'src/app/service/calles.service';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -83,7 +83,11 @@ export class PersonaCrearComponent implements OnInit{
       certificado_compin: false,
       embarazo: false,
       certificado_embarazo: false,
-    })
+    });
+
+    this.formCrearPersona.valueChanges.subscribe(val => {
+      localStorage.setItem('formCrearPersona', JSON.stringify(val))
+    });
 
     this.formDireccionPersona = this.fb.group({
       persona:'',
@@ -92,6 +96,11 @@ export class PersonaCrearComponent implements OnInit{
       complemento_direccion:'',
       uv:1,
     })
+
+    this.formDireccionPersona.valueChanges.subscribe(val => {
+      localStorage.setItem('formDireccionPersona', JSON.stringify(val))
+    })
+
     this.formDireccionPersona.get('calle').valueChanges.subscribe(response => {
       // console.log('data is ', response);
       this.filterData(response);
@@ -101,7 +110,9 @@ export class PersonaCrearComponent implements OnInit{
     this.formCorreoPersona = this.fb.group({
       persona:'',
       correo:null,
-
+    })
+    this.formCorreoPersona.valueChanges.subscribe(val => {
+      localStorage.setItem('formCorreoPersona', JSON.stringify(val))
     })
 
     this.formTelefonoPersona = this.fb.group({
@@ -111,12 +122,18 @@ export class PersonaCrearComponent implements OnInit{
       telefono_secundario:'',
       tipo_telefono_secundario:['NO APLICA']
     })
+    this.formTelefonoPersona.valueChanges.subscribe(val => {
+      localStorage.setItem('formTelefonoPersona', JSON.stringify(val))
+    })
 
     this.formInfoSaludPersona = this.fb.group({
       persona:'',
       prevision:'',
       isapre:'NO APLICA',
       comentarios:'',
+    })
+    this.formInfoSaludPersona.valueChanges.subscribe(val => {
+      localStorage.setItem('formInfoSaludPersona', JSON.stringify(val))
     })
 
     this.formArchivoPersona = this.fb.group({
@@ -126,7 +143,7 @@ export class PersonaCrearComponent implements OnInit{
 
     this.getCalles();
 
-
+    this.loadFormState();
   }
 
   filterData(enterdData){
@@ -301,6 +318,11 @@ export class PersonaCrearComponent implements OnInit{
   this.submitFiles(persona_actual)
 
     // console.log(respuesta)
+  localStorage.removeItem('formCrearPersona');
+  localStorage.removeItem('formDireccionPersona');
+  localStorage.removeItem('formCorreoPersona');
+  localStorage.removeItem('formTelefonoPersona');
+  localStorage.removeItem('formInfoSaludPersona')
 
   if (this.redireccion === 'farmacia') {
     this.router.navigate(['farmacia/venta'], {queryParams: {id_persona: persona_actual}})
@@ -314,6 +336,30 @@ export class PersonaCrearComponent implements OnInit{
 
 //ARCHIVOS
 
+// LOCAL STORAGE DEL FORM
+loadFormState() {
+  const savedFormStatePersona = localStorage.getItem('formCrearPersona');
+  const savedFormStateDireccion = localStorage.getItem('formDireccionPersona');
+  const savedFormStateCorreo = localStorage.getItem('formCorreoPersona');
+  const savedFormStateTelefono = localStorage.getItem('formTelefonoPersona');
+  const saveFormStateInfoSalud = localStorage.getItem('formInfoSaludPersona')
 
+  if (savedFormStatePersona) {
+      this.formCrearPersona.setValue(JSON.parse(savedFormStatePersona));
+  }
+  if (savedFormStateDireccion) {
+    this.formDireccionPersona.setValue(JSON.parse(savedFormStateDireccion));
+  }
+  if (savedFormStateCorreo) {
+    this.formCorreoPersona.setValue(JSON.parse(savedFormStateCorreo))
+  }
+  if (savedFormStateTelefono) {
+    this.formTelefonoPersona.setValue(JSON.parse(savedFormStateTelefono))
+  }
+  if (saveFormStateInfoSalud) {
+    this.formInfoSaludPersona.patchValue(JSON.parse(saveFormStateInfoSalud))
+  }
+
+}
 
 }

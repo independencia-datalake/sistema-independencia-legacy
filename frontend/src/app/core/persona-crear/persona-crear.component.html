@@ -6,7 +6,6 @@
         <ng-template matStepLabel>Informacion Basica</ng-template>
         <label>Tipo de identificación: </label>
         <mat-radio-group #idType formControlName="tipo_identificacion" aria-label="Select an option" required>
-        <!-- <mat-radio-group formControlName="tipo_identificacion" aria-label="Select an option" required> -->
           <div>
             <mat-radio-button value="RUT">Rut</mat-radio-button>
           </div>
@@ -210,7 +209,7 @@
               <label>
                 <h2>Previsión de Salud: </h2>
               </label>
-              <mat-radio-group [(ngModel)]="selectedValue" formControlName="prevision" aria-label="Select an option"
+              <mat-radio-group formControlName="prevision" aria-label="Select an option"
                 required>
                 <div>
                   <mat-radio-button value="FONASA">Fonasa</mat-radio-button>
@@ -226,7 +225,7 @@
                 </div>
               </mat-radio-group>
 
-              <mat-form-field *ngIf="selectedValue ==='ISAPRE' " appearance="outline">
+              <mat-form-field *ngIf="formInfoSaludPersona.controls['prevision'].value ==='ISAPRE'" appearance="outline">
                 <mat-label>Previsión de Salud</mat-label>
                 <mat-select formControlName="isapre">
                   <mat-option value="NO APLICA">No Aplica</mat-option>
