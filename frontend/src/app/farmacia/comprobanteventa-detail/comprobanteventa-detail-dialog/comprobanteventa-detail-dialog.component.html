@@ -1,4 +1,3 @@
-
 <form [formGroup]="formProductos">
 
   <ng-container formArrayName="producto">
@@ -6,14 +5,15 @@
       <div class="producto-form-row">
         <mat-form-field class="info">
           <mat-label>Nombre del producto </mat-label>
-            <mat-select (selectionChange)="seleccionarProducto($event, i)">
-              <mat-option *ngFor="let producto of filteredOptions" [value]="producto">
-                {{ producto.marca_producto }} | {{producto.dosis}} x {{producto.presentacion}} | {{producto.p_a}} | Proveedor: {{producto.proveedor}} | Lab: {{ producto.laboratorio }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
+          <mat-select (selectionChange)="seleccionarProducto($event, i)">
+            <mat-option *ngFor="let producto of filteredOptions" [value]="producto">
+              {{ producto.marca_producto }} | {{producto.dosis}} x {{producto.presentacion}} | {{producto.p_a}} |
+              Proveedor: {{producto.proveedor}} | Lab: {{ producto.laboratorio }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-        <mat-form-field >
+        <mat-form-field>
           <mat-label>Cantidad</mat-label>
           <input type="number" formControlName="cantidad" matInput placeholder="0">
           <span matTextSuffix>unidades</span>
@@ -25,7 +25,9 @@
     </ng-container>
   </ng-container>
 
-
+  <div class="f-acenter-jarround">
+    <button class="f-acenter-jarround rounded-pink-button"
+      (click)="agregarProducto()"><mat-icon>add_shopping_cart</mat-icon><span>Agregar
+        Producto</span></button>
+  </div>
 </form>
-
-<button (click)="agregarProducto()"> Add</button>

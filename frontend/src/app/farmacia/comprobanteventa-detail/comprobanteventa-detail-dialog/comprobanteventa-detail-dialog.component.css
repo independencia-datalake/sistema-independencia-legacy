@@ -1,0 +1,42 @@
+form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-width: 550px;
+    min-height: 400px;
+}
+
+form div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.mat-mdc-form-field {
+    --mat-mdc-form-field-floating-label-scale: 0.75;
+    display: inline-flex;
+    flex-direction: column;
+    min-width: 0;
+    text-align: left;
+    min-width: 300px;
+    max-width: 300px;
+}
+
+.rounded-pink-button {
+    cursor: pointer;
+    background-color: rgb(249, 34, 72);
+    width: 200px;
+    border-radius: 25px;
+    color: #FFF;
+    border: none;
+    padding: 10px;
+    margin: 10px 8px;
+}
+
+.f-acenter-jarround {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}

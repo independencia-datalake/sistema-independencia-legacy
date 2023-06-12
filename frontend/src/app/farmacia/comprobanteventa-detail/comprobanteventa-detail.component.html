@@ -1,12 +1,14 @@
-<div id="printData" >
+<div id="printData">
   <div class="pink-banner container">
     <h1>Resumen de Venta</h1>
     <span class="spacer"></span>
     <div *ngIf="estado_venta === 'EN PROGRESO'">
-      <button class="f-acenter-jarround delete" (click)="eliminarVenta()"><span>Eliminar</span><mat-icon>chevron_right</mat-icon></button>
+      <button class="f-acenter-jarround delete"
+        (click)="eliminarVenta()"><span>Eliminar</span><mat-icon>chevron_right</mat-icon></button>
     </div>
     <div *ngIf="estado_venta === 'CANCELADA'">
-      <button class="f-acenter-jarround delete" (click)="restaurarVenta()"><span>Restaurar Venta</span><mat-icon>chevron_right</mat-icon></button>
+      <button class="f-acenter-jarround delete" (click)="restaurarVenta()"><span>Restaurar
+          Venta</span><mat-icon>chevron_right</mat-icon></button>
     </div>
   </div>
   <div class="container contenedor-wrap flex mg-top-15">
@@ -26,12 +28,14 @@
             <a [href]="receta.receta" target="_blank">Receta N° {{ receta.id }}</a>
           </li>
         </ul>
-        <a *ngIf="estado_venta !== 'CANCELADA'" (click)="add_receta()" style="color: #0000EE; cursor: pointer;">Agregar receta</a>
+        <a *ngIf="estado_venta !== 'CANCELADA'" (click)="add_receta()" style="color: #0000EE; cursor: pointer;">Agregar
+          receta</a>
         <a *ngIf="estado_venta === 'CANCELADA'" style="color: #0000EE;">Agregar receta</a>
       </div>
       <div *ngIf="!recetas || recetas.length === 0">
         <p>No se adjuntaron documentos.</p>
-        <a *ngIf="estado_venta !== 'CANCELADA'" (click)="add_receta()" style="color: #0000EE; cursor: pointer;">Agregar receta</a>
+        <a *ngIf="estado_venta !== 'CANCELADA'" (click)="add_receta()" style="color: #0000EE; cursor: pointer;">Agregar
+          receta</a>
         <a *ngIf="estado_venta === 'CANCELADA'" style="color: #0000EE;">Agregar receta</a>
       </div>
 
@@ -41,7 +45,7 @@
       <div class="flex f-col fs-16 w-100 text-grey"><span class="pink-text-content w-800 fs-12">Fecha de venta:</span>
         {{ fecha_venta }}</div>
       <div class="flex f-col fs-16 w-100 text-grey"><span class="pink-text-content w-800 fs-12">atentido por:</span>
-       {{ profesional }}</div>
+        {{ profesional }}</div>
     </div>
   </div>
   <div class="container mg-top-15">
@@ -69,7 +73,8 @@
 
         <ng-container matColumnDef="edit">
           <th mat-header-cell *matHeaderCellDef> </th>
-          <td mat-cell *matCellDef="let producto"> <span><button [disabled]="estado_venta === 'CANCELADA'" (click)="editarProducto(producto)"
+          <td mat-cell *matCellDef="let producto"> <span><button [disabled]="estado_venta === 'CANCELADA'"
+                (click)="editarProducto(producto)"
                 class="f-acenter-jarround square-pink-button"><span>editar</span><mat-icon>edit</mat-icon>
 
               </button></span> </td>
@@ -78,7 +83,8 @@
         <ng-container matColumnDef='button'>
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let producto">
-            <mat-icon *ngIf="estado_venta !== 'CANCELADA'" class="icon-display" (click)="eliminarProduto(producto)">delete_forever</mat-icon>
+            <mat-icon *ngIf="estado_venta !== 'CANCELADA'" class="icon-display"
+              (click)="eliminarProduto(producto)">delete_forever</mat-icon>
             <mat-icon *ngIf="estado_venta === 'CANCELADA'" class="icon-display">delete_forever</mat-icon>
           </td>
         </ng-container>
@@ -91,17 +97,22 @@
   </div>
   <div class="mg-top-15">
     <div class="mg-top-15 container">
-      <button class="f-acenter-jarround rounded-pink-button" [disabled]="estado_venta === 'CANCELADA'" (click)="agregarProducto()"><span>Agregar
-          Producto</span><mat-icon>add_shopping_cart</mat-icon></button>
+      <button class="f-acenter-jarround rounded-pink-button" [disabled]="estado_venta === 'CANCELADA'"
+        (click)="agregarProducto()"><mat-icon>add_shopping_cart</mat-icon><span>Agregar
+          Producto</span></button>
     </div>
     <div class="mg-top-15 container">
       <div class="flex f-ajcenter fs-20">Usted está por confirmar esta venta</div>
       <div class="flex f-ajcenter">
-        <button class="f-acenter-jarround rounded-pink-button" [disabled]="estado_venta === 'CANCELADA'" (click)="imprimir()"><span>Imprimir
-            Pagina</span><mat-icon>print</mat-icon></button>
-        <button *ngIf="estado_venta !== 'CANCELADA'" class="f-acenter-jarround rounded-pink-button" (click)="finVenta()"><span>Finalizar Venta</span><mat-icon>error</mat-icon></button>
+        <button class="f-acenter-jarround rounded-pink-button" [disabled]="estado_venta === 'CANCELADA'"
+          (click)="imprimir()"><mat-icon>print</mat-icon><span>Imprimir
+            Pagina</span></button>
+        <button *ngIf="estado_venta !== 'CANCELADA'" class="f-acenter-jarround rounded-pink-button"
+          (click)="finVenta()"><mat-icon>error</mat-icon><span>Finalizar Venta</span></button>
         <div *ngIf="estado_venta === 'FINALIZADA' || estado_venta === 'CANCELADA'">
-          <button class="f-acenter-jarround rounded-pink-button" (click)="irAListaVentas()"><span>Ir a lista Ventas</span><mat-icon>chevron_right</mat-icon></button>
+          <button class="f-acenter-jarround rounded-pink-button"
+            (click)="irAListaVentas()"><mat-icon>chevron_right</mat-icon><span>Ir a lista
+              Ventas</span></button>
         </div>
       </div>
 
