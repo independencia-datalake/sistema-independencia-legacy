@@ -65,38 +65,6 @@ mat-slider {
 }
 
 
-.mat-datepicker-content {
-  box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
-  background-color: white;
-  color: black;
-}
-.mat-mdc-button:not(:disabled) {
-  color: #000;
-}
-.mat-calendar-table-header, .mat-calendar-body-label {
-  color: rgba(153, 153, 153, 0.7);
-}
-.mat-datepicker-toggle, .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button {
-  color: #000;
-}
-.mat-calendar-body-cell-content, .mat-date-range-input-separator {
-  color: #000;
-  border-color: rgba(0,0,0,0);
-}
-
-.mat-calendar-body-selected {
-  background-color: #fc3d59;
-  color: #fff;
-}
-
-.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
-    background-color: #fc3d59;
-}
-input::placeholder {
-  color: rgb(132, 132, 132) !important;
-}
-
-
 .resaltado {
   font-weight: bold;
 }
@@ -186,9 +154,48 @@ input::placeholder {
 }
 
 .mat-mdc-text-field-wrapper {
-  background-color: #f5f5f5;
+  background-color: #f5f5f5 !important;
 }
 
 .mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
   color: #000000;
 }
+
+.mdc-menu-surface.mat-mdc-select-panel {
+  width: 100%;
+  max-height: 275px;
+  position: static;
+  outline: 0;
+  margin: 0;
+  padding: 0px 0 !important;
+  list-style-type: none;
+}
+
+.mat-datepicker-content {
+  box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+  background-color: white;
+  color: rgb(248, 248, 248);
+}
+.mat-mdc-button:not(:disabled) {
+  color: #000;
+}
+.mat-calendar-table-header, .mat-calendar-body-label {
+  color: rgba(153, 153, 153, 0.7);
+}
+.mat-datepicker-toggle, .mat-datepicker-content .mat-calendar-next-button, .mat-datepicker-content .mat-calendar-previous-button {
+  color: #000;
+}
+.mat-calendar-body-cell-content, .mat-date-range-input-separator {
+  color: #000;
+  border-color: rgba(0,0,0,0);
+}
+.mat-calendar-body-selected {
+  background-color: #fc3d59;
+  color: #fff;
+}
+
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    background-color: #fc3d59;
+}
+
+

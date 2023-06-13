@@ -67,12 +67,11 @@ export class AuthService {
   async isAuthenticated(): Promise<boolean> {
     const token_check = localStorage.getItem('token');
     const user_exist = await this.checkUserProfile(token_check)
-
     // Validacion feacha vencimiento token
     const exp_date = this.getExpirationDate(token_check)
     const ahora = new Date().getTime(); // Obtiene la fecha actual en formato epoch
     const fechaExpiracion = new Date(exp_date).getTime(); // convierte la fecha de expiración a formato epoch
-    if (fechaExpiracion > ahora) {
+    if (fechaExpiracion*1000 < ahora) { //1000 es para pasar de segundos a milisegundos en formato epoch
       // console.log('El token ha expirado'); // el token ha expirado
       // localStorage.removeItem('token');
       localStorage.removeItem('username')

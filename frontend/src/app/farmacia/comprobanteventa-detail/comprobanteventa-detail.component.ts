@@ -8,6 +8,8 @@ import { ComprobanteventaDetailDialogComponent } from './comprobanteventa-detail
 import { AddRecetaDialogComponent } from './add-receta-dialog/add-receta-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
 import { EditarProductovendidoDialogComponent } from './editar-productovendido-dialog/editar-productovendido-dialog.component';
+import { AuthService } from 'src/app/service/auth.service';
+import { ConfirmacionDialogComponent } from './confirmacion-dialog/confirmacion-dialog.component';
 
 @Component({
   selector: 'app-comprobanteventa-detail',
@@ -22,6 +24,7 @@ export class ComprobanteventaDetailComponent {
 
   id_comprobante = Number(this.route.snapshot.queryParamMap.get('id_comprobante'));
   estado_venta = this.route.snapshot.queryParamMap.get('estado_venta');
+  permiso_farmaceuta: boolean;
   productos: any[];
   productosFiltrados: any[];
   comprobante: any;
@@ -37,6 +40,7 @@ export class ComprobanteventaDetailComponent {
 
   constructor(
     private route: ActivatedRoute,
+    private authService: AuthService,
     private productosfarmacia: ProductosService,
     private personaService: PersonaService,
     private userService: UsersService,
@@ -44,7 +48,13 @@ export class ComprobanteventaDetailComponent {
     private router: Router,) { }
 
   ngOnInit() {
-    console.log(this.estado_venta)
+    // console.log(this.estado_venta)
+    const grupos = this.authService.getGrupos(localStorage.getItem('token'))
+    if (grupos.includes('Farmacia-Farmaceuta')) {
+      this.permiso_farmaceuta = true
+    } else {
+      this.permiso_farmaceuta = false
+    }
 
     this.filtroProductos().subscribe((productosFiltrados: any[]) => {
       this.productos = productosFiltrados;
@@ -143,17 +153,27 @@ export class ComprobanteventaDetailComponent {
     });
   }
 
-  eliminarProduto(producto) {
+  eliminarProducto(producto) {
     // console.log(producto.id)
-    this.productosfarmacia.deleteProductoVendido(producto.id).subscribe(
-      data => {
-        // window.location.reload();
-        this.ngOnInit()
-      },
-      error => {
-        console.log(error)
+
+    const dialogRef = this.dialog.open(ConfirmacionDialogComponent, {
+      data: {caso: 2}
+    })
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        this.productosfarmacia.deleteProductoVendido(producto.id).subscribe(
+          data => {
+            // window.location.reload();
+            this.ngOnInit()
+          },
+          error => {
+            console.log(error)
+          }
+        )
+      } else {
+        // console.log('Se eligio no eliminar')
       }
-    )
+    })
 
   }
 
@@ -181,14 +201,23 @@ export class ComprobanteventaDetailComponent {
     //     console.log(error)
     //   }
     // )
-    const comprobante_venta = { id: this.id_comprobante, estado: 'CANCELADA' }
-    this.productosfarmacia.updateComprobanteventa(this.id_comprobante, comprobante_venta).subscribe( response => {
-      console.log(response)
-    }, error => {
-      console.log(error)
-    })
-    this.router.navigate(['farmacia/lista-venta'])
 
+    const dialogRef = this.dialog.open(ConfirmacionDialogComponent, {
+      data: {caso: 1}
+    })
+    dialogRef.afterClosed().subscribe(result => {
+      if(result) {
+        const comprobante_venta = { id: this.id_comprobante, estado: 'CANCELADA' }
+        this.productosfarmacia.updateComprobanteventa(this.id_comprobante, comprobante_venta).subscribe( response => {
+          console.log(response)
+        }, error => {
+          console.log(error)
+        })
+        this.router.navigate(['farmacia/lista-venta'])
+      } else {
+        // console.log('Se eligio no eliminar')
+      }
+    })
   }
 
   restaurarVenta() {

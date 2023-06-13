@@ -48,9 +48,15 @@ export class CrearProductoComponent {
       laboratorio: '',
       autor: this.authService.getUserId(localStorage.getItem('token')),
     })
-
     this.formCrearProducto.addControl('stock_minimo', new FormControl(''));
+
+    this.formCrearProducto.valueChanges.subscribe(val => {
+      localStorage.setItem('formCrearProducto', JSON.stringify(val))
+    })
+
+    this.loadFormState();
   }
+
 
   createProducto() {
     let producto = this.formCrearProducto.value;
@@ -71,6 +77,7 @@ export class CrearProductoComponent {
       console.log(error);
     });
     this.openSnackBar(producto)
+    localStorage.removeItem('formCrearProducto')
     this.router.navigate(['stock'])
   }
 
@@ -79,5 +86,13 @@ export class CrearProductoComponent {
       duration: 5000,
       panelClass: ['multiline-snackbar']
     });
+  }
+
+  loadFormState() {
+    const savedFormStateCrearProducto = localStorage.getItem('formCrearProducto');
+
+    if (savedFormStateCrearProducto) {
+      this.formCrearProducto.setValue(JSON.parse(savedFormStateCrearProducto))
+    }
   }
 }
