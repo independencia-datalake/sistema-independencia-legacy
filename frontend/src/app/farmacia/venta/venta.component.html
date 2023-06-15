@@ -1,38 +1,38 @@
 <div class="container contenedor-wrap">
   <div class="container contenidos-comprobante-venta">
-      <div class="row">
-          <div class="col">
-              <!-- <h2 *ngIf="persona.nombre_persona"> Nombre <span class="magenta"> {{ persona.nombre_persona }} </span></h2> -->
-              <h2 *ngIf="persona"> Nombre <span class="magenta"> {{ persona.nombre_completo }} </span></h2>
-              <h4 class="magenta">Nº de Identificación:</h4>
-              <p *ngIf="persona">{{ persona.numero_identificacion }}</p>
-              <h4 class="magenta">Nº de Teléfono</h4>
-              <p *ngIf="telefono">{{ telefono.telefono }} ({{ telefono.tipo_telefono }})</p>
-              <h4 class="magenta" *ngIf="telefono"> N° de Teléfono Secundario</h4>
-              <p *ngIf="flag_telefono">{{ telefono.telefono_secundario }} ({{ telefono.tipo_telefono_secundario }})</p>
-              <h4 class="magenta">Correo:</h4>
-              <p *ngIf="correo">{{ correo.correo }}</p>
-          </div>
-          <div class="col">
-              <h2> UV: <span class="magenta" *ngIf="direccion"> {{ (direccion.uv - 1) }} </span></h2>
-              <h4 class="magenta">Fecha de nacimiento:</h4>
-              <p *ngIf="persona">{{ persona.fecha_nacimiento }}</p>
-              <h4 class="magenta">Dirección:</h4>
-              <p *ngIf="direccion"> {{ direccion.calle }}, {{ direccion.numero }}</p>
-          </div>
-          <div class="col">
-              <h2>Antecedentes de Salud</h2>
-              <h4 class="magenta">Prevision</h4>
-              <p *ngIf="infosalud">{{ infosalud.prevision }}</p>
-              <h4 class="magenta">Isapre</h4>
-              <p *ngIf="infosalud">{{ infosalud.isapre }}</p>
-              <h4 class="magenta">Observaciones</h4>
-              <p *ngIf="infosalud">{{ infosalud.comentarios }}</p>
+    <div class="row">
+      <div class="col">
+        <!-- <h2 *ngIf="persona.nombre_persona"> Nombre <span class="magenta"> {{ persona.nombre_persona }} </span></h2> -->
+        <h2 *ngIf="persona"> Nombre <span class="magenta"> {{ persona.nombre_completo }} </span></h2>
+        <h4 class="magenta">Nº de Identificación:</h4>
+        <p *ngIf="persona">{{ persona.numero_identificacion }}</p>
+        <h4 class="magenta">Nº de Teléfono</h4>
+        <p *ngIf="telefono">{{ telefono.telefono }} ({{ telefono.tipo_telefono }})</p>
+        <h4 class="magenta" *ngIf="telefono"> N° de Teléfono Secundario</h4>
+        <p *ngIf="flag_telefono">{{ telefono.telefono_secundario }} ({{ telefono.tipo_telefono_secundario }})</p>
+        <h4 class="magenta">Correo:</h4>
+        <p *ngIf="correo">{{ correo.correo }}</p>
+      </div>
+      <div class="col">
+        <h2> UV: <span class="magenta" *ngIf="direccion"> {{ (direccion.uv - 1) }} </span></h2>
+        <h4 class="magenta">Fecha de nacimiento:</h4>
+        <p *ngIf="persona">{{ persona.fecha_nacimiento }}</p>
+        <h4 class="magenta">Dirección:</h4>
+        <p *ngIf="direccion"> {{ direccion.calle }}, {{ direccion.numero }}</p>
+      </div>
+      <div class="col">
+        <h2>Antecedentes de Salud</h2>
+        <h4 class="magenta">Prevision</h4>
+        <p *ngIf="infosalud">{{ infosalud.prevision }}</p>
+        <h4 class="magenta">Isapre</h4>
+        <p *ngIf="infosalud">{{ infosalud.isapre }}</p>
+        <h4 class="magenta">Observaciones</h4>
+        <p *ngIf="infosalud">{{ infosalud.comentarios }}</p>
 
-          </div>
       </div>
     </div>
   </div>
+</div>
 
 <hr>
 
@@ -107,7 +107,8 @@
               <mat-label>Nombre del producto </mat-label>
               <mat-select (selectionChange)="seleccionarProducto($event, i)">
                 <mat-option *ngFor="let producto of filteredOptions" [value]="producto">
-                  {{ producto.marca_producto }} | {{producto.dosis}} x {{producto.presentacion}} | {{producto.p_a}} | Proveedor: {{producto.proveedor}} | Lab: {{ producto.laboratorio }}
+                  {{ producto.marca_producto }} | {{producto.dosis}} x {{producto.presentacion}} | {{producto.p_a}} |
+                  Proveedor: {{producto.proveedor}} | Lab: {{ producto.laboratorio }}
                 </mat-option>
               </mat-select>
             </mat-form-field>

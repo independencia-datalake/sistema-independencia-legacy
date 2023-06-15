@@ -1,12 +1,18 @@
-<div class="container">
-  <mat-form-field>
-    <mat-label>Filtrar por Nombre</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Escriba el nombre a buscar">
-  </mat-form-field>
-  <button class="f-acenter-jarround delete" (click)="nuevoProducto()"><span>Nueva Venta</span><mat-icon>chevron_right</mat-icon></button>
+<div class="pink-banner container">
+  <h1>Lista de Productos</h1>
+  <span class="spacer"></span>
+  <div>
+    <button class="f-acenter-jarround delete" (click)="nuevoProducto()"><span>Nuevo
+        Producto</span><mat-icon>chevron_right</mat-icon></button>
+  </div>
 </div>
 <div class="container">
-  Pink title container
+  <div>
+    <!-- <mat-form-field>
+      <mat-label>Filtrar por Nombre</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Escriba el nombre a buscar">
+    </mat-form-field> -->
+  </div>
 </div>
 <div class="container contenedor-wrap">
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -43,12 +49,14 @@
 
     <ng-container matColumnDef="cenabast">
       <th mat-header-cell *matHeaderCellDef> Cenabast </th>
-      <td mat-cell *matCellDef="let element"> {{ element.cenabast ? 'SI' : element.cenabast === false ? 'NO' : '' }} </td>
+      <td mat-cell *matCellDef="let element"> {{ element.cenabast ? 'SI' : element.cenabast === false ? 'NO' : '' }}
+      </td>
     </ng-container>
 
     <ng-container matColumnDef="bioequivalent">
       <th mat-header-cell *matHeaderCellDef> Bioequivalencia </th>
-      <td mat-cell *matCellDef="let element"> {{ element.bioequivalencia ? 'SI' : element.bioequivalencia === false ? 'NO' : '' }} </td>
+      <td mat-cell *matCellDef="let element"> {{ element.bioequivalencia ? 'SI' : element.bioequivalencia === false ?
+        'NO' : '' }} </td>
     </ng-container>
 
     <ng-container matColumnDef="laboratory">
@@ -59,18 +67,16 @@
     <ng-container matColumnDef='button'>
       <th mat-header-cell *matHeaderCellDef> </th>
       <td mat-cell *matCellDef="let element"> <button (click)="editarProducto(element.id)"
-        class="f-acenter-jarround square-pink-button"><span>editar</span><mat-icon>edit</mat-icon>
+          class="f-acenter-jarround square-pink-button"><span>editar</span><mat-icon>edit</mat-icon>
 
-      </button> </td>
+        </button> </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]"
-                 showFirstLastButtons
-                 aria-label="Select page of periodic elements">
+  <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons aria-label="Select page of periodic elements">
   </mat-paginator>
 
 </div>
