@@ -268,10 +268,6 @@ button:hover {
   background-color: #fc3d59;
 }
 
-/* .info {
-  margin-right: 15px;
-} */
-
 .subtitulo {
   padding: 20px;
   background-color: #FC3D59;
@@ -286,6 +282,10 @@ button:hover {
 
 .subtitulo h2 {
   margin: 0;
+  font-family: 'Mulish', sans-serif !important;
+  color: #fff !important;
+  font-weight: 900 !important;
+  font-size: 1.5rem;
 }
 
 .container form {
