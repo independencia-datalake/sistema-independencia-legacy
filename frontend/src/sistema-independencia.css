@@ -1046,8 +1046,7 @@ button {
 }
 
 button:focus {
-	outline: 1px dotted;
-	outline: 5px auto -webkit-focus-ring-color
+	outline: none;
 }
 
 button,
@@ -10725,5 +10724,28 @@ a.text-dark:hover {
 		border: 1px solid #ddd !important
 	}
 }
+
+.mat-mdc-option:hover:not(.mdc-list-item--disabled) .mat-mdc-option-ripple,
+.mat-mdc-option:focus:not(.mdc-list-item--disabled) .mat-mdc-option-ripple,
+.mat-mdc-option.mat-mdc-option-active .mat-mdc-option-ripple,
+.mat-mdc-option.mdc-list-item--selected:not(.mat-mdc-option-multiple):not(.mdc-list-item--disabled) .mat-mdc-option-ripple {
+	background: transparent;
+}
+
+.mat-mdc-option:hover:not(.mdc-list-item--disabled),
+.mat-mdc-option:focus:not(.mdc-list-item--disabled),
+.mat-mdc-option.mat-mdc-option-active,
+.mat-mdc-option.mdc-list-item--selected:not(.mat-mdc-option-multiple):not(.mdc-list-item--disabled) {
+	background: rgb(245, 245, 235);
+}
+
+.mat-mdc-option:hover:not(.mdc-list-item--disabled) .mdc-list-item__primary-text,
+.mat-mdc-option:focus:not(.mdc-list-item--disabled) .mdc-list-item__primary-text,
+.mat-mdc-option.mat-mdc-option-active .mdc-list-item__primary-text,
+.mat-mdc-option.mdc-list-item--selected:not(.mat-mdc-option-multiple):not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+	color: #040505;
+	font-weight: 700;
+}
+
 
 /*# sourceMappingURL=bootstrap.min.css.map */

@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
+// ES2015 Modules
+import { validate, clean, format, getCheckDigit } from 'rut.js'
 import { PersonaService } from 'src/app/service/persona.service';
 import { take } from 'rxjs/operators';
 import { ActivatedRoute, Params } from '@angular/router';
@@ -19,6 +21,7 @@ export class PersonaComponent implements OnInit {
   }
 
   idNumber: string;
+  idNum: any;
 
   formCheckPersona: FormGroup;
 
@@ -33,6 +36,8 @@ export class PersonaComponent implements OnInit {
     'Pasaporte',
     'Otro'
   ]
+
+  selectedType: string = ''
 
   constructor(private fb: FormBuilder, private personaService: PersonaService, private router: Router, private route: ActivatedRoute) { }
 
@@ -49,14 +54,19 @@ export class PersonaComponent implements OnInit {
 
   focusOnInput(e: any, next: any) {
     next.focus()
+    this.selectedType = e.value;
+    console.log(e)
+  }
+  formatRut(value) {
+    this.idNum = this.selectedType == 'RUT' ? format(value) : value;
   }
 
   onCheckPersona(): void {
     let flag_rut = false;
     this.loading = true;
-    const numero_identificacion = this.formCheckPersona.value.numero_identificacion;
     const tipo_seleccionado = this.formCheckPersona.value.tipo;
-    if (tipo_seleccionado==='RUT') {
+    const numero_identificacion = tipo_seleccionado === 'RUT' ? format(this.formCheckPersona.value.numero_identificacion) : this.formCheckPersona.value.numero_identificacion;
+    if (tipo_seleccionado === 'RUT') {
       flag_rut = true;
       try {
         // this.focusOnID();
@@ -67,7 +77,7 @@ export class PersonaComponent implements OnInit {
           if (this.redireccion === 'farmacia') {
             this.router.navigate(['farmacia/venta'], { queryParams: { id_persona: result.id } })
           }
-          } else {
+        } else {
           localStorage.removeItem('formTelefonoPersona')
           localStorage.removeItem('formInfoSaludPersona')
           localStorage.removeItem('formCorreoPersona')
@@ -80,38 +90,40 @@ export class PersonaComponent implements OnInit {
         console.log(err)
       }
     }
-    if (flag_rut === false) {try {
-      // this.focusOnID();
-      const result = this.personas.find(item => item.numero_identificacion === numero_identificacion)
-      if (typeof result != "undefined") {
-        this.success = true
-        // console.log(result.id)
-        if (this.redireccion === 'farmacia') {
-          this.router.navigate(['farmacia/venta'], { queryParams: { id_persona: result.id } })
-        }
+    if (flag_rut === false) {
+      try {
+        // this.focusOnID();
+        const result = this.personas.find(item => item.numero_identificacion === numero_identificacion)
+        if (typeof result != "undefined") {
+          this.success = true
+          // console.log(result.id)
+          if (this.redireccion === 'farmacia') {
+            this.router.navigate(['farmacia/venta'], { queryParams: { id_persona: result.id } })
+          }
         } else {
-        localStorage.removeItem('formTelefonoPersona')
-        localStorage.removeItem('formInfoSaludPersona')
-        localStorage.removeItem('formCorreoPersona')
-        localStorage.removeItem('formCrearPersona')
-        localStorage.removeItem('formDireccionPersona')
-        this.router.navigate(['persona/crear'], { queryParams: { numero_identificacion: numero_identificacion, tipo: tipo_seleccionado, redireccion: this.redireccion } })
+          localStorage.removeItem('formTelefonoPersona')
+          localStorage.removeItem('formInfoSaludPersona')
+          localStorage.removeItem('formCorreoPersona')
+          localStorage.removeItem('formCrearPersona')
+          localStorage.removeItem('formDireccionPersona')
+          this.router.navigate(['persona/crear'], { queryParams: { numero_identificacion: numero_identificacion, tipo: tipo_seleccionado, redireccion: this.redireccion } })
 
+        }
+      } catch (err) {
+        console.log(err)
       }
-    } catch (err) {
-      console.log(err)
-    }}
+    }
     this.loading = false;
   }
   ventaSaltar(): void {
     this.router.navigate(['farmacia/venta'], { queryParams: { id_persona: 1 } })
   }
 
-  formatID(id:string) {
+  formatID(id: string) {
     // Verificar si el ID termina con guión y un carácter
     const regex = /-\w$/;
     if (!regex.test(id)) {
-        throw new Error("Formato incorrecto. Debería terminar en guion y un caracter");
+      throw new Error("Formato incorrecto. Debería terminar en guion y un caracter");
     }
 
     // Separar el dígito verificador del resto del número
@@ -124,7 +136,7 @@ export class PersonaComponent implements OnInit {
 
     // Verificar que sólo contenga números
     if (!/^\d+$/.test(cleanedNumberPart)) {
-        throw new Error("Formato incorrecto. Sólo se permiten números antes del guion");
+      throw new Error("Formato incorrecto. Sólo se permiten números antes del guion");
     }
 
     // Formatear el número con puntos cada 3 dígitos, desde el final
