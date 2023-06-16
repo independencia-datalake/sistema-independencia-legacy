@@ -80,8 +80,7 @@
 
         <mat-form-field style="width: 212px;">
           <mat-label>Fecha de Nacimiento</mat-label>
-          <input matInput [matDatepicker]="picker1" autocomplete="off"
-            formControlName="fecha_nacimiento">
+          <input matInput [matDatepicker]="picker1" autocomplete="off" formControlName="fecha_nacimiento">
           <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
           <mat-datepicker #picker1 color="primary"></mat-datepicker>
         </mat-form-field>
@@ -124,7 +123,7 @@
 
               <mat-form-field>
                 <mat-label>Numeracion</mat-label>
-                <input matInput placeholder="0" formControlName="numero" type="number" />
+                <input matInput placeholder="0" formControlName="numero" type="number" required />
               </mat-form-field>
             </form>
             <hr>
@@ -133,7 +132,7 @@
 
               <mat-form-field>
                 <mat-label>Correo</mat-label>
-                <input formControlName="correo" matInput placeholder="ejemplo@gmail.com" required>
+                <input formControlName="correo" matInput placeholder="ejemplo@gmail.com">
               </mat-form-field>
 
             </form>
@@ -146,10 +145,10 @@
                 <div class="col fono">
                   <mat-form-field>
                     <mat-label>Telefono</mat-label>
-                    <input formControlName="telefono" matInput placeholder="+569xxxxxxxx" required>
+                    <input formControlName="telefono" matInput placeholder="+569xxxxxxxx">
                   </mat-form-field>
                   <label>Tipo de Telefono </label>
-                  <mat-radio-group formControlName="tipo_telefono" aria-label="Select an option" required>
+                  <mat-radio-group formControlName="tipo_telefono" aria-label="Select an option">
                     <div>
                       <mat-radio-button value="MOVIL">Movil</mat-radio-button>
                     </div>
@@ -165,35 +164,35 @@
                   </mat-radio-group>
                 </div>
 
-          <div class="col">
-            <mat-form-field>
-              <mat-label>Telefono secundario</mat-label>
-                <input formControlName="telefono_secundario" matInput placeholder="+569xxxxxxxx" required>
-              </mat-form-field>
-            <label>Tipo Telefono secundario</label>
-          <mat-radio-group formControlName="tipo_telefono_secundario" aria-label="Select an option" required>
-            <div>
-              <mat-radio-button value="MOVIL">Movil</mat-radio-button>
-            </div>
-            <div>
-              <mat-radio-button value="CASA">Casa</mat-radio-button>
-            </div>
-            <div>
-              <mat-radio-button value="TRABAJO">Trabajo</mat-radio-button>
-            </div>
-            <div>
-              <mat-radio-button value="OTRO">Otro</mat-radio-button>
-            </div>
-            <div>
-              <mat-radio-button value="NO APLICA" checked>No Aplica</mat-radio-button>
-            </div>
-          </mat-radio-group>
+                <div class="col">
+                  <mat-form-field>
+                    <mat-label>Telefono secundario</mat-label>
+                    <input formControlName="telefono_secundario" matInput placeholder="+569xxxxxxxx">
+                  </mat-form-field>
+                  <label>Tipo Telefono secundario</label>
+                  <mat-radio-group formControlName="tipo_telefono_secundario" aria-label="Select an option">
+                    <div>
+                      <mat-radio-button value="MOVIL">Movil</mat-radio-button>
+                    </div>
+                    <div>
+                      <mat-radio-button value="CASA">Casa</mat-radio-button>
+                    </div>
+                    <div>
+                      <mat-radio-button value="TRABAJO">Trabajo</mat-radio-button>
+                    </div>
+                    <div>
+                      <mat-radio-button value="OTRO">Otro</mat-radio-button>
+                    </div>
+                    <div>
+                      <mat-radio-button value="NO APLICA" checked>No Aplica</mat-radio-button>
+                    </div>
+                  </mat-radio-group>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
-      </form>
-    </div>
-  </div>
-</div>
+      </div>
       <div>
         <button mat-raised-button matStepperPrevious>Back</button>
         <button matStepperNext mat-raised-button style="margin: 6px;">Siguente</button>
@@ -209,8 +208,7 @@
               <label>
                 <h2>Previsión de Salud: </h2>
               </label>
-              <mat-radio-group formControlName="prevision" aria-label="Select an option"
-                required>
+              <mat-radio-group formControlName="prevision" aria-label="Select an option" required>
                 <div>
                   <mat-radio-button value="FONASA">Fonasa</mat-radio-button>
                 </div>
@@ -295,13 +293,15 @@
                   </div>
                 </div>
                 <div class="file-table-column">
-                  <div class="h-41 w-60 p-10 file-table-row text-center" *ngFor="let file of selectedFiles; let i = index">
+                  <div class="h-41 w-60 p-10 file-table-row text-center"
+                    *ngFor="let file of selectedFiles; let i = index">
                     <mat-icon class="delete-file" (click)="onFileDeleted($event,i)">cancel</mat-icon>
                   </div>
                 </div>
               </div>
               <hr>
-              <button class="rounded-pink-button pl-6" type="button" mat-raised-button (click)="fileInput.click()"><mat-icon>
+              <button class="rounded-pink-button pl-6" type="button" mat-raised-button
+                (click)="fileInput.click()"><mat-icon>
                   attach_file</mat-icon>{{ selectedFiles.length > 0 ? "Agregar otro archivo" : "Selecciona un
                 archivo"}}</button>
               <input hidden (change)="onFileSelected($event)" #fileInput type="file" multiple>
@@ -326,18 +326,21 @@
         <div class="row">
           <div class="col">
             <h2>Info Personal </h2>
-            <p>Nombre: {{ personaResumen.nombre_persona }} {{ personaResumen.apellido_paterno }} {{ personaResumen.apellido_materno }} </p>
-            <p>N° Identificación: {{personaResumen.numero_identificacion}} ({{ personaResumen.tipo_identificacion }})</p>
+            <p>Nombre: {{ personaResumen.nombre_persona }} {{ personaResumen.apellido_paterno }} {{
+              personaResumen.apellido_materno }} </p>
+            <p>N° Identificación: {{personaResumen.numero_identificacion}} ({{ personaResumen.tipo_identificacion }})
+            </p>
             <p>Fecha de nacimiento: {{ personaResumen.fecha_nacimiento }}</p>
 
             <h2>Direccion</h2>
             <p>Calle: {{ direccionResumen.calle }}</p>
             <p>Numeracion: {{ direccionResumen.numero }}</p>
 
-        <h2>Telefono</h2>
-        <p>Telefono principal ({{ telefonoResumen.tipo_telefono }}): {{ telefonoResumen.telefono }}</p>
-        <p *ngIf="telefonoResumen.telefono_secundario">Telefono secundario ({{ telefonoResumen.tipo_telefono_secundario
-          }}): {{ telefonoResumen.telefono_secundario }}</p>
+            <h2>Telefono</h2>
+            <p>Telefono principal ({{ telefonoResumen.tipo_telefono }}): {{ telefonoResumen.telefono }}</p>
+            <p *ngIf="telefonoResumen.telefono_secundario">Telefono secundario ({{
+              telefonoResumen.tipo_telefono_secundario
+              }}): {{ telefonoResumen.telefono_secundario }}</p>
 
           </div>
           <div class="col">
@@ -345,9 +348,11 @@
             <p>mail: {{ correoResumen.correo }}</p>
 
             <h2>Telefono</h2>
-            <p *ngIf="telefonoResumen.telefono !== null">Telefono principal ({{ telefonoResumen.tipo_telefono }}): {{ telefonoResumen.telefono }}</p>
+            <p *ngIf="telefonoResumen.telefono !== null">Telefono principal ({{ telefonoResumen.tipo_telefono }}): {{
+              telefonoResumen.telefono }}</p>
             <p *ngIf="telefonoResumen.telefono === null">Telefono principal: No especificado</p>
-            <p *ngIf="telefonoResumen.telefono_secundario">Telefono secundario ({{ telefonoResumen.tipo_telefono_secundario }}): {{ telefonoResumen.telefono_secundario }}</p>
+            <p *ngIf="telefonoResumen.telefono_secundario">Telefono secundario ({{
+              telefonoResumen.tipo_telefono_secundario }}): {{ telefonoResumen.telefono_secundario }}</p>
 
             <h2>Info Salud</h2>
             <p>Prevision: {{ personainfosaludResumen.prevision }}</p>
