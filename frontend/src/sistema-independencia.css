@@ -10746,6 +10746,7 @@ a.text-dark:hover {
 	color: #040505;
 	font-weight: 700;
 }
+
 .mat-mdc-dialog-surface.mdc-dialog__surface{
 	background-color:white!important;
 }
@@ -10753,11 +10754,13 @@ a.text-dark:hover {
 .mat-mdc-dialog-surface.mdc-dialog__surface .mdc-notched-outline{
 	background-color: rgba(250,250,250,0.1);
 }
+
 .mat-mdc-dialog-surface.mdc-dialog__surface .mat-mdc-select-value,
 .mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input,
 .mat-mdc-dialog-surface.mdc-dialog__surface .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above{
 	color: #4a4a4a;
 }
+
 .mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__leading,
 .mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__notch,
 .mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__trailing {
@@ -10769,11 +10772,41 @@ a.text-dark:hover {
 .mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field--outlined:not(.mdc-text-field--disabled) .mdc-notched-outline__trailing{
 	border-color: #4a4a4a;
 }
+
 .mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field--outlined:not(.mdc-text-field--disabled):hover .mdc-notched-outline__leading,
 .mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field--outlined:not(.mdc-text-field--disabled):hover .mdc-notched-outline__notch,
 .mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field--outlined:not(.mdc-text-field--disabled):hover .mdc-notched-outline__trailing{
 	border-color: #4a4a4a;
 }
+
+
+
+
+
+.mat-mdc-dialog-surface.mdc-dialog__surface .mat-mdc-select-value,
+.mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field.mdc-text-field--disabled .mdc-text-field__input,
+.mat-mdc-dialog-surface.mdc-dialog__surface .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline--upgraded .mdc-floating-label--float-above{
+	color: #4a4a4a;
+}
+
+.mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field--outlined.mdc-text-field--disabled.mdc-text-field--focused .mdc-notched-outline__leading,
+.mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field--outlined.mdc-text-field--disabled.mdc-text-field--focused .mdc-notched-outline__notch,
+.mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field--outlined.mdc-text-field--disabled.mdc-text-field--focused .mdc-notched-outline__trailing {
+    border-color: #4a4a4a;
+}
+
+.mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field--outlined.mdc-text-field--disabled .mdc-notched-outline__leading,
+.mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field--outlined.mdc-text-field--disabled .mdc-notched-outline__notch,
+.mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field--outlined.mdc-text-field--disabled .mdc-notched-outline__trailing{
+	border-color: #4a4a4a;
+}
+
+.mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field--outlined.mdc-text-field--disabled:hover .mdc-notched-outline__leading,
+.mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field--outlined.mdc-text-field--disabled:hover .mdc-notched-outline__notch,
+.mat-mdc-dialog-surface.mdc-dialog__surface .mdc-text-field--outlined.mdc-text-field--disabled:hover .mdc-notched-outline__trailing{
+	border-color: #4a4a4a;
+}
+
 .modal-center {
 	display: flex;
     flex-direction: column;
@@ -10782,30 +10815,45 @@ a.text-dark:hover {
     padding: 25px;
     border-radius: 10px;
 }
+
 .warning-modal .mat-icon{
 	height: 52px;
 	width: 52px;
 	font-size: 52px;
 	color: rgb(249, 34, 72);
 }
+
 .warning-modal h1{
 	color: #4a4a4a!important;
 	font-weight: 900!important;
+	font-size: 25px!important;
 	font-family: 'Mulish', sans-serif!important;
 
 }
+
 .warning-modal p{
 	color: #4a4a4a!important;
 	text-align: center;
 }
+
 .warning-modal .cancel-button{
 	background-color: rgb(249, 34, 72) !important;
 	border-radius: 20px;
 }
+
 .warning-modal .cancel-button .mdc-button__label{
 	color: #fff;
 	padding-left: 10px;
 	padding-right: 10px;
+} 
+.pink-rounded-button{
+	background-color: rgb(249, 34, 72) !important;
+	border-radius: 20px!important;
 }
+.pink-rounded-button .mdc-button__label{
+	color: #fff;
+	padding-left: 10px;
+	padding-right: 10px;
+} 
 
 /*# sourceMappingURL=bootstrap.min.css.map */
