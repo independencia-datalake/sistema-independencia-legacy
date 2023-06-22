@@ -1,12 +1,14 @@
 <!-- Caso 1 -->
-<div *ngIf="caso === 1">
+<div *ngIf="caso === 1" class="modal-center warning-modal">
+  <mat-icon>warning</mat-icon>
   <h1 mat-dialog-title>¿Quieres eliminar esta venta?</h1>
   <div mat-dialog-content>
     <p>¿Estas seguro/a de eliminar esta venta?</p>
+    <p>Una vez eliminado, perderas los datos de esta venta.</p>
   </div>
   <div mat-dialog-actions>
-    <button mat-button [mat-dialog-close]="true">Eliminar</button>
-    <button mat-button [mat-dialog-close]="false">Cancelar</button>
+    <button mat-button [mat-dialog-close]="true" >Eliminar</button>
+    <button mat-button [mat-dialog-close]="false" class="cancel-button" >Cancelar</button>
   </div>
 </div>
 

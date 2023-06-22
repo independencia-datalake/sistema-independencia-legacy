@@ -252,6 +252,7 @@ export class PersonaCrearComponent implements OnInit {
 
     // CREAR PERSONA
     const data_persona = this.formCrearPersona.value;
+    console.log('======GGGGGGG',data_persona)
     // const fechaformateada = format(data_persona.fecha_nacimiento, 'yyyy-MM-dd');
     // data_persona.fecha_nacimiento = fechaformateada
 
@@ -260,6 +261,7 @@ export class PersonaCrearComponent implements OnInit {
       const fechaFormatoCorrecto = /^\d{4}-\d{2}-\d{2}$/.test(data_persona.fecha_nacimiento);
       console.log(fechaFormatoCorrecto)
       if (!fechaFormatoCorrecto) {
+        console.log('EN IF')
         data_persona.fecha_nacimiento = format(new Date(data_persona.fecha_nacimiento), 'yyyy-MM-dd');
       }
 

@@ -26,7 +26,8 @@
         <mat-form-field class="example-full-width">
           <mat-label>Nº Identificación</mat-label>
           <input #idNumber [(ngModel)]="idNum" (ngModelChange)="formatRut(idNum)"
-            formControlName="numero_identificacion" matInput placeholder="18.465.635-3" [value]="idNum">
+            formControlName="numero_identificacion" matInput placeholder="18.465.635-3" [value]="idNum"/>
+            <sub class="error" *ngIf="inputError">Rut invalido.</sub>
         </mat-form-field>
       </div>
       <div>

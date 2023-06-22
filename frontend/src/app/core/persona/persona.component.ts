@@ -15,7 +15,7 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class PersonaComponent implements OnInit {
 
-  @ViewChild("idInputForm") firstNameField;
+  @ViewChild("idNumber") firstNameField;
   focusOnID() {
     this.firstNameField.nativeElement.focus();
   }
@@ -27,6 +27,7 @@ export class PersonaComponent implements OnInit {
 
   loading = false;
   success = false;
+  inputError = false;
 
   personas: any;
   redireccion: any;
@@ -66,14 +67,15 @@ export class PersonaComponent implements OnInit {
     this.loading = true;
     const tipo_seleccionado = this.formCheckPersona.value.tipo;
     const numero_identificacion = tipo_seleccionado === 'RUT' ? format(this.formCheckPersona.value.numero_identificacion) : this.formCheckPersona.value.numero_identificacion;
-    if (tipo_seleccionado === 'RUT') {
+    const valid_id_number = this.validateID(numero_identificacion)
+    if (tipo_seleccionado === 'RUT' && valid_id_number) {
+      this.inputError = false;
       flag_rut = true;
       try {
-        // this.focusOnID();
-        const result = this.personas.find(item => item.numero_identificacion === this.formatID(numero_identificacion))
+        this.focusOnID();
+        const result = this.personas.find(item => this.formatID(item.numero_identificacion) === numero_identificacion)
         if (typeof result != "undefined") {
           this.success = true
-          // console.log(result.id)
           if (this.redireccion === 'farmacia') {
             this.router.navigate(['farmacia/venta'], { queryParams: { id_persona: result.id } })
           }
@@ -89,14 +91,17 @@ export class PersonaComponent implements OnInit {
       } catch (err) {
         console.log(err)
       }
-    }
-    if (flag_rut === false) {
+    }else if(tipo_seleccionado === 'RUT' && !valid_id_number){
+      console.log('there goes the error')
+      this.inputError = true;
+      this.focusOnID();
+    } else {
+      this.inputError = false;
       try {
-        // this.focusOnID();
+        this.focusOnID();
         const result = this.personas.find(item => item.numero_identificacion === numero_identificacion)
         if (typeof result != "undefined") {
           this.success = true
-          // console.log(result.id)
           if (this.redireccion === 'farmacia') {
             this.router.navigate(['farmacia/venta'], { queryParams: { id_persona: result.id } })
           }
@@ -120,30 +125,14 @@ export class PersonaComponent implements OnInit {
   }
 
   formatID(id: string) {
-    // Verificar si el ID termina con guión y un carácter
-    const regex = /-\w$/;
-    if (!regex.test(id)) {
-      throw new Error("Formato incorrecto. Debería terminar en guion y un caracter");
-    }
-
-    // Separar el dígito verificador del resto del número
-    const parts = id.split('-');
-    const numberPart = parts[0];
-    const checkDigit = parts[1];
-
-    // Reemplazar los puntos, si existen
-    const cleanedNumberPart = numberPart.replace(/\./g, '');
-
-    // Verificar que sólo contenga números
-    if (!/^\d+$/.test(cleanedNumberPart)) {
-      throw new Error("Formato incorrecto. Sólo se permiten números antes del guion");
-    }
-
-    // Formatear el número con puntos cada 3 dígitos, desde el final
-    const formattedNumber = cleanedNumberPart.split('').reverse().join('').replace(/(\d{3}(?!$))/g, '$1.').split('').reverse().join('');
-
-    // Devolver el ID formateado
-    return `${formattedNumber}-${checkDigit}`;
+    const idNumberFormat = format(id);
+    return idNumberFormat
   }
+
+  validateID(id: string) {
+    const idNumberValid = validate(id);
+    return idNumberValid;
+  }
+
 
 }
