@@ -15,7 +15,7 @@ import { environment } from 'src/environment/environment';
   styleUrls: ['./persona-crear.component.css'],
   encapsulation: ViewEncapsulation.None,
 })
-export class PersonaCrearComponent implements OnInit{
+export class PersonaCrearComponent implements OnInit {
   apiUrl = environment.apiURL;
   showInputFile: boolean = false
   redireccion: any;
@@ -28,7 +28,7 @@ export class PersonaCrearComponent implements OnInit{
   formCorreoPersona: FormGroup;
   formTelefonoPersona: FormGroup;
   formInfoSaludPersona: FormGroup;
-  formArchivoPersona:FormGroup;
+  formArchivoPersona: FormGroup;
 
   personaResumen: any;
   direccionResumen: any;
@@ -62,7 +62,7 @@ export class PersonaCrearComponent implements OnInit{
 
   ngOnInit(): void {
 
-    // console.log(this.route.snapshot.queryParamMap.get('tipo'))
+    //console.log(this.route.snapshot.queryParamMap.get('tipo'))
     this.redireccion = this.route.snapshot.queryParamMap.get('redireccion')
 
     this.formCrearPersona = this.fb.group({
@@ -90,11 +90,11 @@ export class PersonaCrearComponent implements OnInit{
     });
 
     this.formDireccionPersona = this.fb.group({
-      persona:'',
-      calle:'',
-      numero:'',
-      complemento_direccion:'',
-      uv:1,
+      persona: '',
+      calle: '',
+      numero: '',
+      complemento_direccion: '',
+      uv: 1,
     })
 
     this.formDireccionPersona.valueChanges.subscribe(val => {
@@ -108,8 +108,8 @@ export class PersonaCrearComponent implements OnInit{
 
 
     this.formCorreoPersona = this.fb.group({
-      persona:'',
-      correo:null,
+      persona: '',
+      correo: null,
     })
     this.formCorreoPersona.valueChanges.subscribe(val => {
       localStorage.setItem('formCorreoPersona', JSON.stringify(val))
@@ -117,28 +117,28 @@ export class PersonaCrearComponent implements OnInit{
 
     this.formTelefonoPersona = this.fb.group({
       persona: '',
-      telefono:'',
-      tipo_telefono:null,
-      telefono_secundario:'',
-      tipo_telefono_secundario:['NO APLICA']
+      telefono: '',
+      tipo_telefono: null,
+      telefono_secundario: '',
+      tipo_telefono_secundario: ['NO APLICA']
     })
     this.formTelefonoPersona.valueChanges.subscribe(val => {
       localStorage.setItem('formTelefonoPersona', JSON.stringify(val))
     })
 
     this.formInfoSaludPersona = this.fb.group({
-      persona:'',
-      prevision:'',
-      isapre:'NO APLICA',
-      comentarios:'',
+      persona: '',
+      prevision: '',
+      isapre: 'NO APLICA',
+      comentarios: '',
     })
     this.formInfoSaludPersona.valueChanges.subscribe(val => {
       localStorage.setItem('formInfoSaludPersona', JSON.stringify(val))
     })
 
     this.formArchivoPersona = this.fb.group({
-      persona:'',
-      archivo:'',
+      persona: '',
+      archivo: '',
     })
 
     this.getCalles();
@@ -146,7 +146,7 @@ export class PersonaCrearComponent implements OnInit{
     this.loadFormState();
   }
 
-  filterData(enterdData){
+  filterData(enterdData) {
     this.filterdOptions = this.options.filter(item => {
       return item.toLowerCase().indexOf(enterdData.toLowerCase()) > -1
     })
@@ -203,163 +203,165 @@ export class PersonaCrearComponent implements OnInit{
     });
   }
 
-  onItemChange(value){
+  onItemChange(value) {
     // console.log(" Value is : ", value );
- }
+  }
 
- form = this.fb.group({
+  form = this.fb.group({
     archivos: this.fb.array([])
- });
-
- get archivos() {
-  return this.form.controls["archivos"] as FormArray;
- }
-
- addArchivo() {
-  const archivoForm = this.fb.group({
-    archivo: File,
   });
-  this.archivos.push(archivoForm);
- }
 
- deleteArchivo(archivoIndex:number){
-  this.archivos.removeAt(archivoIndex)
- }
+  get archivos() {
+    return this.form.controls["archivos"] as FormArray;
+  }
 
- verResumen() {
-  this.personaResumen = this.formCrearPersona.value;
-  if (this.personaResumen.fecha_nacimiento) {
-    // Verificar si la fecha ya está en el formato 'dd-MM-yyyy'
-    const fechaFormatoCorrecto = /^\d{2}-\d{2}-\d{4}$/.test(this.personaResumen.fecha_nacimiento);
+  addArchivo() {
+    const archivoForm = this.fb.group({
+      archivo: File,
+    });
+    this.archivos.push(archivoForm);
+  }
 
-    if (!fechaFormatoCorrecto) {
-      this.personaResumen.fecha_nacimiento = format(new Date(this.personaResumen.fecha_nacimiento), 'dd-MM-yyyy');
+  deleteArchivo(archivoIndex: number) {
+    this.archivos.removeAt(archivoIndex)
+  }
+
+  verResumen() {
+    this.personaResumen = this.formCrearPersona.value;
+    if (this.personaResumen.fecha_nacimiento) {
+      // Verificar si la fecha ya está en el formato 'dd-MM-yyyy'
+      const fechaFormatoCorrecto = /^\d{2}-\d{2}-\d{4}$/.test(this.personaResumen.fecha_nacimiento);
+
+      if (!fechaFormatoCorrecto) {
+        this.personaResumen.fecha_nacimiento = format(new Date(this.personaResumen.fecha_nacimiento), 'dd-MM-yyyy');
+      }
+    }
+    this.direccionResumen = this.formDireccionPersona.value
+    this.correoResumen = this.formCorreoPersona.value
+    this.telefonoResumen = this.formTelefonoPersona.value
+    this.personainfosaludResumen = this.formInfoSaludPersona.value;
+  }
+
+  onStepChanged(event: StepperSelectionEvent): void {
+    if (event.selectedIndex === 3) {
+      this.verResumen()
     }
   }
-  this.direccionResumen = this.formDireccionPersona.value
-  this.correoResumen = this.formCorreoPersona.value
-  this.telefonoResumen = this.formTelefonoPersona.value
-  this.personainfosaludResumen = this.formInfoSaludPersona.value;
- }
 
- onStepChanged(event: StepperSelectionEvent): void {
-  if (event.selectedIndex === 3) {
-    this.verResumen()
-  }
-}
+  onSubmit() {
 
- onSubmit() {
-
-  // CREAR PERSONA
-  const data_persona = this.formCrearPersona.value;
-  // const fechaformateada = format(data_persona.fecha_nacimiento, 'yyyy-MM-dd');
-  // data_persona.fecha_nacimiento = fechaformateada
-
-  if (data_persona.fecha_nacimiento !== null) {
-    console.log(data_persona.fecha_nacimiento)
-    const fechaFormatoCorrecto = /^\d{4}-\d{2}-\d{2}$/.test(data_persona.fecha_nacimiento);
-    console.log(fechaFormatoCorrecto)
-    if (!fechaFormatoCorrecto) {
-      data_persona.fecha_nacimiento = format(new Date(data_persona.fecha_nacimiento), 'yyyy-MM-dd');
-    }
-
-    // const fechaformateada = format(new Date(data_persona.fecha_nacimiento), 'yyyy-MM-dd');
+    // CREAR PERSONA
+    const data_persona = this.formCrearPersona.value;
+    console.log('======GGGGGGG',data_persona)
+    // const fechaformateada = format(data_persona.fecha_nacimiento, 'yyyy-MM-dd');
     // data_persona.fecha_nacimiento = fechaformateada
-    // console.log(data_persona.fecha_nacimiento)
+
+    if (data_persona.fecha_nacimiento !== null) {
+      console.log(data_persona.fecha_nacimiento)
+      const fechaFormatoCorrecto = /^\d{4}-\d{2}-\d{2}$/.test(data_persona.fecha_nacimiento);
+      console.log(fechaFormatoCorrecto)
+      if (!fechaFormatoCorrecto) {
+        console.log('EN IF')
+        data_persona.fecha_nacimiento = format(new Date(data_persona.fecha_nacimiento), 'yyyy-MM-dd');
+      }
+
+      // const fechaformateada = format(new Date(data_persona.fecha_nacimiento), 'yyyy-MM-dd');
+      // data_persona.fecha_nacimiento = fechaformateada
+      // console.log(data_persona.fecha_nacimiento)
+    }
+
+    this.personaService.createPersona(data_persona).subscribe(respuesta => {
+      const persona_actual = respuesta.id;
+
+
+      // CREAR DIRECCION
+      const data_direccion = this.formDireccionPersona.value;
+      data_direccion.persona = persona_actual;
+      // console.log(data_direccion)
+      this.personaService.createDireccion(data_direccion).subscribe(respuesta => {
+        // console.log(respuesta)
+      }, (error) => {
+        console.log(error);
+      });
+
+      // CREAR CORREO
+      const data_correo = this.formCorreoPersona.value;
+      data_correo.persona = persona_actual;
+      this.personaService.createCorreo(data_correo).subscribe(respuesta => {
+        // console.log(respuesta)
+      }, (error) => {
+        console.log(error)
+      })
+
+      // CREAR TELEFONO
+      const data_telefono = this.formTelefonoPersona.value;
+      data_telefono.persona = persona_actual
+      this.personaService.createTelefono(data_telefono).subscribe(respuesta => {
+        // console.log(respuesta)
+      }, (error) => {
+        console.log(error)
+      })
+
+      // CREAR PERSONA INFOSALUD
+      const data_infosalud = this.formInfoSaludPersona.value;
+      data_infosalud.persona = persona_actual
+      if (data_infosalud.prevision !== 'ISAPRE') {
+        data_infosalud.isapre = "NO APLICA"
+      } else {
+
+      }
+
+      // console.log(data_infosalud)
+      this.personaService.createInfosalud(data_infosalud).subscribe(respuesta => {
+        // console.log(respuesta)
+      }, (error) => {
+        console.log(error)
+      })
+      this.submitFiles(persona_actual)
+
+      // console.log(respuesta)
+      localStorage.removeItem('formCrearPersona');
+      localStorage.removeItem('formDireccionPersona');
+      localStorage.removeItem('formCorreoPersona');
+      localStorage.removeItem('formTelefonoPersona');
+      localStorage.removeItem('formInfoSaludPersona')
+
+      if (this.redireccion === 'farmacia') {
+        this.router.navigate(['farmacia/venta'], { queryParams: { id_persona: persona_actual } })
+      } else if (this.redireccion === 'lista_persona') {
+        this.router.navigate(['farmacia/resumen-persona'])
+      }
+    }, (error) => {
+      console.log(error);
+    });
   }
 
-  this.personaService.createPersona(data_persona).subscribe(respuesta => {
-  const persona_actual = respuesta.id;
+  //ARCHIVOS
 
+  // LOCAL STORAGE DEL FORM
+  loadFormState() {
+    const savedFormStatePersona = localStorage.getItem('formCrearPersona');
+    const savedFormStateDireccion = localStorage.getItem('formDireccionPersona');
+    const savedFormStateCorreo = localStorage.getItem('formCorreoPersona');
+    const savedFormStateTelefono = localStorage.getItem('formTelefonoPersona');
+    const saveFormStateInfoSalud = localStorage.getItem('formInfoSaludPersona')
 
-  // CREAR DIRECCION
-  const data_direccion = this.formDireccionPersona.value;
-  data_direccion.persona = persona_actual;
-  // console.log(data_direccion)
-  this.personaService.createDireccion(data_direccion).subscribe(respuesta =>{
-    // console.log(respuesta)
-  }, (error)=> {
-    console.log(error);
-  });
-
-  // CREAR CORREO
-  const data_correo = this.formCorreoPersona.value;
-  data_correo.persona = persona_actual;
-    this.personaService.createCorreo(data_correo).subscribe(respuesta => {
-      // console.log(respuesta)
-    }, (error)=>{
-      console.log(error)
-    })
-
-  // CREAR TELEFONO
-  const data_telefono = this.formTelefonoPersona.value;
-  data_telefono.persona = persona_actual
-    this.personaService.createTelefono(data_telefono).subscribe(respuesta => {
-      // console.log(respuesta)
-    }, (error)=>{
-      console.log(error)
-    })
-
-  // CREAR PERSONA INFOSALUD
-  const data_infosalud = this.formInfoSaludPersona.value;
-  data_infosalud.persona = persona_actual
-  if (data_infosalud.prevision !== 'ISAPRE') {
-    data_infosalud.isapre = "NO APLICA"
-  } else {
-
-  }
-
-  // console.log(data_infosalud)
-    this.personaService.createInfosalud(data_infosalud).subscribe(respuesta => {
-      // console.log(respuesta)
-    }, (error)=>{
-      console.log(error)
-    })
-  this.submitFiles(persona_actual)
-
-    // console.log(respuesta)
-  localStorage.removeItem('formCrearPersona');
-  localStorage.removeItem('formDireccionPersona');
-  localStorage.removeItem('formCorreoPersona');
-  localStorage.removeItem('formTelefonoPersona');
-  localStorage.removeItem('formInfoSaludPersona')
-
-  if (this.redireccion === 'farmacia') {
-    this.router.navigate(['farmacia/venta'], {queryParams: {id_persona: persona_actual}})
-  } else if (this.redireccion ==='lista_persona') {
-    this.router.navigate(['farmacia/resumen-persona'])
-  }
-  }, (error)=> {
-    console.log(error);
-  });
- }
-
-//ARCHIVOS
-
-// LOCAL STORAGE DEL FORM
-loadFormState() {
-  const savedFormStatePersona = localStorage.getItem('formCrearPersona');
-  const savedFormStateDireccion = localStorage.getItem('formDireccionPersona');
-  const savedFormStateCorreo = localStorage.getItem('formCorreoPersona');
-  const savedFormStateTelefono = localStorage.getItem('formTelefonoPersona');
-  const saveFormStateInfoSalud = localStorage.getItem('formInfoSaludPersona')
-
-  if (savedFormStatePersona) {
+    if (savedFormStatePersona) {
       this.formCrearPersona.setValue(JSON.parse(savedFormStatePersona));
-  }
-  if (savedFormStateDireccion) {
-    this.formDireccionPersona.setValue(JSON.parse(savedFormStateDireccion));
-  }
-  if (savedFormStateCorreo) {
-    this.formCorreoPersona.setValue(JSON.parse(savedFormStateCorreo))
-  }
-  if (savedFormStateTelefono) {
-    this.formTelefonoPersona.setValue(JSON.parse(savedFormStateTelefono))
-  }
-  if (saveFormStateInfoSalud) {
-    this.formInfoSaludPersona.patchValue(JSON.parse(saveFormStateInfoSalud))
-  }
+    }
+    if (savedFormStateDireccion) {
+      this.formDireccionPersona.setValue(JSON.parse(savedFormStateDireccion));
+    }
+    if (savedFormStateCorreo) {
+      this.formCorreoPersona.setValue(JSON.parse(savedFormStateCorreo))
+    }
+    if (savedFormStateTelefono) {
+      this.formTelefonoPersona.setValue(JSON.parse(savedFormStateTelefono))
+    }
+    if (saveFormStateInfoSalud) {
+      this.formInfoSaludPersona.patchValue(JSON.parse(saveFormStateInfoSalud))
+    }
 
-}
+  }
 
 }
