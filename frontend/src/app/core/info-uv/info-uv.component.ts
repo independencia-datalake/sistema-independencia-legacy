@@ -18,6 +18,9 @@ export class InfoUvComponent {
   map: Map; // Declarar la variable map como propiedad de la clase
   unidad_vecinal: string;
 
+  public data_poblacion: any;
+  data_poblacion_uv: any = { "UV": 0, "Total": 0, "Hombres": 0, "Mujeres": 0, "% Población inmigrante": 0, "Superficie total m2": 0, "Superficies no habitadas m2": 0, "Superficie m2": 0, "Densidad Habitantes/Km2": 0 };
+
   constructor(public dialog: MatDialog, private http: HttpClient) { }
 
   ngAfterViewInit(): void{
@@ -56,8 +59,12 @@ export class InfoUvComponent {
 
 
       this.zoomUV(this.unidad_vecinal)
-
+      this.selectUV(this.unidad_vecinal)
     });
+
+    this.http.get('../../assets/uv_poblacion.json').subscribe((data:any) => {
+      this.data_poblacion = data
+    })
 
       }
 
@@ -71,6 +78,7 @@ export class InfoUvComponent {
 
 
       this.zoomUV(this.unidad_vecinal)
+      this.selectUV(this.unidad_vecinal)
 
     });
 
@@ -80,7 +88,7 @@ export class InfoUvComponent {
 
     this.http.get('../../assets/uv_coordenadas.json').subscribe((data: any) => {
 
-      console.log(data[id])
+      // console.log(data[id])
       const coordsaux = [];
       for (let pointId in data[id]) {
         const point = data[id][pointId];
@@ -91,6 +99,17 @@ export class InfoUvComponent {
       this.map.fitBounds(centro_uv_aux);
 
     });
+
+  }
+
+  selectUV(uv) {
+    let uvNumber = parseInt(uv.split('-')[1]);
+    this.data_poblacion_uv = this.data_poblacion.find(element => element.UV === uvNumber);
+
+
+    // console.log(uv)
+    // console.log(this.data_poblacion)
+    console.log(this.data_poblacion_uv)
 
   }
 

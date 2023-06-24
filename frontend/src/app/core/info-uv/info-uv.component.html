@@ -15,6 +15,24 @@
       <div class="col">
         <h2>Resumen sobre <a class="texto-click" (click)="dialogUV()">{{unidad_vecinal}}</a></h2>
         <mat-accordion>
+
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Poblacion
+              </mat-panel-title>
+              <mat-panel-description>
+                Informacion sobre la poblacion de la unidad vecinal (SECPLA 2023)
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>Poblacion total: {{data_poblacion_uv.Total}}
+              <br> Poblacion Hombres: {{data_poblacion_uv.Hombres}}
+              <br> Poblacion Mujeres: {{data_poblacion_uv.Mujeres}}
+              <br> Superficie total m2: {{data_poblacion_uv['Superficie total m2']}}
+              <br> Superficie habitada: {{data_poblacion_uv['Superficie m2']}}
+              <br> Densidad Habitantes/Km2: {{data_poblacion_uv['Densidad Habitantes/Km2']}}</p>
+          </mat-expansion-panel>
+
           <mat-expansion-panel>
             <mat-expansion-panel-header>
               <mat-panel-title>
