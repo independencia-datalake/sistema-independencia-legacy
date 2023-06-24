@@ -15,27 +15,27 @@
 
     <ng-container matColumnDef="salesNumber">
       <th mat-header-cell *matHeaderCellDef> N° de Venta </th>
-      <td mat-cell *matCellDef="let element"> {{element.salesNumber}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.id}} </td>
     </ng-container>
 
     <ng-container matColumnDef="fecha">
       <th mat-header-cell *matHeaderCellDef> Fecha Venta </th>
-      <td mat-cell *matCellDef="let element"> {{element.fecha}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.created}} </td>
     </ng-container>
 
     <ng-container matColumnDef="idPerson">
       <th mat-header-cell *matHeaderCellDef> N° de Identidad de la Persona </th>
-      <td mat-cell *matCellDef="let element"> {{element.idPerson}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.comprador_aux[0].numero_identificacion}} </td>
     </ng-container>
 
     <ng-container matColumnDef="namePerson">
       <th mat-header-cell *matHeaderCellDef> Nombre Persona </th>
-      <td mat-cell *matCellDef="let element"> {{element.namePerson}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.comprador_aux[0].nombre_completo}} </td>
     </ng-container>
 
     <ng-container matColumnDef="professional">
       <th mat-header-cell *matHeaderCellDef> Profesional </th>
-      <td mat-cell *matCellDef="let element"> {{element.professional}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.farmaceuta_aux[0].username}} </td>
     </ng-container>
 
     <ng-container matColumnDef="estado">
@@ -45,7 +45,7 @@
 
     <ng-container matColumnDef='button'>
       <th mat-header-cell *matHeaderCellDef> </th>
-      <td mat-cell *matCellDef="let element"> <button (click)="editarVenta(element.salesNumber, element.estado)"
+      <td mat-cell *matCellDef="let element"> <button (click)="editarVenta(element.id, element.estado)"
           class="f-acenter-jarround square-pink-button"><span>editar</span><mat-icon>edit</mat-icon>
 
         </button> </td>
@@ -55,7 +55,33 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons aria-label="Select page of periodic elements">
-  </mat-paginator>
+  <!-- <mat-paginator [pageSizeOptions]="[10, 20, 30]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+  </mat-paginator> -->
+
+  <button mat-button (click)="LastFirstPage('first')">First</button>
+  <button mat-button *ngIf="page !== 1"  (click)="prevPage()">Anterior</button>
+  <button mat-button *ngIf="page !== totalPages" (click)="nextPage()">Siguiente</button>
+  <button mat-button (click)="LastFirstPage('last')">Last</button>
+
+  <mat-form-field>
+    <mat-label>Elementos por página</mat-label>
+    <mat-select (selectionChange)="setPageSize($event.value)" [value]="pageSize.toString()">
+      <mat-option value="5">5</mat-option>
+      <mat-option value="10">10</mat-option>
+      <mat-option value="20">20</mat-option>
+      <mat-option value="30">30</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Filtro</mat-label>
+    <input matInput [(ngModel)]="buscadorValue">
+    <button *ngIf="buscadorValue" matSuffix mat-icon-button aria-label="Clear" (click)="buscadorValue=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+  <button mat-button (click)="filtro(buscadorValue)">Buscar</button>
 
 </div>

@@ -31,6 +31,12 @@ export class ResumenPersonaComponent {
     'button'];
   dataSource = new MatTableDataSource<persona>();
 
+  page: number = 1;
+  pageSize: number = 10;
+  totalPages: number;
+
+  buscadorValue: string = '';
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
@@ -46,26 +52,12 @@ export class ResumenPersonaComponent {
   }
 
   ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
   }
 
-  fetchData(): void {
-    this.personaService.getPersonas().pipe(
-      switchMap((personas: any[]) => {
-        const requests = personas.map(persona => {
-          return this.personaService.getPersonaInfoSaludByPersona(persona.id).pipe(
-            map(infoSalud => ({
-              ...persona,
-              healthInsurance: infoSalud.prevision,
-              isapre: infoSalud.isapre,
-              comments: infoSalud.comentarios
-            }))
-          );
-        });
-        return forkJoin(requests);
-      })
-    ).subscribe((results: any[]) => {
-      this.dataSource.data = results;
+  fetchData(search = this.buscadorValue,size = this.pageSize): void {
+    this.personaService.getPersonasLista(search ,this.page, size).subscribe((personas: any) => {
+      this.totalPages =  Math.ceil(personas.count / this.pageSize)
+      this.dataSource.data = personas.results;
     });
   }
 
@@ -81,6 +73,41 @@ export class ResumenPersonaComponent {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
+  nextPage() {
+    this.page++;
+    this.fetchData();
+  }
+
+  prevPage() {
+    if (this.page > 1) {
+      this.page--;
+      this.fetchData();
+    }
+  }
+
+  setPageSize(size) {
+    this.pageSize=size
+    this.fetchData()
+  }
+
+  LastFirstPage(page) {
+    if (page === 'last') {
+      // console.log(this.totalPages)
+      this.page = this.totalPages
+    } else if (page === 'first') {
+      // console.log(1)
+      this.page = 1
+    }
+    this.fetchData();
+  }
+
+  filtro(valor) {
+    console.log(valor)
+
+    this.fetchData();
+  }
+
 }
 
 

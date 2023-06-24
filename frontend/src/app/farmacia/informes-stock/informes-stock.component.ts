@@ -30,6 +30,12 @@ export class InformesStockComponent {
     'button'];
     dataSource = new MatTableDataSource<products>();
 
+    page: number = 1;
+    pageSize: number = 10;
+    totalPages: number;
+
+    buscadorValue: string = '';
+
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
     constructor(
@@ -47,29 +53,14 @@ export class InformesStockComponent {
       this.dataSource.paginator = this.paginator;
     }
 
-    getData(): void {
-      this.stockService.getBodega().pipe(
-        switchMap((data: any[]) => {
-          if (data.length > 0) {
-            const productRequests = data.map(item => {
-              return this.productosService.getProductoByid(item.id_producto).pipe(
-                map(producto => ({
-                  id: item.id,
-                  stock: item.stock,
-                  stock_min: item.stock_min,
-                  holgura: item.holgura,
-                  brand: `${producto.marca_producto} | ${producto.dosis} x ${producto.presentacion} | ${producto.p_a} | Proveedor: ${producto.proveedor} | Lab: ${producto.laboratorio}`
-                }))
-              );
-            });
-            return forkJoin(productRequests);
-          } else {
-            return of([]);
-          }
-        })
-      ).subscribe((results: any[]) => {
-        this.dataSource.data = results;
-      });
+    getData( search = this.buscadorValue, size = this.pageSize): void {
+      this.stockService.getBodegaLista(search, this.page, size).subscribe((raw_data: any) => {
+        this.totalPages = Math.ceil(raw_data.count / this.pageSize)
+        const response = raw_data.results
+
+        this.dataSource.data = response
+        console.log(this.dataSource.data)
+      })
     }
 
     editarBodega(id) {
@@ -78,5 +69,39 @@ export class InformesStockComponent {
     applyFilter(event: Event) {
       const filterValue = (event.target as HTMLInputElement).value;
       this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
+
+    nextPage() {
+      this.page++;
+      this.getData();
+    }
+
+    prevPage() {
+      if (this.page > 1) {
+        this.page--;
+        this.getData();
+      }
+    }
+
+    setPageSize(size) {
+      this.pageSize=size
+      this.getData()
+    }
+
+    LastFirstPage(page) {
+      if (page === 'last') {
+        // console.log(this.totalPages)
+        this.page = this.totalPages
+      } else if (page === 'first') {
+        // console.log(1)
+        this.page = 1
+      }
+      this.getData();
+    }
+
+    filtro(valor) {
+      // console.log(valor)
+
+      this.getData();
     }
 }
