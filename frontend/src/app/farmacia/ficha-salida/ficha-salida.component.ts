@@ -56,7 +56,7 @@ export class FichaSalidaComponent {
     let producto_mermado = this.formSalidaProducto.value
     let nombre = producto_mermado.nombre
     producto_mermado.nombre=producto_mermado.nombre.id
-    console.log(producto_mermado)
+    // console.log(producto_mermado)
     this.stockService.salidaProducto(producto_mermado).subscribe(Response => {
     }, error => {
       console.log(error)
