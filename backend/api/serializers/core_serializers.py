@@ -16,6 +16,17 @@ class PersonaSerializer(serializers.ModelSerializer):
         model = Persona
         fields = '__all__'
 
+class PersonaSerializer2(serializers.ModelSerializer):
+    info_salud = serializers.SerializerMethodField()  # Nuevo campo
+
+    class Meta:
+        model = Persona
+        fields = ['id', 'numero_identificacion', 'nombre_completo', 'info_salud']  # Asegúrate de incluir los campos necesarios
+
+    def get_info_salud(self, obj):
+        info_salud = PersonaInfoSalud.objects.filter(persona=obj)  # Obtiene la información de salud relacionada con esta persona
+        return PersonaInfoSaludSerializer(info_salud, many = True).data  # Retorna los datos serializados
+
 class TelefonoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Telefono
