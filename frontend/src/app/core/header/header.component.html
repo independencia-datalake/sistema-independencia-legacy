@@ -5,7 +5,7 @@
   <button mat-icon-button class="example-icon favorite-icon log-out" (click)="onButtonClick()"></button>
   <button routerLink="" mat-icon-button class="inicio"></button>
 </mat-toolbar>
-<div class="logo-menusection container">
+<div class="logo-menusection container" [class.hide-header]="isVisRouteActive()">
   <div class="img-link">
     <img src="../../../assets/form-independencia.png" routerLink="">
   </div>
@@ -17,7 +17,7 @@
     <button mat-menu-item>Calculadora UV</button>
     <button routerLink="vis" mat-menu-item>Visualización</button>
     <button routerLink="conoce-tu-area" mat-menu-item>Conoce tu area</button>
-    <button routerLink="conoce-tu-uv" mat-menu-item>Conoce tu UV</button>
+    <button routerLink="ficha-barrial" mat-menu-item>Ficha Barrial</button>
   </mat-menu>
 
 </div>

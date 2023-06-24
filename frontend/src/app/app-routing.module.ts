@@ -25,6 +25,7 @@ import { InformesProductosComponent } from './farmacia/informes-productos/inform
 import { InformesStockComponent } from './farmacia/informes-stock/informes-stock.component';
 import { ResumenPersonaComponent } from './farmacia/lista-personas/lista-personas.component';
 import { ListaVentaComponent } from './farmacia/lista-ventas/lista-ventas.component';
+import { FichaIngresoComponent } from './farmacia/ficha-ingreso/ficha-ingreso.component';
 import { FichaSalidaComponent } from './farmacia/ficha-salida/ficha-salida.component';
 
 
@@ -40,7 +41,7 @@ const routes: Routes = [
   { path: 'persona/crear', component: PersonaCrearComponent },
   { path: 'vis', component: VisComponent, canActivate: [AuthGuard] },
   { path: 'conoce-tu-area', component: InfoComunaComponent },
-  { path: 'conoce-tu-uv', component: InfoUvComponent },
+  { path: 'ficha-barrial', component: InfoUvComponent },
 
   // FARMACIA
   { path: 'farmacia', component: FarmaciaHomeComponent, canActivate: [AuthFarmaciaGuard] },
@@ -56,6 +57,7 @@ const routes: Routes = [
   // STOCK
   { path: 'stock', component: StockProductosComponent, canActivate: [AuthFarmaciaGuard] },
   { path: 'stock/crear-producto', component: CrearProductoComponent, canActivate: [AuthFarmaciaGuard] },
+  { path: 'stock/ficha-ingreso', component: FichaIngresoComponent, canActivate: [AuthFarmaciaGuard]},
   { path: 'stock/ficha-salida', component: FichaSalidaComponent, canActivate: [AuthFarmaciaGuard]},
   // SEGURIDAD
   { path: 'seguridad', component: SeguridadHomeComponent },

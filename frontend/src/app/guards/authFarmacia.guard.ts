@@ -14,19 +14,18 @@ export class AuthFarmaciaGuard implements CanActivate {
     const flag = await this.authService.isAuthenticated();
     const flag2 = await this.authService.isFarmacia();
     // const flag2 = true
-    // if (flag !== true && flag2 !== true) {
-    //   // console.log(this.authService.isAuthenticated())
-    //   // console.log('permiti el paso ')
-    //   return true;
-    // } else if (flag !== true && flag2 !== false) {
-    //   this.openSnackBar();
-    //   // console.log('negado')
-    //   return false;
-    // } else {
-    //   this.router.navigate(['/login']);
-    //   return false
-    // }
-    return true
+    if (flag == true && flag2 == true) {
+      // console.log(this.authService.isAuthenticated())
+      // console.log('permiti el paso ')
+      return true;
+    }  else if (flag == true && flag2 == false) {
+      this.openSnackBar();
+      // console.log('negado')
+      return false;
+    } else {
+      this.router.navigate(['/login']);
+      return false
+    }
   }
 
   openSnackBar() {

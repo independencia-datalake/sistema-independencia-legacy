@@ -29,6 +29,7 @@ import { FichaSalidaComponent } from './ficha-salida/ficha-salida.component';
 import { MatRadioModule } from '@angular/material/radio';
 import { VentaPendienteDialogComponent } from './venta/venta-pendiente-dialog/venta-pendiente-dialog.component';
 import { ConfirmacionDialogComponent } from './comprobanteventa-detail/confirmacion-dialog/confirmacion-dialog.component';
+import { FichaIngresoComponent } from './ficha-ingreso/ficha-ingreso.component';
 
 
 
@@ -54,6 +55,7 @@ import { ConfirmacionDialogComponent } from './comprobanteventa-detail/confirmac
     FichaSalidaComponent,
     VentaPendienteDialogComponent,
     ConfirmacionDialogComponent,
+    FichaIngresoComponent,
   ],
   imports: [
     CommonModule,

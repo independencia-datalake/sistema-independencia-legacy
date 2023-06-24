@@ -80,3 +80,7 @@
 .icon-display {
   cursor: pointer;
 }
+
+.hide-header {
+  display: none;
+}
