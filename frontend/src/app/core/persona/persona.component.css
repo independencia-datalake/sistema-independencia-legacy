@@ -70,3 +70,9 @@ h3 {
 .white-text {
   color: white !important;
 }
+sub.error{
+  color:#fc3d59;
+  position: absolute;
+  left: -10px;
+  bottom: -10px;
+}

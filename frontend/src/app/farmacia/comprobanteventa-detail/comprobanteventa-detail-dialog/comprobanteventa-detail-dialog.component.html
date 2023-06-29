@@ -1,5 +1,5 @@
 <form [formGroup]="formProductos">
-
+  <h1>Agregar Producto</h1>
   <ng-container formArrayName="producto">
     <ng-container *ngFor="let productoForm of productos.controls; let i = index" [formGroupName]="i">
       <div class="producto-form-row">
@@ -27,7 +27,7 @@
 
   <div class="f-acenter-jarround">
     <button class="f-acenter-jarround rounded-pink-button"
-      (click)="agregarProducto()"><mat-icon>add_shopping_cart</mat-icon><span>Agregar
+      (click)="agregarProducto()"><span>Agregar
         Producto</span></button>
   </div>
 </form>
