@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogUVComponent } from './dialog-uv/dialog-uv.component';
 import * as L from 'leaflet';
 import { HttpClient } from '@angular/common/http';
+import { DataLabService } from 'src/app/service/data-lab.service';
 
 
 @Component({
@@ -21,7 +22,9 @@ export class InfoUvComponent {
   public data_poblacion: any;
   data_poblacion_uv: any = { "UV": 0, "Total": 0, "Hombres": 0, "Mujeres": 0, "% Población inmigrante": 0, "Superficie total m2": 0, "Superficies no habitadas m2": 0, "Superficie m2": 0, "Densidad Habitantes/Km2": 0 };
 
-  constructor(public dialog: MatDialog, private http: HttpClient) { }
+  data_transito_uv: any = {"UV": 0, "Licencia Conducir":0, "Permiso Circulacion":0, "Rank Licencia":0, "Rank Permiso":0, "Created": 0}
+
+  constructor(public dialog: MatDialog, private http: HttpClient, private data_lab: DataLabService) { }
 
   ngAfterViewInit(): void{
 
@@ -105,7 +108,15 @@ export class InfoUvComponent {
   selectUV(uv) {
     let uvNumber = parseInt(uv.split('-')[1]);
     this.data_poblacion_uv = this.data_poblacion.find(element => element.UV === uvNumber);
-
+    this.data_lab.getTransitoDataLabByUV(uvNumber+1).subscribe(
+      (data) => {
+        this.data_transito_uv = data;
+        console.log(this.data_transito_uv); // Solo para verificar la data recibida
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
 
     // console.log(uv)
     // console.log(this.data_poblacion)

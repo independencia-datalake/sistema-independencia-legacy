@@ -69,6 +69,20 @@
             <p>I'm visible because I am open</p>
           </mat-expansion-panel>
 
+          <mat-expansion-panel>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Transito
+              </mat-panel-title>
+              <mat-panel-description>
+                Informacion sobre licencias de conducir y patentes comerciales
+              </mat-panel-description>
+            </mat-expansion-panel-header>
+            <p>En tu Unidad Vecinal se han entregado <span class="highlight">{{data_transito_uv.licencia_conducir}}</span> Licencias de conducir. Es la unidad vecinal <span class="highlight">{{'N°' + data_transito_uv.rank_licencia_conducir}}</span> con más licencias entregadas
+              <br> Tu Unidad Vecinal es la <span class="highlight">{{'N°' + data_transito_uv.rank_permiso_circulacion}}</span> con mayor cantidad de permisos de circulación, con un total de <span class="highlight">{{data_transito_uv.permiso_circulacion}}</span> permisos entregados
+              <br> *última medición del {{data_transito_uv.created}}</p>
+          </mat-expansion-panel>
+
         </mat-accordion>
       </div>
     </div>

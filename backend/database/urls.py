@@ -19,11 +19,13 @@ urlpatterns = [
     path('api/users/register/', registerUser, name='register'),
 
     path('api/mapa_legacy/', include('api.urls.mapa_legacy_urls')),
+    path('api/data_lab/', include('api.urls.data_lab_urls')),
     path('api/core/', include('api.urls.core_urls')),
     path('api/farmacia/', include('api.urls.farmacia_urls')),
     path('api/seguridad/', include('api.urls.seguridad_urls')),
     path('api/stock/', include('api.urls.stock_urls')),
     path('api/users/', include('api.urls.users_urls')),
+
 
 
     path('api/users/profile/', getUserProfile, name="users-profile")

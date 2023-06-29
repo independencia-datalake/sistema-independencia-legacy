@@ -68,6 +68,7 @@ class LaboratoriosDeleteAPIViw(generics.DestroyAPIView):
     ## Producto Farmacia
 
 class ProductoFarmaciaListCreateAPIViw(generics.ListCreateAPIView):
+    
     queryset = ProductoFarmacia.objects.all()
     serializer_class = ProductoFarmaciaSerializer
     permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedorNOPOST]
