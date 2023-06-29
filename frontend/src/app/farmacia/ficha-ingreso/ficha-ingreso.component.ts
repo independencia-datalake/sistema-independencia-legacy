@@ -93,7 +93,7 @@ export class FichaIngresoComponent {
     response.forEach(product => {
       let producto_ingresado_aux = {
         "cantidad": product.cantidad_ingresada,
-        "lote": product.lote,
+        "lote": product.n_lote,
         "precio_compra": product.precio_compra,
         "precio_venta": product.precio_venta,
         "n_factura": product.n_factura,

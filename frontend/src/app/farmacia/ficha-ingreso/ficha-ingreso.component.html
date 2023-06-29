@@ -13,7 +13,7 @@
       <mat-label>Nombre del producto </mat-label>
       <mat-select formControlName="producto">
         <mat-option *ngFor="let producto of filteredOptions" [value]="producto">
-          {{ producto.marca_producto }} | {{producto.dosis}} x {{producto.presentacion}} | {{producto.p_a}} | Proveedor: {{producto.proveedor}} | Lab
+          {{ producto.marca_producto }} | {{producto.dosis}} x {{producto.presentacion}} | {{producto.p_a}} | Proveedor: {{producto.proveedor}} | Lab: {{producto.laboratorio}}
         </mat-option>
       </mat-select>
     </mat-form-field>
