@@ -33,7 +33,6 @@ export class FichaIngresoComponent {
       let estado = response[0].estado
       this.n_ingreso = response[0].id
       if (estado === true) {
-        console.log('hay q crear un nuevo estado')
 
         this.formEstadoIngreso = this.fb.group({
           estado: false,
@@ -43,7 +42,6 @@ export class FichaIngresoComponent {
         this.stockService.createEstadoIngreso(estadoOrdenIngreso).subscribe(respuesta => {
           // console.log(respuesta)
         })
-        console.log(estadoOrdenIngreso)
         this.ngOnInit()
       }
     })
