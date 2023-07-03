@@ -14,6 +14,7 @@ import { of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { MatSelectModule } from '@angular/material/select';
 import { MapaLegacyService } from 'src/app/service/mapa-legacy.service';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 interface data_UV {
   nombre: any;
@@ -55,6 +56,8 @@ export class VisComponent {
 
   fechaInicio: any;
   fechaFin: any;
+  anioFin: any;
+  anioFin_ly: any;
 
   // SLIDER
 
@@ -76,8 +79,39 @@ export class VisComponent {
     floor: 0,
     ceil: 100,
     noSwitching: true,
+
     getPointerColor: (value:number): string => {return '#FC3D59'},
   };
+
+  public columnas = [
+    { nombre: 'total', resaltada: false, element: 'total' },
+    // { nombre: 'rank', resaltada: false },
+    { nombre: 'ventas', resaltada: false, element: 'ventas' },
+    { nombre: 'alcohol', resaltada: false, element: 'alcohol' },
+    { nombre: 'comercial', resaltada: false, element: 'comercial' },
+    { nombre: 'profesional', resaltada: false, element: 'profesional'},
+    { nombre: 'industrial', resaltada: false, element: 'industrial' },
+    { nombre: 'microempresa', resaltada: false, element: 'microempresa'},
+    { nombre: 'estacionada', resaltada: false, element: 'estacionada'},
+    { nombre: 'anexion', resaltada: false, element: 'anexion' },
+    { nombre: 'antiguas', resaltada: false, element: 'antiguas' },
+    { nombre: 'anulacion', resaltada: false, element: 'anulacion' },
+    { nombre: 'cambio de destino', resaltada: false, element: 'cambio_destino' },
+    { nombre: 'fusion', resaltada: false, element: 'fusion' },
+    { nombre: 'ley 20.898', resaltada: false, element: 'ley_20898' },
+    { nombre: 'obras menores', resaltada: false, element: 'obrasmenores' },
+    { nombre: 'permisos de edificacion', resaltada: false, element: 'permisosedificacion' },
+    { nombre: 'recepcion final', resaltada: false, element: 'recepcionfinal' },
+    { nombre: 'regularizaciones', resaltada: false, element: 'regularizaciones' },
+    { nombre: 'regularizaciones ley 18.591', resaltada: false, element: 'regularizaciones18591' },
+    { nombre: 'resolucion', resaltada: false, element: 'resolucion' },
+    { nombre: 'subdivisiones', resaltada: false, element: 'subdivisiones' },
+    { nombre: 'ventas por piso', resaltada: false, element: 'ventasporpiso' },
+    { nombre: 'licencia conducir', resaltada: false, element: 'licencia_conducir' },
+    { nombre: 'permiso circulacion', resaltada: false, element: 'permiso_circulacion' },
+    // Agrega las columnas restantes aquí...
+  ];
+
 
   constructor(private http: HttpClient,
               private empresas: EmpresasServiceService,
@@ -134,10 +168,7 @@ export class VisComponent {
 
 
       });
-    } else if (this.tipo_mapa === 'farmacia') {
-      // console.log('farmacia')
-    }else if (this.tipo_mapa === 'impuestosyderechos') {
-      // console.log('impuestos y derechos')
+    }else if (this.tipo_mapa === 'farmacia') {
 
       this.mapa_legacy.getRangoFechasGeneralByTipo(this.tipo_mapa, this.columnaResaltada).pipe(
         switchMap(fechas => {
@@ -152,33 +183,102 @@ export class VisComponent {
           } else if (flag_slider === false) {
             this.initializeSlider(this.fechaInicio,this.fechaFin)
           }
+          return forkJoin([this.mapa_legacy.getVentasFarmaciaByUV(this.fechaInicio, this.fechaFin), this.uvCoordRequest])
+        })
+      ).subscribe(([ventasFarmaciaTotalByUVData, uvCoordData]) => {
+        let densidadPorUV = {};
+        const values = Object.values(ventasFarmaciaTotalByUVData);
+        if ( this.columnaResaltada === 'ventas') {
+          values.forEach((element: any) => {
+            densidadPorUV[element.uv-1] = element.ventas
+          });
+          let densidades = (ventasFarmaciaTotalByUVData as any[]).map(item => item.ventas);
+          this.maximo = Math.max(...densidades);
+        }
+        this.dataSource = ventasFarmaciaTotalByUVData.map(item => {
+          return { nombre:'UV-' + (item.uv-1), ventas: item.ventas}
+        })
+
+        // Utilizar los datos al crear geoJsonData
+        this.geoJsonData = {
+          type: 'FeatureCollection',
+          features: Object.keys(uvCoordData).map((key) => {
+            const coords = Object.values(uvCoordData[key]);
+            // La clave de UV se asume que está en formato 'UV-#' y se extrae el número
+            let uvNumber = parseInt(key.split('-')[1]);
+            // Obtener la densidad correspondiente de densidadPorUV, o 0 si no hay datos
+            let densidad = densidadPorUV[uvNumber] || 0;
+            return {
+              type: 'Feature',
+              properties: {
+                "name": key,
+                "density": densidad,
+              },
+              geometry: {
+                type: 'Polygon',
+                coordinates: [coords],
+              },
+            };
+          }),
+        };
+
+        // Luego puedes actualizar la data del layer geoJson con los nuevos datos
+        this.geoJsonLayer.clearLayers();
+        this.geoJsonLayer.addData(this.geoJsonData);
+
+        this.legend = new L.Control({ position: 'bottomright' });
+        this.updateLegend(this.maximo);
+        this.legend.addTo(this.map);
+
+      })
+
+      this.displayedColumns = ['nombre', 'ventas'];
+
+    }else if (this.tipo_mapa === 'impuestosyderechos') {
+      // console.log('impuestos y derechos')
+      this.mapa_legacy.getRangoFechasGeneralByTipo(this.tipo_mapa, this.columnaResaltada).pipe(
+        switchMap(fechas => {
+          if (fecha_inicio_init && fecha_fin_init) {
+            this.fechaInicio = fecha_inicio_init
+            this.fechaFin = fecha_fin_init
+          } else {
+            this.fechaInicio = fechas.fecha_inicio
+            this.fechaFin = fechas.fecha_fin
+          }
+          if (flag_slider === true) {
+          } else if (flag_slider === false) {
+            this.initializeSlider(this.fechaInicio,this.fechaFin)
+          }
+
+          const fechaFinObj = new Date(this.fechaFin)
+          this.anioFin = fechaFinObj.getFullYear();
+          this.anioFin_ly = this.anioFin-1
 
           return forkJoin([this.mapa_legacy.getEmpresasByUV(this.fechaInicio, this.fechaFin), this.uvCoordRequest]);
         })
       ).subscribe(([empresasTotalByUVData, uvCoordData]) => {
         let densidadPorUV = {};
         const values = Object.values(empresasTotalByUVData);
-        if (this.columnaResaltada === 'total') {
-          values.forEach(element => {
-            densidadPorUV[element.uv-1] = element.total
-          });
-          let densidades = (empresasTotalByUVData as any[]).map(item => item.total);
-          this.maximo = Math.max(...densidades);
-        } else if (this.columnaResaltada === 'comercial') {
-          values.forEach(element => {
-            densidadPorUV[element.uv-1] = element.comercial
-          });
-          let densidades = (empresasTotalByUVData as any[]).map(item => item.comercial);
-          this.maximo = Math.max(...densidades);
-        } else if (this.columnaResaltada === 'alcohol') {
-          values.forEach(element => {
-            densidadPorUV[element.uv-1] = element.alcohol
-          });
-          let densidades = (empresasTotalByUVData as any[]).map(item => item.alcohol);
-          this.maximo = Math.max(...densidades);
-        }
+
+        let clave = this.columnaResaltada
+
+        values.forEach(element => {
+          densidadPorUV[element.uv-1] = element[clave];  // Accede a la propiedad de 'element' basada en la clave
+        });
+
+        let densidades = (empresasTotalByUVData as any[]).map(item => item[clave]);  // Mapea la propiedad de 'item' basada en la clave
+
+        this.maximo = Math.max(...densidades);
+
         this.dataSource = empresasTotalByUVData.map(item => {
-          return { nombre:'UV-' + (item.uv-1), total: item.total, comercial: item.comercial, alcohol: item.alcohol}
+
+          let rank = item[`rank_${this.columnaResaltada}`];
+          let rank_ly = item[`rank_${this.columnaResaltada}_ly`];
+
+          rank = rank || '-';  // Si rank es null o undefined, se le asigna "-"
+          rank_ly = rank_ly || '-';
+
+          return { nombre:'UV-' + (item.uv-1), rank: rank, rank_ly: rank_ly, total: item.total, alcohol: item.alcohol, comercial: item.comercial, profesional: item.profesional, industrial: item.industrial, microempresa: item.microempresa, estacionada: item.estacionada}
         })
 
         // Utilizar los datos al crear geoJsonData
@@ -213,46 +313,80 @@ export class VisComponent {
         this.legend.addTo(this.map);
       })
 
-      this.displayedColumns = ['nombre', 'total', 'comercial', 'alcohol'];
+      this.displayedColumns = ['nombre', 'rank', 'rank_ly', 'total', 'alcohol', 'comercial', 'profesional', 'industrial', 'microempresa', 'estacionada'];
 
 
     } else if (this.tipo_mapa === 'obrasmunicipales') {
-      this.columnaResaltada = 'total'
-      // this.mapa_legacy.getRangoFechasGeneralByTipo(this.tipo_mapa, this.columnaResaltada).pipe(
-      //   switchMap(fechas => {
-      //     if (fecha_inicio_init && fecha_fin_init) {
-      //       this.fechaInicio = fecha_inicio_init
-      //       this.fechaFin = fecha_fin_init
-      //     } else {
-      //       this.fechaInicio = fechas.fecha_inicio
-      //       this.fechaFin = fechas.fecha_fin
-      //     }
+      this.mapa_legacy.getRangoFechasGeneralByTipo(this.tipo_mapa, this.columnaResaltada).pipe(
+        switchMap(fechas => {
+          if (fecha_inicio_init && fecha_fin_init) {
+            this.fechaInicio = fecha_inicio_init
+            this.fechaFin = fecha_fin_init
+          } else {
+            this.fechaInicio = fechas.fecha_inicio
+            this.fechaFin = fechas.fecha_fin
+          }
+          if (flag_slider === true) {
+          } else if (flag_slider === false) {
+            this.initializeSlider(this.fechaInicio,this.fechaFin)
+          }
 
-      //     if (flag_slider === true) {
-      //     } else if (flag_slider === false) {
-      //       this.initializeSlider(this.fechaInicio,this.fechaFin)
-      //     }
+          const fechaFinObj = new Date(this.fechaFin)
+          this.anioFin = fechaFinObj.getFullYear();
+          this.anioFin_ly = this.anioFin-1
 
-      //     return forkJoin([this.mapa_legacy.getObrasMunicipalesTotalByUV])
-      //   })
-      // )
-
-
-      const ObrasMunicipalesTotalByUV = this.mapa_legacy.getObrasMunicipalesTotalByUV();
-      forkJoin([ObrasMunicipalesTotalByUV, this.uvCoordRequest]).subscribe(([ObrasMunicipalesTotalByUVData, uvCoordData]) => {
+          return forkJoin([this.mapa_legacy.getObrasMunicipalesTotalByUV(this.fechaInicio, this.fechaFin), this.uvCoordRequest]);
+        })
+      ).subscribe(([obrasMunicipalesByUVData, uvCoordData]) => {
         let densidadPorUV = {};
-        const values = Object.values(ObrasMunicipalesTotalByUVData);
+        const values = Object.values(obrasMunicipalesByUVData)
+
+        let clave = this.columnaResaltada
+
         values.forEach(element => {
-          densidadPorUV[element.uv-1] = element.densidad;
-        });
-
-        let densidades = (ObrasMunicipalesTotalByUVData as any[]).map(item => item.densidad);
-        this.maximo = Math.max(...densidades);
-
-        this.dataSource = ObrasMunicipalesTotalByUVData.map(item => {
-          return { nombre:'UV-' + (item.uv-1), total: item.densidad}
+          densidadPorUV[element.uv-1] = element[clave];
         })
 
+        let densidades = (obrasMunicipalesByUVData as any[]).map(item => item[clave])
+
+        this.maximo = Math.max(...densidades);
+
+        this.dataSource = obrasMunicipalesByUVData.map(item => {
+
+          let formattedColumnName = this.formatColumnName(this.columnaResaltada);
+          let rank;
+          let rank_ly;
+          if (this.columnaResaltada === 'cambio de destino') {
+              rank = item.rank_cambiodestino;
+          } else if (this.columnaResaltada === 'permisos de edificacion') {
+              rank = item.rank_permisosedificacion;
+              rank_ly = item.rank_permisosedificacion_ly;
+          } else if (this.columnaResaltada === 'regularizaciones ley 18.591') {
+              rank = item.rank_regularizaciones18591;
+              rank_ly = item.rank_regularizaciones18591_ly;
+          } else {
+            rank = item[`rank_${formattedColumnName}`];
+            rank_ly = item[`rank_${formattedColumnName}_ly`];
+          }
+
+          return { nombre:'UV-' + (item.uv-1),
+                   rank: rank,
+                   total: item.total,
+                   anexion: item.anexion,
+                   antiguas: item.antiguas,
+                   anulacion: item.anulacion,
+                   cambio_destino: item['cambio de destino'],
+                   fusion: item.fusion,
+                   ley_20898: item['ley 20.898'],
+                   obrasmenores: item['obras menores'],
+                  permisosedificacion: item['permisos de edificacion'],
+                   recepcionfinal: item['recepcion final'],
+                   regularizaciones: item.regularizaciones,
+                   regularizaciones18591: item['regularizaciones ley 18.591'],
+                   resolucion: item.resolucion,
+                   subdivisiones: item.subdivisiones,
+                  ventasporpiso: item['ventas por piso'] }
+        })
         // Utilizar los datos al crear geoJsonData
         this.geoJsonData = {
           type: 'FeatureCollection',
@@ -275,14 +409,20 @@ export class VisComponent {
             };
           }),
         };
+
+        // Luego puedes actualizar la data del layer geoJson con los nuevos datos
         this.geoJsonLayer.clearLayers();
         this.geoJsonLayer.addData(this.geoJsonData);
 
         this.legend = new L.Control({ position: 'bottomright' });
         this.updateLegend(this.maximo);
         this.legend.addTo(this.map);
+
+
       })
-      this.displayedColumns = ['nombre', 'total'];
+
+      this.displayedColumns = ['nombre', 'rank', 'total', 'anexion', 'antiguas', 'anulacion', 'cambio de destino', 'fusion', 'ley 20.898', 'obras menores', 'permisos de edificacion', 'recepcion final', 'regularizaciones', 'regularizaciones ley 18.591', 'resolucion', 'subdivisiones', 'ventas por piso']
+
 
     } else if (this.tipo_mapa === 'transito') {
 
@@ -300,7 +440,9 @@ export class VisComponent {
           } else if (flag_slider === false) {
             this.initializeSlider(this.fechaInicio,this.fechaFin)
           }
-
+          const fechaFinObj = new Date(this.fechaFin)
+          this.anioFin = fechaFinObj.getFullYear();
+          this.anioFin_ly = this.anioFin-1
           // this.initializeSlider(this.fechaInicio,this.fechaFin)
           return forkJoin([this.mapa_legacy.getTransitoByUV(this.fechaInicio,this.fechaFin), this.uvCoordRequest]);
         })
@@ -325,7 +467,20 @@ export class VisComponent {
         }
 
         this.dataSource = licenciasTotalByUVData.map(item => {
-          return { nombre:'UV-' + (item.uv-1), licencia_conducir: item.licencia_conducir, permiso_circulacion: item.permiso_circulacion}
+          let rank;
+          let rank_ly
+          if (this.columnaResaltada === 'licencia conducir') {
+            rank = item.rank_licencia
+            rank_ly = item.rank_licencia_ly
+          } else if (this.columnaResaltada === 'permiso circulacion') {
+            rank = item.rank_permiso
+            rank_ly = item.rank_permiso_ly
+          }
+
+          rank = rank || '-';  // Si rank es null o undefined, se le asigna "-"
+          rank_ly = rank_ly || '-';
+
+          return { nombre:'UV-' + (item.uv-1), rank: rank, rank_ly: rank_ly, licencia_conducir: item.licencia_conducir, permiso_circulacion: item.permiso_circulacion}
         })
 
         // Utilizar los datos al crear geoJsonData
@@ -357,7 +512,7 @@ export class VisComponent {
         this.updateLegend(this.maximo);
         this.legend.addTo(this.map);
       })
-      this.displayedColumns = ['nombre', 'licencia conducir', 'permiso circulacion'];
+      this.displayedColumns = ['nombre', 'rank', 'rank_ly', 'licencia conducir', 'permiso circulacion'];
     }
 
     if (this.tipo_mapa !== 'ninguna') {
@@ -367,9 +522,6 @@ export class VisComponent {
       }).addTo(this.map);
 
     }
-
-
-
    }
 
   ngAfterViewInit(): void{
@@ -425,14 +577,18 @@ export class VisComponent {
   tipoMapaChange(opcion: string) {
     this.tipo_mapa = opcion
     if (this.tipo_mapa === 'farmacia') {
-
+      this.columnaResaltada = 'ventas'
+      localStorage.setItem('Columna', 'ventas')
     } else if(this.tipo_mapa === 'impuestosyderechos') {
       this.columnaResaltada = 'total'
       localStorage.setItem('Columna', 'total')
+    }else if(this.tipo_mapa === 'obrasmunicipales'){
+      this.columnaResaltada ='total'
     } else if (this.tipo_mapa === 'transito') {
       this.columnaResaltada = 'licencia conducir'
       localStorage.setItem('Columna', 'licencia conducir')
     }
+
     this.initializeMapData()
   }
 
@@ -516,7 +672,7 @@ export class VisComponent {
 
     //Tipo de label
     if (this.tipo_mapa === 'farmacia') {
-
+      this.label.updateContent( '<h4>Ventas de farmacia ' +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
     } else if (this.tipo_mapa === 'impuestosyderechos') {
       this.label.updateContent( '<h4>Patentes de tipo ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
     } else if (this.tipo_mapa === 'obrasmunicipales'){
@@ -613,6 +769,11 @@ export class VisComponent {
     else {
       return 'error'
     }
+  }
+
+  formatColumnName(name) {
+    // Reemplaza los espacios y puntos por nada
+    return name.replace(/[\s\.]/g, '');
   }
 
 }

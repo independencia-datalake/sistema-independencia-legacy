@@ -6,6 +6,7 @@ import { take, of, forkJoin, switchMap, map } from 'rxjs';
 import { PersonaService } from 'src/app/service/persona.service';
 import { ProductosService } from 'src/app/service/productos.service';
 import { StockService } from 'src/app/service/stock.service';
+import { FormsModule } from '@angular/forms';
 
 export interface products {
   name: string;
@@ -37,6 +38,12 @@ export class InformesProductosComponent {
     'laboratory', 'button'];
     dataSource = new MatTableDataSource<products>();
 
+    page: number = 1;
+    pageSize: number = 10;
+    totalPages: number;
+
+    buscadorValue: string = '';
+
     @ViewChild(MatPaginator) paginator: MatPaginator;
 
     constructor(
@@ -54,10 +61,14 @@ export class InformesProductosComponent {
       this.dataSource.paginator = this.paginator;
     }
 
-    getData(): void {
-      this.productosService.getProductos().subscribe(response => {
+    getData(search = this.buscadorValue,size = this.pageSize): void {
+      this.productosService.getProductosLista(search,this.page, size).subscribe((raw_data: any) => {
+        // console.log(raw_data)
+        this.totalPages =  Math.ceil(raw_data.count / this.pageSize)
+        const response = raw_data.results
         this.dataSource.data = response
-        console.log(this.dataSource.data)
+        // this.dataSource.data = raw_data
+        // console.log(this.dataSource.data)
       })
     }
 
@@ -74,5 +85,38 @@ export class InformesProductosComponent {
       this.dataSource.filter = filterValue.trim().toLowerCase();
     }
 
+    nextPage() {
+      this.page++;
+      this.getData();
+    }
+
+    prevPage() {
+      if (this.page > 1) {
+        this.page--;
+        this.getData();
+      }
+    }
+
+    setPageSize(size) {
+      this.pageSize=size
+      this.getData()
+    }
+
+    LastFirstPage(page) {
+      if (page === 'last') {
+        // console.log(this.totalPages)
+        this.page = this.totalPages
+      } else if (page === 'first') {
+        // console.log(1)
+        this.page = 1
+      }
+      this.getData();
+    }
+
+    filtro(valor) {
+      // console.log(valor)
+
+      this.getData();
+    }
 }
 

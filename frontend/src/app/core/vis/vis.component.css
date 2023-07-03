@@ -1,7 +1,7 @@
 @import url("https://unpkg.com/leaflet@1.9.3/dist/leaflet.css");
 
 #map {
-  height: 500px;
+  height: 555px;
   width: 90%;
   /* border: 2px solid black; */
 }
@@ -30,7 +30,7 @@
   opacity: 0.7;
 }
 .mat-mdc-table .mdc-data-table__header-row {
-  height: 56px;
+  height: 50px;
   background: #FC3D59;
 }
 
@@ -45,11 +45,14 @@ table tr:nth-child(odd) td {
 
 .mi-tabla {
 
-  height: 447px;
+  height: 600px;
   overflow: auto;
   display: block;
 }
-
+.mat-mdc-table .mdc-data-table__row {
+  /* height: 25px; */
+  height: 35px;
+}
 .mi-tabla th,
 .mi-tabla td {
   width: 1%;
@@ -58,10 +61,6 @@ table tr:nth-child(odd) td {
 
 .leaflet-container {
   background-color: white;
-}
-
-mat-slider {
-  width: 225px !important;
 }
 
 
@@ -198,4 +197,6 @@ mat-slider {
     background-color: #fc3d59;
 }
 
-
+.mat-column-name {
+  height: 100px;
+}

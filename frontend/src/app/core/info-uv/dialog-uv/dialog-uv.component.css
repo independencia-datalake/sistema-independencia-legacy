@@ -10,3 +10,9 @@
   /* color: #FC3D59 !important; */
   cursor: pointer;
 }
+
+.mat-mdc-button:not(:disabled) {
+  color: rgb(255 255 255) !important;
+  background: transparent;
+  font-size: 1.05em !important;
+}

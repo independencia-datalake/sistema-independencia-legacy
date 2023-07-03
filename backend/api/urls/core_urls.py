@@ -11,6 +11,7 @@ urlpatterns = [
     path('callesindependencia/update/<int:pk>/', views.CallesIndependenciaUpdateAPIViw.as_view()),
     path('callesindependencia/delete/<int:pk>/', views.CallesIndependenciaDeleteAPIViw.as_view()),
     path('persona/', views.PersonaListCreateAPIViw.as_view()),
+    path('persona-lista/', views.PersonaList2CreateAPIViw.as_view()),
     path('persona/<int:pk>/', views.PersonaDetailAPIViw.as_view()),
     path('persona/update/<int:pk>/', views.PersonaUpdateAPIViw.as_view()),
     path('persona/delete/<int:pk>/', views.PersonaDeleteAPIViw.as_view()),

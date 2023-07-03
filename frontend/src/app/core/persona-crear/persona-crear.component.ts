@@ -262,7 +262,13 @@ export class PersonaCrearComponent implements OnInit {
       console.log(fechaFormatoCorrecto)
       if (!fechaFormatoCorrecto) {
         console.log('EN IF')
-        data_persona.fecha_nacimiento = format(new Date(data_persona.fecha_nacimiento), 'yyyy-MM-dd');
+        // data_persona.fecha_nacimiento = format(new Date(data_persona.fecha_nacimiento), 'yyyy-MM-dd');
+        console.log(data_persona.fecha_nacimiento)
+        const [dia, mes, año] = data_persona.fecha_nacimiento.split('-');
+        const fecha = new Date(`${año}-${mes}-${dia}`);
+        const fechaformateada = format(fecha, 'yyyy-MM-dd');
+        data_persona.fecha_nacimiento = fechaformateada
+        console.log(data_persona.fecha_nacimiento)
       }
 
       // const fechaformateada = format(new Date(data_persona.fecha_nacimiento), 'yyyy-MM-dd');

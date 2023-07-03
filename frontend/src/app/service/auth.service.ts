@@ -91,6 +91,22 @@ export class AuthService {
     }
   }
 
+  async isDeveloper(): Promise<Boolean> {
+    const token_check = localStorage.getItem('token');
+    const grupos = this.getGrupos(token_check);
+    try {
+      if (grupos.includes('Developer') ) {
+        // console.log('grupo aceptado')
+        return true
+      } else {
+        // console.log('grupo no encontrado')
+        return false
+      }
+    } catch (error) {
+      return false
+    }
+  }
+
   async isFarmacia(): Promise<boolean> {
     const token_check = localStorage.getItem('token');
     const grupos = this.getGrupos(token_check)

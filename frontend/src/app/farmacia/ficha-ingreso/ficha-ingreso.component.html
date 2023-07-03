@@ -1,0 +1,51 @@
+<div class="subtitulo">
+  <h2>Ficha ingreso de Producto</h2>
+</div>
+<div class="container contenedor-wrap text-container">
+
+  <h3>Ficha de ingreso N°{{n_ingreso}}</h3>
+  <div *ngFor="let producto of listaProductosIngresar; let i=index">
+    <p>{{i + 1}}. {{producto.nombre_producto}} || Cantidad: {{producto.cantidad_ingresada}}</p>
+  </div>
+  <h3>Producto a ingresar</h3>
+  <form [formGroup]="formIngresoProducto" (submit)="ingresoProducto()">
+    <mat-form-field class="info" appearance="outline">
+      <mat-label>Nombre del producto </mat-label>
+      <mat-select formControlName="producto">
+        <mat-option *ngFor="let producto of filteredOptions" [value]="producto">
+          {{ producto.marca_producto }} | {{producto.dosis}} x {{producto.presentacion}} | {{producto.p_a}} | Proveedor: {{producto.proveedor}} | Lab: {{producto.laboratorio}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="info">
+      <mat-label>Cantidad ingresada al stock </mat-label>
+      <input type="number" formControlName="cantidad_ingresada" matInput placeholder="" required>
+    </mat-form-field>
+    <mat-form-field class="info">
+      <mat-label>Precio de Compra </mat-label>
+      <span matPrefix>&nbsp; $ &nbsp;</span>
+      <input type="number" formControlName="precio_compra" matInput placeholder="" required>
+    </mat-form-field>
+    <mat-form-field class="info">
+      <mat-label>Precio de venta </mat-label>
+      <span matPrefix>&nbsp; $ &nbsp;</span>
+      <input type="number" formControlName="precio_venta" matInput placeholder="" required>
+    </mat-form-field>
+    <mat-form-field class="info">
+      <mat-label>N° de lote </mat-label>
+      <input formControlName="lote" matInput placeholder="" required>
+    </mat-form-field>
+    <mat-form-field class="info">
+      <mat-label>N° de factura </mat-label>
+      <input formControlName="n_factura" matInput placeholder="" required>
+    </mat-form-field>
+
+    <div>
+      <button type="button"  mat-raised-button (click)="confirmar()">Confirmar</button>
+      <button type="submit" mat-raised-button>Agregar producto</button>
+      <!-- <button mat-button (click)="">Reset</button> -->
+      <button type="button" mat-raised-button (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>

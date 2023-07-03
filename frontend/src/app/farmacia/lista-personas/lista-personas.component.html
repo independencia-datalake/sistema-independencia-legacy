@@ -7,13 +7,7 @@
   </div>
 </div>
 <div>
-  <!-- <mat-form-field>
-    <mat-label>Filtrar por Nombre</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Escriba el nombre a buscar">
-  </mat-form-field>
-  <button class="" (click)="nuevaPersona()"><span>Crear
-      Persona</span><mat-icon>chevron_right</mat-icon></button>
-</div> -->
+
 </div>
 <div class="container contenedor-wrap">
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -30,17 +24,17 @@
 
     <ng-container matColumnDef="healthInsurance">
       <th mat-header-cell *matHeaderCellDef> Prevision </th>
-      <td mat-cell *matCellDef="let element"> {{element.healthInsurance}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.info_salud[0].prevision}} </td>
     </ng-container>
 
     <ng-container matColumnDef="isapre">
       <th mat-header-cell *matHeaderCellDef> Isapre </th>
-      <td mat-cell *matCellDef="let element"> {{element.isapre}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.info_salud[0].isapre}} </td>
     </ng-container>
 
     <ng-container matColumnDef="comments">
       <th mat-header-cell *matHeaderCellDef> Comentarios </th>
-      <td mat-cell *matCellDef="let element"> {{element.comments}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.info_salud[0].comentarios}} </td>
     </ng-container>
 
     <ng-container matColumnDef='button'>
@@ -55,7 +49,33 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons aria-label="Select page of periodic elements">
-  </mat-paginator>
+  <!-- <mat-paginator [pageSizeOptions]="[10, 20, 30]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+  </mat-paginator> -->
+
+  <button mat-button (click)="LastFirstPage('first')">First</button>
+  <button mat-button *ngIf="page !== 1"  (click)="prevPage()">Anterior</button>
+  <button mat-button *ngIf="page !== totalPages" (click)="nextPage()">Siguiente</button>
+  <button mat-button (click)="LastFirstPage('last')">Last</button>
+
+  <mat-form-field>
+    <mat-label>Elementos por página</mat-label>
+    <mat-select (selectionChange)="setPageSize($event.value)" [value]="pageSize.toString()">
+      <mat-option value="5">5</mat-option>
+      <mat-option value="10">10</mat-option>
+      <mat-option value="20">20</mat-option>
+      <mat-option value="30">30</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Filtro</mat-label>
+    <input matInput [(ngModel)]="buscadorValue">
+    <button *ngIf="buscadorValue" matSuffix mat-icon-button aria-label="Clear" (click)="buscadorValue=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+  <button mat-button (click)="filtro(buscadorValue)">Buscar</button>
 
 </div>

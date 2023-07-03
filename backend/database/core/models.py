@@ -167,7 +167,7 @@ class Correo(models.Model):
 
 class Direccion(models.Model):
   active = models.BooleanField(default=True, verbose_name="Activo",null=True)
-  persona = models.ForeignKey(Persona, on_delete=models.CASCADE, verbose_name='Persona')
+  persona = models.ForeignKey(Persona, on_delete=models.CASCADE, verbose_name='Persona', related_name = 'direcciones')
   uv = models.ForeignKey(UV, on_delete=models.CASCADE, verbose_name='UV')
   calle = models.CharField(max_length=200, verbose_name="Avenida/Calle/Pasaje", blank=True, null=True)
   numero = models.PositiveIntegerField(verbose_name="Numeración", blank=True, null=True)

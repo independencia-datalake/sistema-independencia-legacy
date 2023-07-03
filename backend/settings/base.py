@@ -45,12 +45,15 @@ INSTALLED_APPS = [
     'database.farmacia',
     'database.seguridad',
     'database.mapa_legacy',
+    'database.data_lab',
     
     #third-party
     'corsheaders',
     'rest_framework',
     'storages',
     'rest_framework.authtoken',
+
+    'django_filters',
 
 
 ]
@@ -135,9 +138,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REST_FRAMEWORK = {
 
     # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    # 'PAGE_SIZE': 10
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        # 'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework.authentication.BasicAuthentication',
         # 'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
 

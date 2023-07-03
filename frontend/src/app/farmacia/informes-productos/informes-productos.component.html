@@ -76,7 +76,30 @@
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons aria-label="Select page of periodic elements">
-  </mat-paginator>
+  <button mat-button (click)="LastFirstPage('first')">First</button>
+  <button mat-button *ngIf="page !== 1"  (click)="prevPage()">Anterior</button>
+  <button mat-button *ngIf="page !== totalPages" (click)="nextPage()">Siguiente</button>
+  <button mat-button (click)="LastFirstPage('last')">Last</button>
+
+  <mat-form-field>
+    <mat-label>Elementos por página</mat-label>
+    <mat-select (selectionChange)="setPageSize($event.value)" [value]="pageSize.toString()">
+      <mat-option value="5">5</mat-option>
+      <mat-option value="10">10</mat-option>
+      <mat-option value="20">20</mat-option>
+      <mat-option value="30">30</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field class="example-full-width">
+    <mat-label>Filtro</mat-label>
+    <input matInput [(ngModel)]="buscadorValue">
+    <button *ngIf="buscadorValue" matSuffix mat-icon-button aria-label="Clear" (click)="buscadorValue=''">
+      <mat-icon>close</mat-icon>
+    </button>
+  </mat-form-field>
+  <button mat-button (click)="filtro(buscadorValue)">Buscar</button>
+
+
 
 </div>

@@ -6,6 +6,7 @@ import { UsersService } from 'src/app/service/users.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { raw } from 'express';
 
 export interface products {
   salesNumber: number;
@@ -34,6 +35,12 @@ export class ListaVentaComponent implements AfterViewInit {
   ];
   dataSource = new MatTableDataSource<products>();
 
+  page: number = 1;
+  pageSize: number = 10;
+  totalPages: number;
+
+  buscadorValue: string = '';
+
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
@@ -52,37 +59,25 @@ export class ListaVentaComponent implements AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  fetchData(): void {
-    this.ventasService.getComprobanteventa().pipe(take(1)).subscribe((data: any[]) => {
-      const observables = data.map((element) =>
-        this.personaService.getPersona(element.comprador).pipe(take(1))
-      );
+  fetchData(search= this.buscadorValue ,size = this.pageSize): void {
+    this.ventasService.getComprobanteventaLista(search ,this.page, size).pipe(take(1)).subscribe((raw_data: any) => {
+      this.totalPages =  Math.ceil(raw_data.count / this.pageSize)
 
-      forkJoin(observables).subscribe((responses: any[]) => {
-        const userObservables = data.map((element) =>
-          this.usersService.getUserByid(element.farmaceuta).pipe(take(1))
-        );
+      const data = raw_data.results
 
-        forkJoin(userObservables).subscribe((userResponses: any[]) => {
-          const formattedData = responses.map((datapersona, index) => {
-            const userId = data[index].farmaceuta;
-            const profesional = userResponses.find(
-              (user) => user.id === userId
-            );
+    // Usar map para iterar a través de cada objeto y formatear el campo 'created'
+    const formattedData = data.map(item => {
+      // Crear objeto Date a partir del string
+      let createdDate = new Date(item.created);
 
-            return {
-              salesNumber: data[index].id,
-              fecha: this.fechaFormatted(data[index].created),
-              idPerson: datapersona.numero_identificacion,
-              namePerson: datapersona.nombre_completo,
-              professional: profesional.username,
-              estado: data[index].estado
-            };
-          });
+      let formattedCreated = this.fechaFormatted(createdDate)
 
-          this.dataSource.data = formattedData;
-        });
-      });
+      // Devolver el objeto original con el campo 'created' formateado
+      return {...item, created: formattedCreated};
+    });
+
+    this.dataSource.data = formattedData
+
     });
   }
 
@@ -111,4 +106,39 @@ export class ListaVentaComponent implements AfterViewInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
+
+  nextPage() {
+    this.page++;
+    this.fetchData();
+  }
+
+  prevPage() {
+    if (this.page > 1) {
+      this.page--;
+      this.fetchData();
+    }
+  }
+
+  setPageSize(size) {
+    this.pageSize=size
+    this.fetchData()
+  }
+
+  LastFirstPage(page) {
+    if (page === 'last') {
+      // console.log(this.totalPages)
+      this.page = this.totalPages
+    } else if (page === 'first') {
+      // console.log(1)
+      this.page = 1
+    }
+    this.fetchData();
+  }
+
+  filtro(valor) {
+    console.log(valor)
+
+    this.fetchData();
+  }
+
 }

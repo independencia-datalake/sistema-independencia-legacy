@@ -13,6 +13,11 @@ export class MapaLegacyService {
   apiUrl = environment.apiURL;
   constructor( private http: HttpClient ) { }
 
+  // FARMACIA
+
+  getVentasFarmaciaByUV(fecha_inicio, fecha_fin): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/mapa_legacy/farmacia-total/${fecha_inicio}/${fecha_fin}/`);
+  }
 
   // EMPRESAS
   getEmpresasByUV(fecha_inicio, fecha_fin): Observable<Empresas> {
@@ -25,8 +30,8 @@ export class MapaLegacyService {
   }
 
   // DOM OBRAS MUNICIPALES
-  getObrasMunicipalesTotalByUV(): Observable<DOM> {
-    return this.http.get<DOM>(`${this.apiUrl}/mapa_legacy/DOM-total/`);
+  getObrasMunicipalesTotalByUV(fecha_inicio, fecha_fin): Observable<DOM> {
+    return this.http.get<DOM>(`${this.apiUrl}/mapa_legacy/DOM-total/${fecha_inicio}/${fecha_fin}/`);
   }
 
   // RANGO FECHAS
