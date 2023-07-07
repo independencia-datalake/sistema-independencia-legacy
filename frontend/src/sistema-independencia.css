@@ -796,6 +796,11 @@ contenedor-grafico {
 	border: 1px solid #000;
 	color: #FFF;
 }
+.ellipsis-text {
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+  }
 
 
 /* BOOSTRAP ?? */
@@ -10881,5 +10886,11 @@ a.text-dark:hover {
 }
 .a-f-start{
 	align-self: flex-start;
+}
+
+.small-icon{
+	height: 24px!important;
+	width: 24px!important;
+	font-size: 24px!important;
 }
 /*# sourceMappingURL=bootstrap.min.css.map */
