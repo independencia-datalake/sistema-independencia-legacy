@@ -1,3 +1,12 @@
 input{
     color: #4a4a4a;
 }
+.table-head{
+    background-color: rgba(249, 34, 72, 0.5);
+}
+.ellipsis-text{
+    max-width: 200px;
+}
+.table-border{
+    border: 1px solid #4a4a4a;
+}
