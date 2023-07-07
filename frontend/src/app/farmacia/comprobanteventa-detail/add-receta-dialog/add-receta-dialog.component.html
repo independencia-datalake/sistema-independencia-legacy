@@ -1,8 +1,21 @@
-<h1 mat-dialog-title>File Upload</h1>
+<div class="modal-center warning-modal">
+  <mat-icon>receipt</mat-icon>
+  <h1 mat-dialog-title>Subir Receta</h1>
 <div mat-dialog-content>
-  <input type="file" (change)="onFileSelected($event)">
+  <button *ngIf="selectedFile === null "class="pink-rounded-button pl-6" type="button" mat-raised-button
+    (click)="fileInput.click()"><mat-icon class="text-white">
+      attach_file</mat-icon>Selecciona una receta</button>
+ <!--  <input hidden (change)="onFileSelected($event)" #fileInput type="file" multiple> -->
+ <input hidden class="custom-file-upload" type="file" (change)="onFileSelected($event)" #fileInput>
+ <div *ngIf="selectedFile !== null " class="d-flex">
+  <div class="vertical-align-middle flex-column"><div class="vertical-align-middle table-head w-100 p-1 table-border"><p>Nombre</p></div><div class="vertical-align-middle p-1 table-border"><p class=" ellipsis-text">{{selectedFile.name}}</p></div></div>
+  <div class="vertical-align-middle flex-column"><div class="vertical-align-middle table-head w-100 p-1 table-border"><p>Tipo</p></div><div class="vertical-align-middle p-1 table-border"><p class=" ellipsis-text">{{selectedFile.type}}</p></div></div>
+  <div class="vertical-align-middle flex-column"><div class="vertical-align-middle table-head w-100 p-1 table-border"><p>Borrar</p></div><div class="vertical-align-middle p-1 table-border"><mat-icon class="delete-file small-icon" (click)="onFileDeleted()">cancel</mat-icon></div></div>
+ </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button class="pink-rounded-button" mat-button (click)="onNoClick()">Cancel</button>
   <button mat-button [mat-dialog-close]="selectedFile" (click)="addReceta(selectedFile, id_comprobante)" cdkFocusInitial>Ok</button>
 </div>
+</div>
+

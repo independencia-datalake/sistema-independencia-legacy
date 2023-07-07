@@ -10,6 +10,13 @@
   /* color: #FC3D59 !important; */
   cursor: pointer;
 }
+label{
+  color:#4a4a4a!important;
+}
+
+.p-top-40{
+  padding-top: 40px;
+}
 
 .mat-mdc-button:not(:disabled) {
   color: rgb(255 255 255) !important;

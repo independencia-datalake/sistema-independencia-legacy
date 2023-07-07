@@ -1,11 +1,13 @@
-<h1 mat-dialog-title >¿Cual es tu unidad vecinal?</h1>
-<div mat-dialog-content>
-  Elige una opcion:
-  <mat-radio-group [(ngModel)]="selectedOption">
+<div class="modal-center min-w-500 warning-modal">
+  <mat-icon> place</mat-icon>
+  <h1>¿Cual es tu unidad vecinal?</h1>
+<div mat-dialog-content class="producto-form-row modal-center w-100">
+  <p>Elige una opcion:</p>
+  <mat-radio-group [(ngModel)]="selectedOption" class="flex-column">
     <mat-radio-button value="direccion">Ingresar dirección</mat-radio-button>
     <mat-radio-button value="unidad-vecinal">Ingresar unidad vecinal</mat-radio-button>
   </mat-radio-group>
-  <div *ngIf="selectedOption === 'unidad-vecinal'">
+  <div *ngIf="selectedOption === 'unidad-vecinal'" class="flex-column p-top-40">
     <mat-form-field>
       <mat-label>Unidad vecinal:</mat-label>
       <mat-select [(ngModel)]="selectedUV">
@@ -13,11 +15,11 @@
       </mat-select>
     </mat-form-field>
   </div>
-  <div *ngIf="selectedOption === 'direccion'">
+  <div *ngIf="selectedOption === 'direccion'" class="flex-column p-top-40">
     <mat-form-field>
       <mat-label>Calle</mat-label>
-        <input formControlName="calle" matInput placeholder="Av. Independencia" [matAutocomplete]="auto" required>
-        <mat-autocomplete #auto="matAutocomplete">
+        <input autofocus formControlName="calle" matInput placeholder="Av. Independencia" [matAutocomplete]="auto" required>
+        <mat-autocomplete #uvSelect  #auto="matAutocomplete">
           <mat-option *ngFor="let item of filterdOptions" [value]="item">
             {{item}}
           </mat-option>
@@ -32,5 +34,6 @@
   </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-button mat-dialog-close cdkFocusInitial (click)="onNoClick()">Ok</button>
+  <button class="pink-rounded-button" mat-button mat-dialog-close cdkFocusInitial (click)="onNoClick()">Ok</button>
+</div>
 </div>
