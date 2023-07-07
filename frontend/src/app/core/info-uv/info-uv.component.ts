@@ -23,7 +23,7 @@ export class InfoUvComponent {
   ngAfterViewInit(): void{
 
     const dialogRef = this.dialog.open(DialogUVComponent, {
-      width: '300px'
+      width: 'auto'
     });
 
 
@@ -63,7 +63,7 @@ export class InfoUvComponent {
 
   dialogUV() {
     const dialogRef = this.dialog.open(DialogUVComponent, {
-      width: '300px'
+      width: 'auto'
     });
 
     dialogRef.afterClosed().subscribe(result => {

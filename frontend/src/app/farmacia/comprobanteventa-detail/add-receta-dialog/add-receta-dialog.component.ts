@@ -20,6 +20,11 @@ export class AddRecetaDialogComponent {
 
   onFileSelected(event) {
     this.selectedFile = event.target.files[0];
+    console.log(this.selectedFile.name)
+  }
+
+  onFileDeleted(){
+    this.selectedFile=null;
   }
 
   @Output() recetaCreada = new EventEmitter();

@@ -1,8 +1,22 @@
-<h1 mat-dialog-title>File Upload</h1>
+<div class="modal-center warning-modal">
+  <mat-icon>receipt</mat-icon>
+  <h1 mat-dialog-title>Subir Receta</h1>
 <div mat-dialog-content>
-  <input type="file" (change)="onFileSelected($event)">
+  <button class="pink-rounded-button pl-6" type="button" mat-raised-button
+    (click)="fileInput.click()"><mat-icon class="text-white">
+      attach_file</mat-icon>select</button>
+ <!--  <input hidden (change)="onFileSelected($event)" #fileInput type="file" multiple> -->
+ <input hidden class="custom-file-upload" type="file" (change)="onFileSelected($event)" #fileInput>
+ <p>{{selectedFile.name}}</p>
+ <div>
+  <div><div>Nombre</div><div>{{selectedFile.name}}</div></div>
+  <div><div>Tipo</div><div>{{selectedFile.type}}</div></div>
+  <div><div></div><div><mat-icon class="delete-file" (click)="onFileDeleted()">cancel</mat-icon></div></div>
+ </div>
 </div>
 <div mat-dialog-actions>
-  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button class="pink-rounded-button" mat-button (click)="onNoClick()">Cancel</button>
   <button mat-button [mat-dialog-close]="selectedFile" (click)="addReceta(selectedFile, id_comprobante)" cdkFocusInitial>Ok</button>
 </div>
+</div>
+

@@ -10,3 +10,10 @@
   /* color: #FC3D59 !important; */
   cursor: pointer;
 }
+label{
+  color:#4a4a4a!important;
+}
+
+.p-top-40{
+  padding-top: 40px;
+}

@@ -1,6 +1,7 @@
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
-import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { Component, ViewEncapsulation, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { MatDialogRef} from '@angular/material/dialog';
 import { CallesService } from 'src/app/service/calles.service';
+import { MatSelect } from '@angular/material/select';
 
 @Component({
   selector: 'app-dialog-uv',
@@ -20,7 +21,9 @@ export class DialogUVComponent {
 
   constructor(public dialogRef: MatDialogRef<DialogUVComponent>, private callesIndependencia: CallesService) { }
 
+  @ViewChild("uvSelect", {static:false}) uvField:MatSelect;
   ngOnInit() {
+    this.uvField.focus();
     for (let i = 1; i <= 26; i++) {
       this.uvOptions.push(`UV-${i}`);
     }
