@@ -111,7 +111,7 @@ class ExencionAseo(models.Model):
     apellido_materno = models.CharField(blank=True, null=True,max_length=200, verbose_name="Apellido Materno")
     estado_civil = models.CharField(blank=True, null=True,max_length=500, verbose_name="Estado Civil")
     ocupacion = models.CharField(blank=True, null=True,max_length=500, verbose_name="Ocupación")
-    tramo_rsh = models.PositiveSmallIntegerField(verbose_name='Tramo RSH')
+    tramo_rsh = models.DecimalField(verbose_name='Tramo RSH', max_digits=5, decimal_places=2)
     calle = models.CharField(blank=True, null=True, max_length=500, verbose_name="Avenida/Calle/Pasaje")
     numero = models.PositiveIntegerField(blank=True, null=True, verbose_name="Numeración")
     complemento_direccion = models.CharField(max_length=200, verbose_name='Complemento de Dirección',blank=True,null=True)

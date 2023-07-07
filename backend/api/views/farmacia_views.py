@@ -1,9 +1,14 @@
 from rest_framework.response import Response
 from rest_framework import generics
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.parsers import MultiPartParser
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import status
+from django.db.models import F
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
+from api.filters.farmacia_filters import ProductoFarmaciaFilter, ComprobanteVentaFilter
+from .permissions_views import *
 
 from api.serializers.farmacia_serializers import *
 from database.farmacia.models import (
@@ -15,6 +20,12 @@ from database.farmacia.models import (
     CargaProducto,
 )
 
+    # PAGINACION
+
+class CustomPageNumberPagination(PageNumberPagination):
+    page_size = 10
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
     ## Laboratorios
 
@@ -57,8 +68,21 @@ class LaboratoriosDeleteAPIViw(generics.DestroyAPIView):
     ## Producto Farmacia
 
 class ProductoFarmaciaListCreateAPIViw(generics.ListCreateAPIView):
+    
     queryset = ProductoFarmacia.objects.all()
     serializer_class = ProductoFarmaciaSerializer
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedorNOPOST]
+
+    def perfrom_create(self, serializer):
+        instance = serializer.save()
+
+class ProductoFarmaciaList2CreateAPIViw(generics.ListCreateAPIView):
+    queryset = ProductoFarmacia.objects.all()
+    serializer_class = ProductoFarmaciaSerializer
+    pagination_class = CustomPageNumberPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ProductoFarmaciaFilter
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedorNOPOST]
 
     def perfrom_create(self, serializer):
         instance = serializer.save()
@@ -67,6 +91,7 @@ class ProductoFarmaciaDetailAPIViw(generics.RetrieveAPIView):
     queryset = ProductoFarmacia.objects.all()
     serializer_class = ProductoFarmaciaSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedorNOPOST]
 
 
 class ProductoFarmaciaUpdateAPIViw(generics.UpdateAPIView):
@@ -81,6 +106,7 @@ class ProductoFarmaciaDeleteAPIViw(generics.DestroyAPIView):
     queryset = ProductoFarmacia.objects.all()
     serializer_class = ProductoFarmaciaSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta]
 
     def perform_destroy(self, instance):
         return super().perform_destroy(instance)
@@ -89,14 +115,27 @@ class ProductoFarmaciaDeleteAPIViw(generics.DestroyAPIView):
     ## Comprobante Venta
 
 class ComprobanteVentaListCreateAPIViw(generics.ListCreateAPIView):
-    queryset = ComprobanteVenta.objects.all()
+    queryset = ComprobanteVenta.objects.all().order_by('-created')
     serializer_class = ComprobanteVentaSerializer
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
 
-    def perfrom_create(self, serializer):
+    def perform_create(self, serializer):
+        instance = serializer.save()
+
+class ComprobanteVentaList2CreateAPIViw(generics.ListCreateAPIView):
+    queryset = ComprobanteVenta.objects.all().order_by('-created')
+    serializer_class = ComprobanteVentaSerializer2
+    pagination_class = CustomPageNumberPagination
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = ComprobanteVentaFilter
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
+
+    def perform_create(self, serializer):
         instance = serializer.save()
 
 class UltimoComprobanteVentaAPIViw(generics.RetrieveAPIView):
     serializer_class = ComprobanteVentaSerializer
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
 
     def get_object(self):
         latest_comprobante = ComprobanteVenta.objects.latest('created')
@@ -106,11 +145,13 @@ class ComprobanteVentasDetailAPIViw(generics.RetrieveAPIView):
     queryset = ComprobanteVenta.objects.all()
     serializer_class = ComprobanteVentaSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
 
 class ComprobanteVentaUpdateAPIViw(generics.UpdateAPIView):
     queryset = ComprobanteVenta.objects.all()
     serializer_class = ComprobanteVentaSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
 
     def perform_update(self, serializer):
         return super().perform_update(serializer)
@@ -119,6 +160,7 @@ class ComprobanteVentaDeleteAPIViw(generics.DestroyAPIView):
     queryset = ComprobanteVenta.objects.all()
     serializer_class = ComprobanteVentaSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
 
     def perform_destroy(self, instance):
         return super().perform_destroy(instance)
@@ -129,12 +171,14 @@ class ComprobanteVentaDeleteAPIViw(generics.DestroyAPIView):
 class RecetasListCreateAPIViw(generics.ListCreateAPIView):
     queryset = Recetas.objects.all()
     serializer_class = RecetasSerializer
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
 
     def perfrom_create(self, serializer):
         instance = serializer.save()
 
 class RecetasPorVentaAPIView(generics.ListAPIView):
     serializer_class = RecetasSerializer
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
 
     def get_queryset(self):
         venta_id = self.kwargs['venta_id']
@@ -146,11 +190,13 @@ class RecetasDetailAPIViw(generics.RetrieveAPIView):
     queryset = Recetas.objects.all()
     serializer_class = RecetasSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
 
 class RecetasUpdateAPIViw(generics.UpdateAPIView):
     queryset = Recetas.objects.all()
     serializer_class = RecetasSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
 
     def perform_update(self, serializer):
         return super().perform_update(serializer)
@@ -159,6 +205,7 @@ class RecetasDeleteAPIViw(generics.DestroyAPIView):
     queryset = Recetas.objects.all()
     serializer_class = RecetasSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
 
     def perform_destroy(self, instance):
         return super().perform_destroy(instance)
@@ -168,6 +215,7 @@ class RecetasDeleteAPIViw(generics.DestroyAPIView):
 class ProductoVendidoListCreateAPIViw(generics.ListCreateAPIView):
     queryset = ProductoVendido.objects.all()
     serializer_class = ProductoVendidoSerializer
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
 
     def perfrom_create(self, serializer):
         instance = serializer.save()
@@ -176,11 +224,13 @@ class ProductoVendidoDetailAPIViw(generics.RetrieveAPIView):
     queryset = ProductoVendido.objects.all()
     serializer_class = ProductoVendidoSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
 
 class ProductoVendidoUpdateAPIViw(generics.UpdateAPIView):
     queryset = ProductoVendido.objects.all()
     serializer_class = ProductoVendidoSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
 
     def perform_update(self, serializer):
         return super().perform_update(serializer)
@@ -189,6 +239,7 @@ class ProductoVendidoDeleteAPIViw(generics.DestroyAPIView):
     queryset = ProductoVendido.objects.all()
     serializer_class = ProductoVendidoSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
 
     def perform_destroy(self, instance):
         return super().perform_destroy(instance)

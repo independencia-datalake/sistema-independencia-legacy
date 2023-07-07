@@ -8,6 +8,6 @@ export interface ProductoIngresado {
     precio_compra?: any;
     precio_venta?: any;
     n_factura?: string;
-    nombre?: ProductoFarmacia;
+    producto?: ProductoFarmacia;
     n_venta?: OrdenIngresoProducto;
   }

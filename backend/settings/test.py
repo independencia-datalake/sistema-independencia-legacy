@@ -6,8 +6,12 @@ ALLOWED_HOSTS = ['*']
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',            ## PATH OF FRONTEND
+    # 'http://localhost',                ## For Postman
+    # 'http://127.0.0.1',                ## For Postman
 ]
 CORS_ALLOWED_ORIGIN_REGEXES = r'^/api/.*'
+
+
 CORS_ALLOW_CREDENTIALS = True
 
 

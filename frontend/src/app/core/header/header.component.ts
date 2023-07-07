@@ -60,4 +60,7 @@ export class HeaderComponent implements OnInit {
     this._snackBar.open('Error: Ya esta Logueado. Si desea cambiar de usuario, desconéctese primero', 'Aceptar');
   }
 
+  isVisRouteActive(): boolean {
+    return this.router.isActive('/vis', false);
+  }
 }

@@ -17,3 +17,9 @@ label{
 .p-top-40{
   padding-top: 40px;
 }
+
+.mat-mdc-button:not(:disabled) {
+  color: rgb(255 255 255) !important;
+  background: transparent;
+  font-size: 1.05em !important;
+}

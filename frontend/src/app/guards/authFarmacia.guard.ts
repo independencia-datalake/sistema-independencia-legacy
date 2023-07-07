@@ -13,20 +13,17 @@ export class AuthFarmaciaGuard implements CanActivate {
   async canActivate(): Promise<boolean> {
     const flag = await this.authService.isAuthenticated();
     const flag2 = await this.authService.isFarmacia();
+    const flag3 = await this.authService.isDeveloper();
     // const flag2 = true
-    // if (flag !== true && flag2 !== true) {
-    //   // console.log(this.authService.isAuthenticated())
-    //   // console.log('permiti el paso ')
-    //   return true;
-    // } else if (flag !== true && flag2 !== false) {
-    //   this.openSnackBar();
-    //   // console.log('negado')
-    //   return false;
-    // } else {
-    //   this.router.navigate(['/login']);
-    //   return false
-    // }
-    return true
+    if (flag == true && (flag2 == true || flag3 == true)) {
+      return true;
+    } else if (flag == true && flag2 == false && flag3 == false) {
+      this.openSnackBar();
+      return false;
+    } else {
+      this.router.navigate(['/login']);
+      return false;
+    }
   }
 
   openSnackBar() {
