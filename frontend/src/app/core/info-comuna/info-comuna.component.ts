@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, ViewEncapsulation, OnDestroy, AfterViewInit } from '@angular/core';
 import { Map, tileLayer, polygon, marker } from 'leaflet';
 import { HttpClient } from '@angular/common/http';
 import * as L from 'leaflet';
@@ -13,7 +13,7 @@ import * as L from 'leaflet';
 
 
 
-export class InfoComunaComponent {
+export class InfoComunaComponent implements OnDestroy, AfterViewInit {
 
   puntosInteres: {[key: string]: [string, [number, number], string]} = {};
   opciones_interes: string[];
@@ -38,7 +38,7 @@ export class InfoComunaComponent {
   opciones_UV: string[] = [];
 
   poligono_independencia: any;
-  map: Map; // Declarar la variable map como propiedad de la clase
+  private map1: Map; // Declarar la variable map como propiedad de la clase
   selectedOption: string;
   centro_poligonoIndepe: L.LatLngBounds; // declarar la variable global
   centro_uv_aux: L.LatLngBounds; // declarar la variable global
@@ -95,15 +95,15 @@ export class InfoComunaComponent {
 
   ngAfterViewInit(): void{
 
-    this.map = new Map('map').setView([-33.414316, -70.664376], 14,); // asignar el valor de la variable map
+    this.map1 = new Map('map1').setView([-33.414316, -70.664376], 14,); // asignar el valor de la variable map
     tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains: 'abcd',
       // maxZoom: 14
-    }).addTo(this.map); // Usar this.map en lugar de map
+    }).addTo(this.map1); // Usar this.map en lugar de map
 
-    const poligonoIndependencia = L.layerGroup().addTo(this.map);
-    const poligonoUV = L.layerGroup().addTo(this.map);
+    const poligonoIndependencia = L.layerGroup().addTo(this.map1);
+    const poligonoUV = L.layerGroup().addTo(this.map1);
 
     this.http.get('../../assets/poligono_independencia.json').subscribe(response => {
       this.poligono_independencia = response;
@@ -123,7 +123,7 @@ export class InfoComunaComponent {
 
     this.http.get('../../assets/uv_coordenadas.json').subscribe((data: any) => {
       const popup = L.popup();
-      const mapObj = this.map;
+      const mapObj = this.map1;
       for (let id in data) {
         const coords = [];
         for (let pointId in data[id]) {
@@ -173,7 +173,7 @@ export class InfoComunaComponent {
     }
 
     // Agrega la capa al LayerControl
-      const layerControl = L.control.layers(null, capas).addTo(this.map);
+      const layerControl = L.control.layers(null, capas).addTo(this.map1);
 
 
 
@@ -187,13 +187,13 @@ export class InfoComunaComponent {
   });
     if (this.showMarkers) {
       // Eliminar todos los marcadores del mapa
-      this.markers.forEach(marker => marker.removeFrom(this.map));
+      this.markers.forEach(marker => marker.removeFrom(this.map1));
       this.markers = [];
     } else {
       // Agregar los marcadores al mapa
       for (let key in this.puntosInteres) {
         const punto = this.puntosInteres[key]
-        const marker = L.marker(punto[1], {icon: redIcon}).addTo(this.map);
+        const marker = L.marker(punto[1], {icon: redIcon}).addTo(this.map1);
         marker.bindPopup(`<b>${punto[0]}</b><br>Ubicacion: ${punto[2]}`);
         this.markers.push(marker);
       }
@@ -208,13 +208,13 @@ export class InfoComunaComponent {
   });
     if (this.showMarkerssalud) {
       // Eliminar todos los marcadores del mapa
-      this.markerssalud.forEach(marker => marker.removeFrom(this.map));
+      this.markerssalud.forEach(marker => marker.removeFrom(this.map1));
       this.markerssalud = [];
     } else {
       // Agregar los marcadores al mapa
       for (let key in this.puntosSalud) {
         const punto = this.puntosSalud[key]
-        const marker = L.marker(punto[1], {icon: blueIcon}).addTo(this.map);
+        const marker = L.marker(punto[1], {icon: blueIcon}).addTo(this.map1);
         marker.bindPopup(`<b>${punto[0]}</b><br>Ubicacion: ${punto[2]}`);
         this.markerssalud.push(marker);
       }
@@ -228,13 +228,13 @@ export class InfoComunaComponent {
   });
     if (this.showMarkerseduc) {
       // Eliminar todos los marcadores del mapa
-      this.markerseduc.forEach(marker => marker.removeFrom(this.map));
+      this.markerseduc.forEach(marker => marker.removeFrom(this.map1));
       this.markerseduc = [];
     } else {
       // Agregar los marcadores al mapa
       for (let key in this.puntosEduc) {
         const punto = this.puntosEduc[key]
-        const marker = L.marker(punto[1], {icon: greenIcon}).addTo(this.map);
+        const marker = L.marker(punto[1], {icon: greenIcon}).addTo(this.map1);
         marker.bindPopup(`<b>${punto[0]}</b><br>Ubicacion: ${punto[2]}`);
         this.markerseduc.push(marker);
       }
@@ -250,13 +250,13 @@ export class InfoComunaComponent {
   });
     if (this.showMarkersmonumento) {
       // Eliminar todos los marcadores del mapa
-      this.markersmonumento.forEach(marker => marker.removeFrom(this.map));
+      this.markersmonumento.forEach(marker => marker.removeFrom(this.map1));
       this.markersmonumento = [];
     } else {
       // Agregar los marcadores al mapa
       for (let key in this.puntosMonumento) {
         const punto = this.puntosMonumento[key]
-        const marker = L.marker(punto[1], {icon: yellowIcon}).addTo(this.map);
+        const marker = L.marker(punto[1], {icon: yellowIcon}).addTo(this.map1);
         marker.bindPopup(`<b>${punto[0]}</b><br>Ubicacion: ${punto[2]}`);
         this.markersmonumento.push(marker);
       }
@@ -268,25 +268,25 @@ export class InfoComunaComponent {
   onSelectionChangeInteres() {
     const puntoInteres = this.puntosInteres[this.selectedOption];
     const marker = L.marker(puntoInteres[1]);
-    this.map.flyTo(marker.getLatLng(), 16);
+    this.map1.flyTo(marker.getLatLng(), 16);
   }
 
   onSelectionChangeSalud() {
     const puntoSalud = this.puntosSalud[this.selectedOption];
     const marker = L.marker(puntoSalud[1]);
-    this.map.flyTo(marker.getLatLng(), 16);
+    this.map1.flyTo(marker.getLatLng(), 16);
   }
 
   onSelectionChangeEducacion() {
     const puntoEduc = this.puntosEduc[this.selectedOption];
     const marker = L.marker(puntoEduc[1]);
-    this.map.flyTo(marker.getLatLng(), 16);
+    this.map1.flyTo(marker.getLatLng(), 16);
   }
 
   onSelectionChangeMonumento() {
     const puntoMonumento = this.puntosMonumento[this.selectedOption];
     const marker = L.marker(puntoMonumento[1]);
-    this.map.flyTo(marker.getLatLng(), 16);
+    this.map1.flyTo(marker.getLatLng(), 16);
   }
 
   onSelectionChangeUV() {
@@ -304,8 +304,12 @@ export class InfoComunaComponent {
       }
       const poligono_aux = L.polygon([coordsaux]);
       const centro_uv_aux = poligono_aux.getBounds();
-      this.map.fitBounds(centro_uv_aux);
+      this.map1.fitBounds(centro_uv_aux);
 
     });
+  }
+
+  ngOnDestroy(): void {
+    this.map1.remove()
   }
 }
