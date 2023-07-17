@@ -1,0 +1,37 @@
+[
+{
+    "model": "gsl.categoriagsl",
+    "pk": 1,
+    "fields": {
+        "nombre_categoria": "Derivar"
+    }
+},
+{
+    "model": "gsl.categoriagsl",
+    "pk": 2,
+    "fields": {
+        "nombre_categoria": "Emitir informe social"
+    }
+},
+{
+    "model": "gsl.categoriagsl",
+    "pk": 3,
+    "fields": {
+        "nombre_categoria": "Gestionar aporte económico"
+    }
+},
+{
+    "model": "gsl.categoriagsl",
+    "pk": 4,
+    "fields": {
+        "nombre_categoria": "Gestionar beneficio en especie o servicio municipal"
+    }
+},
+{
+    "model": "gsl.categoriagsl",
+    "pk": 5,
+    "fields": {
+        "nombre_categoria": "Solicitar modificación de información RSH"
+    }
+}
+]

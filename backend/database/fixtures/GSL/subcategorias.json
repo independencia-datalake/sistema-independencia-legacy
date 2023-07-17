@@ -1,0 +1,187 @@
+[
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 1,
+        "fields": {
+            "nombre_subcategoria": "Externa",
+            "categoria": 1
+
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 2,
+        "fields": {
+            "nombre_subcategoria": "Municipal no GSL",
+            "categoria": 1
+
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 3,
+        "fields": {
+            "nombre_subcategoria": "SNAC",
+            "categoria": 1
+
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 4,
+        "fields": {
+            "nombre_subcategoria": "Subsidios sociales",
+            "categoria": 1
+
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 5,
+        "fields": {
+            "nombre_subcategoria": "Informes sociales",
+            "categoria": 2
+
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 6,
+        "fields": {
+            "nombre_subcategoria": "Alimentación",
+            "categoria": 3
+
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 7,
+        "fields": {
+            "nombre_subcategoria": "Funerales",
+            "categoria": 3
+
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 8,
+        "fields": {
+            "nombre_subcategoria": "Gastos de Salud",
+            "categoria": 3
+
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 9,
+        "fields": {
+            "nombre_subcategoria": "Habitabilidad",
+            "categoria": 3
+
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 10,
+        "fields": {
+            "nombre_subcategoria": "Otros",
+            "categoria": 3
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 11,
+        "fields": {
+            "nombre_subcategoria": "Servicios Básicos",
+            "categoria": 3
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 12,
+        "fields": {
+            "nombre_subcategoria": "Alimentación",
+            "categoria": 4
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 13,
+        "fields": {
+            "nombre_subcategoria": "Aporte económico",
+            "categoria": 4
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 14,
+        "fields": {
+            "nombre_subcategoria": "Artículos de uso personal",
+            "categoria": 4
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 15,
+        "fields": {
+            "nombre_subcategoria": "Educación",
+            "categoria": 4
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 16,
+        "fields": {
+            "nombre_subcategoria": "Funerales",
+            "categoria": 4
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 17,
+        "fields": {
+            "nombre_subcategoria": "Habitabilidad",
+            "categoria": 4
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 18,
+        "fields": {
+            "nombre_subcategoria": "Otros",
+            "categoria": 4
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 19,
+        "fields": {
+            "nombre_subcategoria": "Servicios Básicos",
+            "categoria": 4
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 20,
+        "fields": {
+            "nombre_subcategoria": "Actualización",
+            "categoria": 5
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 21,
+        "fields": {
+            "nombre_subcategoria": "Complemento",
+            "categoria": 5
+        }
+    },
+    {
+        "model": "gsl.subcategoriagsl",
+        "pk": 22,
+        "fields": {
+            "nombre_subcategoria": "Ingreso al RSH",
+            "categoria": 5
+        }
+    }
+    ]

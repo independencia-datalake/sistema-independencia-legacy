@@ -86,7 +86,7 @@ def update_bodega_by_ingreso(sender, instance, **kwargs):
 @receiver(pre_save, sender=ComprobanteVenta)
 def update_stock(sender, instance, **kwargs):
     # Se comprueba si la instancia ya existía antes (es decir, si se está editando una instancia existente)
-    if instance.pk is not None:
+    if instance.pk is not None and instance.pk != 1:
         # Se obtiene la instancia original antes de la edición
         original_instance = sender.objects.get(pk=instance.pk)
         # Si el estado ha cambiado a 'CANCELADA'
