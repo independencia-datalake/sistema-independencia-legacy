@@ -13,7 +13,6 @@ from collections import defaultdict
 from api.serializers.mapa_legacy_serializers import *
 from database.mapa_legacy.models import (
     Empresas,
-
 )
 from database.farmacia.models import (
     ComprobanteVenta
@@ -230,6 +229,55 @@ class CountEmpresasByUV(APIView):
                  } for uv, values in uv_densities.items()]
 
         return Response(data)
+
+    #EXENCION BASURA
+
+class CountExencionBasuraByUV(APIView):
+    def get(self, request, fecha_inicio, fecha_fin):
+
+        # Convertir las fechas de string a datetime
+        fecha_inicio_dt = datetime.strptime(fecha_inicio, '%Y-%m-%d')
+        fecha_fin_dt = datetime.strptime(fecha_fin, '%Y-%m-%d')
+
+        uv_values = range(1, 28)
+
+        uv_densities = {uv: {'total': 0, 'porciento50': 0, 'porciento75': 0, 'porciento100': 0} for uv in uv_values}    
+
+        queryset_total = ExencionAseo.objects.filter(marca_temporal__gte=fecha_inicio, marca_temporal__lte=fecha_fin).values('uv').annotate(total=Count('id')).order_by('uv')
+        queryset_50 = ExencionAseo.objects.filter(porcentaje_exencion=0.5, marca_temporal__gte=fecha_inicio, marca_temporal__lte=fecha_fin).values('uv').annotate(porciento50=Count('id')).order_by('uv')
+        queryset_75 = ExencionAseo.objects.filter(porcentaje_exencion=0.75, marca_temporal__gte=fecha_inicio, marca_temporal__lte=fecha_fin).values('uv').annotate(porciento75=Count('id')).order_by('uv')
+        queryset_100 = ExencionAseo.objects.filter(porcentaje_exencion=1, marca_temporal__gte=fecha_inicio, marca_temporal__lte=fecha_fin).values('uv').annotate(porciento100=Count('id')).order_by('uv')
+
+        for qs in [queryset_total, queryset_50, queryset_75, queryset_100]:
+            for obj in qs:
+                uv = obj['uv']
+                for key, value in obj.items():
+                    if key != 'uv':
+                        uv_densities[uv][key] = value
+
+        list_names = ['total', 'porciento50', 'porciento75', 'porciento100']
+
+        ranked_lists = {list_name: [(uv, values[list_name]) for uv, values in uv_densities.items() if uv != 1] for list_name in list_names}
+ 
+        ranks = {key: 1 for key in ranked_lists.keys()}
+
+        for list_name, uv_list in ranked_lists.items():
+            uv_list.sort(key=lambda x: x[1], reverse=True)
+            for uv, _ in uv_list:
+                uv_densities[uv]['rank_'+list_name] = ranks[list_name]
+                ranks[list_name] += 1
+
+        data = [{'uv': uv,
+                 'total': values['total'],
+                 'porciento50': values['porciento50'],
+                 'porciento75': values['porciento75'],
+                 'porciento100': values['porciento100'],
+                 'rank_total': values.get('rank_total', None), 
+                 'rank_porciento100': values.get('rank_porciento100', None)
+                 } for uv, values in uv_densities.items()]
+
+        return Response(data)
+
 
     #LICENCIAS DE CONDUCIR
 
@@ -484,9 +532,21 @@ class RangoFechasGeneralView(generics.RetrieveAPIView):
         elif mapa == "ayudasocial":
             # Código para el caso "ayudasocial"
             print("Estás en la sección de ayuda social.")
-        elif mapa == "excensionbasura":
-            # Código para el caso "excensionbasura"
-            print("Estás en la sección de excensión de basura.")
+        elif mapa == "exencionbasura":
+
+            queryset = ExencionAseo.objects
+
+            if tipo != 'total':
+                if tipo == 'porciento50': tipo=0,5
+                elif tipo == 'porciento75': tipo = 0.75
+                elif tipo == 'porciento100': tipo = 1
+                queryset = queryset.filter(porcentaje_exencion=tipo)
+            
+            # fecha_inicio = queryset.earliest('created').created.date()
+            # fecha_fin = queryset.latest('created').created.date()
+            fecha_inicio = queryset.earliest('marca_temporal').marca_temporal.date()
+            fecha_fin = queryset.latest('marca_temporal').marca_temporal.date()
+
         elif mapa == "obrasmunicipales":
             # Código para el caso "obrasmunicipales"
 
