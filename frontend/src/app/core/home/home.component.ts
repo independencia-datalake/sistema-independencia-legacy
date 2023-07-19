@@ -7,13 +7,19 @@ import { AuthService } from 'src/app/service/auth.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent {
-
   constructor(
     private authService: AuthService) {
   }
 
+  isAdmin:any;
+
+  getIsDeveloper() {
+    return this.authService.isDeveloper();
+  }
+
   ngOnInit(): void {
     // this.authService.isAuthenticated()
+    this.getIsDeveloper().then(data => this.isAdmin = data);
     if(localStorage.getItem('token')) {
       this.authService.isAuthenticated()
     }

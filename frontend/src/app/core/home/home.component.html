@@ -2,6 +2,7 @@
   <div class="botonera" style="background-color: white">
     <h1>Departamentos</h1>
     <div class="botones">
+      <a *ngIf="isAdmin" routerLink="/admin">Admin</a>
       <a routerLink="/farmacia">Farmacia</a>
       <a routerLink="/seguridad">Seguridad</a>
     </div>

@@ -27,6 +27,7 @@ import { ResumenPersonaComponent } from './farmacia/lista-personas/lista-persona
 import { ListaVentaComponent } from './farmacia/lista-ventas/lista-ventas.component';
 import { FichaIngresoComponent } from './farmacia/ficha-ingreso/ficha-ingreso.component';
 import { FichaSalidaComponent } from './farmacia/ficha-salida/ficha-salida.component';
+import { AdminComponent } from './core/admin/admin.component';
 
 
 const routes: Routes = [
@@ -61,6 +62,9 @@ const routes: Routes = [
   { path: 'stock/ficha-salida', component: FichaSalidaComponent, canActivate: [AuthFarmaciaGuard]},
   // SEGURIDAD
   { path: 'seguridad', component: SeguridadHomeComponent },
+
+  //ADMIN
+  { path: 'admin', component: AdminComponent },
 ];
 
 @NgModule({

@@ -46,6 +46,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
+import { AdminComponent } from './admin/admin.component';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 
 
@@ -62,7 +64,8 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
     InfoComunaComponent,
     InfoUvComponent,
     DialogUVComponent,
-    VisComponent
+    VisComponent,
+    AdminComponent
 
   ],
   imports: [
@@ -94,6 +97,7 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
     MatTooltipModule,
     NgxSliderModule,
     MatIconModule,
+    NgxDropzoneModule
   ],
   providers: [
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },
