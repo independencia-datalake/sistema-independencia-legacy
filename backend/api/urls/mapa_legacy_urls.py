@@ -10,7 +10,8 @@ urlpatterns = [
     path('farmacia-total/<str:fecha_inicio>/<str:fecha_fin>/', views.CountFarmaciaByUV.as_view()),
     # EMPRESAS
     path('empresas-total/<str:fecha_inicio>/<str:fecha_fin>/', views.CountEmpresasByUV.as_view()),
-
+    # EXCENCION ASEO
+    path('exencion-total/<str:fecha_inicio>/<str:fecha_fin>/', views.CountExencionBasuraByUV.as_view()),
     # LICENCIAS DE CONDUCIR
     path('transito-total/<str:fecha_inicio>/<str:fecha_fin>/', views.CountTransitoByUV.as_view()),
 

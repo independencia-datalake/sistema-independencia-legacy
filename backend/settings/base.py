@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'database.seguridad',
     'database.mapa_legacy',
     'database.data_lab',
+    'database.gsl',
     
     #third-party
     'corsheaders',

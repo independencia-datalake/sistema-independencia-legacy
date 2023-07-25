@@ -86,6 +86,7 @@ export class VisComponent {
   public columnas = [
     { nombre: 'total', resaltada: false, element: 'total' },
     // { nombre: 'rank', resaltada: false },
+    // EMPRESAS
     { nombre: 'ventas', resaltada: false, element: 'ventas' },
     { nombre: 'alcohol', resaltada: false, element: 'alcohol' },
     { nombre: 'comercial', resaltada: false, element: 'comercial' },
@@ -93,6 +94,11 @@ export class VisComponent {
     { nombre: 'industrial', resaltada: false, element: 'industrial' },
     { nombre: 'microempresa', resaltada: false, element: 'microempresa'},
     { nombre: 'estacionada', resaltada: false, element: 'estacionada'},
+    // EXENCION ASEO
+    { nombre: 'porciento50', resaltada: false, element: 'porciento50'},
+    { nombre: 'porciento75', resaltada: false, element: 'porciento75'},
+    { nombre: 'porciento100', resaltada: false, element: 'porciento100'},
+    // DOM
     { nombre: 'anexion', resaltada: false, element: 'anexion' },
     { nombre: 'antiguas', resaltada: false, element: 'antiguas' },
     { nombre: 'anulacion', resaltada: false, element: 'anulacion' },
@@ -107,6 +113,7 @@ export class VisComponent {
     { nombre: 'resolucion', resaltada: false, element: 'resolucion' },
     { nombre: 'subdivisiones', resaltada: false, element: 'subdivisiones' },
     { nombre: 'ventas por piso', resaltada: false, element: 'ventasporpiso' },
+    // TRANSITO
     { nombre: 'licencia conducir', resaltada: false, element: 'licencia_conducir' },
     { nombre: 'permiso circulacion', resaltada: false, element: 'permiso_circulacion' },
     // Agrega las columnas restantes aquí...
@@ -314,6 +321,80 @@ export class VisComponent {
       })
 
       this.displayedColumns = ['nombre', 'rank', 'rank_ly', 'total', 'alcohol', 'comercial', 'profesional', 'industrial', 'microempresa', 'estacionada'];
+
+    } else if (this.tipo_mapa === 'exencionbasura') {
+      this.mapa_legacy.getRangoFechasGeneralByTipo(this.tipo_mapa, this.columnaResaltada).pipe(
+        switchMap(fechas => {
+          if (fecha_inicio_init && fecha_fin_init) {
+            this.fechaInicio = fecha_inicio_init
+            this.fechaFin = fecha_fin_init
+          } else {
+            this.fechaInicio = fechas.fecha_inicio
+            this.fechaFin = fechas.fecha_fin
+          }
+          if (flag_slider === true) {
+          } else if (flag_slider === false) {
+            this.initializeSlider(this.fechaInicio,this.fechaFin)
+          }
+
+          const fechaFinObj = new Date(this.fechaFin)
+          this.anioFin = fechaFinObj.getFullYear();
+          this.anioFin_ly = this.anioFin-1
+
+          return forkJoin([this.mapa_legacy.getExencionByUV(this.fechaInicio, this.fechaFin), this.uvCoordRequest]);
+        })
+      ).subscribe(([exencionAseoByUVData, uvCoordData]) => {
+        let densidadPorUV = {};
+        const values = Object.values(exencionAseoByUVData)
+        let clave = this.columnaResaltada
+
+        values.forEach((element:any) => {
+          densidadPorUV[element.uv-1] = element[clave];
+        })
+
+        let densidades = (exencionAseoByUVData as any[]).map(item => item[clave])
+
+        this.maximo = Math.max(...densidades)
+
+        this.dataSource = (exencionAseoByUVData as any[]).map(item => {
+          let rank = item[`rank_${this.columnaResaltada}`];
+          rank = rank || '-';
+          return { nombre:'UV-' + (item.uv-1), rank: rank, total: item.total, porciento50: item.porciento50, porciento75: item.porciento75, porciento100: item.porciento100}
+        })
+
+        // Utilizar los datos al crear geoJsonData
+        this.geoJsonData = {
+          type: 'FeatureCollection',
+          features: Object.keys(uvCoordData).map((key) => {
+            const coords = Object.values(uvCoordData[key]);
+            // La clave de UV se asume que está en formato 'UV-#' y se extrae el número
+            let uvNumber = parseInt(key.split('-')[1]);
+            // Obtener la densidad correspondiente de densidadPorUV, o 0 si no hay datos
+            let densidad = densidadPorUV[uvNumber] || 0;
+            return {
+              type: 'Feature',
+              properties: {
+                "name": key,
+                "density": densidad,
+              },
+              geometry: {
+                type: 'Polygon',
+                coordinates: [coords],
+              },
+            };
+          }),
+        };
+        // Luego puedes actualizar la data del layer geoJson con los nuevos datos
+        this.geoJsonLayer.clearLayers();
+        this.geoJsonLayer.addData(this.geoJsonData);
+
+        this.legend = new L.Control({ position: 'bottomright' });
+        this.updateLegend(this.maximo);
+        this.legend.addTo(this.map);
+      })
+
+      this.displayedColumns = ['nombre', 'rank', 'total', 'porciento50', 'porciento75', 'porciento100'];
+
 
 
     } else if (this.tipo_mapa === 'obrasmunicipales') {
@@ -535,7 +616,7 @@ export class VisComponent {
       zoomControl: false,   // Deshabilitar el control de zoom
       scrollWheelZoom: false
     };
-    this.map = new Map('map', mapOptions).setView([-33.416793, -70.662822], 14);
+    this.map = new Map('map-vis', mapOptions).setView([-33.416793, -70.662822], 14);
 
 
     tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
@@ -582,7 +663,10 @@ export class VisComponent {
     } else if(this.tipo_mapa === 'impuestosyderechos') {
       this.columnaResaltada = 'total'
       localStorage.setItem('Columna', 'total')
-    }else if(this.tipo_mapa === 'obrasmunicipales'){
+    } else if (this.tipo_mapa === 'exencionbasura') {
+      this.columnaResaltada = 'total'
+      localStorage.setItem('Columna', 'total')
+    } else if(this.tipo_mapa === 'obrasmunicipales'){
       this.columnaResaltada ='total'
     } else if (this.tipo_mapa === 'transito') {
       this.columnaResaltada = 'licencia conducir'
@@ -675,6 +759,8 @@ export class VisComponent {
       this.label.updateContent( '<h4>Ventas de farmacia ' +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
     } else if (this.tipo_mapa === 'impuestosyderechos') {
       this.label.updateContent( '<h4>Patentes de tipo ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+    } else if (this.tipo_mapa === 'exencionbasura') {
+      this.label.updateContent( '<h4>Exencion Basura ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
     } else if (this.tipo_mapa === 'obrasmunicipales'){
       this.label.updateContent( '<h4>Obras Municipales ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
     } else if (this.tipo_mapa ==='transito') {
