@@ -13,6 +13,8 @@ import { UsersComponent } from './users/users.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AuthModule } from './auth/auth.module';
 
+import { NgxDropzoneModule } from 'ngx-dropzone';
+
 
 
 
@@ -32,6 +34,7 @@ import { AuthModule } from './auth/auth.module';
     FormsModule,
     ReactiveFormsModule,
     AuthModule,
+    NgxDropzoneModule
   ],
   providers: [],
   bootstrap: [AppComponent]
