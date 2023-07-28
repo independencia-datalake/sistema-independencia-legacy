@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  # backend:
+  #   build:
+  #     context: ./backend
+  #   ports:
+  #     - "8000:8000"   # Expose Django backend on host port 8000
+  #   depends_on:
+  #     - db
+  #   # Add any additional configurations for the Django backend container
+
+  postgres:
+    image: postgres:11.17-alpine3.16
+    environment:
+      POSTGRES_DB: sistema_independencia
+      POSTGRES_USER: datalake
+      POSTGRES_PASSWORD: D4t4l4k3
+    ports:
+      - '5434:5434'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    # Add any additional configurations for the PostgreSQL container
+
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #   ports:
+  #     - "4200:4200"   # Expose Angular frontend on host port 4200
+  #   # Add any additional configurations for the Angular frontend container
+
+volumes:
+  pgdata:

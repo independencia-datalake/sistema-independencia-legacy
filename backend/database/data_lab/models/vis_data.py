@@ -18,6 +18,9 @@ class ApiCall(models.Model):
                                     ),
                                 verbose_name='Origen del llamado'
                                  )
+    
+    def __str__(self):
+        return f'Llamado: {self.id} | Tipo: {self.tipo_call}'
 
 class FarmaciaDataLab(models.Model):
     uv = models.IntegerField
@@ -25,6 +28,10 @@ class FarmaciaDataLab(models.Model):
     rank_ventas = models.IntegerField(null=True, blank=True)
     api_call = models.ForeignKey(ApiCall, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación", editable=False)
+
+    def __str__(self):
+        return f'Llamado: {self.api_call.id} | Unidad Vecinal: {self.uv}'
+
 
 class ImpuestosYDerechosDataLab(models.Model):
     uv = models.IntegerField()
@@ -44,6 +51,9 @@ class ImpuestosYDerechosDataLab(models.Model):
     rank_estacionada = models.IntegerField(null=True, blank=True)
     api_call = models.ForeignKey(ApiCall, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación", editable=False)
+
+    def __str__(self):
+        return f'Llamado: {self.api_call.id} | Unidad Vecinal: {self.uv}'
 
 class DOMDataLab(models.Model):
     uv = models.IntegerField()
@@ -80,6 +90,9 @@ class DOMDataLab(models.Model):
     api_call = models.ForeignKey(ApiCall, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación", editable=False)
 
+    def __str__(self):
+        return f'Llamado: {self.api_call.id} | Unidad Vecinal: {self.uv}'
+
 class TransitoDataLab(models.Model):
     uv = models.IntegerField()
     licencia_conducir = models.IntegerField()
@@ -88,3 +101,6 @@ class TransitoDataLab(models.Model):
     rank_permiso_circulacion = models.IntegerField(null=True, blank=True)
     api_call = models.ForeignKey(ApiCall, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación", editable=False)
+
+    def __str__(self):
+        return f'Llamado: {self.api_call.id} | Unidad Vecinal: {self.uv}'

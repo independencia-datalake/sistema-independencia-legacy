@@ -30,6 +30,15 @@
   height: 500px;
 }
 
+#map1 {
+  height: 500px;
+  /* border: 2px solid black; */
+}
+
+.map1 {
+  height: 500px;
+}
+
 .mat-mdc-checkbox .mdc-form-field {
   color: #000000;
 }

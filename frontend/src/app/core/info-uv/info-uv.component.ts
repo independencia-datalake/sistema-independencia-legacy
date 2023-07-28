@@ -1,5 +1,5 @@
 
-import { Component, ViewEncapsulation, OnInit } from '@angular/core';
+import { Component, AfterViewInit, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
 import { Map, tileLayer, polygon, marker } from 'leaflet';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogUVComponent } from './dialog-uv/dialog-uv.component';
@@ -14,17 +14,21 @@ import { DataLabService } from 'src/app/service/data-lab.service';
   styleUrls: ['./info-uv.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class InfoUvComponent {
+export class InfoUvComponent implements OnDestroy, AfterViewInit {
 
-  map: Map; // Declarar la variable map como propiedad de la clase
+  private map: Map; // Declarar la variable map como propiedad de la clase
   unidad_vecinal: string;
 
   public data_poblacion: any;
-  data_poblacion_uv: any = { "UV": 0, "Total": 0, "Hombres": 0, "Mujeres": 0, "% Población inmigrante": 0, "Superficie total m2": 0, "Superficies no habitadas m2": 0, "Superficie m2": 0, "Densidad Habitantes/Km2": 0 };
-
-  data_transito_uv: any = {"UV": 0, "Licencia Conducir":0, "Permiso Circulacion":0, "Rank Licencia":0, "Rank Permiso":0, "Created": 0}
+  // data_poblacion_uv: any = { "UV": 0, "Total": 0, "Hombres": 0, "Mujeres": 0, "% Población inmigrante": 0, "Superficie total m2": 0, "Superficies no habitadas m2": 0, "Superficie m2": 0, "Densidad Habitantes/Km2": 0 };
+  data_poblacion_uv: any = { };
+  data_farmacia_uv: any = {};
+  data_empresas_uv: any = { };
+  data_DOM_uv: any = { };
+  data_transito_uv: any = { };
 
   constructor(public dialog: MatDialog, private http: HttpClient, private data_lab: DataLabService) { }
+
 
   ngAfterViewInit(): void{
 
@@ -33,12 +37,15 @@ export class InfoUvComponent {
     });
 
 
-    this.map = new Map('map').setView([-33.414316, -70.664376], 14,); // asignar el valor de la variable map
+    this.map = new Map('map-barrial').setView([-33.414316, -70.664376], 14,); // asignar el valor de la variable map
     tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
       subdomains: 'abcd',
       // maxZoom: 14
     }).addTo(this.map); // Usar this.map en lugar de map
+    setTimeout(() => {
+      this.map.invalidateSize();
+    }, 0);
 
       const poligonoUV = L.layerGroup().addTo(this.map);
 
@@ -70,6 +77,7 @@ export class InfoUvComponent {
     })
 
       }
+
 
   dialogUV() {
     const dialogRef = this.dialog.open(DialogUVComponent, {
@@ -108,20 +116,44 @@ export class InfoUvComponent {
   selectUV(uv) {
     let uvNumber = parseInt(uv.split('-')[1]);
     this.data_poblacion_uv = this.data_poblacion.find(element => element.UV === uvNumber);
-    this.data_lab.getTransitoDataLabByUV(uvNumber+1).subscribe(
+    this.data_lab.getFarmaciaDataLabByUV(uvNumber+1).subscribe(
       (data) => {
-        this.data_transito_uv = data;
-        console.log(this.data_transito_uv); // Solo para verificar la data recibida
+        this.data_farmacia_uv = data
+      },
+      (error) => {
+        console.log(error)
+      }
+    )
+    this.data_lab.getEmpresasDataLabByUV(uvNumber+1).subscribe(
+      (data) => {
+        this.data_empresas_uv = data;
+      },
+      (error) => {
+        console.error(error)
+      }
+    )
+    this.data_lab.getDOMDataLabByUV(uvNumber+1).subscribe(
+      (data) => {
+        this.data_DOM_uv = data;
       },
       (error) => {
         console.error(error);
       }
     );
+    this.data_lab.getTransitoDataLabByUV(uvNumber+1).subscribe(
+      (data) => {
+        this.data_transito_uv = data;
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
+    console.log(this.data_DOM_uv)
+    console.log(this.data_empresas_uv)
+  }
 
-    // console.log(uv)
-    // console.log(this.data_poblacion)
-    console.log(this.data_poblacion_uv)
-
+  ngOnDestroy(): void {
+    this.map.remove()
   }
 
 }

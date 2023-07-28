@@ -1,0 +1,29 @@
+[
+    {
+        "model": "farmacia.laboratorios",
+        "pk": 1,
+        "fields": {
+            "nombre_laboratorio": "Dummy Lab"
+        }
+    },
+    {
+        "model": "farmacia.ordeningresoproducto",
+        "pk": 1,
+        "fields": {
+            "estado": "False",
+            "created": "2022-11-28T13:00:58.252",
+            "updated": "2022-11-28T13:00:58.252"
+        }
+    },
+    {
+        "model": "farmacia.comprobanteventa",
+        "pk": 1,
+        "fields": {
+            "comprador": 1,
+            "estado": "FINALIZADA",
+            "farmaceuta": 1,
+            "created": "2022-11-28T13:00:58.252",
+            "updated": "2022-11-28T13:00:58.252"
+        }
+    }
+]

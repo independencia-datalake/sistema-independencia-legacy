@@ -24,6 +24,11 @@ export class MapaLegacyService {
     return this.http.get<Empresas>(`${this.apiUrl}/mapa_legacy/empresas-total/${fecha_inicio}/${fecha_fin}/`);
   }
 
+  // EXENCION ASEO
+  getExencionByUV(fecha_inicio, fecha_fin): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/mapa_legacy/exencion-total/${fecha_inicio}/${fecha_fin}/`);
+  }
+
   // LICENCIA DE CONDUCIR
   getTransitoByUV(fecha_inicio, fecha_fin): Observable<LicenciaConducir> {
     return this.http.get<LicenciaConducir>(`${this.apiUrl}/mapa_legacy/transito-total/${fecha_inicio}/${fecha_fin}/`);
