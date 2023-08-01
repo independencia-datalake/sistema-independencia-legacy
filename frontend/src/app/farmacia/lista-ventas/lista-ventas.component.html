@@ -77,7 +77,7 @@
 
   <mat-form-field class="example-full-width">
     <mat-label>Filtro</mat-label>
-    <input matInput [(ngModel)]="buscadorValue">
+    <input (ngModelChange)="filtro(buscadorValue)" matInput [(ngModel)]="buscadorValue">
     <button *ngIf="buscadorValue" matSuffix mat-icon-button aria-label="Clear" (click)="buscadorValue=''">
       <mat-icon>close</mat-icon>
     </button>

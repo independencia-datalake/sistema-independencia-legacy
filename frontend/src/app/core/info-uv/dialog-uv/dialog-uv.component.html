@@ -16,21 +16,22 @@
     </mat-form-field>
   </div>
   <div *ngIf="selectedOption === 'direccion'" class="flex-column p-top-40">
-    <mat-form-field>
-      <mat-label>Calle</mat-label>
-        <input autofocus formControlName="calle" matInput placeholder="Av. Independencia" [matAutocomplete]="auto" required>
-        <mat-autocomplete #uvSelect  #auto="matAutocomplete">
-          <mat-option *ngFor="let item of filterdOptions" [value]="item">
-            {{item}}
-          </mat-option>
-        </mat-autocomplete>
-    </mat-form-field>
-
-
-    <mat-form-field>
-      <mat-label>Numeracion</mat-label>
-      <input matInput placeholder="0" formControlName="numero" type="number"/>
-    </mat-form-field>
+    <form [formGroup]="formDireccionPersona">
+      <mat-form-field>
+        <mat-label>Calle</mat-label>
+          <input formControlName="calle" matInput placeholder="Av. Independencia" [matAutocomplete]="auto" required>
+          <mat-autocomplete #auto="matAutocomplete">
+            <mat-option *ngFor="let item of filterdOptions" [value]="item">
+              {{item}}
+            </mat-option>
+          </mat-autocomplete>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Numeracion</mat-label>
+        <input matInput placeholder="0" formControlName="numero" type="number"/>
+      </mat-form-field>
+    </form>
+    
   </div>
 </div>
 <div mat-dialog-actions>

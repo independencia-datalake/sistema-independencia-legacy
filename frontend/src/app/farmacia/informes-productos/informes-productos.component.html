@@ -93,7 +93,12 @@
 
   <mat-form-field class="example-full-width">
     <mat-label>Filtro</mat-label>
-    <input matInput [(ngModel)]="buscadorValue">
+    <input type="text" (keyup)="filtro(buscadorValue)" matInput [(ngModel)]="buscadorValue" >
+    <!-- <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of dataSource" [value]="option">
+        {{option.marca_producto}} | {{option.proveedor}} | {{option.p_a}} | {{option.presentacion}} | {{option.laboratorio}}
+      </mat-option>
+    </mat-autocomplete> -->
     <button *ngIf="buscadorValue" matSuffix mat-icon-button aria-label="Clear" (click)="buscadorValue=''">
       <mat-icon>close</mat-icon>
     </button>

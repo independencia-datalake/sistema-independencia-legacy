@@ -1,11 +1,24 @@
 
-import { Component, AfterViewInit, ViewEncapsulation, OnInit, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, ViewEncapsulation, OnInit, OnDestroy, Inject, NgZone, PLATFORM_ID } from '@angular/core';
 import { Map, tileLayer, polygon, marker } from 'leaflet';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogUVComponent } from './dialog-uv/dialog-uv.component';
 import * as L from 'leaflet';
 import { HttpClient } from '@angular/common/http';
 import { DataLabService } from 'src/app/service/data-lab.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { map } from 'rxjs/operators';
+import { Observable, forkJoin } from 'rxjs';
+import { ChangeDetectorRef } from '@angular/core';
+import { of } from 'rxjs';
+import { MatSelectModule } from '@angular/material/select';
+import {MatTooltipModule} from '@angular/material/tooltip'; 
+import { isPlatformBrowser } from '@angular/common';
+// amCharts imports
+import * as am5 from '@amcharts/amcharts5';
+import * as am5xy from '@amcharts/amcharts5/xy';
+import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
+
 
 
 @Component({
@@ -15,6 +28,11 @@ import { DataLabService } from 'src/app/service/data-lab.service';
   encapsulation: ViewEncapsulation.None
 })
 export class InfoUvComponent implements OnDestroy, AfterViewInit {
+
+  datag=[];
+
+  private root!: am5.Root;
+  
 
   private map: Map; // Declarar la variable map como propiedad de la clase
   unidad_vecinal: string;
@@ -27,10 +45,171 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
   data_DOM_uv: any = { };
   data_transito_uv: any = { };
 
-  constructor(public dialog: MatDialog, private http: HttpClient, private data_lab: DataLabService) { }
+  constructor(public dialog: MatDialog, private http: HttpClient, private data_lab: DataLabService, @Inject(PLATFORM_ID) private platformId: Object, private zone: NgZone) { }
+  browserOnly(f: () => void) {
+    if (isPlatformBrowser(this.platformId)) {
+      this.zone.runOutsideAngular(() => {
+        f();
+      });
+    }
+  }
 
 
   ngAfterViewInit(): void{
+
+    ////chart
+    ///amchart
+     // Chart code goes in here
+     this.browserOnly(() => {
+      let root = am5.Root.new("chartdiv");
+
+      root.setThemes([am5themes_Animated.new(root)]);
+
+      let chart = root.container.children.push(am5xy.XYChart.new(root, {
+        panX: false,
+        panY: false,
+        wheelX: "none",
+        wheelY: "none",
+        layout: root.verticalLayout,
+        paddingRight: 30
+      }));
+
+      //data danu
+
+      const dataBd = [
+        {
+          "id": 29,
+          "uv": 2,
+          "licencia_conducir": 226,
+          "permiso_circulacion": 1203,
+          "rank_licencia_conducir": 10,
+          "rank_permiso_circulacion": 24,
+          "created": "2023-07-04T16:08:52.129169",
+          "api_call": 9
+        },
+        {
+          "id": 30,
+          "uv": 3,
+          "licencia_conducir": 268,
+          "permiso_circulacion": 3302,
+          "rank_licencia_conducir": 1,
+          "rank_permiso_circulacion": 12,
+          "created": "2023-07-04T16:08:52.134417",
+          "api_call": 9
+        },
+        {
+          "id": 20,
+          "uv": 4,
+          "licencia_conducir": 268,
+          "permiso_circulacion": 3302,
+          "rank_licencia_conducir": 26,
+          "rank_permiso_circulacion": 12,
+          "created": "2023-07-04T16:08:52.134417",
+          "api_call": 9
+        },
+        
+      ]
+
+      let data = dataBd.map(element => {
+        return {
+          category: element.uv,
+          value: element.rank_licencia_conducir,
+          columnSettings:{
+            fill: am5.color(element.rank_licencia_conducir < 9 ? 0xc6251a : element.rank_licencia_conducir < 19 ? 0xfcc034 : 0x6bc352 )
+          }
+        }
+      }).sort((el1,el2) => el1.value - el2.value)
+      console.log(data)
+
+      this.datag = [...data];
+      console.log('======== ',this.datag)
+
+      let xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+        categoryField: "category",
+        renderer: am5xy.AxisRendererX.new(root, {
+      
+        }),
+        tooltip: am5.Tooltip.new(root, {})
+      }));
+      
+      let xRenderer = xAxis.get("renderer");
+      
+      xRenderer.grid.template.set("forceHidden", true);
+      xRenderer.labels.template.set("forceHidden", true);
+      
+      xAxis.data.setAll(data);
+      
+      let yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+        min: 0,
+        max: 1,
+        strictMinMax: true,
+        renderer: am5xy.AxisRendererY.new(root, {})
+      }));
+      
+      let yRenderer = yAxis.get("renderer");
+      
+      yRenderer.grid.template.set("forceHidden", true);
+      yRenderer.labels.template.set("forceHidden", true);
+
+      let series = chart.series.push(am5xy.ColumnSeries.new(root, {
+        xAxis: xAxis,
+        yAxis: yAxis,
+        valueYField: "value",
+        categoryXField: "category",
+        maskBullets: false
+      }));
+      
+      series.columns.template.setAll({
+        width: am5.p100,
+        tooltipY: 0,
+        strokeOpacity: 1,
+        strokeWidth:2,
+        stroke:am5.color(0xffffff),
+        templateField: "columnSettings"
+      });
+      
+      series.data.setAll(data);
+
+      //labels
+      function addAxisLabel(category, text) {
+        let rangeDataItem = xAxis.makeDataItem({
+          category: category
+        });
+        
+        let range = xAxis.createAxisRange(rangeDataItem);
+      
+        range.get("label").setAll({
+          text: text,
+          forceHidden: false
+        });
+      
+        range.get("grid").setAll({
+          strokeOpacity: 1,
+          location: 1
+        });
+      }
+      
+      addAxisLabel("19", "19+");
+      addAxisLabel("18", "18");
+      addAxisLabel("8", "8");
+
+      let legend = chart.children.push(
+        am5.Legend.new(root, {
+          centerX: am5.p50,
+          x: am5.p50
+        })
+      );
+
+      series.appear(1, 26);
+      chart.appear(1, 26);
+
+      // Add cursor
+      chart.set("cursor", am5xy.XYCursor.new(root, {}));
+
+      this.root = root;
+    });
+
+    ////end chart
 
     const dialogRef = this.dialog.open(DialogUVComponent, {
       width: 'auto'
@@ -85,11 +264,11 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.unidad_vecinal = result
+      this.unidad_vecinal = result;
 
-
-      this.zoomUV(this.unidad_vecinal)
-      this.selectUV(this.unidad_vecinal)
+      console.log(this.unidad_vecinal)
+      this.zoomUV(this.unidad_vecinal);
+      this.selectUV(this.unidad_vecinal);
 
     });
 
@@ -114,6 +293,8 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
   }
 
   selectUV(uv) {
+    console.log('EN select uv')
+    console.log(uv)
     let uvNumber = parseInt(uv.split('-')[1]);
     this.data_poblacion_uv = this.data_poblacion.find(element => element.UV === uvNumber);
     this.data_lab.getFarmaciaDataLabByUV(uvNumber+1).subscribe(

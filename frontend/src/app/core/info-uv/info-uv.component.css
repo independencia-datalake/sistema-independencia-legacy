@@ -27,6 +27,13 @@ p {
 .highlight {
   font-weight: bold;
 }
+#chartdiv {
+  width: 100%;
+  height: 130px;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
 
 
 
