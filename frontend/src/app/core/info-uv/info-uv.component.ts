@@ -56,13 +56,6 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
 
 
   ngAfterViewInit(): void{
-
-    ////chart
-    ///amchart
-     // Chart code goes in here
-    //  this.browserOnly(() => {
-
-
       const dataBd = [
         {
           "id": 29,
@@ -121,7 +114,6 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
 
       this.datag = [...data];
       console.log('======== ',this.datag)
-    // });
 
 
     const dialogRef = this.dialog.open(DialogUVComponent, {

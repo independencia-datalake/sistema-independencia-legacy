@@ -49,7 +49,7 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { AdminComponent } from './admin/admin.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-// import { PieChartComponent } from '../core/charts/piechart.component';
+import { PieChartComponent } from './charts/pie-chart.component';
 
 
 
@@ -68,7 +68,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     DialogUVComponent,
     VisComponent,
     AdminComponent,
-    // PieChartComponent
+    PieChartComponent
 
   ],
   imports: [
