@@ -60,21 +60,8 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
     ////chart
     ///amchart
      // Chart code goes in here
-     this.browserOnly(() => {
-      let root = am5.Root.new("chartdiv");
+    //  this.browserOnly(() => {
 
-      root.setThemes([am5themes_Animated.new(root)]);
-
-      let chart = root.container.children.push(am5xy.XYChart.new(root, {
-        panX: false,
-        panY: false,
-        wheelX: "none",
-        wheelY: "none",
-        layout: root.verticalLayout,
-        paddingRight: 30
-      }));
-
-      //data danu
 
       const dataBd = [
         {
@@ -107,109 +94,35 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
           "created": "2023-07-04T16:08:52.134417",
           "api_call": 9
         },
+        {
+          "id": 24,
+          "uv": 10,
+          "licencia_conducir": 268,
+          "permiso_circulacion": 3302,
+          "rank_licencia_conducir": 5,
+          "rank_permiso_circulacion": 5,
+          "created": "2023-07-04T16:08:52.134417",
+          "api_call": 9
+        },
         
       ]
 
       let data = dataBd.map(element => {
         return {
           category: element.uv,
-          value: element.rank_licencia_conducir,
-          columnSettings:{
-            fill: am5.color(element.rank_licencia_conducir < 9 ? 0xc6251a : element.rank_licencia_conducir < 19 ? 0xfcc034 : 0x6bc352 )
-          }
+          value: element.licencia_conducir,
+          meditionValue: 'Licencia de conducir',
+          rank: element.rank_licencia_conducir,
+          opacity: 0.9-(element.rank_licencia_conducir/100)
+
         }
-      }).sort((el1,el2) => el1.value - el2.value)
+      }).sort((el1,el2) => el1.rank - el2.rank)
       console.log(data)
 
       this.datag = [...data];
       console.log('======== ',this.datag)
+    // });
 
-      let xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
-        categoryField: "category",
-        renderer: am5xy.AxisRendererX.new(root, {
-      
-        }),
-        tooltip: am5.Tooltip.new(root, {})
-      }));
-      
-      let xRenderer = xAxis.get("renderer");
-      
-      xRenderer.grid.template.set("forceHidden", true);
-      xRenderer.labels.template.set("forceHidden", true);
-      
-      xAxis.data.setAll(data);
-      
-      let yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
-        min: 0,
-        max: 1,
-        strictMinMax: true,
-        renderer: am5xy.AxisRendererY.new(root, {})
-      }));
-      
-      let yRenderer = yAxis.get("renderer");
-      
-      yRenderer.grid.template.set("forceHidden", true);
-      yRenderer.labels.template.set("forceHidden", true);
-
-      let series = chart.series.push(am5xy.ColumnSeries.new(root, {
-        xAxis: xAxis,
-        yAxis: yAxis,
-        valueYField: "value",
-        categoryXField: "category",
-        maskBullets: false
-      }));
-      
-      series.columns.template.setAll({
-        width: am5.p100,
-        tooltipY: 0,
-        strokeOpacity: 1,
-        strokeWidth:2,
-        stroke:am5.color(0xffffff),
-        templateField: "columnSettings"
-      });
-      
-      series.data.setAll(data);
-
-      //labels
-      function addAxisLabel(category, text) {
-        let rangeDataItem = xAxis.makeDataItem({
-          category: category
-        });
-        
-        let range = xAxis.createAxisRange(rangeDataItem);
-      
-        range.get("label").setAll({
-          text: text,
-          forceHidden: false
-        });
-      
-        range.get("grid").setAll({
-          strokeOpacity: 1,
-          location: 1
-        });
-      }
-      
-      addAxisLabel("19", "19+");
-      addAxisLabel("18", "18");
-      addAxisLabel("8", "8");
-
-      let legend = chart.children.push(
-        am5.Legend.new(root, {
-          centerX: am5.p50,
-          x: am5.p50
-        })
-      );
-
-      series.appear(1, 26);
-      chart.appear(1, 26);
-
-      // Add cursor
-      chart.set("cursor", am5xy.XYCursor.new(root, {}));
-
-      this.root = root;
-    });
-
-    ////end chart
 
     const dialogRef = this.dialog.open(DialogUVComponent, {
       width: 'auto'

@@ -48,6 +48,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { AdminComponent } from './admin/admin.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+// import { PieChartComponent } from '../core/charts/piechart.component';
 
 
 
@@ -65,7 +67,8 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     InfoUvComponent,
     DialogUVComponent,
     VisComponent,
-    AdminComponent
+    AdminComponent,
+    // PieChartComponent
 
   ],
   imports: [
@@ -97,7 +100,9 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     MatTooltipModule,
     NgxSliderModule,
     MatIconModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
+    NgxChartsModule,
+
   ],
   providers: [
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },

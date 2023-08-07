@@ -87,20 +87,14 @@
       </div>
     </div>
     <div>
-
       <div>
-        <div id="chartdiv"></div>
-
-
-      </div>
-
-      <div>
-        <div *ngIf="datag.length > 0">
-          <div *ngFor="element of datag">
-            <div></div>
+        <div class="d-flex alig-items-center justify-content-center m-top-20 m-bottom-20" *ngIf="datag.length > 0">
+          <div class="d-flex alig-items-center justify-content-center">
+            <div *ngFor="let element of datag" class="rank" [style.opacity]="element.opacity"> {{element.value}} </div>
           </div>
         </div>
       </div>
+      <div></div>
 
     </div>
 

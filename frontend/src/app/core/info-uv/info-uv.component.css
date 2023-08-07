@@ -35,6 +35,11 @@ p {
   align-items: center;
 }
 
+.rank{
+  width: 50px;
+  height: 25;
+  background-color: #1587cf;
+}
 
 
 
