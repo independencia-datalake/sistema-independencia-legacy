@@ -49,10 +49,7 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { AdminComponent } from './admin/admin.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { PieChartComponent } from './charts/pie-chart.component';
-
-
-
+import { PieChartComponent } from './charts/piechart.component';
 
 @NgModule({
   declarations: [
