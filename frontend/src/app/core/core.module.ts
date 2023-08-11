@@ -50,6 +50,9 @@ import { AdminComponent } from './admin/admin.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { PieChartComponent } from './charts/piechart.component';
+import { PieChartCompareComponent } from './charts/piechart-compare.component';
+import { AdvancePieChartComponent } from './charts/advanccepiechart.component';
+import { BarChartComponent } from './charts/barchart.component';
 
 @NgModule({
   declarations: [
@@ -65,8 +68,10 @@ import { PieChartComponent } from './charts/piechart.component';
     DialogUVComponent,
     VisComponent,
     AdminComponent,
-    PieChartComponent
-
+    PieChartComponent,
+    AdvancePieChartComponent,
+    BarChartComponent,
+    PieChartCompareComponent
   ],
   imports: [
     CommonModule,

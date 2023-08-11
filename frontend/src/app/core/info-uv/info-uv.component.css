@@ -36,8 +36,8 @@ p {
 }
 
 .rank{
-  width: 50px;
-  height: 25;
+  max-width: 50px;
+  width: 26px;
   background-color: #1587cf;
 }
 

@@ -697,8 +697,9 @@ export class VisComponent {
     // console.log(fechaFinString)
 
     this.initializeMapData(fechaInicioString, fechaFinString, flag_slider);
-
-
+    console.log('=====DATA SOURCE====')
+    console.log(this.dataSource)
+    console.log('=====DATA SOURCE====')
   }
 
   sliderChange(event) {

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-pie-chart',
+  selector: 'app-pie-chart-compare',
   template: `
     <ngx-charts-pie-chart
       [results]="chartData"
@@ -14,7 +14,7 @@ import { Component } from '@angular/core';
   `,
   styleUrls: ['./charts.component.css'],
 })
-export class PieChartComponent {
+export class PieChartCompareComponent {
   dataBd:any = [
     {
       "id": 1,
@@ -275,15 +275,20 @@ export class PieChartComponent {
   };
 
   constructor() {
-    this.chartData = this.createChartData();
+    this.chartData = this.createChartData(10);
   }
 
-  createChartData() {
+  createChartData(uvFilter) {
     const pieChartData = [];
     this.dataBd.forEach((item) => {
-      const name = `ID ${item.id}`;
-      const value = item.rank_licencia_conducir;
-      pieChartData.push({ name, value });
+      if(uvFilter === item.uv){
+        const namelc = `Licencia de Conducir`;
+        const namepc = `Permiso de Circulación`;
+        const valuelc = item.licencia_conducir;
+        const valuepc = item.permiso_circulacion;
+        pieChartData.push({ name:namelc, value:valuelc });
+        pieChartData.push({ name:namepc, value:valuepc });
+      }
     });
 
     return pieChartData;

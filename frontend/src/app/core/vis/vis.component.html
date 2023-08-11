@@ -51,69 +51,118 @@
 
 </mat-grid-list>
 
-<div class="slider-container" *ngIf="tipo_mapa === 'ninguna'">
-  <ngx-slider [(value)]="dummy_value" [(highValue)]="dummy_highvalue" [options]="dummy_options"></ngx-slider>
-
-  <mat-form-field appearance="fill" class="my-datepicker">
-    <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio">
-    <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
-    <mat-datepicker #pickerInicio color="primary"></mat-datepicker>
-  </mat-form-field>
-
-  <mat-form-field appearance="fill" class="my-datepicker">
-    <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin">
-    <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
-    <mat-datepicker #pickerFin></mat-datepicker>
-  </mat-form-field>
-
-  <button mat-raised-button color="primary" (click)="fechaChange()">Buscar</button>
-
-  <mat-form-field style="text-align: right !important">
-    <mat-label>Selecciona una opción</mat-label>
-    <mat-select (selectionChange)="tipoMapaChange($event.value)">
-      <mat-option value="farmacia">FARMACIA MUNICIPAL</mat-option>
-      <mat-option value="dimap">HIGIENE AMBIENTAL - DIMAP</mat-option>
-      <mat-option value="seguridad">SEGURIDAD MUNICIPAL</mat-option>
-      <mat-option value="impuestosyderechos">IMPUESTOS Y DERECHOS</mat-option>
-      <mat-option value="ayudasocial">AYUDA SOCIAL - PANDEMIA</mat-option>
-      <mat-option value="exencionbasura">EXCENCIÓN BASURA</mat-option>
-      <mat-option value="obrasmunicipales">OBRAS MUNICIPALES</mat-option>
-      <mat-option value="transito">TRANSITO</mat-option>
-    </mat-select>
-  </mat-form-field>
+<div class="slider-container d-flex flex-column" *ngIf="tipo_mapa === 'ninguna'">
+  <div>
+    <div>
+      <ngx-slider [(value)]="dummy_value" [(highValue)]="dummy_highvalue" [options]="dummy_options"></ngx-slider>
+    </div>
+    <div class="flex-column">
+      <div class="d-flex flex-row p-20">
+        <div class="flex-column">
+          <p>Fecha de inicio:</p>
+          <mat-form-field appearance="fill" class="my-datepicker">
+            <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio">
+            <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+            <mat-datepicker #pickerInicio color="primary"></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="flex-column">
+          <p>Fecha de Fin</p>
+          <mat-form-field appearance="fill" class="my-datepicker">
+            <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin">
+            <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFin></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <mat-form-field style="text-align: right !important">
+        <mat-label>Selecciona una opción</mat-label>
+        <mat-select (selectionChange)="tipoMapaChange($event.value)">
+          <mat-option value="farmacia">FARMACIA MUNICIPAL</mat-option>
+          <mat-option value="dimap">HIGIENE AMBIENTAL - DIMAP</mat-option>
+          <mat-option value="seguridad">SEGURIDAD MUNICIPAL</mat-option>
+          <mat-option value="impuestosyderechos">IMPUESTOS Y DERECHOS</mat-option>
+          <mat-option value="ayudasocial">AYUDA SOCIAL - PANDEMIA</mat-option>
+          <mat-option value="exencionbasura">EXCENCIÓN BASURA</mat-option>
+          <mat-option value="obrasmunicipales">OBRAS MUNICIPALES</mat-option>
+          <mat-option value="transito">TRANSITO</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="fechaChange()">Buscar</button>
+    </div>
+  </div>
+  <div>
+    Dashboard
+  </div>
 
 </div>
 
-<div class="slider-container" *ngIf="tipo_mapa !== 'ninguna'">
-  <ngx-slider [(value)]="slider_value" [(highValue)]="slider_highvalue" [options]="slider_options" (userChangeEnd)="sliderChange($event)"></ngx-slider>
+<div class="slider-container flex-column" *ngIf="tipo_mapa !== 'ninguna'">
+  <div>
+    <div>
+      <ngx-slider [(value)]="slider_value" [(highValue)]="slider_highvalue" [options]="slider_options" (userChangeEnd)="sliderChange($event)"></ngx-slider>
+    </div>
+    <div class="flex-column">
+      <div class="d-flex flex-row p-20">
+        <div class="flex-column">
+          <p>Fecha de inicio:</p>
+          <mat-form-field appearance="fill" class="my-datepicker">
+            <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio">
+            <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+            <mat-datepicker #pickerInicio color="primary"></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="flex-column">
+          <p>Fecha de Fin</p>
+          <mat-form-field appearance="fill" class="my-datepicker">
+            <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin">
+            <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+            <mat-datepicker #pickerFin></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+      <mat-form-field style="text-align: right !important">
+        <mat-label>Selecciona una opción</mat-label>
+        <mat-select (selectionChange)="tipoMapaChange($event.value)">
+          <mat-option value="farmacia">FARMACIA MUNICIPAL</mat-option>
+          <mat-option value="dimap">HIGIENE AMBIENTAL - DIMAP</mat-option>
+          <mat-option value="seguridad">SEGURIDAD MUNICIPAL</mat-option>
+          <mat-option value="impuestosyderechos">IMPUESTOS Y DERECHOS</mat-option>
+          <mat-option value="ayudasocial">AYUDA SOCIAL - PANDEMIA</mat-option>
+          <mat-option value="exencionbasura">EXENCIÓN BASURA</mat-option>
+          <mat-option value="obrasmunicipales">OBRAS MUNICIPALES</mat-option>
+          <mat-option value="transito">TRANSITO</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="fechaChange()">Buscar</button>
+    </div>
+  </div>
+  <div>
+    <div>
+      <div>
+        <div class="d-flex alig-items-center justify-content-center m-top-20 m-bottom-20" *ngIf="dataSource.length > 0">
+          <div class="d-flex alig-items-center justify-content-center">
+            <div *ngFor="let element of dataSource" class="rank" [style.opacity]="element.opacity"> {{element.value}} </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <app-pie-chart-compare></app-pie-chart-compare>
+      </div>
+      <div>
+        <app-pie-chart></app-pie-chart>
+      </div>
+      <div>
+        <app-advance-pie-chart></app-advance-pie-chart>
+      </div>
+      <div>
+        <app-barchart></app-barchart>
+      </div>
 
-  <mat-form-field appearance="fill" class="my-datepicker">
-    <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio">
-    <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
-    <mat-datepicker #pickerInicio color="primary"></mat-datepicker>
-  </mat-form-field>
+    </div>
+  </div>
 
-  <mat-form-field appearance="fill" class="my-datepicker">
-    <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin">
-    <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
-    <mat-datepicker #pickerFin></mat-datepicker>
-  </mat-form-field>
 
-  <button mat-raised-button color="primary" (click)="fechaChange()">Buscar</button>
-
-  <mat-form-field style="text-align: right !important">
-    <mat-label>Selecciona una opción</mat-label>
-    <mat-select (selectionChange)="tipoMapaChange($event.value)">
-      <mat-option value="farmacia">FARMACIA MUNICIPAL</mat-option>
-      <mat-option value="dimap">HIGIENE AMBIENTAL - DIMAP</mat-option>
-      <mat-option value="seguridad">SEGURIDAD MUNICIPAL</mat-option>
-      <mat-option value="impuestosyderechos">IMPUESTOS Y DERECHOS</mat-option>
-      <mat-option value="ayudasocial">AYUDA SOCIAL - PANDEMIA</mat-option>
-      <mat-option value="exencionbasura">EXENCIÓN BASURA</mat-option>
-      <mat-option value="obrasmunicipales">OBRAS MUNICIPALES</mat-option>
-      <mat-option value="transito">TRANSITO</mat-option>
-    </mat-select>
-  </mat-form-field>
 
 </div>
 
