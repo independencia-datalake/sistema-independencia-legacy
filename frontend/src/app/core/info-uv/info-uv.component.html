@@ -13,7 +13,10 @@
         <!-- mapa -->
       </div>
       <div class="col">
-        <h2>Resumen sobre jhgjhgjgj <a class="texto-click" (click)="dialogUV()">{{unidad_vecinal}}</a></h2>
+        <h2>Resumen sobre
+          <a class="texto-click" (click)="dialogUV()" *ngIf="unidad_vecinal; else sinValor">{{unidad_vecinal}}</a>
+          <ng-template #sinValor><a class="texto-click" (click)="dialogUV()">elija unidad vecinal</a></ng-template>
+      </h2>
         <mat-accordion>
 
           <mat-expansion-panel>

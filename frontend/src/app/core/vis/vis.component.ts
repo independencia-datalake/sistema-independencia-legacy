@@ -55,8 +55,15 @@ export class VisComponent {
   label: any;
   geoJsonLayer: L.GeoJSON;
   public maximo:any;
-
   legend: L.Control;
+
+  public uvPoblacionData: any;
+  public visPoblacionData: any = 'Ninguna';
+  onToggleChange(value: string) {
+    this.visPoblacionData = value;
+    this.initializeMapData()
+  }
+
 
 
   // dataSource = new MatTableDataSource<data_UV>([...this.dataByUV]);
@@ -92,9 +99,41 @@ export class VisComponent {
     getPointerColor: (value:number): string => {return '#FC3D59'},
   };
 
+  calculateDensidad(element, uvData, property, percentageProperty) {
+    if (this.visPoblacionData === 'Total Poblacion' && uvData && uvData.total != 0) {
+      return parseFloat((100 * element[property] / uvData.total).toFixed(2));
+    } else if (this.visPoblacionData === 'Superficie' && uvData && uvData.superficie != 0) {
+      return parseFloat((10000 * element[property] / uvData.superficie).toFixed(2));
+    } else if (this.visPoblacionData === 'Porcentaje') {
+      console.log(element)
+      return element[percentageProperty];
+    } else {
+      return element[property];
+    }
+  }
+  calculateValue = (element, uvData, property, percentageProperty) => {
+    if (this.visPoblacionData === 'Total Poblacion' && uvData && uvData.total != 0) {
+      return (element[property] / uvData.total).toFixed(2);
+    } else if (this.visPoblacionData === 'Superficie' && uvData && uvData.superficie != 0) {
+      return (10000 * element[property] / uvData.superficie).toFixed(1);
+    } else if (this.visPoblacionData === 'Porcentaje') {
+      return element[percentageProperty] + '%';
+    } else {
+      return element[property];
+    }
+  }
+
   public columnas = [
     { nombre: 'total', resaltada: false, element: 'total' },
     // { nombre: 'rank', resaltada: false },
+    // POBLACION
+    { nombre: 'hombres', resaltada: false, element: 'hombres' },
+    { nombre: 'mujeres', resaltada: false, element: 'mujeres' },
+    { nombre: 'porcentaje_inmigrante', resaltada: false, element: 'porcentaje_inmigrante' },
+    { nombre: 'superficie_total', resaltada: false, element: 'superficie_total' },
+    { nombre: 'superficie_no_habitada', resaltada: false, element: 'superficie_no_habitada' },
+    { nombre: 'superficie', resaltada: false, element: 'superficie' },
+    { nombre: 'densidad_habitantekm2', resaltada: false, element: 'densidad_habitantekm2' },
     // EMPRESAS
     { nombre: 'ventas', resaltada: false, element: 'ventas' },
     { nombre: 'alcohol', resaltada: false, element: 'alcohol' },
@@ -184,7 +223,75 @@ export class VisComponent {
 
 
       });
-    }else if (this.tipo_mapa === 'farmacia') {
+
+    } else if (this.tipo_mapa === 'poblacion') {
+      this.mapa_legacy.getRangoFechasGeneralByTipo('impuestosyderechos', 'total').pipe(
+        switchMap(fechas => {
+          if (fecha_inicio_init && fecha_fin_init) {
+            this.fechaInicio = fecha_inicio_init
+            this.fechaFin = fecha_fin_init
+          } else {
+            this.fechaInicio = fechas.fecha_inicio
+            this.fechaFin = fechas.fecha_fin
+          }
+          if (flag_slider === true) {
+          } else if (flag_slider === false) {
+            this.initializeSlider(this.fechaInicio,this.fechaFin)
+          }
+          return forkJoin([this.mapa_legacy.getPoblacionUV(), this.uvCoordRequest])
+        })
+      ).subscribe(([poblacionUVData, uvCoordData]) => {
+        let densidadPorUV = {};
+        const values = Object.values(poblacionUVData);
+
+        let clave = this.columnaResaltada
+
+        values.forEach((element:any) => {
+          densidadPorUV[element.uv] = element[clave]
+        })
+
+        let densidades = (poblacionUVData as any[]).map(item => item[clave])
+
+        this.maximo = Math.max(...densidades)
+
+        this.dataSource = (poblacionUVData as any[]).map(item => {
+          return { nombre:'UV-' + (item.uv), total: item.total, hombres: item.hombres, mujeres: item.mujeres, porcentaje_inmigrante: item.porcentaje_inmigrante, superficie_total: item.superficie_total, superficie_no_habitada: item.superficie_no_habitada, superficie: item.superficie, densidad_habitantekm2: item.densidad_habitantekm2 }
+        })
+
+        // Utilizar los datos al crear geoJsonData
+        this.geoJsonData = {
+          type: 'FeatureCollection',
+          features: Object.keys(uvCoordData).map((key) => {
+            const coords = Object.values(uvCoordData[key]);
+            // La clave de UV se asume que está en formato 'UV-#' y se extrae el número
+            let uvNumber = parseInt(key.split('-')[1]);
+            // Obtener la densidad correspondiente de densidadPorUV, o 0 si no hay datos
+            let densidad = densidadPorUV[uvNumber] || 0;
+            return {
+              type: 'Feature',
+              properties: {
+                "name": key,
+                "density": densidad,
+              },
+              geometry: {
+                type: 'Polygon',
+                coordinates: [coords],
+              },
+            };
+          }),
+        };
+        // Luego puedes actualizar la data del layer geoJson con los nuevos datos
+        this.geoJsonLayer.clearLayers();
+        this.geoJsonLayer.addData(this.geoJsonData);
+
+        this.legend = new L.Control({ position: 'bottomright' });
+        this.updateLegend(this.maximo);
+        this.legend.addTo(this.map);
+      })
+
+      this.displayedColumns = ['nombre', 'rank', 'total', 'hombres', 'mujeres', 'porcentaje_inmigrante', 'superficie_total', 'superficie_no_habitada', 'superficie', 'densidad_habitantekm2'];
+
+    } else if (this.tipo_mapa === 'farmacia') {
 
       this.mapa_legacy.getRangoFechasGeneralByTipo(this.tipo_mapa, this.columnaResaltada).pipe(
         switchMap(fechas => {
@@ -273,16 +380,23 @@ export class VisComponent {
           return forkJoin([this.mapa_legacy.getEmpresasByUV(this.fechaInicio, this.fechaFin), this.uvCoordRequest]);
         })
       ).subscribe(([empresasTotalByUVData, uvCoordData]) => {
+
         let densidadPorUV = {};
         const values = Object.values(empresasTotalByUVData);
 
         let clave = this.columnaResaltada
 
         values.forEach(element => {
-          densidadPorUV[element.uv-1] = element[clave];  // Accede a la propiedad de 'element' basada en la clave
+          // densidadPorUV[element.uv-1] = element[clave];  // Accede a la propiedad de 'element' basada en la clave
+          let uvData = this.uvPoblacionData[element.uv - 1]
+          densidadPorUV[element.uv - 1] = this.calculateDensidad(element, uvData, clave,clave+'_porcentaje' )
         });
 
-        let densidades = (empresasTotalByUVData as any[]).map(item => item[clave]);  // Mapea la propiedad de 'item' basada en la clave
+        let densidades = (empresasTotalByUVData as any[]).map(item => {
+          // item[clave]
+          let uvData = this.uvPoblacionData[item.uv - 1]
+          return this.calculateDensidad(item, uvData, clave, clave+'_porcentaje')
+        });  // Mapea la propiedad de 'item' basada en la clave
 
         this.maximo = Math.max(...densidades);
 
@@ -290,11 +404,16 @@ export class VisComponent {
 
           let rank = item[`rank_${this.columnaResaltada}`];
           let rank_ly = item[`rank_${this.columnaResaltada}_ly`];
+          let uvData = this.uvPoblacionData[item.uv - 1]
+
+          let tipo_patentes = ['total', 'alcohol', 'comercial', 'profesional', 'industrial', 'microempresa', 'estacionada'];
+          let values = tipo_patentes.map(palabra => this.calculateValue(item, uvData, palabra, palabra + '_porcentaje'));
+          let [total, alcohol, comercial, profesional, industrial, microempresa, estacionada] = values;
 
           rank = rank || '-';  // Si rank es null o undefined, se le asigna "-"
           rank_ly = rank_ly || '-';
 
-          return { nombre:'UV-' + (item.uv-1), rank: rank, rank_ly: rank_ly, total: item.total, alcohol: item.alcohol, comercial: item.comercial, profesional: item.profesional, industrial: item.industrial, microempresa: item.microempresa, estacionada: item.estacionada}
+          return { nombre:'UV-' + (item.uv-1), rank: rank, rank_ly: rank_ly, total: total, alcohol: alcohol, comercial: comercial, profesional: profesional, industrial: industrial, microempresa: microempresa, estacionada: estacionada}
         })
 
         // Utilizar los datos al crear geoJsonData
@@ -420,7 +539,6 @@ export class VisComponent {
           } else if (flag_slider === false) {
             this.initializeSlider(this.fechaInicio,this.fechaFin)
           }
-
           const fechaFinObj = new Date(this.fechaFin)
           this.anioFin = fechaFinObj.getFullYear();
           this.anioFin_ly = this.anioFin-1
@@ -428,16 +546,23 @@ export class VisComponent {
           return forkJoin([this.mapa_legacy.getObrasMunicipalesTotalByUV(this.fechaInicio, this.fechaFin), this.uvCoordRequest]);
         })
       ).subscribe(([obrasMunicipalesByUVData, uvCoordData]) => {
+
         let densidadPorUV = {};
         const values = Object.values(obrasMunicipalesByUVData)
 
         let clave = this.columnaResaltada
+        console.log(clave)
 
         values.forEach(element => {
-          densidadPorUV[element.uv-1] = element[clave];
+          // densidadPorUV[element.uv-1] = element[clave];
+          let uvData = this.uvPoblacionData[element.uv - 1]
+          densidadPorUV[element.uv - 1] = this.calculateDensidad(element, uvData, clave, clave+'_porcentaje')
         })
 
-        let densidades = (obrasMunicipalesByUVData as any[]).map(item => item[clave])
+        let densidades = (obrasMunicipalesByUVData as any[]).map(item => {
+          let uvData = this.uvPoblacionData[item.uv - 1]
+          return this.calculateDensidad(item, uvData, clave, clave+'_porcentaje')
+        })
 
         this.maximo = Math.max(...densidades);
 
@@ -446,8 +571,15 @@ export class VisComponent {
           let formattedColumnName = this.formatColumnName(this.columnaResaltada);
           let rank;
           let rank_ly;
+          let uvData = this.uvPoblacionData[item.uv - 1]
+
+          let tipo_dom = ['total', 'anexion', 'antiguas', 'anulacion', 'cambiodestino', 'fusion', 'ley 20.898', 'obras menores', 'permisos de edificacion', 'recepcion final', 'regularizaciones', 'regularizaciones ley 18.591', 'resolucion', 'subdivisiones', 'ventas por piso']
+          let values = tipo_dom.map(palabra => this.calculateValue(item,uvData,palabra,palabra+'_porcentaje'))
+          let [total, anexion, antiguas, anulacion, cambio_destino, fusion, ley_20898, obrasmenores, permisos_edificacion, recepcionfinal, regularizaciones, regularizaciones18591, resolucion, subdivisiones, ventasporpiso] = values;
+
           if (this.columnaResaltada === 'cambio de destino') {
               rank = item.rank_cambiodestino;
+
           } else if (this.columnaResaltada === 'permisos de edificacion') {
               rank = item.rank_permisosedificacion;
               rank_ly = item.rank_permisosedificacion_ly;
@@ -461,21 +593,21 @@ export class VisComponent {
 
           return { nombre:'UV-' + (item.uv-1),
                    rank: rank,
-                   total: item.total,
-                   anexion: item.anexion,
-                   antiguas: item.antiguas,
-                   anulacion: item.anulacion,
-                   cambio_destino: item['cambio de destino'],
-                   fusion: item.fusion,
-                   ley_20898: item['ley 20.898'],
-                   obrasmenores: item['obras menores'],
-                  permisosedificacion: item['permisos de edificacion'],
-                   recepcionfinal: item['recepcion final'],
-                   regularizaciones: item.regularizaciones,
-                   regularizaciones18591: item['regularizaciones ley 18.591'],
-                   resolucion: item.resolucion,
-                   subdivisiones: item.subdivisiones,
-                  ventasporpiso: item['ventas por piso'] }
+                   total: total,
+                   anexion: anexion,
+                   antiguas: antiguas,
+                   anulacion: anulacion,
+                   cambio_destino: cambio_destino,
+                   fusion: fusion,
+                  ley_20898: ley_20898,
+                  obrasmenores: obrasmenores,
+                  permisosedificacion: permisos_edificacion,
+                  recepcionfinal: recepcionfinal,
+                   regularizaciones: regularizaciones,
+                  regularizaciones18591: regularizaciones18591,
+                   resolucion: resolucion,
+                   subdivisiones: subdivisiones,
+                  ventasporpiso: ventasporpiso}
         })
         // Utilizar los datos al crear geoJsonData
         this.geoJsonData = {
@@ -537,42 +669,49 @@ export class VisComponent {
           return forkJoin([this.mapa_legacy.getTransitoByUV(this.fechaInicio,this.fechaFin), this.uvCoordRequest]);
         })
       ).subscribe(([licenciasTotalByUVData, uvCoordData]) => {
+
         let densidadPorUV = {};
         const values = Object.values(licenciasTotalByUVData);
 
         if (this.columnaResaltada === 'licencia conducir') {
           values.forEach(element => {
-            densidadPorUV[element.uv-1] = element.licencia_conducir;
+            let uvData = this.uvPoblacionData[element.uv - 1];
+            densidadPorUV[element.uv - 1] = this.calculateDensidad(element, uvData, 'licencia_conducir', 'licencia_conducir_porcentaje');
           });
 
-          let densidades = (licenciasTotalByUVData as any[]).map(item => item.licencia_conducir);
+          let densidades = (licenciasTotalByUVData as any[]).map(item => {
+            let uvData = this.uvPoblacionData[item.uv - 1];
+            return this.calculateDensidad(item, uvData, 'licencia_conducir', 'licencia_conducir_porcentaje');
+          });
+
           this.maximo = Math.max(...densidades);
         } else if (this.columnaResaltada === 'permiso circulacion') {
           values.forEach(element => {
-            densidadPorUV[element.uv-1] = element.permiso_circulacion;
+            let uvData = this.uvPoblacionData[element.uv - 1];
+            densidadPorUV[element.uv - 1] = this.calculateDensidad(element, uvData, 'permiso_circulacion', 'permiso_circulacion_porcentaje');
           });
 
-          let densidades = (licenciasTotalByUVData as any[]).map(item => item.permiso_circulacion);
+          let densidades = (licenciasTotalByUVData as any[]).map(item => {
+            let uvData = this.uvPoblacionData[item.uv - 1];
+            return this.calculateDensidad(item, uvData, 'permiso_circulacion', 'permiso_circulacion_porcentaje');
+          });
+
           this.maximo = Math.max(...densidades);
         }
 
         this.dataSource = licenciasTotalByUVData.map(item => {
-          let rank;
-          let rank_ly
-          if (this.columnaResaltada === 'licencia conducir') {
-            rank = item.rank_licencia
-            rank_ly = item.rank_licencia_ly
-          } else if (this.columnaResaltada === 'permiso circulacion') {
-            rank = item.rank_permiso
-            rank_ly = item.rank_permiso_ly
-          }
+          let rank = this.columnaResaltada === 'licencia conducir' ? item.rank_licencia : item.rank_permiso;
+          let rank_ly = this.columnaResaltada === 'licencia conducir' ? item.rank_licencia_ly : item.rank_permiso_ly;
+          let uvData = this.uvPoblacionData[item.uv - 1];
+
+          let licencia_conducir = this.calculateValue(item, uvData, 'licencia_conducir', 'licencia_conducir_porcentaje');
+          let permiso_circulacion = this.calculateValue(item, uvData, 'permiso_circulacion', 'permiso_circulacion_porcentaje');
 
           rank = rank || '-';  // Si rank es null o undefined, se le asigna "-"
           rank_ly = rank_ly || '-';
 
-          return { nombre:'UV-' + (item.uv-1), rank: rank, rank_ly: rank_ly, licencia_conducir: item.licencia_conducir, permiso_circulacion: item.permiso_circulacion}
-        })
-
+          return { nombre:'UV-' + (item.uv-1), rank: rank, rank_ly: rank_ly, licencia_conducir: licencia_conducir, permiso_circulacion: permiso_circulacion }
+        });
         // Utilizar los datos al crear geoJsonData
         this.geoJsonData = {
           type: 'FeatureCollection',
@@ -625,6 +764,7 @@ export class VisComponent {
       zoomControl: false,   // Deshabilitar el control de zoom
       scrollWheelZoom: false
     };
+    // this.map = new Map('map-vis', mapOptions).setView([-33.416793, -70.662822], 14);
     this.map = new Map('map-vis', mapOptions).setView([-33.416793, -70.662822], 14);
 
 
@@ -647,7 +787,6 @@ export class VisComponent {
       interactive: true
     };
     L.imageOverlay(image, imageBounds, imageOptions).addTo(this.map);
-
     const info = L.Control.extend({
       onAdd: function(map) {
         const div = L.DomUtil.create('div', 'info');
@@ -663,7 +802,26 @@ export class VisComponent {
     this.label = new info(); // label es la etiqueta de arriba a la derecha del mapa
     this.label.addTo(this.map);
 
-    
+
+    console.log('si pasamos por aqui')
+    this.mapa_legacy.getPoblacionUV().subscribe(data => {
+      this.uvPoblacionData = data;
+      this.uvPoblacionData.unshift({
+        id: 0,
+        total: 10000000000000,
+        superficie: 100000000000,
+        superficie_total: 1000000000000,
+        // Agrega aquí las demás propiedades que necesites
+      });
+      console.log(this.uvPoblacionData)
+    })
+
+      // Añadir el objeto a uvPoblacionData
+      // this.uvPoblacionData['UV-0'] = {Total: '1', 'Superficie m2': '1'};
+
+      console.log(this.uvPoblacionData);
+    // });
+
   }
 
 
@@ -770,15 +928,40 @@ export class VisComponent {
     //Tipo de label
     if (this.tipo_mapa === 'farmacia') {
       this.label.updateContent( '<h4>Ventas de farmacia ' +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+    } else if (this.tipo_mapa === 'poblacion') {
+      this.label.updateContent( '<h4>Poblacion  ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
     } else if (this.tipo_mapa === 'impuestosyderechos') {
-      this.label.updateContent( '<h4>Patentes de tipo ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+      if (this.visPoblacionData === 'Total Poblacion') {
+        this.label.updateContent( '<h4>Patentes de tipo ' + columnita +  ' por habitante: </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+      } else if (this.visPoblacionData === 'Superficie') {
+        this.label.updateContent( '<h4>Patentes de tipo ' + columnita +  ' por hectarea: </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+      } else if (this.visPoblacionData === 'Porcentaje') {
+        this.label.updateContent( '<h4>Porcentaje de Patentes de ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+      } else {
+        this.label.updateContent( '<h4>Patentes de tipo ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+      }
     } else if (this.tipo_mapa === 'exencionbasura') {
       this.label.updateContent( '<h4>Exencion Basura ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
     } else if (this.tipo_mapa === 'obrasmunicipales'){
-      this.label.updateContent( '<h4>Obras Municipales ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+      if (this.visPoblacionData === 'Total Poblacion') {
+        this.label.updateContent( '<h4>Obras Municipales ' + columnita +  ' por habitante: </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+      } else if ( this.visPoblacionData === 'Superficie') {
+        this.label.updateContent( '<h4>Obras Municipales '+columnita +  ' por hectarea: </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+      } else if (this.visPoblacionData === 'Porcentaje') {
+        this.label.updateContent( '<h4>Porcentaje de Obras Municipales '+columnita +  ': </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '%<br />');
+      } else {
+        this.label.updateContent( '<h4>Obras Municipales '+columnita +  ': </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+      }
     } else if (this.tipo_mapa ==='transito') {
-    this.label.updateContent( '<h4>'+columnita +  ': </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
-
+      if (this.visPoblacionData === 'Total Poblacion') {
+        this.label.updateContent( '<h4>'+columnita +  ' por habitante: </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '%<br />');
+      } else if ( this.visPoblacionData === 'Superficie') {
+        this.label.updateContent( '<h4>'+columnita +  ' por hectarea: </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+      } else if (this.visPoblacionData === 'Porcentaje') {
+        this.label.updateContent( '<h4>Porcentaje de '+columnita +  ': </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '%<br />');
+      } else {
+        this.label.updateContent( '<h4>'+columnita +  ': </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+      }
     }
   }
 
@@ -829,6 +1012,7 @@ export class VisComponent {
       return null;
     }
   }
+
 
   initializeSlider(fecha_inicio, fecha_fin) {
     // console.log('inicializando slider')

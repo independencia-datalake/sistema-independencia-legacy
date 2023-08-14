@@ -39,4 +39,6 @@ urlpatterns = [
     path('personaarchivos/<int:pk>/', views.PersonaArchivosDetailAPIViw.as_view()),
     path('personaarchivos/update/<int:pk>/', views.PersonaArchivosUpdateAPIViw.as_view()),
     path('personaarchivos/delete/<int:pk>/', views.PersonaArchivosDeleteAPIViw.as_view()),
+    path('poblacion-uv/', views.PoblacionUVAPIView.as_view()),
+    path('obtener_uv/<str:calle>/<int:numeracion>/', views.ObtenerUVView.as_view(), name='obtener_uv'),
 ]

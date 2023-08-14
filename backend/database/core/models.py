@@ -246,3 +246,14 @@ class PersonaArchivos(models.Model):
       verbose_name_plural = "Archivos de persona"
     def __str__(self):
         return f'Archivo N°:  {self.pk} || Asociada a la persona:  {self.persona}'
+
+class PoblacionUV(models.Model):
+    uv = models.ForeignKey(UV, on_delete=models.CASCADE, verbose_name='UV')
+    total = models.PositiveIntegerField(verbose_name="Poblacion Total", blank=True, null=True)
+    hombres = models.PositiveIntegerField(verbose_name="Hombres Total", blank=True, null=True)
+    mujeres = models.PositiveIntegerField(verbose_name="Mujeres Total", blank=True, null=True)
+    porcentaje_inmigrante = models.DecimalField(verbose_name='Porcentaje Poblacion Inmigrante', max_digits=5, decimal_places=2)
+    superficie_total = models.PositiveIntegerField(verbose_name="Superficie Total m2", blank=True, null=True)
+    superficie_no_habitada = models.PositiveIntegerField(verbose_name="Superficie no habitadas m2", blank=True, null=True)
+    superficie = models.PositiveIntegerField(verbose_name="Superficie m2", blank=True, null=True)
+    densidad_habitantekm2 = models.DecimalField(verbose_name='Densidad Habitante/Km2', max_digits=5, decimal_places=1)

@@ -4,6 +4,7 @@ import { CallesService } from 'src/app/service/calles.service';
 import { MatSelect } from '@angular/material/select';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
+
 @Component({
   selector: 'app-dialog-uv',
   templateUrl: './dialog-uv.component.html',
@@ -19,6 +20,7 @@ export class DialogUVComponent {
 
   options = [];
   filterdOptions;
+
 
   formDireccionPersona: FormGroup;
 
@@ -44,6 +46,7 @@ export class DialogUVComponent {
       this.filterData(response);
     })
 
+    
     for (let i = 1; i <= 26; i++) {
       this.uvOptions.push(`UV-${i}`);
     }
@@ -51,17 +54,32 @@ export class DialogUVComponent {
     this.getCalles();
   }
 
+  
   ngAfterViewInit(){
     if(this.uvField){
       this.uvField.focus();
     }else{
       console.log('uvField is undefined')
+
     }
   }
 
   onNoClick(): void {
+    // console.log(this.selectedOption)
+    if (this.selectedOption === 'direccion') {
+      console.log(this.formulario.value)
+      let calle = this.formulario.value.calle
+      let numeracion = this.formulario.value.numero
+      this.callesIndependencia.getUV(calle,numeracion).subscribe(data => {
+        console.log(data)
+        this.selectedUV = `UV-${data.unidad_vecinal}`;
+        this.dialogRef.close(this.selectedUV);
+      })
+    } else {
     // this.selectedUV = this.uvFormGroup.value.uv;
+    // console.log(this.selectedUV)
     this.dialogRef.close(this.selectedUV);
+    }
   }
   filterData(enterdData) {
     console.log('on filter dataq--- ')

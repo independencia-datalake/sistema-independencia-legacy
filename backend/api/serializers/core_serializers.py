@@ -52,3 +52,8 @@ class PersonaArchivosSerializer(serializers.ModelSerializer):
         model = PersonaArchivos
         fields = '__all__'
 
+class PoblacionUVSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PoblacionUV
+        fields = '__all__'
+

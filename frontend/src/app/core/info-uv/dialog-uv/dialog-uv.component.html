@@ -15,6 +15,7 @@
       </mat-select>
     </mat-form-field>
   </div>
+
   <div *ngIf="selectedOption === 'direccion'" class="flex-column p-top-40">
     <form [formGroup]="formDireccionPersona">
       <mat-form-field>
@@ -31,7 +32,7 @@
         <input matInput placeholder="0" formControlName="numero" type="number"/>
       </mat-form-field>
     </form>
-    
+
   </div>
 </div>
 <div mat-dialog-actions>

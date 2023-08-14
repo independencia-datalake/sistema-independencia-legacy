@@ -359,6 +359,7 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+
       this.unidad_vecinal = result
 
 
@@ -417,7 +418,7 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
         this.data_farmacia_uv = data
       },
       (error) => {
-        console.log(error)
+        // console.log(error)
       }
     )
     this.data_lab.getEmpresasDataLabByUV(uvNumber+1).subscribe(

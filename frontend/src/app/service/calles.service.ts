@@ -17,4 +17,7 @@ export class CallesService {
       .pipe(map((response:[]) => response.map(item => item['calle'])));
   }
 
+  getUV(calle, numeracion): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/core/obtener_uv/${calle}/${numeracion}/`);
+  }
 }
