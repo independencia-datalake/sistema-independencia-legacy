@@ -11,6 +11,7 @@
         <td mat-cell *matCellDef="let element">{{element.nombre}}</td>
       </ng-container>
 
+
     <ng-container matColumnDef="rank" sticky>
       <th mat-header-cell *matHeaderCellDef  matTooltip="Ranking de uv's considerando todas las entradas durante el periodo de tiempo especificado" >Rank ({{ anioFin }}) </th>
       <td mat-cell *matCellDef="let element">
@@ -71,6 +72,7 @@
   <mat-form-field style="text-align: right !important">
     <mat-label>Selecciona una opción</mat-label>
     <mat-select (selectionChange)="tipoMapaChange($event.value)">
+      <mat-option value="poblacion">POBLACION Y SUPERFICIE</mat-option>
       <mat-option value="farmacia">FARMACIA MUNICIPAL</mat-option>
       <mat-option value="dimap">HIGIENE AMBIENTAL - DIMAP</mat-option>
       <mat-option value="seguridad">SEGURIDAD MUNICIPAL</mat-option>
@@ -104,6 +106,7 @@
   <mat-form-field style="text-align: right !important">
     <mat-label>Selecciona una opción</mat-label>
     <mat-select (selectionChange)="tipoMapaChange($event.value)">
+      <mat-option value="poblacion">POBLACION Y SUPERFICIE</mat-option>
       <mat-option value="farmacia">FARMACIA MUNICIPAL</mat-option>
       <mat-option value="dimap">HIGIENE AMBIENTAL - DIMAP</mat-option>
       <mat-option value="seguridad">SEGURIDAD MUNICIPAL</mat-option>
@@ -117,6 +120,17 @@
 
   <div id="chartdiv" style="width: 100%; height: 500px"></div>
 
-</div>
+  <!-- <mat-slide-toggle [(ngModel)]="visPoblacionData" (change)="toggleChanged($event)">Slide me!</mat-slide-toggle> -->
 
+
+</div>
+<div style="clear: both">
+  <mat-button-toggle-group name="favoriteColor" aria-label="Favorite Color"
+    (change)="onToggleChange($event.value)">
+    <mat-button-toggle value="Ninguna">Total</mat-button-toggle>
+    <mat-button-toggle value="Total Poblacion">Habitante</mat-button-toggle>
+    <mat-button-toggle value="Superficie">Superficie</mat-button-toggle>
+    <mat-button-toggle value="Porcentaje">Porcentaje</mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
 

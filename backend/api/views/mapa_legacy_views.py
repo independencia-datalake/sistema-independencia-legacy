@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from datetime import datetime, timedelta
 from django.db.models import Count, Window, F, Case, When, Value, IntegerField
 from django.db.models.functions import RowNumber
-from django.db.models import Q
+from django.db.models import Q, Sum
 
 from collections import defaultdict
 
@@ -75,6 +75,25 @@ class CountEmpresasByUV(APIView):
 
         uv_densities = {uv: {'total': 0, 'alcohol': 0, 'comercial': 0, 'profesional': 0, 'industrial': 0, 'microempresa': 0, 'estacionada': 0} for uv in uv_values}
         uv_densities_ly = {uv: {'total': 0} for uv in uv_values}
+
+        # Cuenta el total de empresas
+        total_empresas = Empresas.objects.filter(created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_alcohol = Empresas.objects.filter(tipo='alcohol', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_comercial = Empresas.objects.filter(tipo='comercial', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_profesional = Empresas.objects.filter(tipo='profesional', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_industrial = Empresas.objects.filter(tipo='industrial', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_microempresa = Empresas.objects.filter(tipo='microempresa', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_estacionada = Empresas.objects.filter(tipo='estacionado', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+
+        totales = {
+            'total': total_empresas,
+            'alcohol': total_alcohol,
+            'comercial': total_comercial,
+            'profesional': total_profesional,
+            'industrial': total_industrial,
+            'microempresa': total_microempresa,
+            'estacionada': total_estacionada
+        }
 
         # Cuenta el total de empresas
         queryset_total = Empresas.objects.filter(created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(total=Count('id')).order_by('uv')
@@ -209,12 +228,19 @@ class CountEmpresasByUV(APIView):
         # Convierte los resultados a la forma requerida
         data = [{'uv': uv, 
                  'total': values['total'], 
+                 'total_porcentaje': round(values['total']/totales['total']*100,2),
                  'alcohol': values['alcohol'], 
+                 'alcohol_porcentaje': round(values['alcohol']/totales['alcohol']*100,2),
                  'comercial': values['comercial'], 
+                 'comercial_porcentaje': round(values['comercial']/totales['comercial']*100,2),
                  'profesional': values['profesional'],
-                 'industrial': values['industrial'], 
+                 'profesional_porcentaje': round(values['profesional']/totales['profesional']*100,2),
+                 'industrial': values['industrial'],
+                 'industrial_porcentaje': round(values['industrial']/totales['industrial']*100,2), 
                  'microempresa': values['microempresa'],
+                 'microempresa_porcentaje': round(values['microempresa']/totales['microempresa']*100,2),
                  'estacionada': values['estacionada'],
+                 'estacionada_porcentaje': round(values['estacionada']/totales['estacionada']*100,2),
                  'rank_total': values.get('rank_total', None), 
                  'rank_alcohol': values.get('rank_alcohol', None), 
                  'rank_comercial': values.get('rank_comercial', None),
@@ -298,6 +324,9 @@ class CountTransitoByUV(APIView):
         uv_densities = {uv: {'licencia_conducir': 0, 'permiso_circulacion': 0} for uv in uv_values}
         uv_densities_ly = {uv: {'total': 0} for uv in uv_values}
 
+        total_licencias = 0
+        total_permisos = 0
+
         # Perform the actual query for LicenciaConducir.
         queryset_licencia = LicenciaConducir.objects.filter(fecha__gte=fecha_inicio, fecha__lte=fecha_fin).values('uv').annotate(licencia_conducir=Count('id')).order_by('uv')
         queryset_licencia_ly = LicenciaConducir.objects.filter(fecha__gte=fecha_inicio_ly, fecha__lte=fecha_fin_ly).values('uv').annotate(licencia_conducir=Count('id')).order_by('uv')
@@ -307,10 +336,12 @@ class CountTransitoByUV(APIView):
         # Update the dict with actual densities for LicenciaConducir.
         for obj in queryset_licencia:
             uv_densities[obj['uv']]['licencia_conducir'] = obj['licencia_conducir']
+            total_licencias += obj['licencia_conducir']
 
         # Update the dict with actual densities for PermisoCirculacion.
         for obj in queryset_permiso:
             uv_densities[obj['uv']]['permiso_circulacion'] = obj['permiso_circulacion']
+            total_permisos += obj['permiso_circulacion']
 
         uv_licencia = [(uv, values['licencia_conducir']) for uv, values in uv_densities.items() if uv != 1]
         uv_permiso = [(uv, values['permiso_circulacion']) for uv, values in uv_densities.items() if uv != 1]
@@ -363,7 +394,9 @@ class CountTransitoByUV(APIView):
         # Convert dict items to a list of dicts.
         data = [{'uv': uv, 
                  'licencia_conducir': values['licencia_conducir'], 
+                 'licencia_conducir_porcentaje': round((values['licencia_conducir']/total_licencias)*100, 2),
                  'permiso_circulacion': values['permiso_circulacion'],
+                 'permiso_circulacion_porcentaje': round((values['permiso_circulacion']/total_permisos)*100, 2),
                  'rank_licencia': values.get('rank_licencia', None),
                  'rank_permiso': values.get('rank_permiso', None),
                  'rank_licencia_ly': uv_densities_ly[uv].get('rank_licencia_ly', None),
@@ -390,6 +423,43 @@ class CountObrasMunicipalesByUV(APIView):
         # Initialize a dict with all UV values, each having density = 0.
         uv_densities = {uv: {'total': 0, 'anexion': 0, 'antiguas': 0, 'anulacion': 0, 'cambiodestino': 0, 'fusion': 0, 'ley20898': 0, 'obrasmenores': 0, 'permisosedificacion': 0, 'recepcionfinal': 0, 'regularizaciones': 0, 'regularizaciones18591': 0, 'resolucion': 0, 'subdivisiones': 0, 'ventasporpiso': 0} for uv in uv_values}
         uv_densities_ly = {uv: {'total': 0} for uv in uv_values}
+        
+        total_dom = DOM.objects.filter(created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_anexion = DOM.objects.filter(tramite='ANEXIÓN', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_anulacion = DOM.objects.filter(tramite='ANULACION', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_antiguas = DOM.objects.filter(tramite='ANTIGUAS', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_cambiodestino = DOM.objects.filter(tramite='CAMBIO DE DESTINO', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_fusion = DOM.objects.filter(tramite='FUSION', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_ley20898 = DOM.objects.filter(tramite='LEY 20.898', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_obrasmenores = DOM.objects.filter(tramite='OBRAS MENORES', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_permisosedificacion = DOM.objects.filter(tramite='PERMISO DE EDIFICACIÓN', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_recepcionfinal = DOM.objects.filter(tramite='RECEPCIÓN FINAL', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_regularizaciones = DOM.objects.filter(tramite='REGULARIZACIONES', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_regularizaciones18591 = DOM.objects.filter(tramite='REGULARIZACIONES LEY 18.591', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_resolucion = DOM.objects.filter(tramite='RESOLUCIÓN', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_subdivisiones = DOM.objects.filter(tramite='SUBDIVISIONES', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_ventasporpiso = DOM.objects.filter(tramite='VENTA POR PISO', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+
+
+
+        totales = {
+            'total': total_dom,
+            'anexion': total_anexion,
+            'antiguas': total_antiguas,
+            'anulacion': total_anulacion,
+            'cambiodestino': total_cambiodestino,
+            'fusion': total_fusion,
+            'ley20898': total_ley20898,
+            'obrasmenores': total_obrasmenores,
+            'permisosedificacion': total_permisosedificacion,
+            'recepcionfinal': total_recepcionfinal,
+            'regularizaciones': total_regularizaciones,
+            'regularizaciones18591': total_regularizaciones18591,
+            'resolucion': total_resolucion,
+            'subdivisiones': total_subdivisiones,
+            'ventasporpiso': total_ventasporpiso,
+        }
+
         # Perform the actual query.
         queryset_total = DOM.objects.filter(created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(total=Count('id')).order_by('uv')
         queryset_total_ly = DOM.objects.filter(created__gte=fecha_inicio_ly, created__lte=fecha_fin_ly).values('uv').annotate(total=Count('id')).order_by('uv')
@@ -463,20 +533,35 @@ class CountObrasMunicipalesByUV(APIView):
         # Convert dict items to a list of dicts.
         data = [{'uv': uv,
                  'total': values['total'],
+                 'total_porcentaje': round(values['total']/totales['total']*100,2) if totales['total'] != 0 else 0,
                  'anexion': values['anexion'],
+                 'anexion_porcentaje': round(values['anexion']/totales['anexion']*100,2) if totales['anexion'] != 0 else 0,
                  'antiguas': values['antiguas'],
+                 'antiguas_porcentaje': round(values['antiguas']/totales['antiguas']*100,2) if totales['antiguas'] != 0 else 0,
                  'anulacion': values['anulacion'],
-                 'cambio de destino': values['cambiodestino'],
+                 'anulacion_porcentaje': round(values['anulacion']/totales['anulacion']*100,2) if totales['anulacion'] != 0 else 0,
+                 'cambiodestino': values['cambiodestino'],
+                 'cambiodestino_porcentaje': round(values['cambiodestino']/totales['cambiodestino']*100,2) if totales['cambiodestino'] != 0 else 0,
                  'fusion': values['fusion'],
+                 'fusion_porcentaje': round(values['fusion']/totales['fusion']*100,2) if totales['fusion'] != 0 else 0,
                  'ley 20.898': values['ley20898'],
+                 'ley 20.898_porcentaje': round(values['ley20898']/totales['ley20898']*100,2) if totales['ley20898'] != 0 else 0,
                  'obras menores': values['obrasmenores'],
+                 'obras menores_porcentaje': round(values['obrasmenores']/totales['obrasmenores']*100,2) if totales['obrasmenores'] != 0 else 0,
                  'permisos de edificacion': values['permisosedificacion'],
+                 'permisos de edificacion_porcentaje': round(values['permisosedificacion']/totales['permisosedificacion']*100,2) if totales['permisosedificacion'] != 0 else 0,
                  'recepcion final': values['recepcionfinal'],
+                 'recepcion final_porcentaje': round(values['recepcionfinal']/totales['recepcionfinal']*100,2) if totales['recepcionfinal'] != 0 else 0,
                  'regularizaciones': values['regularizaciones'],
+                 'regularizaciones_porcentaje': round(values['regularizaciones']/totales['regularizaciones']*100,2) if totales['regularizaciones'] != 0 else 0,
                  'regularizaciones ley 18.591': values['regularizaciones18591'],
+                 'regularizaciones ley 18.591_porcentaje': round(values['regularizaciones18591']/totales['regularizaciones18591']*100,2) if totales['regularizaciones18591'] != 0 else 0,
                  'resolucion': values['resolucion'],
+                 'resolucion_porcentaje': round(values['resolucion']/totales['resolucion']*100,2) if totales['resolucion'] != 0 else 0,
                  'subdivisiones': values['subdivisiones'],
+                 'subdivisiones_porcentaje': round(values['subdivisiones']/totales['subdivisiones']*100,2) if totales['subdivisiones'] != 0 else 0,
                  'ventas por piso': values['ventasporpiso'],
+                 'ventas por piso_porcentaje': round(values['ventasporpiso']/totales['ventasporpiso']*100,2) if totales['ventasporpiso'] != 0 else 0,
                  'rank_total': values.get('rank_total', None), 
                  'rank_anexion': values.get('rank_anexion', None),
                  'rank_antiguas': values.get('rank_antiguas', None),

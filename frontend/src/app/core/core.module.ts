@@ -48,6 +48,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { AdminComponent } from './admin/admin.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+
 
 
 
@@ -97,7 +99,8 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     MatTooltipModule,
     NgxSliderModule,
     MatIconModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
+    MatButtonToggleModule,
   ],
   providers: [
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },

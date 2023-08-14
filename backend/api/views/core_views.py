@@ -1,8 +1,11 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import generics
+from rest_framework.views import APIView
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import status
+from django.http import JsonResponse, Http404
 from api.filters.persona_filters import PersonaFilter
 from .permissions_views import *
 
@@ -336,3 +339,26 @@ class PersonaArchivosDeleteAPIViw(generics.DestroyAPIView):
 
     def perform_destroy(self, instance):
         return super().perform_destroy(instance)
+
+class PoblacionUVAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        # Primero obtenemos los últimos 26 objetos.
+        last_26_objects = PoblacionUV.objects.all().order_by('-id')[:26]
+
+        # Usamos el serializer para convertir los datos del modelo a JSON
+        serializer = PoblacionUVSerializer(last_26_objects, many=True)
+
+        # Ordenamos los datos en el orden de las id de forma ascendente
+        ordered_data = sorted(serializer.data, key=lambda x: x['id'])
+
+        return Response(ordered_data)
+
+class ObtenerUVView(APIView):
+    def get(self, request, calle, numeracion):
+
+        if not calle or not numeracion:
+            return Response({"error": "Falta la calle o la numeración"}, status=status.HTTP_400_BAD_REQUEST)
+
+        uv = obtener_uv(calle, numeracion)
+
+        return Response({'unidad_vecinal': uv}, status=status.HTTP_200_OK)

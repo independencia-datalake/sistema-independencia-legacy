@@ -43,4 +43,9 @@ export class MapaLegacyService {
   getRangoFechasGeneralByTipo(mapa, tipo): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/mapa_legacy/rango-fechas/${mapa}/${tipo}`);
   }
+
+  // POBLACION UV
+  getPoblacionUV():Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/core/poblacion-uv/`);
+  }
 }

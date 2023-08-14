@@ -15,17 +15,16 @@
       </mat-select>
     </mat-form-field>
   </div>
-  <div *ngIf="selectedOption === 'direccion'" class="flex-column p-top-40">
+  <div *ngIf="selectedOption === 'direccion'" class="flex-column p-top-40" [formGroup]="formulario">
     <mat-form-field>
       <mat-label>Calle</mat-label>
-        <input autofocus formControlName="calle" matInput placeholder="Av. Independencia" [matAutocomplete]="auto" required>
-        <mat-autocomplete #uvSelect  #auto="matAutocomplete">
-          <mat-option *ngFor="let item of filterdOptions" [value]="item">
-            {{item}}
-          </mat-option>
-        </mat-autocomplete>
+      <input autofocus formControlName="calle" matInput placeholder="Av. Independencia" [matAutocomplete]="auto" required>
+      <mat-autocomplete #uvSelect  #auto="matAutocomplete">
+        <mat-option *ngFor="let item of filterdOptions" [value]="item">
+          {{item}}
+        </mat-option>
+      </mat-autocomplete>
     </mat-form-field>
-
 
     <mat-form-field>
       <mat-label>Numeracion</mat-label>
