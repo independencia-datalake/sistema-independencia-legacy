@@ -42,6 +42,7 @@ export class InformesProductosComponent {
     pageSize: number = 10;
     totalPages: number;
 
+    filterVal:string[];
     buscadorValue: string = '';
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -62,13 +63,19 @@ export class InformesProductosComponent {
     }
 
     getData(search = this.buscadorValue,size = this.pageSize): void {
+      console.log('=====',search)
       this.productosService.getProductosLista(search,this.page, size).subscribe((raw_data: any) => {
-        // console.log(raw_data)
+        console.log(raw_data)
         this.totalPages =  Math.ceil(raw_data.count / this.pageSize)
         const response = raw_data.results
         this.dataSource.data = response
         // this.dataSource.data = raw_data
-        // console.log(this.dataSource.data)
+        console.log('VVVVVVVVV ',this.dataSource.data)
+        // this.filterVal = this.dataSource.data
+
+        /**
+         * 
+         */
       })
     }
 
@@ -114,8 +121,8 @@ export class InformesProductosComponent {
     }
 
     filtro(valor) {
-      // console.log(valor)
-
+      console.log(valor)
+      console.log('en filtro')
       this.getData();
     }
 }
