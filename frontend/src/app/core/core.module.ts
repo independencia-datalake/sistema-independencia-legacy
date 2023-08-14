@@ -49,9 +49,11 @@ import { NgxSliderModule } from '@angular-slider/ngx-slider';
 import { AdminComponent } from './admin/admin.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-
-
-
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { PieChartComponent } from './charts/piechart.component';
+import { PieChartCompareComponent } from './charts/piechart-compare.component';
+import { AdvancePieChartComponent } from './charts/advanccepiechart.component';
+import { BarChartComponent } from './charts/barchart.component';
 
 
 @NgModule({
@@ -67,8 +69,11 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     InfoUvComponent,
     DialogUVComponent,
     VisComponent,
-    AdminComponent
-
+    AdminComponent,
+    PieChartComponent,
+    AdvancePieChartComponent,
+    BarChartComponent,
+    PieChartCompareComponent
   ],
   imports: [
     CommonModule,
@@ -101,6 +106,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
     MatIconModule,
     NgxDropzoneModule,
     MatButtonToggleModule,
+    NgxChartsModule,
   ],
   providers: [
     { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } },

@@ -60,6 +60,7 @@ export class ListaVentaComponent implements AfterViewInit {
   }
 
   fetchData(search= this.buscadorValue ,size = this.pageSize): void {
+    
     this.ventasService.getComprobanteventaLista(search ,this.page, size).pipe(take(1)).subscribe((raw_data: any) => {
       this.totalPages =  Math.ceil(raw_data.count / this.pageSize)
 
@@ -137,7 +138,7 @@ export class ListaVentaComponent implements AfterViewInit {
 
   filtro(valor) {
     console.log(valor)
-
+    console.log('en filtro')
     this.fetchData();
   }
 

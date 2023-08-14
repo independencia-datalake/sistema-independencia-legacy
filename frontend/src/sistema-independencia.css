@@ -10980,4 +10980,10 @@ a.text-dark:hover {
 	padding: 10px;
 	margin: 10px 8px;
   }
+.m-top-20{
+	margin-top: 20px;
+}
+.m-bottom-20{
+	margin-bottom: 20px;
+}
 /*# sourceMappingURL=bootstrap.min.css.map */

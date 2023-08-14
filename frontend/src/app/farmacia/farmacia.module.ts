@@ -16,6 +16,7 @@ import { CrearProductoComponent } from './crear-producto/crear-producto.componen
 import { MatSelectModule } from '@angular/material/select';
 import { InformesProductosComponent } from './informes-productos/informes-productos.component';
 import { MatTableModule } from '@angular/material/table';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { InformesStockComponent } from './informes-stock/informes-stock.component';
 import { ResumenPersonaComponent } from './lista-personas/lista-personas.component';
 import { ListaVentaComponent } from './lista-ventas/lista-ventas.component';
@@ -74,6 +75,7 @@ import { FichaIngresoComponent } from './ficha-ingreso/ficha-ingreso.component';
     MatRadioModule,
     MatFormFieldModule,
     MatInputModule,
+    MatAutocompleteModule,
   ],
 
 })

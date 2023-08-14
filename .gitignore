@@ -165,3 +165,7 @@ Thumbs.db
 
 .angular
 client_api_tester
+
+# local bd
+db.sqlite3
+respaldo_dev.sh
