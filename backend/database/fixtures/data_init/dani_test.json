@@ -1,0 +1,392 @@
+[
+    {
+        "model": "core.poblacionuv",
+        "pk": 1,
+        "fields": {
+            "uv": 1,
+            "total": 2047,
+            "hombres": 1040,
+            "mujeres": 1007,
+            "porcentaje_inmigrante": 0.9,
+            "superficie_total": 180815,
+            "superficie_no_habitada": 38199,
+            "superficie": 142616,
+            "densidad_habitantekm2": 1435.3 
+        }
+    },
+    {
+        "model": "core.poblacionuv",
+        "pk": 2,
+        "fields": {
+          "uv": 2,
+          "total": 3655,
+          "hombres": 1857,
+          "mujeres": 1798,
+          "porcentaje_inmigrante": 0.8,
+          "superficie_total": 289499,
+          "superficie_no_habitada": 40272,
+          "superficie": 249227,
+          "densidad_habitantekm2": 1466.5
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 3,
+        "fields": {
+          "uv": 3,
+          "total": 11549,
+          "hombres": 5867,
+          "mujeres": 5682,
+          "porcentaje_inmigrante": 7.1,
+          "superficie_total": 726286,
+          "superficie_no_habitada": 319772,
+          "superficie": 406514,
+          "densidad_habitantekm2": 2841.0
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 4,
+        "fields": {
+          "uv": 4,
+          "total": 10711,
+          "hombres": 5441,
+          "mujeres": 5270,
+          "porcentaje_inmigrante": 7.7,
+          "superficie_total": 396697,
+          "superficie_no_habitada": null,
+          "superficie": 396697,
+          "densidad_habitantekm2": 2700.0
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 5,
+        "fields": {
+          "uv": 5,
+          "total": 6078,
+          "hombres": 3088,
+          "mujeres": 2990,
+          "porcentaje_inmigrante": 3.1,
+          "superficie_total": 344522,
+          "superficie_no_habitada": null,
+          "superficie": 344522,
+          "densidad_habitantekm2": 1764.2
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 6,
+        "fields": {
+          "uv": 6,
+          "total": 10391,
+          "hombres": 5279,
+          "mujeres": 5112,
+          "porcentaje_inmigrante": 8.7,
+          "superficie_total": 322528,
+          "superficie_no_habitada": 121870,
+          "superficie": 200658,
+          "densidad_habitantekm2": 5178.5
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 7,
+        "fields": {
+          "uv": 7,
+          "total": 3910,
+          "hombres": 1986,
+          "mujeres": 1924,
+          "porcentaje_inmigrante": 1.2,
+          "superficie_total": 145918,
+          "superficie_no_habitada": 13806,
+          "superficie": 132112,
+          "densidad_habitantekm2": 2959.6
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 8,
+        "fields": {
+          "uv": 8,
+          "total": 13609,
+          "hombres": 6914,
+          "mujeres": 6696,
+          "porcentaje_inmigrante": 13.1,
+          "superficie_total": 408770,
+          "superficie_no_habitada": 32682,
+          "superficie": 376088,
+          "densidad_habitantekm2": 3618.6
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 9,
+        "fields": {
+          "uv": 9,
+          "total": 7727,
+          "hombres": 3925,
+          "mujeres": 3802,
+          "porcentaje_inmigrante": 9.2,
+          "superficie_total": 541894,
+          "superficie_no_habitada": 287370,
+          "superficie": 254524,
+          "densidad_habitantekm2": 3035.9
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 10,
+        "fields": {
+          "uv": 10,
+          "total": 2537,
+          "hombres": 1289,
+          "mujeres": 1248,
+          "porcentaje_inmigrante": 0.7,
+          "superficie_total": 221440,
+          "superficie_no_habitada": 105762,
+          "superficie": 115678,
+          "densidad_habitantekm2": 2193.2
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 11,
+        "fields": {
+          "uv": 11,
+          "total": 3710,
+          "hombres": 1885,
+          "mujeres": 1825,
+          "porcentaje_inmigrante": 0.0,
+          "superficie_total": 199529,
+          "superficie_no_habitada": 33606,
+          "superficie": 165923,
+          "densidad_habitantekm2": 2236.0
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 12,
+        "fields": {
+          "uv": 12,
+          "total": 2649,
+          "hombres": 1346,
+          "mujeres": 1303,
+          "porcentaje_inmigrante": 1.3,
+          "superficie_total": 169426,
+          "superficie_no_habitada": null,
+          "superficie": 169426,
+          "densidad_habitantekm2": 1563.5
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 13,
+        "fields": {
+          "uv": 13,
+          "total": 13672,
+          "hombres": 6946,
+          "mujeres": 6727,
+          "porcentaje_inmigrante": 14.0,
+          "superficie_total": 361551,
+          "superficie_no_habitada": 53422,
+          "superficie": 308129,
+          "densidad_habitantekm2": 4437.1
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 14,
+        "fields": {
+          "uv": 14,
+          "total": 2597,
+          "hombres": 1319,
+          "mujeres": 1278,
+          "porcentaje_inmigrante": 1.6,
+          "superficie_total": 150027,
+          "superficie_no_habitada": 53061,
+          "superficie": 96966,
+          "densidad_habitantekm2": 2678.3
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 15,
+        "fields": {
+          "uv": 15,
+          "total": 5879,
+          "hombres": 2987,
+          "mujeres": 2893,
+          "porcentaje_inmigrante": 6.6,
+          "superficie_total": 153767,
+          "superficie_no_habitada": 51839,
+          "superficie": 101928,
+          "densidad_habitantekm2": 5767.8
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 16,
+        "fields": {
+          "uv": 16,
+          "total": 6541,
+          "hombres": 3323,
+          "mujeres": 3218,
+          "porcentaje_inmigrante": 9.4,
+          "superficie_total": 177693,
+          "superficie_no_habitada": 10577,
+          "superficie": 167116,
+          "densidad_habitantekm2": 3914.0
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 17,
+        "fields": {
+          "uv": 17,
+          "total": 4694,
+          "hombres": 2384,
+          "mujeres": 2309,
+          "porcentaje_inmigrante": 1.8,
+          "superficie_total": 265994,
+          "superficie_no_habitada": null,
+          "superficie": 265994,
+          "densidad_habitantekm2": 1764.7
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 18,
+        "fields": {
+          "uv": 18,
+          "total": 5304,
+          "hombres": 2694,
+          "mujeres": 2610,
+          "porcentaje_inmigrante": 1.9,
+          "superficie_total": 418563,
+          "superficie_no_habitada": null,
+          "superficie": 418563,
+          "densidad_habitantekm2": 1267.2
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 19,
+        "fields": {
+          "uv": 19,
+          "total": 4303,
+          "hombres": 2186,
+          "mujeres": 2117,
+          "porcentaje_inmigrante": 1.1,
+          "superficie_total": 237230,
+          "superficie_no_habitada": null,
+          "superficie": 237230,
+          "densidad_habitantekm2": 1813.9
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 20,
+        "fields": {
+          "uv": 20,
+          "total": 7167,
+          "hombres": 3641,
+          "mujeres": 3526,
+          "porcentaje_inmigrante": 2.1,
+          "superficie_total": 455156,
+          "superficie_no_habitada": null,
+          "superficie": 455156,
+          "densidad_habitantekm2": 1574.6
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 21,
+        "fields": {
+          "uv": 21,
+          "total": 4035,
+          "hombres": 2050,
+          "mujeres": 1985,
+          "porcentaje_inmigrante": 0.4,
+          "superficie_total": 186414,
+          "superficie_no_habitada": null,
+          "superficie": 186414,
+          "densidad_habitantekm2": 2164.5
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 22,
+        "fields": {
+          "uv": 22,
+          "total": 4130,
+          "hombres": 2098,
+          "mujeres": 2032,
+          "porcentaje_inmigrante": 0.3,
+          "superficie_total": 230425,
+          "superficie_no_habitada": null,
+          "superficie": 230425,
+          "densidad_habitantekm2": 1792.3
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 23,
+        "fields": {
+          "uv": 23,
+          "total": 3020,
+          "hombres": 1534,
+          "mujeres": 1486,
+          "porcentaje_inmigrante": 0.8,
+          "superficie_total": 184323,
+          "superficie_no_habitada": 76972,
+          "superficie": 107351,
+          "densidad_habitantekm2": 2813.2
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 24,
+        "fields": {
+          "uv": 24,
+          "total": 2958,
+          "hombres": 1503,
+          "mujeres": 1455,
+          "porcentaje_inmigrante": 0.6,
+          "superficie_total": 66196,
+          "superficie_no_habitada": null,
+          "superficie": 66196,
+          "densidad_habitantekm2": 3327.6
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 25,
+        "fields": {
+          "uv": 25,
+          "total": 5409,
+          "hombres": 2748,
+          "mujeres": 2661,
+          "porcentaje_inmigrante": 5.5,
+          "superficie_total": 100945,
+          "superficie_no_habitada": null,
+          "superficie": 100945,
+          "densidad_habitantekm2": 5358.4
+        }
+      },
+      {
+        "model": "core.poblacionuv",
+        "pk": 26,
+        "fields": {
+          "uv": 26,
+          "total": 3605,
+          "hombres": 1831,
+          "mujeres": 1774,
+          "porcentaje_inmigrante": 0.2,
+          "superficie_total": 404437,
+          "superficie_no_habitada": 159918,
+          "superficie": 244519,
+          "densidad_habitantekm2": 1474.3
+        }
+      }
+]
