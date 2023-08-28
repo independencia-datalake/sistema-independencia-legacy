@@ -1,9 +1,132 @@
 
+<div class="d-flex alig-items-center alig-items-center justify-content-center">
+  <div class="slider-container d-flex flex-row alig-items-center justify-content-center" *ngIf="tipo_mapa === 'ninguna'">
+    <div style="clear: both; margin-top: 16px;">
+      <mat-button-toggle-group name="favoriteColor" aria-label="Favorite Color"
+        (change)="onToggleChange($event.value)">
+        <mat-button-toggle value="Ninguna">Total</mat-button-toggle>
+        <mat-button-toggle value="Total Poblacion">Habitante</mat-button-toggle>
+        <mat-button-toggle value="Superficie">Superficie</mat-button-toggle>
+        <mat-button-toggle value="Porcentaje">Porcentaje</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <div>
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row p-20 align-items-end">
+          <div class="flex-column">
+            <p>Fecha de inicio:</p>
+            <mat-form-field appearance="fill" class="my-datepicker">
+              <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio">
+              <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+              <mat-datepicker #pickerInicio color="primary"></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="flex-column">
+            <p>Fecha de Fin</p>
+            <mat-form-field appearance="fill" class="my-datepicker">
+              <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin">
+              <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+              <mat-datepicker #pickerFin></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <mat-label>Selecciona una opción</mat-label>
+              <mat-select (selectionChange)="tipoMapaChange($event.value)">
+                <mat-option value="farmacia">FARMACIA MUNICIPAL</mat-option>
+                <mat-option value="dimap">HIGIENE AMBIENTAL - DIMAP</mat-option>
+                <mat-option value="seguridad">SEGURIDAD MUNICIPAL</mat-option>
+                <mat-option value="impuestosyderechos">IMPUESTOS Y DERECHOS</mat-option>
+                <mat-option value="ayudasocial">AYUDA SOCIAL - PANDEMIA</mat-option>
+                <mat-option value="exencionbasura">EXCENCIÓN BASURA</mat-option>
+                <mat-option value="obrasmunicipales">OBRAS MUNICIPALES</mat-option>
+                <mat-option value="transito">TRANSITO</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+       
+      </div>
+    </div>
+    <div>
+      <button mat-raised-button (click)="fechaChange()" color="primary" style="margin-top: 16px; height: 50px;">OK</button>
+    </div>
+    <div>
+      <button mat-raised-button (click)="descargar()" style="margin-top: 16px; height: 50px;">Descargar</button>
+    </div>
+  </div>
+
+
+  <div class="slider-container d-flex flex-row alig-items-center justify-content-center" *ngIf="tipo_mapa !== 'ninguna'">
+    <div style="clear: both; margin-top: 16px;">
+      <mat-button-toggle-group name="favoriteColor" aria-label="Favorite Color"
+        (change)="onToggleChange($event.value)">
+        <mat-button-toggle value="Ninguna">Total</mat-button-toggle>
+        <mat-button-toggle value="Total Poblacion">Habitante</mat-button-toggle>
+        <mat-button-toggle value="Superficie">Superficie</mat-button-toggle>
+        <mat-button-toggle value="Porcentaje">Porcentaje</mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <div>
+      <div class="d-flex flex-row">
+        <div class="d-flex flex-row p-20 align-items-end">
+          <div class="flex-column">
+            <p>Fecha de inicio:</p>
+            <mat-form-field appearance="fill" class="my-datepicker">
+              <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio">
+              <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
+              <mat-datepicker #pickerInicio color="primary"></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="flex-column">
+            <p>Fecha de Fin</p>
+            <mat-form-field appearance="fill" class="my-datepicker">
+              <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin">
+              <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
+              <mat-datepicker #pickerFin></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field style="text-align: right !important">
+              <mat-label>Selecciona una opción</mat-label>
+              <mat-select (selectionChange)="tipoMapaChange($event.value)">
+                <mat-option value="farmacia">FARMACIA MUNICIPAL</mat-option>
+                <mat-option value="dimap">HIGIENE AMBIENTAL - DIMAP</mat-option>
+                <mat-option value="seguridad">SEGURIDAD MUNICIPAL</mat-option>
+                <mat-option value="impuestosyderechos">IMPUESTOS Y DERECHOS</mat-option>
+                <mat-option value="ayudasocial">AYUDA SOCIAL - PANDEMIA</mat-option>
+                <mat-option value="exencionbasura">EXENCIÓN BASURA</mat-option>
+                <mat-option value="obrasmunicipales">OBRAS MUNICIPALES</mat-option>
+                <mat-option value="transito">TRANSITO</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+       
+      </div>
+    </div>
+    <div>
+      <button aria-colspan="pink-button" mat-raised-button (click)="fechaChange()" color="primary" style="margin-top: 16px; height: 50px;">OK</button>
+    </div>
+    <div>
+      <button mat-raised-button (click)="descargar()" style="margin-top: 16px; height: 50px;">Descargar</button>
+    </div>
+  </div>
+</div>
 <mat-grid-list cols="20" rowHeight="730px">
-  <mat-grid-tile [colspan]="7">
-    <div id="map-vis"></div>
+  <mat-grid-tile [colspan]="9">
+    <div>
+      <div>
+        <div id="map-vis"></div>
+      </div>
+      <div>
+        <div>
+          <ngx-slider [(value)]="slider_value" [(highValue)]="slider_highvalue" [options]="slider_options" (userChangeEnd)="sliderChange($event)"></ngx-slider>
+        </div>
+      </div>
+    </div>
   </mat-grid-tile>
-  <mat-grid-tile [colspan]="13">
+  <mat-grid-tile [colspan]="10">
     <table mat-table [dataSource]="dataSource" class="mi-tabla">
       <!-- Columna de nombre -->
       <ng-container matColumnDef="nombre" sticky>
@@ -49,132 +172,40 @@
     </table>
 
   </mat-grid-tile>
-
 </mat-grid-list>
-
-<div class="slider-container d-flex flex-column" *ngIf="tipo_mapa === 'ninguna'">
+<div *ngIf="tipo_mapa !== 'ninguna'">
   <div>
     <div>
-      <ngx-slider [(value)]="dummy_value" [(highValue)]="dummy_highvalue" [options]="dummy_options"></ngx-slider>
-    </div>
-    <div class="flex-column">
-      <div class="d-flex flex-row p-20">
-        <div class="flex-column">
-          <p>Fecha de inicio:</p>
-          <mat-form-field appearance="fill" class="my-datepicker">
-            <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio">
-            <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
-            <mat-datepicker #pickerInicio color="primary"></mat-datepicker>
-          </mat-form-field>
-        </div>
-        <div class="flex-column">
-          <p>Fecha de Fin</p>
-          <mat-form-field appearance="fill" class="my-datepicker">
-            <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin">
-            <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
-            <mat-datepicker #pickerFin></mat-datepicker>
-          </mat-form-field>
-        </div>
-      </div>
-      <mat-form-field style="text-align: right !important">
-        <mat-label>Selecciona una opción</mat-label>
-        <mat-select (selectionChange)="tipoMapaChange($event.value)">
-          <mat-option value="farmacia">FARMACIA MUNICIPAL</mat-option>
-          <mat-option value="dimap">HIGIENE AMBIENTAL - DIMAP</mat-option>
-          <mat-option value="seguridad">SEGURIDAD MUNICIPAL</mat-option>
-          <mat-option value="impuestosyderechos">IMPUESTOS Y DERECHOS</mat-option>
-          <mat-option value="ayudasocial">AYUDA SOCIAL - PANDEMIA</mat-option>
-          <mat-option value="exencionbasura">EXCENCIÓN BASURA</mat-option>
-          <mat-option value="obrasmunicipales">OBRAS MUNICIPALES</mat-option>
-          <mat-option value="transito">TRANSITO</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button mat-raised-button color="primary" (click)="fechaChange()">Buscar</button>
-    </div>
-  </div>
-  <div>
-    Dashboard
-  </div>
-
-</div>
-
-<div class="slider-container flex-column" *ngIf="tipo_mapa !== 'ninguna'">
-  <div>
-    <div>
-      <ngx-slider [(value)]="slider_value" [(highValue)]="slider_highvalue" [options]="slider_options" (userChangeEnd)="sliderChange($event)"></ngx-slider>
-    </div>
-    <div class="flex-column">
-      <div class="d-flex flex-row p-20">
-        <div class="flex-column">
-          <p>Fecha de inicio:</p>
-          <mat-form-field appearance="fill" class="my-datepicker">
-            <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio">
-            <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
-            <mat-datepicker #pickerInicio color="primary"></mat-datepicker>
-          </mat-form-field>
-        </div>
-        <div class="flex-column">
-          <p>Fecha de Fin</p>
-          <mat-form-field appearance="fill" class="my-datepicker">
-            <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin">
-            <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
-            <mat-datepicker #pickerFin></mat-datepicker>
-          </mat-form-field>
-        </div>
-      </div>
-      <mat-form-field style="text-align: right !important">
-        <mat-label>Selecciona una opción</mat-label>
-        <mat-select (selectionChange)="tipoMapaChange($event.value)">
-          <mat-option value="farmacia">FARMACIA MUNICIPAL</mat-option>
-          <mat-option value="dimap">HIGIENE AMBIENTAL - DIMAP</mat-option>
-          <mat-option value="seguridad">SEGURIDAD MUNICIPAL</mat-option>
-          <mat-option value="impuestosyderechos">IMPUESTOS Y DERECHOS</mat-option>
-          <mat-option value="ayudasocial">AYUDA SOCIAL - PANDEMIA</mat-option>
-          <mat-option value="exencionbasura">EXENCIÓN BASURA</mat-option>
-          <mat-option value="obrasmunicipales">OBRAS MUNICIPALES</mat-option>
-          <mat-option value="transito">TRANSITO</mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button mat-raised-button color="primary" (click)="fechaChange()">Buscar</button>
-    </div>
-  </div>
-  <div>
-    <div>
-      <div>
-        <div class="d-flex alig-items-center justify-content-center m-top-20 m-bottom-20" *ngIf="dataSource.length > 0">
-          <div class="d-flex alig-items-center justify-content-center">
-            <div *ngFor="let element of dataSource" class="rank" [style.opacity]="element.opacity"> {{element.value}} </div>
+      <div class="d-flex alig-items-center justify-content-center m-top-20 m-bottom-20">
+        <div class="d-flex alig-items-center justify-content-center">
+          <div *ngFor="let element of dataSource" class="rank" [style.opacity]="element.opacity"> 
+            {{element.value}} 
           </div>
         </div>
       </div>
-      <div>
+    </div>
+    <div class="d-flex flex-row">
+      <div style="flex: 2">
+        <app-bubble-chart></app-bubble-chart>
+      </div>
+      <div style="flex: 1">
         <app-pie-chart-compare></app-pie-chart-compare>
       </div>
-      <div>
-        <app-pie-chart></app-pie-chart>
-      </div>
-      <div>
-        <app-advance-pie-chart></app-advance-pie-chart>
-      </div>
-      <div>
-        <app-barchart></app-barchart>
-      </div>
-
     </div>
+    <div>
+      <app-barchart></app-barchart>
+    </div>
+    <div>
+      <app-area-chart-stacked></app-area-chart-stacked>
+    </div>
+    
+    <!-- <div>
+      <app-pie-chart></app-pie-chart>
+    </div> -->
+    
+    
+
   </div>
-
-
-  <!-- <mat-slide-toggle [(ngModel)]="visPoblacionData" (change)="toggleChanged($event)">Slide me!</mat-slide-toggle> -->
-
-
 </div>
-<div style="clear: both">
-  <mat-button-toggle-group name="favoriteColor" aria-label="Favorite Color"
-    (change)="onToggleChange($event.value)">
-    <mat-button-toggle value="Ninguna">Total</mat-button-toggle>
-    <mat-button-toggle value="Total Poblacion">Habitante</mat-button-toggle>
-    <mat-button-toggle value="Superficie">Superficie</mat-button-toggle>
-    <mat-button-toggle value="Porcentaje">Porcentaje</mat-button-toggle>
-  </mat-button-toggle-group>
-</div>
+
 

@@ -1059,4 +1059,8 @@ export class VisComponent {
     return name.replace(/[\s\.]/g, '');
   }
 
+  descargar(){
+    console.log('descargar')
+  }
+
 }

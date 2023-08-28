@@ -54,6 +54,8 @@ import { PieChartComponent } from './charts/piechart.component';
 import { PieChartCompareComponent } from './charts/piechart-compare.component';
 import { AdvancePieChartComponent } from './charts/advanccepiechart.component';
 import { BarChartComponent } from './charts/barchart.component';
+import { AreaChartStackedComponent } from './charts/stackedarea.component';
+import { BubbleChartComponent } from './charts/bubblechart.component'; 
 
 
 @NgModule({
@@ -73,7 +75,9 @@ import { BarChartComponent } from './charts/barchart.component';
     PieChartComponent,
     AdvancePieChartComponent,
     BarChartComponent,
-    PieChartCompareComponent
+    PieChartCompareComponent,
+    AreaChartStackedComponent,
+    BubbleChartComponent
   ],
   imports: [
     CommonModule,

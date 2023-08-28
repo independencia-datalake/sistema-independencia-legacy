@@ -1,20 +1,28 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-pie-chart-compare',
+  selector: 'app-bubble-chart',
   template: `
-    <ngx-charts-pie-chart
-      [results]="chartData"
-      [labels]="true"
-      [legend]="false"
-      [explodeSlices]="true"
-      [doughnut]="false"
-    >
-    </ngx-charts-pie-chart>
+  <ngx-charts-bubble-chart
+  [results]="bubbleChartData"
+  [xAxis]="true"
+  [yAxis]="true"
+  [legend]="true"
+  [showXAxisLabel]="true"
+  [showYAxisLabel]="true"
+  [xAxisLabel]="'UV'"
+  [yAxisLabel]="'Licencia de Conducir'"
+  [scheme]="colorScheme"
+  >
+</ngx-charts-bubble-chart>
+
+
   `,
   styleUrls: ['./charts.component.css'],
 })
-export class PieChartCompareComponent {
+export class BubbleChartComponent {
+
+
   dataBd:any = [
     {
       "id": 1,
@@ -269,28 +277,38 @@ export class PieChartCompareComponent {
     
   ]
 
+  bubbleChartData:any[];
   chartData: any[] = [];
-  colorScheme:any = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
+
 
   constructor() {
-    this.chartData = this.createChartData(10);
+    this.bubbleChartData = this.transformBubbleData(this.dataBd);
   }
-
-  createChartData(uvFilter) {
-    const pieChartData = [];
-    this.dataBd.forEach((item) => {
-      if(uvFilter === item.uv){
-        const namelc = `Licencia de Conducir`;
-        const namepc = `Permiso de Circulación`;
-        const valuelc = item.licencia_conducir;
-        const valuepc = item.permiso_circulacion;
-        pieChartData.push({ name:namelc, value:valuelc });
-        pieChartData.push({ name:namepc, value:valuepc });
-      }
+  transformBubbleData(dataBd: any[]) {
+    const transformedData = [];
+  
+    const series = dataBd.map(item => {
+      return {
+        name: new Date(item.created).toLocaleDateString(),
+        x: item.uv,
+        y: item.licencia_conducir,
+        r: item.permiso_circulacion // esto determina el tamaño del círculo
+      };
     });
-
-    return pieChartData;
+  
+    transformedData.push({
+      name: 'Datos',
+      series: series
+    });
+  
+    return transformedData;
   }
+  colorScheme:any = {
+    domain: ['#1a242c', '#e81746', '#e67303']
+  };
 }
+
+
+
+
+
