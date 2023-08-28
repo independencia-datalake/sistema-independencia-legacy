@@ -67,9 +67,9 @@ export class DialogUVComponent {
   onNoClick(): void {
     // console.log(this.selectedOption)
     if (this.selectedOption === 'direccion') {
-      console.log(this.formulario.value)
-      let calle = this.formulario.value.calle
-      let numeracion = this.formulario.value.numero
+      console.log(this.formDireccionPersona.value)
+      let calle = this.formDireccionPersona.value.calle
+      let numeracion = this.formDireccionPersona.value.numero
       this.callesIndependencia.getUV(calle,numeracion).subscribe(data => {
         console.log(data)
         this.selectedUV = `UV-${data.unidad_vecinal}`;

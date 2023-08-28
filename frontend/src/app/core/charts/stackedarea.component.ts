@@ -1,20 +1,27 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-pie-chart-compare',
+  selector: 'app-area-chart-stacked',
   template: `
-    <ngx-charts-pie-chart
-      [results]="chartData"
-      [labels]="true"
-      [legend]="false"
-      [explodeSlices]="true"
-      [doughnut]="false"
-    >
-    </ngx-charts-pie-chart>
+  <ngx-charts-area-chart-stacked
+  [results]="stackedAreaChartData"
+  [gradient]="true"
+  [xAxis]="true"
+  [yAxis]="true"
+  [legend]="true"
+  [showXAxisLabel]="true"
+  [showYAxisLabel]="true"
+  [xAxisLabel]="'Date'"
+  [yAxisLabel]="'Value'">
+</ngx-charts-area-chart-stacked>
+
+
   `,
   styleUrls: ['./charts.component.css'],
 })
-export class PieChartCompareComponent {
+export class AreaChartStackedComponent {
+
+
   dataBd:any = [
     {
       "id": 1,
@@ -269,28 +276,37 @@ export class PieChartCompareComponent {
     
   ]
 
+  stackedAreaChartData:any[];
   chartData: any[] = [];
-  colorScheme:any = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
+
 
   constructor() {
-    this.chartData = this.createChartData(10);
+    this.stackedAreaChartData = this.transformData(this.dataBd);
   }
-
-  createChartData(uvFilter) {
-    const pieChartData = [];
-    this.dataBd.forEach((item) => {
-      if(uvFilter === item.uv){
-        const namelc = `Licencia de Conducir`;
-        const namepc = `Permiso de Circulación`;
-        const valuelc = item.licencia_conducir;
-        const valuepc = item.permiso_circulacion;
-        pieChartData.push({ name:namelc, value:valuelc });
-        pieChartData.push({ name:namepc, value:valuepc });
-      }
-    });
-
-    return pieChartData;
+  transformData(dataBd: any[]) {
+    const seriesKeys = ['licencia_conducir', 'permiso_circulacion'];
+    const transformedData = [];
+  
+    for (let key of seriesKeys) {
+      const series = dataBd.map(item => {
+        console.log('==================',isNaN(item[key]))
+        return {
+          name: new Date(item.created).toLocaleDateString(),
+          value: parseInt(item[key])
+        };
+      });
+  
+      transformedData.push({
+        name: key,
+        series: series
+      });
+    }
+  
+    return transformedData;
   }
 }
+
+
+
+
+
