@@ -72,9 +72,9 @@ export class AuthService {
     const ahora = new Date().getTime(); // Obtiene la fecha actual en formato epoch
     const fechaExpiracion = new Date(exp_date).getTime(); // convierte la fecha de expiración a formato epoch
     if (fechaExpiracion*1000 < ahora) { //1000 es para pasar de segundos a milisegundos en formato epoch
-      // console.log('El token ha expirado'); // el token ha expirado
-      // localStorage.removeItem('token');
+      console.log('El token ha expirado'); // el token ha expirado
       localStorage.removeItem('username')
+      localStorage.removeItem('token');
       this.emitUserAuthStatus(false);
       return false
     } else {
@@ -94,7 +94,6 @@ export class AuthService {
   async isDeveloper(): Promise<Boolean> {
     const token_check = localStorage.getItem('token');
     const grupos = this.getGrupos(token_check);
-    console.log("en is developer")
     try {
       if (grupos.includes('Developer') ) {
         console.log('grupo aceptado')
