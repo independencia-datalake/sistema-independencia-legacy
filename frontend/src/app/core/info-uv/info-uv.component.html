@@ -91,8 +91,8 @@
     </div>
     <div>
       <div>
-        <div class="d-flex alig-items-center justify-content-center m-top-20 m-bottom-20" *ngIf="datag.length > 0">
-          <div class="d-flex alig-items-center justify-content-center">
+        <div class="d-flex align-items-center justify-content-center m-top-20 m-bottom-20" *ngIf="datag.length > 0">
+          <div class="d-flex align-items-center justify-content-center">
             <div *ngFor="let element of datag" class="rank" [style.opacity]="element.opacity"> {{element.value}} </div>
           </div>
         </div>
@@ -123,4 +123,61 @@
   <mat-tab label="Gestion Social Local"> S</mat-tab>
 
   </mat-tab-group>
+  </div>
+
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-center">
+      <div class="logo">
+        Logo
+      </div>
+    </div>
+    <div>
+      <div>
+        <div class="pink-information">
+          Estas en la unidad vecinal N°x "Nombre unidad vecinal"
+        </div>
+      </div>
+      <div>
+        <p>Superficie: valor-sup m<sup>2</sup></p>
+        <p>Superficie habitada: valor-hab m<sup>2</sup></p>
+        <p>Poblacion total: valor-poblacion personas</p>
+      </div>
+      <div>
+        <img class="img-fb" src="../../../assets/ejemploficha.png" />
+      </div>
+    </div>
+    <div class="d-flex flex-column">
+      <h2 class="text-center fb-title">ALGUNOS DATOS DE ESTE BARRIO</h2>
+      <div class="d-flex align-items-center flex-column">
+        <div class="d-flex flex-row align-items-center" *ngFor="let item of dictionary | keyvalue; let i = index">
+          <div class="w-300">
+            <h6 *ngIf="(i+1)%2!==0 && item.key !== 'presupuesto'" class="information-section pink-text">{{item.key | titlecase}}</h6>
+            <div *ngIf="(i+1)%2!==0 && item.key !== 'presupuesto'" class="subrayado">   
+            </div>
+            <div *ngIf="(i+1)%2==0 || item.key == 'presupuesto'" class="doted-line w-300"></div>
+          </div>
+          <div  *ngIf="item.key !== 'presupuesto'" class="grey-bubble">
+            <p>
+              {{ item.value }}
+            </p>
+          </div>
+          <div  *ngIf="item.key == 'presupuesto'" class="pink-bubble">
+            <p>
+              {{ item.value }}
+            </p>
+          </div>
+          <div class="w-300">
+            <h6 *ngIf="(i+1)%2==0 && item.key !== 'presupuesto'" class="information-section right pink-text">{{item.key | titlecase}}</h6>
+            <div *ngIf="(i+1)%2==0 && item.key !== 'presupuesto'" class="subrayado right">   
+            </div>
+            <div *ngIf="(i+1)%2!==0 || item.key == 'presupuesto'" class="doted-line w-300"></div>
+          </div>  
+        </div>
+      </div>
+    </div>
+    <div class="d-flex flex-row align-items-center">
+      <button>
+        DESCARGAR PLANILLA
+      </button>
+    </div>
   </div>

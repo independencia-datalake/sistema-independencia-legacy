@@ -1,19 +1,19 @@
 
 <div class="d-flex alig-items-center alig-items-center justify-content-center">
-  <div class="slider-container d-flex flex-row alig-items-center justify-content-center" *ngIf="tipo_mapa === 'ninguna'">
+  <div class="slider-container d-flex flex-row alig-items-center justify-content-center botonera-dashboard " [ngClass]="{'fixed': isBotoneraFixed}">
     <div style="clear: both; margin-top: 16px;">
-      <mat-button-toggle-group name="favoriteColor" aria-label="Favorite Color"
-        (change)="onToggleChange($event.value)">
-        <mat-button-toggle value="Ninguna">Total</mat-button-toggle>
-        <mat-button-toggle value="Total Poblacion">Habitante</mat-button-toggle>
-        <mat-button-toggle value="Superficie">Superficie</mat-button-toggle>
-        <mat-button-toggle value="Porcentaje">Porcentaje</mat-button-toggle>
-      </mat-button-toggle-group>
+      <button mat-button [matMenuTriggerFor]="menu" class="d-flex">{{visPoblacionlegend}} <mat-icon>expand_more</mat-icon> </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onToggleChange('Ninguna')">Total</button>
+        <button mat-menu-item (click)="onToggleChange('Total Poblacion')">Habitante</button>
+        <button mat-menu-item (click)="onToggleChange('Superficie')">Superficie</button>
+        <button mat-menu-item (click)="onToggleChange('Porcentaje')">Porcentaje</button>
+      </mat-menu>
     </div>
     <div>
       <div class="d-flex flex-row">
-        <div class="d-flex flex-row p-20 align-items-end">
-          <div class="flex-column">
+        <div class="d-flex flex-row p-20  align-items-end">
+          <div class="flex-column m-r-5 m-l-5">
             <p>Fecha de inicio:</p>
             <mat-form-field appearance="fill" class="my-datepicker">
               <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio">
@@ -21,64 +21,7 @@
               <mat-datepicker #pickerInicio color="primary"></mat-datepicker>
             </mat-form-field>
           </div>
-          <div class="flex-column">
-            <p>Fecha de Fin</p>
-            <mat-form-field appearance="fill" class="my-datepicker">
-              <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin">
-              <mat-datepicker-toggle matSuffix [for]="pickerFin"></mat-datepicker-toggle>
-              <mat-datepicker #pickerFin></mat-datepicker>
-            </mat-form-field>
-          </div>
-          <div>
-            <mat-form-field>
-              <mat-label>Selecciona una opción</mat-label>
-              <mat-select (selectionChange)="tipoMapaChange($event.value)">
-                <mat-option value="farmacia">FARMACIA MUNICIPAL</mat-option>
-                <mat-option value="dimap">HIGIENE AMBIENTAL - DIMAP</mat-option>
-                <mat-option value="seguridad">SEGURIDAD MUNICIPAL</mat-option>
-                <mat-option value="impuestosyderechos">IMPUESTOS Y DERECHOS</mat-option>
-                <mat-option value="ayudasocial">AYUDA SOCIAL - PANDEMIA</mat-option>
-                <mat-option value="exencionbasura">EXCENCIÓN BASURA</mat-option>
-                <mat-option value="obrasmunicipales">OBRAS MUNICIPALES</mat-option>
-                <mat-option value="transito">TRANSITO</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-        </div>
-       
-      </div>
-    </div>
-    <div>
-      <button mat-raised-button (click)="fechaChange()" color="primary" style="margin-top: 16px; height: 50px;">OK</button>
-    </div>
-    <div>
-      <button mat-raised-button (click)="descargar()" style="margin-top: 16px; height: 50px;">Descargar</button>
-    </div>
-  </div>
-
-
-  <div class="slider-container d-flex flex-row alig-items-center justify-content-center" *ngIf="tipo_mapa !== 'ninguna'">
-    <div style="clear: both; margin-top: 16px;">
-      <mat-button-toggle-group name="favoriteColor" aria-label="Favorite Color"
-        (change)="onToggleChange($event.value)">
-        <mat-button-toggle value="Ninguna">Total</mat-button-toggle>
-        <mat-button-toggle value="Total Poblacion">Habitante</mat-button-toggle>
-        <mat-button-toggle value="Superficie">Superficie</mat-button-toggle>
-        <mat-button-toggle value="Porcentaje">Porcentaje</mat-button-toggle>
-      </mat-button-toggle-group>
-    </div>
-    <div>
-      <div class="d-flex flex-row">
-        <div class="d-flex flex-row p-20 align-items-end">
-          <div class="flex-column">
-            <p>Fecha de inicio:</p>
-            <mat-form-field appearance="fill" class="my-datepicker">
-              <input matInput [matDatepicker]="pickerInicio" [(ngModel)]="fechaInicio">
-              <mat-datepicker-toggle matSuffix [for]="pickerInicio"></mat-datepicker-toggle>
-              <mat-datepicker #pickerInicio color="primary"></mat-datepicker>
-            </mat-form-field>
-          </div>
-          <div class="flex-column">
+          <div class="flex-column m-r-5 m-l-5">
             <p>Fecha de Fin</p>
             <mat-form-field appearance="fill" class="my-datepicker">
               <input matInput [matDatepicker]="pickerFin" [(ngModel)]="fechaFin">
@@ -105,15 +48,15 @@
        
       </div>
     </div>
-    <div>
+    <div class="m-r-5 m-l-5">
       <button aria-colspan="pink-button" mat-raised-button (click)="fechaChange()" color="primary" style="margin-top: 16px; height: 50px;">OK</button>
     </div>
-    <div>
-      <button mat-raised-button (click)="descargar()" style="margin-top: 16px; height: 50px;">Descargar</button>
+    <div class="m-r-5 m-l-5">
+      <button mat-raised-button (click)="descargar()" style="margin-top: 16px; height: 50px;">DESCARGAR PLANILLA</button>
     </div>
   </div>
 </div>
-<mat-grid-list cols="20" rowHeight="730px">
+<mat-grid-list [ngClass]="{'padding-fixed': isBotoneraFixed}" cols="20" rowHeight="730px">
   <mat-grid-tile [colspan]="9">
     <div>
       <div>
@@ -184,18 +127,25 @@
         </div>
       </div>
     </div>
-    <div class="d-flex flex-row">
-      <div style="flex: 2">
-        <app-bubble-chart></app-bubble-chart>
-      </div>
-      <div style="flex: 1">
-        <app-pie-chart-compare></app-pie-chart-compare>
+    <div>
+      <h3 class="dashboard-titles">Titulo de ambos graficos </h3>
+      <div class="d-flex flex-row">
+        <div style="flex: 2">
+          <app-bubble-chart></app-bubble-chart>
+        </div>
+        <div style="flex: 1">
+          <h3>Edades uso farmacia </h3>
+          <app-pie-chart-compare></app-pie-chart-compare>
+        </div>
       </div>
     </div>
+    
     <div>
+      <h3 class="dashboard-titles">Edades uso farmacia </h3>
       <app-barchart></app-barchart>
     </div>
     <div>
+      <h3 class="dashboard-titles">Patentes comerciales segun area comercial </h3>
       <app-area-chart-stacked></app-area-chart-stacked>
     </div>
     

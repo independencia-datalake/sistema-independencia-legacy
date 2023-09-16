@@ -40,6 +40,100 @@ p {
   width: 26px;
   background-color: #1587cf;
 }
+p{
+  color: #4a4a4a;
+}
+.grey-bubble {
+  /*width: 33vw; */
+  /* max-width: 600px; */
+  /* min-width: 338px; */
+  color: black;
+  background-color: rgb(225, 225, 225);
+  padding: 30px;
+  border-radius: 50px;
+  /* margin-left: auto; */
+  /* margin-right: auto; */
+  width: 750px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.pink-bubble {
+  color: #fff;
+  background-color: #FC3D59;
+  padding: 30px;
+  border-radius: 50px;
+  /* margin-left: auto; */
+  /* margin-right: auto; */
+  width: 750px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.pink-bubble p{
+  color: #fff;
+}
+.doted-line{
+  /* max-width: 557px; */
+  border-top: 2px dashed black;
+  /* width: 100%; */
+  height: 2px;
+  width: 300px;
+}
+h6.information-section{
+  font-family: 'Mulish',sans-serif;
+  font-size: 20px;
+  text-align: right;
+  max-width: 300px;
+  padding-right: 20px;
+  margin-left: auto;
+}
+h6.information-section.right{
+  text-align: left;
+  padding-left: 0;
+}
+.subrayado{
+  /* width: 100%; */
+  border-top: 2px solid black;
+  width: 202px;
+  margin-left: auto;
+}
+.subrayado.right{
+  margin-left: 0;
+  margin-right: auto;
+}
+.w-300{
+  width: 300px;
+}
+.img-fb{
+  width: 100%;
+}
+.logo{
+  width: 300px;
+  height: 150px;
+  border-radius: 50px;
+  margin-top: 50px;
+  border: 2px dashed black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pink-information{
+  background-color: #FC3D59;
+  padding: 20px;
+  color: white;
+  font-family: 'Mulish', sans-serif;
+  font-size: 20px;
+  text-align: center;
+}
+.fb-title{
+  margin-top: 30px;
+  margin-bottom: 20px;
+  font-size: 20px;
+  font-family: 'Mulish', sans-serif;
+  text-align: center;
+}
+.pink-text{
+  color: #FC3D59!important;
+}
 
 
 
