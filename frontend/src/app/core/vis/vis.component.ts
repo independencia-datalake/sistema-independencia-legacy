@@ -1,5 +1,5 @@
 
-import { Component, ViewEncapsulation, Inject, NgZone, PLATFORM_ID } from '@angular/core';
+import { Component, ViewEncapsulation, Inject, NgZone, PLATFORM_ID, HostListener } from '@angular/core';
 import { Map, tileLayer, polygon, marker } from 'leaflet';
 import * as L from 'leaflet';
 import { HttpClient } from '@angular/common/http';
@@ -46,6 +46,18 @@ interface data_UV {
 export class VisComponent {
   //amcharts root
   private root!: am5.Root;
+  isBotoneraFixed = false;
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    const scrollY = window.scrollY;
+    if (scrollY > 60) { // Ajusta esto según la altura de tu barra de navegación
+      this.isBotoneraFixed = true;
+    } else {
+      this.isBotoneraFixed = false;
+    }
+  }
+
 
   uvCoordRequest = this.http.get('../../assets/uv_coordenadas.json');
   geoJsonData: any;
@@ -59,9 +71,12 @@ export class VisComponent {
 
   public uvPoblacionData: any;
   public visPoblacionData: any = 'Ninguna';
+  public visPoblacionlegend : string = 'Ninguna';
   onToggleChange(value: string) {
+    console.log(value)
     this.visPoblacionData = value;
-    this.initializeMapData()
+    this.initializeMapData();
+    this.visPoblacionlegend = this.visPoblacionData == 'Ninguna' ? 'Total': 'Total Poblacion' ? 'Habitante' : 'Superficie' ? 'Superficie' : 'Porcentaje';
   }
 
 
@@ -1061,6 +1076,11 @@ export class VisComponent {
 
   descargar(){
     console.log('descargar')
+  }
+
+  seleccionarOpcion(opcion: string) {
+    console.log(`Se seleccionó la opción: ${opcion}`);
+    // Aquí puedes realizar las acciones correspondientes a la opción seleccionada
   }
 
 }

@@ -29,6 +29,9 @@
   margin-right: 8px;
   opacity: 0.7;
 }
+.mat-mdc-table{
+  background-color: white;
+}
 .mat-mdc-table .mdc-data-table__header-row {
   height: 30px;
   background: #FC3D59;
@@ -202,4 +205,39 @@ table tr:nth-child(odd) td {
 
 .mat-column-name {
   height: 100px;
+}
+
+.botonera-dashboard {
+  background-color: white;
+  width: 100%;
+  background: rgb(33,33,33);
+  background: linear-gradient(180deg, rgba(33,33,33,0.7525603991596639) 0%, rgba(255,255,255,1) 1%, rgba(255,255,255,1) 80%, rgba(255,255,255,0.01) 86%);
+}
+
+.botonera-dashboard.fixed {
+  position: fixed;
+  top: 0;
+  z-index: 100000;
+  width: 100%;
+  /* Estilos adicionales cuando la botonera se fija en la parte superior */
+}
+
+.padding-fixed{
+  margin-top: 110px;
+}
+.m-r-5{
+  margin-right: 5px;
+} 
+.m-l-5{
+  margin-left: 5px;
+}
+
+h3.dashboard-titles{
+  font-family: 'Mulish', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: center;
+  color: rgb(249, 34, 72) !important;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }

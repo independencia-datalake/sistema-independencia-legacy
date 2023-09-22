@@ -453,4 +453,27 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
     this.map.remove()
   }
 
+  arrayDeStrings = [
+    "impuestos y derechos | La unidad vecinal N°x es top 3 en patentes, en 2023 se han registrado 450 patentes comerciales, 50 patentes de alcohol, 150 patentes industriales y 340 patentes profesionales. Representando un aporte de $115.000.000.- en promedio anual (medido durante los ultimos 10 años).",
+    "direccion de transito | Durante 2023, este territorio registro solo 140 licencias de condicir, lo que representa un 2,40% de toda la comuna.",
+    "obras municipales | Al parecer, no es un territorio con gran presión inmobiliaria, ya que no registra solicitud de permisos de edificacion u otros certificados relevantes",
+    "seguridad municipal | Tiene un sostenido aumento de las denuncias por incivilidades, con una tasa promedio mensual de +15%",
+    "presupuesto | La UV xx aporta un total aproximado de $190.000.000 anuales al Presupuesto municipal, ocupando el 3er lugar de la comuna",
+    "asistencia social | Registra un aumento en las solicitudes de ayudas sociales, destinada mayoritariamente a la 3° edad.",
+    "farmacias | Tiene un sostenido au,ento de solicitud de famacia, con una tasa promedio mensual de +15%"
+  ];
+
+  generateDictionary(municipalContentArray: string[], separator: string): { [key: string]: string } {
+    const dictionary: { [key: string]: string } = {};
+  
+    municipalContentArray.forEach(item => {
+      const [clave, content] = item.split(separator);
+      dictionary[clave.trim()] = content.trim();
+    });
+  
+    return dictionary;
+  }
+  
+  dictionary = this.generateDictionary(this.arrayDeStrings, "|");
+
 }
