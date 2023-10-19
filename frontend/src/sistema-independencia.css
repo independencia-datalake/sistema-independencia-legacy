@@ -16,9 +16,10 @@ body {
 	font-family: 'Poppins', sans-serif;
 	background: url(assets/background.png) left top no-repeat #F9F9F9;
 	background-size: cover;
-	min-height: 100vh;
+	min-height: 100%;
 	background-attachment: fixed;
 	font-size: 15px;
+	max-width: 100%;
 }
 
 p {
@@ -10879,6 +10880,9 @@ a.text-dark:hover {
 } 
 .min-w-500{
 	min-width: 500px;
+}
+.min-w-445{
+	min-width: 445px;
 }
 .flex-column{
 	display: flex;

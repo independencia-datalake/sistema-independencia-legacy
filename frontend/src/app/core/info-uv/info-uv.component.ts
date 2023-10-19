@@ -409,8 +409,6 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
   }
 
   selectUV(uv) {
-    console.log('EN select uv')
-    console.log(uv)
     let uvNumber = parseInt(uv.split('-')[1]);
     this.data_poblacion_uv = this.data_poblacion.find(element => element.UV === uvNumber);
     this.data_lab.getFarmaciaDataLabByUV(uvNumber+1).subscribe(
