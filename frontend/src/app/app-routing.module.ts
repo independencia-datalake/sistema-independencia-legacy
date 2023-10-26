@@ -28,6 +28,7 @@ import { ListaVentaComponent } from './farmacia/lista-ventas/lista-ventas.compon
 import { FichaIngresoComponent } from './farmacia/ficha-ingreso/ficha-ingreso.component';
 import { FichaSalidaComponent } from './farmacia/ficha-salida/ficha-salida.component';
 import { AdminComponent } from './core/admin/admin.component';
+import { CargaMasivaComponent } from './farmacia/carga-masiva/carga-masiva.component';
 
 
 const routes: Routes = [
@@ -60,6 +61,7 @@ const routes: Routes = [
   { path: 'stock/crear-producto', component: CrearProductoComponent, canActivate: [AuthFarmaciaGuard] },
   { path: 'stock/ficha-ingreso', component: FichaIngresoComponent, canActivate: [AuthFarmaciaGuard]},
   { path: 'stock/ficha-salida', component: FichaSalidaComponent, canActivate: [AuthFarmaciaGuard]},
+  { path: 'stock/carga-masiva', component: CargaMasivaComponent, canActivate: [AuthFarmaciaGuard]},
   // SEGURIDAD
   { path: 'seguridad', component: SeguridadHomeComponent },
 

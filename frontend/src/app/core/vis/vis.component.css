@@ -227,7 +227,7 @@ table tr:nth-child(odd) td {
 }
 .m-r-5{
   margin-right: 5px;
-} 
+}
 .m-l-5{
   margin-left: 5px;
 }
@@ -240,4 +240,10 @@ h3.dashboard-titles{
   color: rgb(249, 34, 72) !important;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }

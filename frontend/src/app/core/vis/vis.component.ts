@@ -21,20 +21,6 @@ import * as am5 from '@amcharts/amcharts5';
 import * as am5xy from '@amcharts/amcharts5/xy';
 import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 
-
-interface data_UV {
-  nombre: any;
-  rank?:any;
-  lp?: any; // Last Periodo de tiempo
-  densidad: any;
-  comercial?: any;
-  // PARA TRANSITO
-  licencia_conducir?: any;
-  permiso_circulacion?: any;
-
-}
-
-
 @Component({
   selector: 'app-vis',
   templateUrl: './vis.component.html',
@@ -62,6 +48,7 @@ export class VisComponent {
   uvCoordRequest = this.http.get('../../assets/uv_coordenadas.json');
   geoJsonData: any;
   tipo_mapa: any = 'ninguna';
+  subgrupos: any[] = [];
   columnaResaltada: string = 'total';
   map: Map;
   label: any;
@@ -84,6 +71,8 @@ export class VisComponent {
   // dataSource = new MatTableDataSource<data_UV>([...this.dataByUV]);
   dataSource: any[] = [];
   displayedColumns: string[] = ['nombre', 'total', 'comercial'];
+
+  dataPieChart: any[] = [];
 
   fechaInicio: any;
   fechaFin: any;
@@ -116,11 +105,10 @@ export class VisComponent {
 
   calculateDensidad(element, uvData, property, percentageProperty) {
     if (this.visPoblacionData === 'Total Poblacion' && uvData && uvData.total != 0) {
-      return parseFloat((100 * element[property] / uvData.total).toFixed(2));
+      return parseFloat((1000 * element[property] / uvData.total).toFixed(0));
     } else if (this.visPoblacionData === 'Superficie' && uvData && uvData.superficie != 0) {
       return parseFloat((10000 * element[property] / uvData.superficie).toFixed(2));
     } else if (this.visPoblacionData === 'Porcentaje') {
-      console.log(element)
       return element[percentageProperty];
     } else {
       return element[property];
@@ -128,18 +116,18 @@ export class VisComponent {
   }
   calculateValue = (element, uvData, property, percentageProperty) => {
     if (this.visPoblacionData === 'Total Poblacion' && uvData && uvData.total != 0) {
-      return (element[property] / uvData.total).toFixed(2);
+      return (1000*element[property] / uvData.total).toFixed(0);
     } else if (this.visPoblacionData === 'Superficie' && uvData && uvData.superficie != 0) {
       return (10000 * element[property] / uvData.superficie).toFixed(1);
     } else if (this.visPoblacionData === 'Porcentaje') {
-      return element[percentageProperty] + '%';
+      return element[percentageProperty];
     } else {
       return element[property];
     }
   }
 
   public columnas = [
-    { nombre: 'total', resaltada: false, element: 'total' },
+    { nombre: 'total', resaltada: false, element: 'total' ,nombre_columna:"Total"},
     // { nombre: 'rank', resaltada: false },
     // POBLACION
     { nombre: 'hombres', resaltada: false, element: 'hombres' },
@@ -149,43 +137,43 @@ export class VisComponent {
     { nombre: 'superficie_no_habitada', resaltada: false, element: 'superficie_no_habitada' },
     { nombre: 'superficie', resaltada: false, element: 'superficie' },
     { nombre: 'densidad_habitantekm2', resaltada: false, element: 'densidad_habitantekm2' },
-    // EMPRESAS
+    // VENTAS FARMACIA
     { nombre: 'ventas', resaltada: false, element: 'ventas' },
-    { nombre: 'alcohol', resaltada: false, element: 'alcohol' },
-    { nombre: 'comercial', resaltada: false, element: 'comercial' },
-    { nombre: 'profesional', resaltada: false, element: 'profesional'},
-    { nombre: 'industrial', resaltada: false, element: 'industrial' },
-    { nombre: 'microempresa', resaltada: false, element: 'microempresa'},
-    { nombre: 'estacionada', resaltada: false, element: 'estacionada'},
+    // EMPRESAS
+    { nombre: 'alcohol', resaltada: false, element: 'alcohol',nombre_columna: "Patentes de Alcohol" },
+    { nombre: 'comercial', resaltada: false, element: 'comercial',nombre_columna: "Patentes Comerciales"},
+    { nombre: 'profesional', resaltada: false, element: 'profesional',nombre_columna: "Patentes Profesionales"},
+    { nombre: 'industrial', resaltada: false, element: 'industrial',nombre_columna: "Patentes Industriales"},
+    { nombre: 'microempresa', resaltada: false, element: 'microempresa',nombre_columna: "Patentes Microempresas"},
+    { nombre: 'estacionada', resaltada: false, element: 'estacionada',nombre_columna: "Patentes Estacionadas"},
     // EXENCION ASEO
-    { nombre: 'porciento50', resaltada: false, element: 'porciento50'},
-    { nombre: 'porciento75', resaltada: false, element: 'porciento75'},
-    { nombre: 'porciento100', resaltada: false, element: 'porciento100'},
+    { nombre: 'porciento50', resaltada: false, element: 'porciento50', nombre_columna: "percentil 50"},
+    { nombre: 'porciento75', resaltada: false, element: 'porciento75', nombre_columna: "percentil 75"},
+    { nombre: 'porciento100', resaltada: false, element: 'porciento100', nombre_columna: "percentil 100"},
     // DOM
-    { nombre: 'anexion', resaltada: false, element: 'anexion' },
-    { nombre: 'antiguas', resaltada: false, element: 'antiguas' },
-    { nombre: 'anulacion', resaltada: false, element: 'anulacion' },
-    { nombre: 'cambio de destino', resaltada: false, element: 'cambio_destino' },
-    { nombre: 'fusion', resaltada: false, element: 'fusion' },
-    { nombre: 'ley 20.898', resaltada: false, element: 'ley_20898' },
-    { nombre: 'obras menores', resaltada: false, element: 'obrasmenores' },
-    { nombre: 'permisos de edificacion', resaltada: false, element: 'permisosedificacion' },
-    { nombre: 'recepcion final', resaltada: false, element: 'recepcionfinal' },
-    { nombre: 'regularizaciones', resaltada: false, element: 'regularizaciones' },
-    { nombre: 'regularizaciones ley 18.591', resaltada: false, element: 'regularizaciones18591' },
-    { nombre: 'resolucion', resaltada: false, element: 'resolucion' },
-    { nombre: 'subdivisiones', resaltada: false, element: 'subdivisiones' },
-    { nombre: 'ventas por piso', resaltada: false, element: 'ventasporpiso' },
+    { nombre: 'anexion', resaltada: false, element: 'anexion', nombre_columna: "Anexión" },
+    { nombre: 'antiguas', resaltada: false, element: 'antiguas', nombre_columna: "Antiguas" },
+    { nombre: 'anulacion', resaltada: false, element: 'anulacion', nombre_columna: "Anulación" },
+    { nombre: 'cambio de destino', resaltada: false, element: 'cambio_destino', nombre_columna: "Cambio de Destino" },
+    { nombre: 'fusion', resaltada: false, element: 'fusion', nombre_columna: "Fusión" },
+    { nombre: 'ley 20.898', resaltada: false, element: 'ley_20898', nombre_columna: "Ley 20.898" },
+    { nombre: 'obras menores', resaltada: false, element: 'obrasmenores', nombre_columna: 'Obras Menores' },
+    { nombre: 'permisos de edificacion', resaltada: false, element: 'permisosedificacion', nombre_columna: 'Permisos de Edificación' },
+    { nombre: 'recepcion final', resaltada: false, element: 'recepcionfinal', nombre_columna: 'Recepción Final' },
+    { nombre: 'regularizaciones', resaltada: false, element: 'regularizaciones', nombre_columna: 'Regularizaciones' },
+    { nombre: 'regularizaciones ley 18.591', resaltada: false, element: 'regularizaciones18591', nombre_columna: 'Regularizaciones ley 18.591' },
+    { nombre: 'resolucion', resaltada: false, element: 'resolucion', nombre_columna: 'Resolucion' },
+    { nombre: 'subdivisiones', resaltada: false, element: 'subdivisiones', nombre_columna: 'Subdivisiones' },
+    { nombre: 'ventas por piso', resaltada: false, element: 'ventasporpiso', nombre_columna: 'Ventas por piso' },
     // TRANSITO
-    { nombre: 'licencia conducir', resaltada: false, element: 'licencia_conducir' },
-    { nombre: 'permiso circulacion', resaltada: false, element: 'permiso_circulacion' },
+    { nombre: 'licencia conducir', resaltada: false, element: 'licencia_conducir', nombre_columna: "Licencias de Conducir" },
+    { nombre: 'permiso circulacion', resaltada: false, element: 'permiso_circulacion', nombre_columna: "Permisos de Circulación" },
     // Agrega las columnas restantes aquí...
   ];
 
 
   constructor(
     private http: HttpClient,
-    private empresas: EmpresasServiceService,
     private mapa_legacy: MapaLegacyService,
     @Inject(PLATFORM_ID) private platformId: Object, private zone: NgZone
   ) {}
@@ -463,7 +451,7 @@ export class VisComponent {
         this.legend.addTo(this.map);
       })
 
-      this.displayedColumns = ['nombre', 'rank', 'rank_ly', 'total', 'alcohol', 'comercial', 'profesional', 'industrial', 'microempresa', 'estacionada'];
+      this.displayedColumns = ['nombre', 'rank', 'total', 'alcohol', 'comercial', 'profesional', 'industrial', 'microempresa', 'estacionada'];
 
     } else if (this.tipo_mapa === 'exencionbasura') {
       this.mapa_legacy.getRangoFechasGeneralByTipo(this.tipo_mapa, this.columnaResaltada).pipe(
@@ -687,6 +675,7 @@ export class VisComponent {
 
         let densidadPorUV = {};
         const values = Object.values(licenciasTotalByUVData);
+        console.log(licenciasTotalByUVData)
 
         if (this.columnaResaltada === 'licencia conducir') {
           values.forEach(element => {
@@ -817,8 +806,6 @@ export class VisComponent {
     this.label = new info(); // label es la etiqueta de arriba a la derecha del mapa
     this.label.addTo(this.map);
 
-
-    console.log('si pasamos por aqui')
     this.mapa_legacy.getPoblacionUV().subscribe(data => {
       this.uvPoblacionData = data;
       this.uvPoblacionData.unshift({
@@ -828,13 +815,11 @@ export class VisComponent {
         superficie_total: 1000000000000,
         // Agrega aquí las demás propiedades que necesites
       });
-      console.log(this.uvPoblacionData)
     })
 
       // Añadir el objeto a uvPoblacionData
       // this.uvPoblacionData['UV-0'] = {Total: '1', 'Superficie m2': '1'};
 
-      console.log(this.uvPoblacionData);
     // });
 
   }
@@ -848,14 +833,45 @@ export class VisComponent {
     } else if(this.tipo_mapa === 'impuestosyderechos') {
       this.columnaResaltada = 'total'
       localStorage.setItem('Columna', 'total')
+      this.subgrupos = [
+        { titulo: 'Total', abierto: "total", descripcion: 'Una patente es un derecho exclusivo que concede el Estado para la protección de una invención, la que proporciona derechos exclusivos que permitirán utilizar y explotar su invención e impedir que terceros la utilicen sin su consentimiento. Si opta por no explotar la patente, puede venderla o ceder los derechos a otra empresa para que la comercialice bajo licencia.' },
+        { titulo: 'Alcohol', abierto: "alcohol", descripcion: 'Permiso otorgado a los contribuyentes, sean estos personas naturales y/o jurídicas constituidas legalmente, que deseen expender, consumir o mantener bebidas alcohólicas para su comercialización. Todos los establecimientos de expendio de bebidas alcohólicas quedarán clasificados dentro de categorías y tendrán las características que se señalan conforme la Ley N° 19.925 sobre Expendio y Consumo de Bebidas Alcohólicas.' },
+        { titulo: 'Comercial', abierto: "comercial", descripcion: 'La Patente Comercial es un permiso municipal que deben tramitar todos quienes deseen desarrollar o ejercer una actividad comercial en una comuna. Para establecimientos de Comercio, es decir, establecimientos destinados principalmente a las actividades de compraventa de mercaderías diversas'  },
+        { titulo: 'Profesional', abierto: "profesional", descripcion: 'Las personas que ejerzan profesiones liberales o cualquier otra profesión u ocupación lucrativa, es decir cualquier actividad ejercida en forma independiente por personas naturales y en la cual predomine el trabajo personal basado en el conocimiento de una ciencia, arte, oficio o técnica por sobre el empleo de maquinarias, herramientas, equipos u otros bienes de capital, pagarán su patente anual sólo en la comuna donde tengan instalada su consulta, estudio u oficina principal, lo que las habilitará para ejercer en todo el territorio nacional.' },
+        { titulo: 'Industrial', abierto: "industrial", descripcion: 'Para establecimientos industriales, es decir, para negocios cuyo giro es la producción o manufacturas, como panaderías, fábricas de productos, alimentos, etc. Tales establecimientos serán calificados caso a caso por el Secretaría Regional Ministerial de Salud respectiva, en consideración a los riesgos que su funcionamiento pueda causar a sus trabajadores, vecindario y comunidad; para estos efectos, se calificarán como sigue: Peligroso, Insalubre o Contaminante, Molesto, Inofensivo.' },
+        { titulo: 'Microempresa', abierto: "microempresa", descripcion: 'El otorgamiento de patente a las microempresas familiares se regular por lo establecido en la Ley N° 19.749, que Establece Normas para la Creación de Microempresas Familiares, cuyo objeto fue procurar una vía más expedita para la formalización de sus actividades, beneficiando así a quienes, contando con recursos limitados, ejerzan una actividad económica lícita, que no sea peligrosa, contaminante o molesta, exceptuándola de las limitaciones relativas a la zonificación comercial o industrial y de algunas autorizaciones previas de tipo sanitario y otras que contemplen las leyes.' },
+        { titulo: 'Estacionada', abierto: "estacionada", descripcion: 'Se entenderá como feria libre, el comercio que se ejerce en la vía pública, en los días y horarios fijados por la Municipalidad, en los cuales se expenden artículos alimenticios de origen natural, vegetal o mineral. Los permisos para el comercio en la ferias son personales, intransferibles e intransmisibles de acuerdo a lo señalado en la Ley orgánica constitucional de Municipalidades. Los feriantes deberán pagar las patentes correspondientes a los derechos que señale la respectiva Ordenanza Municipal, sin perjuicio de sus obligaciones tributarias según lo dispuso en el artículo 24 de la Ley sobre Impuesto a la Renta.' }
+      ]
     } else if (this.tipo_mapa === 'exencionbasura') {
       this.columnaResaltada = 'total'
       localStorage.setItem('Columna', 'total')
     } else if(this.tipo_mapa === 'obrasmunicipales'){
       this.columnaResaltada ='total'
+      localStorage.setItem('Columna', 'total')
+      this.subgrupos = [
+        { titulo: 'Total', descripcion: 'Descripción de total', abierto: "total" },
+        { titulo: 'Anexión', descripcion: 'Descripción de anexión', abierto: "anexion" },
+        { titulo: 'Antiguas', descripcion: 'Descripción de antiguas', abierto: "antiguas" },
+        { titulo: 'Anulación', descripcion: 'Descripción de anulación', abierto: "anulacion" },
+        { titulo: 'Cambio de destino', descripcion: 'Descripción de cambio de destino', abierto: "cambio de destino" },
+        { titulo: 'Fusión', descripcion: 'Descripción de fusión', abierto: "fusion" },
+        { titulo: 'Ley 20.898', descripcion: 'Descripción de ley 20.898', abierto: "ley 20.898" },
+        { titulo: 'Obras menores', descripcion: 'Descripción de obras menores', abierto: "obras menores" },
+        { titulo: 'Permisos de edificación', descripcion: 'Descripción de permisos de edificación', abierto: "permisos de edificacion" },
+        { titulo: 'Recepción final', descripcion: 'Descripción de recepción final', abierto: "repecion final" },
+        { titulo: 'Regularizaciones', descripcion: 'Descripción de regularizaciones', abierto: "regularizaciones" },
+        { titulo: 'Regularizaciones ley 18.591', descripcion: 'Descripción de regularizaciones ley 18.591', abierto: "regularizaciones ley 18.591" },
+        { titulo: 'Resolución', descripcion: 'Descripción de resolución', abierto: "resolucion" },
+        { titulo: 'Subdivisiones', descripcion: 'Descripción de subdivisiones', abierto: "subdivisiones" },
+        { titulo: 'Ventas por piso', descripcion: 'Descripción de ventas por piso', abierto: "ventas por piso" }
+      ];
     } else if (this.tipo_mapa === 'transito') {
       this.columnaResaltada = 'licencia conducir'
       localStorage.setItem('Columna', 'licencia conducir')
+      this.subgrupos =  [
+        { titulo: 'Licencias de Conducir', descripcion: 'Descripción de licencias de conducir', abierto: "licencia conducir" },
+        { titulo: 'Permisos de Circulación', descripcion: 'Descripción de permisos de circulación', abierto: "permiso circulacion" },
+      ];
     }
 
     this.initializeMapData()
@@ -947,9 +963,9 @@ export class VisComponent {
       this.label.updateContent( '<h4>Poblacion  ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
     } else if (this.tipo_mapa === 'impuestosyderechos') {
       if (this.visPoblacionData === 'Total Poblacion') {
-        this.label.updateContent( '<h4>Patentes de tipo ' + columnita +  ' por habitante: </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+        this.label.updateContent( '<h4>Patentes de tipo ' + columnita +  '<br /> por cada 1000 habitantes: </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
       } else if (this.visPoblacionData === 'Superficie') {
-        this.label.updateContent( '<h4>Patentes de tipo ' + columnita +  ' por hectarea: </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+        this.label.updateContent( '<h4>Patentes de tipo ' + columnita +  '<br />por hectarea: </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
       } else if (this.visPoblacionData === 'Porcentaje') {
         this.label.updateContent( '<h4>Porcentaje de Patentes de ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
       } else {
@@ -959,7 +975,7 @@ export class VisComponent {
       this.label.updateContent( '<h4>Exencion Basura ' + columnita +  '</h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
     } else if (this.tipo_mapa === 'obrasmunicipales'){
       if (this.visPoblacionData === 'Total Poblacion') {
-        this.label.updateContent( '<h4>Obras Municipales ' + columnita +  ' por habitante: </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
+        this.label.updateContent( '<h4>Obras Municipales<br />' + columnita +  ' por cada 1000 habitantes: </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
       } else if ( this.visPoblacionData === 'Superficie') {
         this.label.updateContent( '<h4>Obras Municipales '+columnita +  ' por hectarea: </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
       } else if (this.visPoblacionData === 'Porcentaje') {
@@ -969,7 +985,7 @@ export class VisComponent {
       }
     } else if (this.tipo_mapa ==='transito') {
       if (this.visPoblacionData === 'Total Poblacion') {
-        this.label.updateContent( '<h4>'+columnita +  ' por habitante: </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '%<br />');
+        this.label.updateContent( '<h4>'+columnita +  ' por cada 1000 habitantes: </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
       } else if ( this.visPoblacionData === 'Superficie') {
         this.label.updateContent( '<h4>'+columnita +  ' por hectarea: </h4>' + '<b>'+ properties['name'] +'</b>' + '<br />Densidad:' + properties['density'] + '<br />');
       } else if (this.visPoblacionData === 'Porcentaje') {

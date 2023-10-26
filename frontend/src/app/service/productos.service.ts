@@ -40,6 +40,11 @@ export class ProductosService {
     return this.http.post<ProductoFarmacia>(`${this.apiUrl}/farmacia/productofarmacia/`, producto, {headers: this.headers});
   }
 
+  updateProducto(id_producto, producto_editado): Observable<any> {
+    const url = `${this.apiUrl}/farmacia/productofarmacia/update/${id_producto}/`;
+    return this.http.patch<any>(url, producto_editado, {headers: this.headers});
+  }
+
   venderProducto(productovendido: ProductoVendido): Observable<ProductoVendido> {
     return this.http.post<ProductoVendido>(`${this.apiUrl}/farmacia/productovendido/`, productovendido, {headers: this.headers})
   }

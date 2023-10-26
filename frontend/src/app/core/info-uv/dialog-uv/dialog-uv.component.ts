@@ -46,7 +46,7 @@ export class DialogUVComponent {
       this.filterData(response);
     })
 
-    
+
     for (let i = 1; i <= 26; i++) {
       this.uvOptions.push(`UV-${i}`);
     }
@@ -54,7 +54,7 @@ export class DialogUVComponent {
     this.getCalles();
   }
 
-  
+
   ngAfterViewInit(){
     if(this.uvField){
       this.uvField.focus();

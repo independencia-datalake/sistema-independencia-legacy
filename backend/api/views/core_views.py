@@ -8,6 +8,7 @@ from rest_framework import status
 from django.http import JsonResponse, Http404
 from api.filters.persona_filters import PersonaFilter
 from .permissions_views import *
+from bardapi import Bard
 
 from api.serializers.core_serializers import *
 from database.core.models import (
@@ -362,3 +363,17 @@ class ObtenerUVView(APIView):
         uv = obtener_uv(calle, numeracion)
 
         return Response({'unidad_vecinal': uv}, status=status.HTTP_200_OK)
+    
+class ConsultaAI(APIView):
+    def get(self, request, consulta):
+
+
+        BARD_API_KEY = "awiTX26StfidJN2ZP4SHdZ32hI9-Et3fgMfIcVvCTxioNOL3IwBzd44kOrYjXXyHsPAnDg."
+
+        token = BARD_API_KEY
+
+        bard = Bard(token = token)
+
+        result = bard.get_answer(consulta)
+        # print(result)
+        return Response({'content': result['content']}, status= status.HTTP_200_OK)
