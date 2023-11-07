@@ -17,9 +17,6 @@ import { MapaLegacyService } from 'src/app/service/mapa-legacy.service';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { isPlatformBrowser } from '@angular/common';
 // amCharts imports
-import * as am5 from '@amcharts/amcharts5';
-import * as am5xy from '@amcharts/amcharts5/xy';
-import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 
 @Component({
   selector: 'app-vis',
@@ -31,7 +28,6 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
 
 export class VisComponent {
   //amcharts root
-  private root!: am5.Root;
   isBotoneraFixed = false;
 
   @HostListener('window:scroll', [])

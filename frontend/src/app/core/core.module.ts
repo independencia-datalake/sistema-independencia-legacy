@@ -34,7 +34,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
 import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
-import { MatExpansionModule } from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion'; 
 import { InfoComunaComponent } from './info-comuna/info-comuna.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { InfoUvComponent } from './info-uv/info-uv.component'

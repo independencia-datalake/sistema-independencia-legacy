@@ -82,4 +82,11 @@ export class PersonaService {
   createInfosalud(infosalud: PersonaInfoSalud): Observable<PersonaInfoSalud> {
     return this.http.post<PersonaInfoSalud>(`${this.apiUrl}/core/personainfosalud/`, infosalud, {headers: this.headers})
   }
+
+  createArchivoPersona(file, persona): Observable<any> {
+    const formData = new FormData();
+    formData.append('archivo', file);
+    formData.append('persona', persona)
+    return this.http.post(`${this.apiUrl}/core/personaarchivos/`, formData, {headers: this.headers});
+  }
 }

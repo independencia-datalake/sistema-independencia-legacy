@@ -15,10 +15,6 @@ import { MatSelectModule } from '@angular/material/select';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { isPlatformBrowser } from '@angular/common';
 // amCharts imports
-import * as am5 from '@amcharts/amcharts5';
-import * as am5xy from '@amcharts/amcharts5/xy';
-import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
-
 
 
 @Component({
@@ -32,7 +28,6 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
 
   datag=[];
 
-  private root!: am5.Root;
 
 
   private map: Map; // Declarar la variable map como propiedad de la clase

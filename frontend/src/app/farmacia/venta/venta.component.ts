@@ -240,14 +240,16 @@ export class VentaComponent implements OnInit {
       // console.log(formData)
 
       // Realiza una solicitud HTTP POST con FormData
-      this.http.post(`${this.apiUrl}/farmacia/recetas/`, formData).subscribe(
+
+      this.productosfarmacia.createReceta(file, n_venta).subscribe(
         (response) => {
-          console.log(`Archivo ${index + 1} subido con éxito`, response);
+            console.log('Archivo subido con éxito', response);
+
         },
         (error) => {
-          console.log(`Error al subir el archivo ${index + 1}`, error);
+            console.log('Error al subir el archivo', error);
         }
-      );
+    );
     });
   }
 

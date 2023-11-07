@@ -8,6 +8,7 @@ djangorestframework==3.14.0
 djangorestframework-simplejwt==5.2.2
 gunicorn==20.1.0
 numpy==1.24.1
+openai
 pandas==1.5.3
 Pillow==9.4.0
 psycopg2-binary==2.9.6
