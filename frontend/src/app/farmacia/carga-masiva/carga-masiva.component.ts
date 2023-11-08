@@ -13,10 +13,15 @@ import * as XLSX from 'xlsx/xlsx.mjs';
 export class CargaMasivaComponent {
   selectedFile: File = null;
 
+  formEstadoIngreso: FormGroup;
+
   formCrearProducto: FormGroup;
+  formProductoIngresado: FormGroup;
 
   files: File[] = [];
   public Data: any;
+
+  public n_ingreso: any;
 
 
   constructor(private productosfarmacia: ProductosService,
@@ -30,7 +35,7 @@ export class CargaMasivaComponent {
 		console.log(event);
     if(event.addedFiles[0].name.split('.').pop() === 'xlsx'){
       this.selectedFile = event.addedFiles;
-      console.log(this.selectedFile[0].name)
+      // console.log(this.selectedFile[0].name)
       this.readFile(this.selectedFile[0])
     }else{
 
@@ -43,13 +48,13 @@ export class CargaMasivaComponent {
       this.selectedFile = event.target.files;
       this.readFile(this.selectedFile[0])
     }else{
-      console.log('pare que no paso na')
+      // console.log('pare que no paso na')
     }
 
 	}
 
 	onRemove(event) {
-		console.log(event);
+		// console.log(event);
 		this.selectedFile = null;
 	}
 
@@ -77,8 +82,33 @@ export class CargaMasivaComponent {
   }
 
   subirCarga() {
+
+    this.stockService.getEstadoIngreso().subscribe(response => {
+      let estado = response[0].estado
+      this.n_ingreso = response[0].id
+
+      if (estado === true){
+        this.formEstadoIngreso = this.fb.group({
+          estado: false,
+          farmaceuta: this.authService.getUserId(localStorage.getItem('token')),
+        })
+        let estadoOrdenIngreso = this.formEstadoIngreso.value
+        this.stockService.createEstadoIngreso(estadoOrdenIngreso).subscribe(respuesta => {
+          console.log(respuesta)
+          this.n_ingreso = respuesta.id
+          this.stockService.updateEstadoIngreso(this.n_ingreso).subscribe();
+
+        })
+      } else if (estado === false) {
+        this.stockService.deteleProductosIngresados().subscribe()
+        this.stockService.updateEstadoIngreso(this.n_ingreso).subscribe();
+      }
+    }
+
+    // })
+    )
+
     this.Data.slice(1).forEach(element => {
-      console.log(element);
 
       this.formCrearProducto = this.fb.group({
         marca_producto: element[0],
@@ -106,7 +136,28 @@ export class CargaMasivaComponent {
       const idProducto = response.id;
 
       this.stockService.createBodega(idProducto, stockMinimo).subscribe(bodegaResponse => {
-        // console.log('Bodega creada:', bodegaResponse);
+        // this.formProductoIngresado = this.fb.group({
+        //   cantidad: element[8],
+        //   lote: element[10],
+        //   precio_compra: '',
+        //   precio_venta: element[7],
+        //   n_factura: '',
+        //   producto: idProducto,
+        //   n_venta: 0,
+        // })
+        let producto_ingresado_aux = {
+          cantidad: element[8],
+          lote: element[10],
+          precio_compra: null,
+          precio_venta: element[7],
+          n_factura: '',
+          nombre: response.id,
+          n_venta: this.n_ingreso,
+        }
+        this.stockService.createProductoIngresado(producto_ingresado_aux).subscribe(respuesta => {
+
+        })
+
       }, error => {
         console.log('Error al crear la bodega:', error);
       });
@@ -115,9 +166,9 @@ export class CargaMasivaComponent {
       console.log(error);
     });
 
+
+
     });
-
-
-  }
+}
 
 }

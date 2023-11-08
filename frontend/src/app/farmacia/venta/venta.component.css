@@ -164,3 +164,7 @@ form {
 .mat-mdc-select-value {
   color: black;
 }
+
+.info {
+  width: 750px;
+}

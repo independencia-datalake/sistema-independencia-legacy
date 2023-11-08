@@ -34,6 +34,11 @@ import { FichaIngresoComponent } from './ficha-ingreso/ficha-ingreso.component';
 import { CargaMasivaComponent } from './carga-masiva/carga-masiva.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { EditarProductoDialogComponent } from './informes-productos/editar-producto-dialog/editar-producto-dialog.component';
+import { EditarPersonaComponent } from './editar-persona/editar-persona.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { CargaMasivaPersonasComponent } from './carga-masiva-personas/carga-masiva-personas.component';
 
 
 
@@ -62,6 +67,8 @@ import { EditarProductoDialogComponent } from './informes-productos/editar-produ
     FichaIngresoComponent,
     CargaMasivaComponent,
     EditarProductoDialogComponent,
+    EditarPersonaComponent,
+    CargaMasivaPersonasComponent,
   ],
   imports: [
     CommonModule,
@@ -82,6 +89,9 @@ import { EditarProductoDialogComponent } from './informes-productos/editar-produ
     MatInputModule,
     MatAutocompleteModule,
     NgxDropzoneModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatSlideToggleModule,
   ],
 
 })

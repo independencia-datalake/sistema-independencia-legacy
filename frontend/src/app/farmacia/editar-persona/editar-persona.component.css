@@ -1,0 +1,380 @@
+.mat-mdc-radio-button.mat-accent {
+  --mdc-radio-disabled-selected-icon-color: #000;
+  --mdc-radio-disabled-unselected-icon-color: #000;
+  --mdc-radio-unselected-focus-icon-color: #212121;
+  --mdc-radio-unselected-hover-icon-color: #212121;
+  --mdc-radio-unselected-icon-color: rgba(0, 0, 0, .54);
+  --mdc-radio-unselected-pressed-icon-color: rgba(0, 0, 0, .54);
+  --mdc-radio-selected-focus-icon-color: #fc3d59;
+  --mdc-radio-selected-hover-icon-color: #fc3d59;
+  --mdc-radio-selected-icon-color: #fc3d59;
+  --mdc-radio-selected-pressed-icon-color: #fc3d59;
+  --mat-mdc-radio-ripple-color: #000;
+  --mat-mdc-radio-checked-ripple-color: #fc3d59;
+}
+
+.mat-mdc-slide-toggle.mat-accent {
+  --mdc-switch-selected-focus-state-layer-color: #90a4ae;
+  --mdc-switch-selected-handle-color: #90a4ae;
+  --mdc-switch-selected-hover-state-layer-color: #90a4ae;
+  --mdc-switch-selected-pressed-state-layer-color: #90a4ae;
+  --mdc-switch-selected-focus-handle-color: #b0bec5;
+  --mdc-switch-selected-hover-handle-color: #b0bec5;
+  --mdc-switch-selected-pressed-handle-color: #b0bec5;
+  --mdc-switch-selected-focus-track-color: #FC3D59;
+  --mdc-switch-selected-hover-track-color: #FC3D59;
+  --mdc-switch-selected-pressed-track-color: #FC3D59;
+  --mdc-switch-selected-track-color: #FC3D59;
+}
+
+
+.mat-mdc-radio-button .mdc-form-field {
+  color: #000000;
+}
+
+label {
+  display: inline-block;
+  margin-bottom: 0rem;
+}
+
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: #ffffff;
+}
+
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: #b1b1b1;
+}
+
+.mat-mdc-raised-button.mat-unthemed {
+  --mdc-protected-button-container-color: #fc3d59;
+  --mdc-protected-button-label-text-color: #fff;
+}
+
+.mdc-text-field:not(.mdc-text-field--disabled) .mdc-text-field__input {
+  color: black;
+}
+
+.saltar {
+  text-align: center;
+}
+
+.mat-horizontal-stepper-header-container {
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  background-color: #FFF;
+  color: black;
+}
+
+.mat-step-text-label {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  color: black;
+}
+
+.mat-step-header .mat-step-icon {
+  background-color: #222222;
+  color: #fff;
+}
+
+.mat-step-header .mat-step-icon-selected,
+.mat-step-header .mat-step-icon-state-done,
+.mat-step-header .mat-step-icon-state-edit {
+  background-color: #fc3d59;
+  color: #fff;
+}
+
+.mat-horizontal-content-container {
+  overflow: hidden;
+  padding: 0 24px 24px 24px;
+  background-color: #FFF;
+}
+
+t-mdc-slide-toggle {
+  --mdc-switch-disabled-selected-handle-color: green;
+  --mdc-switch-disabled-unselected-handle-color: green;
+  --mdc-switch-disabled-selected-track-color: #FC3D59;
+  --mdc-switch-disabled-unselected-track-color: black;
+  --mdc-switch-unselected-focus-state-layer-color: black;
+  --mdc-switch-unselected-pressed-state-layer-color: black;
+  --mdc-switch-unselected-hover-state-layer-color: black;
+  --mdc-switch-unselected-focus-track-color: black;
+  --mdc-switch-unselected-hover-track-color: black;
+  --mdc-switch-unselected-pressed-track-color: black;
+  --mdc-switch-unselected-track-color: black;
+  --mdc-switch-unselected-focus-handle-color: black;
+  --mdc-switch-unselected-hover-handle-color: black;
+  --mdc-switch-unselected-pressed-handle-color: black;
+  --mdc-switch-handle-surface-color: var(--mdc-theme-surface, black);
+  --mdc-switch-unselected-handle-color: black;
+  --mdc-switch-selected-icon-color: black;
+  --mdc-switch-disabled-selected-icon-color: black;
+  --mdc-switch-disabled-unselected-icon-color: black;
+  --mdc-switch-unselected-icon-color: black;
+}
+
+.mdc-form-field>label {
+  margin-left: 0;
+  margin-right: auto;
+  padding-left: 4px;
+  padding-right: 0;
+  color: #000;
+  order: 0;
+}
+
+.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+  padding-top: 16px;
+  padding-bottom: 16px;
+  background-color: #f5f5f5;
+}
+
+.mat-mdc-form-field-flex {
+  display: inline-flex;
+  align-items: baseline;
+  box-sizing: border-box;
+  width: 100%;
+  background-color: #f5f5f5;
+}
+
+.mat-mdc-slide-toggle.mat-accent {
+  margin-left: 10px;
+}
+
+.siguiente {
+  margin-top: 15px;
+}
+
+.mat-mdc-text-field-wrapper {
+  background-color: #f5f5f5;
+
+}
+
+input::placeholder {
+  color: rgb(132, 132, 132) !important;
+}
+
+.mdc-menu-surface.mat-mdc-autocomplete-panel {
+  width: 100%;
+  max-height: 256px;
+  position: static;
+  visibility: hidden;
+  transform-origin: center top;
+  margin: 0;
+  padding: 0px 0 !important;
+  list-style-type: none;
+}
+
+.mat-mdc-card {
+  position: relative;
+  border-radius: var(--mdc-elevated-card-container-shape, var(--mdc-shape-medium, 4px));
+  background-color: white;
+  border-width: 0;
+  border-style: solid;
+  border-color: white;
+}
+
+.mat-mdc-select-value {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.eliminar {
+  font-size: 0.8em;
+  color: #fff;
+  background-color: #FC3D59;
+  /* border-color: #000000; */
+  margin-left: 10px;
+  transform: scale(0.65);
+
+}
+
+.mdc-menu-surface.mat-mdc-select-panel {
+  width: 100%;
+  max-height: 275px;
+  position: static;
+  outline: 0;
+  margin: 0;
+  padding: 0px 0 !important;
+  list-style-type: none;
+}
+
+.mat-datepicker-content {
+  box-shadow: 0px 2px 4px -1px rgb(0 0 0 / 20%), 0px 4px 5px 0px rgb(0 0 0 / 14%), 0px 1px 10px 0px rgb(0 0 0 / 12%);
+  background-color: white;
+  color: black;
+}
+
+.mat-mdc-button:not(:disabled) {
+  color: #000;
+}
+
+.mat-calendar-table-header,
+.mat-calendar-body-label {
+  color: rgba(153, 153, 153, 0.7);
+}
+
+.mat-datepicker-toggle,
+.mat-datepicker-content .mat-calendar-next-button,
+.mat-datepicker-content .mat-calendar-previous-button {
+  color: #000;
+}
+
+.mat-calendar-body-cell-content,
+.mat-date-range-input-separator {
+  color: #000;
+  border-color: rgba(0, 0, 0, 0);
+}
+
+table tr:nth-child(1) td {
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+tr:nth-child(odd) td {
+  background-color: #ffffff;
+  color: #222;
+}
+
+button.btn:hover,
+button:hover {
+  background-color: #ffffff;
+  border: 1px solid #fff;
+}
+
+.mat-calendar-body-selected {
+  background-color: #fc3d59;
+  color: #fff;
+}
+
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover>.mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+  background-color: #fc3d59;
+}
+
+.info {
+  margin-right: 15px;
+}
+
+/* ARCHIVOS */
+
+.mat-mdc-card {
+  box-shadow: 0px 2px 1px -1px rgb(255, 255, 255), 0px 1px 1px 0px rgba(255, 255, 255, 0.14), 0px 1px 3px 0px rgba(255, 255, 255, 0.12);
+  --mdc-elevated-card-container-color: #ffffff;
+}
+
+.mat-mdc-raised-button.mat-unthemed {
+  --mdc-protected-button-container-color: #FC3D59;
+  --mdc-protected-button-label-text-color: #fff;
+}
+
+.rounded-pink-button {
+  background-color: rgb(249, 34, 72) !important;
+  width: 215px;
+  border-radius: 25px;
+  color: #FFF !important;
+  border: none;
+  padding: 10px;
+  margin: 10px 8px;
+}
+
+.flex {
+  display: flex;
+}
+
+.file-table-column {
+  border-top: 1px solid #4a4a4a;
+  border-bottom: 1px solid #4a4a4a;
+  border-right: none;
+  border-left: none;
+}
+
+.file-table-column:first-of-type {
+  border-left: 1px solid #4a4a4a;
+  border-right: 1px solid #4a4a4a;
+  text-align: center;
+  background-color: rgba(249, 34, 72, .4);
+}
+
+.table-head {
+  background-color: rgba(249, 34, 72, .4) !important;
+  font-family: 'Mulish', sans-serif;
+}
+
+.table-head.file-table-column {
+  border-bottom: none;
+}
+
+.file-table-column:last-of-type {
+  border-right: 1px solid #4a4a4a;
+}
+
+.h-41 {
+  height: 41px;
+}
+
+.w-41 {
+  width: 41px;
+}
+
+.w-60 {
+  width: 60px;
+}
+
+.p-10 {
+  padding: 10px;
+}
+
+.w-250 {
+  width: 250px;
+}
+
+.w-130p {
+  width: 130px;
+}
+
+.ellipsis-text {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.delete-file {
+  color: rgb(249, 34, 72)
+}
+
+.file-table-row:nth-of-type(2n+1):not(.index) {
+  background: rgba(249, 34, 72, .1);
+}
+
+.text-center {
+  text-align: center;
+}
+
+h3 {
+  color: #000 !important;
+  font-family: 'Mulish', sans-serif !important;
+  font-weight: 900 !important;
+  font-size: 1.75rem !important;
+  padding-left: 15px;
+  margin-bottom: 15px !important;
+}
+
+h5 {
+  color: #000 !important;
+  font-family: 'Mulish', sans-serif !important;
+  font-weight: 800 !important;
+  font-size: 1.3rem !important;
+  padding-left: 15px;
+  margin-top: 30px !important;
+}
+
+form {
+  padding-left: 6px;
+}
+
+.pl-6 {
+  padding-left: 6px;
+}
+
+.mat-mdc-select-value {
+  color: black;
+}
