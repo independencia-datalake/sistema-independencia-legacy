@@ -176,6 +176,7 @@ export class AreaChartStackedComponent {
 
   ]
 
+
   stackedAreaChartData:any[];
   chartData: any[] = [];
 

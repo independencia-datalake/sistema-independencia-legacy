@@ -71,7 +71,7 @@ export class BubbleChartComponent {
     return transformedData;
   }
   colorScheme:any = {
-    domain: ['#1a242c', '#e81746', '#e67303']
+    domain: ['#00ffff', '#ff00ff', '#ffff00']
   };
 
   ngOnChanges() {

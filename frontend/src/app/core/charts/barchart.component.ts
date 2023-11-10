@@ -20,7 +20,6 @@ import { EmpresasServiceService } from 'src/app/service/empresas.service.service
         [yAxisLabel]="yAxisLabel"
         [barPadding]="2"
         [dataLabelFormatting]="dataLabelFormattingFunc"
-
     >
     </ngx-charts-bar-vertical>`,
     styleUrls: ['./charts.component.css'],
