@@ -1,18 +1,21 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { MapaLegacyService } from 'src/app/service/mapa-legacy.service';
 
 @Component({
   selector: 'app-bubble-chart',
   template: `
   <ngx-charts-bubble-chart
   [results]="bubbleChartData"
+  [animations]="true"
   [xAxis]="true"
   [yAxis]="true"
-  [legend]="true"
+  [legend]="false"
   [showXAxisLabel]="true"
   [showYAxisLabel]="true"
-  [xAxisLabel]="'UV'"
-  [yAxisLabel]="'Licencia de Conducir'"
+  [xAxisLabel]="'Poblacion'"
+  [yAxisLabel]="'Superficie'"
   [scheme]="colorScheme"
+  [maxRadius]="15"
   >
 </ngx-charts-bubble-chart>
 
@@ -21,291 +24,93 @@ import { Component } from '@angular/core';
   styleUrls: ['./charts.component.css'],
 })
 export class BubbleChartComponent {
-
-
-  dataBd:any = [
-    {
-      "id": 1,
-      "uv": 1,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 1,
-      "created": "2023-07-04T16:08:52.129169",
-      "api_call": 9
-    },
-    {
-      "id": 3,
-      "uv": 3,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 3,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 4,
-      "uv": 4,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 4,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 2,
-      "uv": 2,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 2,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 8,
-      "uv": 8,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 8,
-      "created": "2023-07-04T16:08:52.129169",
-      "api_call": 9
-    },
-    {
-      "id": 6,
-      "uv": 6,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 6,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 7,
-      "uv": 7,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 7,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 9,
-      "uv": 9,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 9,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 10,
-      "uv": 10,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 10,
-      "created": "2023-07-04T16:08:52.129169",
-      "api_call": 9
-    },
-    {
-      "id": 11,
-      "uv": 11,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 11,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 12,
-      "uv": 12,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 12,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 13,
-      "uv": 13,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 13,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 14,
-      "uv": 14,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 14,
-      "created": "2023-07-04T16:08:52.129169",
-      "api_call": 9
-    },
-    {
-      "id": 15,
-      "uv": 15,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 15,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 16,
-      "uv": 16,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 16,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 17,
-      "uv": 17,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 17,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 18,
-      "uv": 18,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 18,
-      "created": "2023-07-04T16:08:52.129169",
-      "api_call": 9
-    },
-    {
-      "id": 19,
-      "uv": 19,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 19,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 20,
-      "uv": 20,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 20,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 21,
-      "uv": 21,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 21,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 22,
-      "uv": 22,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 22,
-      "created": "2023-07-04T16:08:52.129169",
-      "api_call": 9
-    },
-    {
-      "id": 23,
-      "uv": 23,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 23,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 24,
-      "uv": 24,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 24,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 25,
-      "uv": 25,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 25,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    {
-      "id": 26,
-      "uv": 26,
-      "licencia_conducir":Math.floor(Math.random() * 10000000),
-      "permiso_circulacion": Math.floor(Math.random() * 10000000),
-      "rank_licencia_conducir": Math.floor(Math.random() * 10000000),
-      "rank_permiso_circulacion": 26,
-      "created": "2023-07-04T16:08:52.134417",
-      "api_call": 9
-    },
-    
-  ]
+@Input() visdata: any;
+  key_columna = localStorage.getItem('Columna')
+  // dataBd:any = []
 
   bubbleChartData:any[];
   chartData: any[] = [];
+  poblacionData: any = []
 
 
-  constructor() {
-    this.bubbleChartData = this.transformBubbleData(this.dataBd);
+  constructor(private poblacion: MapaLegacyService) {
+    // this.bubbleChartData = this.transformBubbleData(this.dataBd);
   }
+
+  ngOnInit(): void {
+    this.poblacion.getPoblacionUV().subscribe(
+      (data) => {
+        this.poblacionData = data;
+      },
+      (error) => {
+        console.error('Ocurrió un error al obtener los datos', error);
+      }
+    );
+  }
+
   transformBubbleData(dataBd: any[]) {
     const transformedData = [];
-  
-    const series = dataBd.map(item => {
-      return {
-        name: new Date(item.created).toLocaleDateString(),
-        x: item.uv,
-        y: item.licencia_conducir,
-        r: item.licencia_conducir
-      };
-    });
-  
-    transformedData.push({
-      name: 'Datos',
-      series: series
-    });
-  
+
+    // Agrupar los datos por UV
+    for (const item of dataBd) {
+      const series = [
+        {
+          name: 'Población',
+          x: item.poblacion,
+          y: item.superficie,
+          r: item.total
+        }
+      ];
+
+      transformedData.push({
+        name: `UV ${item.uv}`,
+        series: series
+      });
+    }
+
     return transformedData;
   }
   colorScheme:any = {
     domain: ['#00ffff', '#ff00ff', '#ffff00']
   };
+
+  ngOnChanges() {
+    this.key_columna = localStorage.getItem('Columna'); // Obtener el tipo de columna seleccionado
+
+    if (this.key_columna === "licencia conducir") {
+      this.key_columna = "licencia_conducir";
+  } else if (this.key_columna === "permiso circulacion") {
+      this.key_columna = "permiso_circulacion";
+  }
+
+
+    // Inicializar el array que contendrá los nuevos datos
+    let newDataBd = [];
+
+    // Asumiendo que poblacionData y visdata están indexados por UV (pero visdata tiene una UV-0 adicional)
+    for (let i = 0; i < this.poblacionData.length; i++) {
+      let poblacionItem = this.poblacionData[i];
+      let visdataItem = this.visdata[i + 1]; // +1 para omitir la UV-0 en visdata
+
+      // Combinar los datos
+      let combinedData = {
+        id: poblacionItem.id,
+        uv: poblacionItem.id, // Asumiendo que id es igual a UV
+        created: "2023-07-04T16:08:52.129169", // Puedes cambiar esto si tienes una fecha real
+        api_call: 9, // Fijo a 9 según tu ejemplo
+        total: visdataItem[this.key_columna], // Obtener el valor de la columna seleccionada de visdata
+        poblacion: poblacionItem.total, // Población total de poblacionData
+        superficie: poblacionItem.superficie // Superficie de poblacionData
+      };
+
+      newDataBd.push(combinedData);
+    }
+
+    // Ahora newDataBd contiene la información combinada.
+    // Llamar a transformBubbleData para actualizar el gráfico
+    this.bubbleChartData = this.transformBubbleData(newDataBd);
+  }
+
 }
 
 

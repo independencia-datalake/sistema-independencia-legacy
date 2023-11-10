@@ -58,7 +58,7 @@ class Persona(models.Model):
         default='MOVIL',
         max_length=200,
         choices=(
-            ('SOLTEO/A','Soltero/a'),
+            ('SOLTERO/A','Soltero/a'),
             ('CASADO/A','Casado/a'),
             ('VIUDO/A','Viudo/a'),
             ('UNION CIVIL','Union Civil'),

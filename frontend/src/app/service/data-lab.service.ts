@@ -27,6 +27,10 @@ getEmpresasDataLabByUV(uv): Observable<any> {
   return this.http.get<any>(`${this.apiUrl}/data_lab/empresasUV/${uv}/`);
 }
 
+getEmpresasRankDataLab(): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/data_lab/empresas-rank/`);
+}
+
 getDOMDataLabList(): Observable<any> {
   return this.http.get<any>(`${this.apiUrl}/data_lab/DOM/`);
 }
@@ -42,5 +46,14 @@ getTransitoDataLabList(): Observable<any> {
 getTransitoDataLabByUV(uv): Observable<any> {
   return this.http.get<any>(`${this.apiUrl}/data_lab/transitoUV/${uv}/`);
 }
+
+getConsultaAI(consulta): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/core/consultaAI/${consulta}/`);
+}
+
+getGPTMensajeByUV(uv): Observable<any> {
+  return this.http.get<any>(`${this.apiUrl}/data_lab/GPTUV/${uv}/`);
+}
+
 
 }

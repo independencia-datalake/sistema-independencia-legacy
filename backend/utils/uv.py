@@ -3,7 +3,6 @@ import os
 import platform
 
 def obtener_uv(calle, numero):
-
   if platform.system() == 'Windows':
     df = pd.read_csv('{}\\utils\\assets\\streets_uv.csv'.format(os.getcwd()))
   else:

@@ -28,6 +28,9 @@ import { ListaVentaComponent } from './farmacia/lista-ventas/lista-ventas.compon
 import { FichaIngresoComponent } from './farmacia/ficha-ingreso/ficha-ingreso.component';
 import { FichaSalidaComponent } from './farmacia/ficha-salida/ficha-salida.component';
 import { AdminComponent } from './core/admin/admin.component';
+import { CargaMasivaComponent } from './farmacia/carga-masiva/carga-masiva.component';
+import { EditarPersonaComponent } from './farmacia/editar-persona/editar-persona.component';
+import { CargaMasivaPersonasComponent } from './farmacia/carga-masiva-personas/carga-masiva-personas.component';
 
 
 const routes: Routes = [
@@ -40,6 +43,7 @@ const routes: Routes = [
   { path: 'qna', component: QnaComponent },
   { path: 'persona', component: PersonaComponent },
   { path: 'persona/crear', component: PersonaCrearComponent },
+  { path: 'persona/carga-masiva', component: CargaMasivaPersonasComponent  },
   { path: 'vis', component: VisComponent, canActivate: [AuthGuard] },
   { path: 'conoce-tu-area', component: InfoComunaComponent },
   { path: 'ficha-barrial', component: InfoUvComponent },
@@ -53,6 +57,7 @@ const routes: Routes = [
   { path: 'farmacia/resumen-persona', component: ResumenPersonaComponent, canActivate: [AuthFarmaciaGuard] },
   { path: 'farmacia/lista-venta', component: ListaVentaComponent, canActivate: [AuthFarmaciaGuard] },
   { path: 'farmacia/comprobanteventa-detail', component: ComprobanteventaDetailComponent, canActivate: [AuthFarmaciaGuard] },
+  { path: 'editar-persona/:id_persona', component: EditarPersonaComponent, canActivate: [AuthFarmaciaGuard]  },
 
 
   // STOCK
@@ -60,6 +65,7 @@ const routes: Routes = [
   { path: 'stock/crear-producto', component: CrearProductoComponent, canActivate: [AuthFarmaciaGuard] },
   { path: 'stock/ficha-ingreso', component: FichaIngresoComponent, canActivate: [AuthFarmaciaGuard]},
   { path: 'stock/ficha-salida', component: FichaSalidaComponent, canActivate: [AuthFarmaciaGuard]},
+  { path: 'stock/carga-masiva', component: CargaMasivaComponent, canActivate: [AuthFarmaciaGuard]},
   // SEGURIDAD
   { path: 'seguridad', component: SeguridadHomeComponent },
 

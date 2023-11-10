@@ -178,6 +178,7 @@ export class ComprobanteventaDetailComponent {
   }
 
   add_receta() {
+    console.log('pleeease')
     const dialogRef = this.dialog.open(AddRecetaDialogComponent, {
       // width: '100%'
     data: { id_comprobante: this.id_comprobante}

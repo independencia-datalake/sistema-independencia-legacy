@@ -362,3 +362,4 @@ class ObtenerUVView(APIView):
         uv = obtener_uv(calle, numeracion)
 
         return Response({'unidad_vecinal': uv}, status=status.HTTP_200_OK)
+    

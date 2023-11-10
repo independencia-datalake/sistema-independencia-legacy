@@ -12,13 +12,9 @@ import { Observable, forkJoin } from 'rxjs';
 import { ChangeDetectorRef } from '@angular/core';
 import { of } from 'rxjs';
 import { MatSelectModule } from '@angular/material/select';
-import {MatTooltipModule} from '@angular/material/tooltip'; 
+import {MatTooltipModule} from '@angular/material/tooltip';
 import { isPlatformBrowser } from '@angular/common';
 // amCharts imports
-import * as am5 from '@amcharts/amcharts5';
-import * as am5xy from '@amcharts/amcharts5/xy';
-import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
-
 
 
 @Component({
@@ -28,11 +24,11 @@ import am5themes_Animated from '@amcharts/amcharts5/themes/Animated';
   encapsulation: ViewEncapsulation.None
 })
 export class InfoUvComponent implements OnDestroy, AfterViewInit {
+  respuestaAI: any = 'Respuesta generica';
 
   datag=[];
 
-  private root!: am5.Root;
-  
+
 
   private map: Map; // Declarar la variable map como propiedad de la clase
   unidad_vecinal: string;
@@ -307,7 +303,7 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
           "created": "2023-07-04T16:08:52.134417",
           "api_call": 9
         },
-        
+
       ]
 
       let data = dataBd.map(element => {
@@ -320,10 +316,8 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
 
         }
       }).sort((el1,el2) => el1.rank - el2.rank)
-      console.log(data)
 
       this.datag = [...data];
-      console.log('======== ',this.datag)
 
 
     const dialogRef = this.dialog.open(DialogUVComponent, {
@@ -422,6 +416,7 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
     this.data_lab.getEmpresasDataLabByUV(uvNumber+1).subscribe(
       (data) => {
         this.data_empresas_uv = data;
+        // console.log(this.data_empresas_uv)
       },
       (error) => {
         console.error(error)
@@ -430,6 +425,7 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
     this.data_lab.getDOMDataLabByUV(uvNumber+1).subscribe(
       (data) => {
         this.data_DOM_uv = data;
+        // console.log(this.data_DOM_uv)
       },
       (error) => {
         console.error(error);
@@ -438,40 +434,46 @@ export class InfoUvComponent implements OnDestroy, AfterViewInit {
     this.data_lab.getTransitoDataLabByUV(uvNumber+1).subscribe(
       (data) => {
         this.data_transito_uv = data;
+        // console.log(this.data_transito_uv)
       },
       (error) => {
         console.error(error);
       }
     );
-    console.log(this.data_DOM_uv)
-    console.log(this.data_empresas_uv)
+    // console.log(this.data_DOM_uv)
+    // console.log(this.data_empresas_uv)
+
+    this.data_lab.getGPTMensajeByUV(uvNumber+1).subscribe(
+      (data) => {
+        console.log(data.mensaje);
+        console.log(data);
+        this.gptResponse = JSON.parse(data.mensaje); // Parsea la cadena de texto a un objeto JSON
+      },
+      (error) => {
+        console.error(error);
+      }
+    );
   }
 
   ngOnDestroy(): void {
     this.map.remove()
   }
+  public gptResponse = {}
 
-  arrayDeStrings = [
-    "impuestos y derechos | La unidad vecinal N°x es top 3 en patentes, en 2023 se han registrado 450 patentes comerciales, 50 patentes de alcohol, 150 patentes industriales y 340 patentes profesionales. Representando un aporte de $115.000.000.- en promedio anual (medido durante los ultimos 10 años).",
-    "direccion de transito | Durante 2023, este territorio registro solo 140 licencias de condicir, lo que representa un 2,40% de toda la comuna.",
-    "obras municipales | Al parecer, no es un territorio con gran presión inmobiliaria, ya que no registra solicitud de permisos de edificacion u otros certificados relevantes",
-    "seguridad municipal | Tiene un sostenido aumento de las denuncias por incivilidades, con una tasa promedio mensual de +15%",
-    "presupuesto | La UV xx aporta un total aproximado de $190.000.000 anuales al Presupuesto municipal, ocupando el 3er lugar de la comuna",
-    "asistencia social | Registra un aumento en las solicitudes de ayudas sociales, destinada mayoritariamente a la 3° edad.",
-    "farmacias | Tiene un sostenido au,ento de solicitud de famacia, con una tasa promedio mensual de +15%"
-  ];
 
-  generateDictionary(municipalContentArray: string[], separator: string): { [key: string]: string } {
-    const dictionary: { [key: string]: string } = {};
-  
-    municipalContentArray.forEach(item => {
-      const [clave, content] = item.split(separator);
-      dictionary[clave.trim()] = content.trim();
-    });
-  
-    return dictionary;
+  consultaAI(): void {
+    let pregunta = 'me puedes decir de forma concisa, como se hace la salsa pesto? '
+
+    this.data_lab.getConsultaAI(pregunta).subscribe(
+      (respuesta) => {
+        console.log(respuesta)
+          // Esto es solo un ejemplo; debes adaptarlo según la estructura de tu respuesta.
+          this.respuestaAI = respuesta.content;
+      },
+      (error) => {
+          console.error("Hubo un error al obtener la respuesta:", error);
+      }
+  );
   }
-  
-  dictionary = this.generateDictionary(this.arrayDeStrings, "|");
 
 }

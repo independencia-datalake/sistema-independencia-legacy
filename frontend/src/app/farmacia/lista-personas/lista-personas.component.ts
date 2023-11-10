@@ -65,8 +65,9 @@ export class ResumenPersonaComponent {
     this.router.navigate(['persona/crear'], {queryParams: {redireccion: 'lista_persona'}})
   }
 
-  editarPersona(id_comprobante): void {
-    console.log(id_comprobante)
+  editarPersona(id_persona): void {
+    console.log(id_persona)
+    this.router.navigate(['/editar-persona', id_persona]);
   }
 
   applyFilter(event: Event) {

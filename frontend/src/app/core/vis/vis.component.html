@@ -45,7 +45,7 @@
             </mat-form-field>
           </div>
         </div>
-       
+
       </div>
     </div>
     <div class="m-r-5 m-l-5">
@@ -56,6 +56,7 @@
     </div>
   </div>
 </div>
+
 <mat-grid-list [ngClass]="{'padding-fixed': isBotoneraFixed}" cols="20" rowHeight="730px">
   <mat-grid-tile [colspan]="9">
     <div>
@@ -102,10 +103,13 @@
         <span (click)="updateColumna(columna.nombre)"
               [class.resaltado]="columnaResaltada === columna.nombre"
               [class.subrayado]="columnaResaltada === columna.nombre">
-          {{ columna.nombre }}
+          <!-- {{ columna.nombre }} -->
+          {{ columna.nombre_columna }}
         </span>
       </th>
-      <td mat-cell *matCellDef="let element" [class.resaltado]="columnaResaltada === columna.nombre">{{element[columna.element]}}</td>
+      <td mat-cell *matCellDef="let element" [class.resaltado]="columnaResaltada === columna.nombre">
+        {{element[columna.element]}}<span *ngIf="visPoblacionData === 'Porcentaje'">%</span>
+      </td>
     </ng-container>
 
 
@@ -121,13 +125,13 @@
     <div>
       <div class="d-flex alig-items-center justify-content-center m-top-20 m-bottom-20">
         <div class="d-flex alig-items-center justify-content-center">
-          <div *ngFor="let element of dataSource" class="rank" [style.opacity]="element.opacity"> 
-            {{element.value}} 
+          <div *ngFor="let element of dataSource" class="rank" [style.opacity]="element.opacity">
+            {{element.value}}
           </div>
         </div>
       </div>
     </div>
-    <div>
+    <!-- <div>
       <h3 class="dashboard-titles">Titulo de ambos graficos </h3>
       <div class="d-flex flex-row">
         <div style="flex: 2">
@@ -139,23 +143,56 @@
         </div>
       </div>
     </div>
-    
+
     <div>
       <h3 class="dashboard-titles">Edades uso farmacia </h3>
-      <app-barchart></app-barchart>
+      <app-barchart></app-barchart> -->
+
+
+
+
+    <div style="flex: 2">
+      <app-bubble-chart [visdata]="dataSource"></app-bubble-chart>
+    </div>
+    <div style="flex: 1">
+      <!-- <app-pie-chart-compare></app-pie-chart-compare> -->
+    </div>
+    <div class="d-flex flex-row">
+
+      <div class="flex-container">
+        <div>
+          <mat-accordion>
+            <mat-expansion-panel *ngFor="let subgrupo of subgrupos" [expanded]="columnaResaltada === subgrupo.abierto">
+              <mat-expansion-panel-header (click)="updateColumna(subgrupo.abierto)">
+                <mat-panel-title>
+                  {{subgrupo.titulo}}
+                </mat-panel-title>
+                <mat-panel-description>
+                  Descripcion de {{subgrupo.titulo}}
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <!-- <p>{{subgrupo.descripcion}}</p> -->
+              <p>info</p>
+            </mat-expansion-panel>
+          </mat-accordion>
+        </div>
+        <div>
+          <app-pie-chart [dataBd]="dataSource"></app-pie-chart>
+        </div>
+      </div>
+
+    </div>
+
+    <div>
+      <app-barchart [dataBd]="dataSource"></app-barchart>
     </div>
     <div>
       <h3 class="dashboard-titles">Patentes comerciales segun area comercial </h3>
       <app-area-chart-stacked></app-area-chart-stacked>
     </div>
-    
-    <!-- <div>
-      <app-pie-chart></app-pie-chart>
-    </div> -->
-    
-    
 
   </div>
 </div>
+
 
 

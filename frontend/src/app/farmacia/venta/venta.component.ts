@@ -79,12 +79,17 @@ export class VentaComponent implements OnInit {
         dialogRef.afterClosed().subscribe(result => {
           if (result === false) {
             // Continuar con la venta
-            console.log('Retomar venta');
+            // console.log('Retomar venta');
             this.router.navigate(['farmacia/comprobanteventa-detail'], { queryParams: { id_comprobante: response.id, estado_venta: 'EN PROGRESO' } })
 
           } else if (result === true) {
             // Cancelar y empezar una nueva venta
-            console.log('Cancelar y empezar nueva venta');
+            const comprobante_venta = { id: response.id, estado: 'CANCELADA'}
+            this.productosfarmacia.updateComprobanteventa(response.id, comprobante_venta).subscribe( response => {
+              // console.log(response)
+            }, error => {
+              // console.log(error)
+            })
           }
         })
 
@@ -192,7 +197,7 @@ export class VentaComponent implements OnInit {
         this.productosfarmacia.venderProducto(producto).subscribe(respuesta => {
           // console.log(respuesta);
         }, (error) => {
-          console.log(error);
+          // console.log(error);
         });
       }
       // Subir los archivos de recetas
@@ -240,14 +245,16 @@ export class VentaComponent implements OnInit {
       // console.log(formData)
 
       // Realiza una solicitud HTTP POST con FormData
-      this.http.post(`${this.apiUrl}/farmacia/recetas/`, formData).subscribe(
+
+      this.productosfarmacia.createReceta(file, n_venta).subscribe(
         (response) => {
-          console.log(`Archivo ${index + 1} subido con éxito`, response);
+            // console.log('Archivo subido con éxito', response);
+
         },
         (error) => {
-          console.log(`Error al subir el archivo ${index + 1}`, error);
+            // console.log('Error al subir el archivo', error);
         }
-      );
+    );
     });
   }
 

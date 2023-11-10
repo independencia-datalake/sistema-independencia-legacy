@@ -24,3 +24,8 @@ class TransitoDataLabSerializer(serializers.ModelSerializer):
 class RangoFechasByTipo(serializers.Serializer):
     fecha_inicio = serializers.DateField()
     fecha_fin = serializers.DateField()
+
+class GPTDataLabSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GPTMessageDataLab
+        fields = '__all__'

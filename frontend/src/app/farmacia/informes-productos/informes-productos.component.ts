@@ -7,6 +7,8 @@ import { PersonaService } from 'src/app/service/persona.service';
 import { ProductosService } from 'src/app/service/productos.service';
 import { StockService } from 'src/app/service/stock.service';
 import { FormsModule } from '@angular/forms';
+import { EditarProductoDialogComponent } from './editar-producto-dialog/editar-producto-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 export interface products {
   name: string;
@@ -52,9 +54,17 @@ export class InformesProductosComponent {
       private productosService: ProductosService,
       private personaService: PersonaService,
       private router: Router,
+      public dialog: MatDialog,
     ) {}
 
     ngOnInit() {
+      console.log("cmon")
+      // this.getData();
+      this.updateData();
+    }
+
+    updateData() {
+      console.log('PogO')
       this.getData();
     }
 
@@ -63,24 +73,27 @@ export class InformesProductosComponent {
     }
 
     getData(search = this.buscadorValue,size = this.pageSize): void {
-      console.log('=====',search)
       this.productosService.getProductosLista(search,this.page, size).subscribe((raw_data: any) => {
-        console.log(raw_data)
+        // console.log(raw_data)
         this.totalPages =  Math.ceil(raw_data.count / this.pageSize)
         const response = raw_data.results
         this.dataSource.data = response
-        // this.dataSource.data = raw_data
-        console.log('VVVVVVVVV ',this.dataSource.data)
-        // this.filterVal = this.dataSource.data
 
-        /**
-         * 
-         */
       })
     }
 
-    editarProducto(id) {
-      console.log(id)
+    editarProducto(producto) {
+      // console.log(producto)
+      const dialogRef = this.dialog.open(EditarProductoDialogComponent, {
+        data: {producto: producto}
+      });
+      // Suscribirse al evento recetaCreada
+      dialogRef.componentInstance.productoEditado.subscribe((result) => {
+        // console.log(result)
+        if (result === 'actualizar') {
+          this.updateData()
+        }
+      });
     }
 
     nuevoProducto() {
