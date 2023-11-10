@@ -54,6 +54,7 @@ export class PieChartComponent {
     'permiso circulacion': 'permiso_circulacion'
   };
 
+
 @Input() dataBd: any;
   chartData: any[] = [];
   colorScheme:any = {
