@@ -33,6 +33,7 @@ class CustomPageNumberPagination(PageNumberPagination):
 class UVListCreateAPIViw(generics.ListCreateAPIView):
     queryset = UV.objects.all()
     serializer_class = UVSerializer
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceutaNOPOST | IsFarmaciaVendedorNOPOST]
 
     def perfrom_create(self, serializer):
         instance = serializer.save()
@@ -41,11 +42,13 @@ class UVDetailAPIViw(generics.RetrieveAPIView):
     queryset = UV.objects.all()
     serializer_class = UVSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceutaNOPOST | IsFarmaciaVendedorNOPOST]
 
 class UVUpdateAPIViw(generics.UpdateAPIView):
     queryset = UV.objects.all()
     serializer_class = UVSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceutaNOPOST | IsFarmaciaVendedorNOPOST]
 
     def perform_update(self, serializer):
         return super().perform_update(serializer)
@@ -54,6 +57,7 @@ class UVDeleteAPIViw(generics.DestroyAPIView):
     queryset = UV.objects.all()
     serializer_class = UVSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceutaNOPOST | IsFarmaciaVendedorNOPOST]
 
     def perform_destroy(self, instance):
         return super().perform_destroy(instance)
@@ -64,6 +68,7 @@ class UVDeleteAPIViw(generics.DestroyAPIView):
 class CallesIndependenciaListCreateAPIViw(generics.ListCreateAPIView):
     queryset = CallesIndependencia.objects.all()
     serializer_class = CallesIndependenciaSerializer
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceutaNOPOST | IsFarmaciaVendedorNOPOST]
 
     def perfrom_create(self, serializer):
         instance = serializer.save()
@@ -72,11 +77,13 @@ class CallesIndependenciaDetailAPIViw(generics.RetrieveAPIView):
     queryset = CallesIndependencia.objects.all()
     serializer_class = CallesIndependenciaSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceutaNOPOST | IsFarmaciaVendedorNOPOST]
 
 class CallesIndependenciaUpdateAPIViw(generics.UpdateAPIView):
     queryset = CallesIndependencia.objects.all()
     serializer_class = CallesIndependenciaSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceutaNOPOST | IsFarmaciaVendedorNOPOST]
 
     def perform_update(self, serializer):
         return super().perform_update(serializer)
@@ -85,6 +92,7 @@ class CallesIndependenciaDeleteAPIViw(generics.DestroyAPIView):
     queryset = CallesIndependencia.objects.all()
     serializer_class = CallesIndependenciaSerializer
     lookup_field = 'pk'
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceutaNOPOST | IsFarmaciaVendedorNOPOST]
 
     def perform_destroy(self, instance):
         return super().perform_destroy(instance)
@@ -341,6 +349,7 @@ class PersonaArchivosDeleteAPIViw(generics.DestroyAPIView):
         return super().perform_destroy(instance)
 
 class PoblacionUVAPIView(APIView):
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceutaNOPOST | IsFarmaciaVendedorNOPOST]
     def get(self, request, *args, **kwargs):
         # Primero obtenemos los últimos 26 objetos.
         last_26_objects = PoblacionUV.objects.all().order_by('-id')[:26]
@@ -354,6 +363,8 @@ class PoblacionUVAPIView(APIView):
         return Response(ordered_data)
 
 class ObtenerUVView(APIView):
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceutaNOPOST | IsFarmaciaVendedorNOPOST]
+
     def get(self, request, calle, numeracion):
 
         if not calle or not numeracion:
