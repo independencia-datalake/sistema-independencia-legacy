@@ -46,7 +46,8 @@ class ProductoFarmacia(models.Model):
         return super(ProductoFarmacia, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.marca_producto} | {self.dosis} x {self.presentacion} | {self.p_a} | Proovedor: {self.proveedor} | Lab: {self.laboratorio} '
+        # return f'{self.marca_producto} | {self.dosis} x {self.presentacion} | {self.p_a} | Proovedor: {self.proveedor} | Lab: {self.laboratorio} '
+        return f'{self.marca_producto}'
 
     def  get_absolute_url(self):
         return reverse("productofarmacia-inicio")  

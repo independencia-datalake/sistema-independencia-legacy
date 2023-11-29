@@ -330,6 +330,18 @@ class PersonaArchivosDetailAPIViw(generics.RetrieveAPIView):
     lookup_field = 'pk'
     permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
 
+class PersonaArchivosByPersonaDetailAPIView(generics.ListAPIView):
+    serializer_class = PersonaArchivosSerializer
+    permission_classes = [IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
+
+    def get_queryset(self):
+        """
+        Este método sobrescribe el método get_queryset para filtrar
+        los archivos por el ID de la persona.
+        """
+        persona_id = self.kwargs['pk']
+        return PersonaArchivos.objects.filter(persona=persona_id)
+
 class PersonaArchivosUpdateAPIViw(generics.UpdateAPIView):
     queryset = PersonaArchivos.objects.all()
     serializer_class = PersonaArchivosSerializer

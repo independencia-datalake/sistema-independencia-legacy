@@ -257,3 +257,12 @@ class PoblacionUV(models.Model):
     superficie_no_habitada = models.PositiveIntegerField(verbose_name="Superficie no habitadas m2", blank=True, null=True)
     superficie = models.PositiveIntegerField(verbose_name="Superficie m2", blank=True, null=True)
     densidad_habitantekm2 = models.DecimalField(verbose_name='Densidad Habitante/Km2', max_digits=5, decimal_places=1)
+
+class ArchivoCarga(models.Model): 
+    archivo = models.FileField(blank=True, null = True, upload_to='archivos_carga/%Y/%m/%d/')
+
+    class Meta:
+      verbose_name = "Archivo de carga"
+      verbose_name_plural = "Archivos de carga"
+    def __str__(self):
+        return f'Archivo de carga de persona N°:  {self.pk}'

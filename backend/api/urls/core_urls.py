@@ -36,7 +36,7 @@ urlpatterns = [
     path('personainfosalud/update/<int:pk>/', views.PersonaInfoSaludUpdateAPIViw.as_view()),
     path('personainfosalud/delete/<int:pk>/', views.PersonaInfoSaludDeleteAPIViw.as_view()),
     path('personaarchivos/', views.PersonaArchivosListCreateAPIViw.as_view()),
-    path('personaarchivos/<int:pk>/', views.PersonaArchivosDetailAPIViw.as_view()),
+    path('personaarchivos/<int:pk>/', views.PersonaArchivosByPersonaDetailAPIView.as_view()),
     path('personaarchivos/update/<int:pk>/', views.PersonaArchivosUpdateAPIViw.as_view()),
     path('personaarchivos/delete/<int:pk>/', views.PersonaArchivosDeleteAPIViw.as_view()),
     path('poblacion-uv/', views.PoblacionUVAPIView.as_view()),
