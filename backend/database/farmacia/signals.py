@@ -18,7 +18,6 @@ from .models import (
 
 @receiver(pre_save, sender=ProductoMermado)
 def update_bodega_by_mermado(sender, instance, **kwargs):
-    print('something')
     key = instance.nombre.id
     cantidad_mermada = instance.cantidad
     nombre = instance.nombre
@@ -31,39 +30,43 @@ def update_bodega_by_mermado(sender, instance, **kwargs):
 
 @receiver(pre_save, sender=ProductoVendido)
 def update_bodega_by_venta(sender, instance, **kwargs):
-    num = ProductoVendido.objects.filter(pk=instance.pk).count()
-    if num == 0:        
-        key = instance.nombre.id
-        cantidad_vendida = instance.cantidad
-        bodvirt = BodegaVirtual.objects.get(nombre_id=key)
-        if bodvirt:
-            stock_actual = bodvirt.stock
-            nuevo_stock = stock_actual - cantidad_vendida
-            bodvirt.stock = nuevo_stock
-            bodvirt.save()
+
+    print('se esta editando un producto vendido')
+
+    # num = ProductoVendido.objects.filter(pk=instance.pk).count()
+    # if num == 0:        
+    #     key = instance.nombre.id
+    #     cantidad_vendida = instance.cantidad
+    #     bodvirt = BodegaVirtual.objects.get(nombre_id=key)
+    #     if bodvirt:
+    #         stock_actual = bodvirt.stock
+    #         nuevo_stock = stock_actual - cantidad_vendida
+    #         bodvirt.stock = nuevo_stock
+    #         bodvirt.save()
             
-    else:
-        key = instance.nombre.id
-        cantidad_antigua = ProductoVendido.objects.get(pk=instance.pk).cantidad
-        cantidad_vendida = instance.cantidad
-        cantidad_update = cantidad_vendida - cantidad_antigua
-        bodvirt = BodegaVirtual.objects.get(nombre_id=key)
-        if bodvirt:
-            stock_actual = bodvirt.stock
-            nuevo_stock = stock_actual - cantidad_update
-            bodvirt.stock = nuevo_stock
-            bodvirt.save()        
+    # else:
+    #     key = instance.nombre.id
+    #     cantidad_antigua = ProductoVendido.objects.get(pk=instance.pk).cantidad
+    #     cantidad_vendida = instance.cantidad
+    #     cantidad_update = cantidad_vendida - cantidad_antigua
+    #     bodvirt = BodegaVirtual.objects.get(nombre_id=key)
+    #     if bodvirt:
+    #         stock_actual = bodvirt.stock
+    #         nuevo_stock = stock_actual - cantidad_update
+    #         bodvirt.stock = nuevo_stock
+    #         bodvirt.save()        
 
 @receiver(pre_delete, sender=ProductoVendido)
 def update_bodega_by_venta_ondelete(sender, instance, **kwargs):
+        #SIGNAL OBSOLETA
         key = instance.nombre.id
-        cantidad_vendida_cancelada = instance.cantidad
-        bodvirt = BodegaVirtual.objects.get(nombre_id=key)
-        if bodvirt:
-            stock_actual = bodvirt.stock
-            nuevo_stock = stock_actual + cantidad_vendida_cancelada
-            bodvirt.stock = nuevo_stock
-            bodvirt.save()
+        # cantidad_vendida_cancelada = instance.cantidad
+        # bodvirt = BodegaVirtual.objects.get(nombre_id=key)
+        # if bodvirt:
+        #     stock_actual = bodvirt.stock
+        #     nuevo_stock = stock_actual + cantidad_vendida_cancelada
+        #     bodvirt.stock = nuevo_stock
+        #     bodvirt.save()
     
 @receiver(pre_save, sender = ProductoIngresado)
 def update_bodega_by_ingreso(sender, instance, **kwargs):
@@ -90,7 +93,7 @@ def update_stock(sender, instance, **kwargs):
         # Se obtiene la instancia original antes de la edición
         original_instance = sender.objects.get(pk=instance.pk)
         # Si el estado ha cambiado a 'CANCELADA'
-        if original_instance.estado != instance.estado and instance.estado == 'CANCELADA':
+        if original_instance.estado == 'FINALIZADA' and instance.estado == 'CANCELADA':
             # Se obtienen los productos vendidos en el comprobante de venta que se está cancelando
             productos_vendidos = ProductoVendido.objects.filter(n_venta=instance)
             for producto_vendido in productos_vendidos:
@@ -99,4 +102,20 @@ def update_stock(sender, instance, **kwargs):
                 # Se incrementa el stock en BodegaVirtual en la cantidad vendida
                 bodega_virtual.stock = F('stock') + producto_vendido.cantidad
                 bodega_virtual.save()
+        elif original_instance.estado == 'CANCELADA' and instance.estado == 'FINALIZADA':
+            #Restauranto venta cancelada
+            productos_vendidos = ProductoVendido.objects.filter(n_venta=instance)
+            for producto_vendido in productos_vendidos:
+                bodega_virtual = BodegaVirtual.objects.get(nombre=producto_vendido.nombre)
+                bodega_virtual.stock = F('stock') - producto_vendido.cantidad
+                bodega_virtual.save()
+
+        elif original_instance.estado != instance.estado and instance.estado == 'FINALIZADA':
+            print('signal venta finalizada')
+            productos_vendidos = ProductoVendido.objects.filter(n_venta=instance)
+            for producto_vendido in productos_vendidos:
+                bodega_virtual = BodegaVirtual.objects.get(nombre=producto_vendido.nombre)
+                bodega_virtual.stock = F('stock') - producto_vendido.cantidad
+                bodega_virtual.save()
+        
 

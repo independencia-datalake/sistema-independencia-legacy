@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-from rest_framework import generics
+from rest_framework import generics, status
 from django_filters import rest_framework as filters
 from django.db.models import Count
 from rest_framework.views import APIView
@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 from django.db.models import Count, Window, F, Case, When, Value, IntegerField
 from django.db.models.functions import RowNumber
 from django.db.models import Q, Sum
+import pandas as pd
+from datetime import timedelta
 
 from collections import defaultdict
 
@@ -21,27 +23,41 @@ from database.farmacia.models import (
 # FARMACIA
 class CountFarmaciaByUV(APIView):
     def get(self, request, fecha_inicio, fecha_fin):
-        # Initialize a dict with all UV values, each having ventas = 0.
+        # Initialize a dict with all UV values, each having ventas = 0 and dinero_recaudado = 0.
         uv_values = range(1, 28)
-        uv_ventas = {uv: {'ventas': 0} for uv in uv_values}
+        uv_ventas = {uv: {'ventas': 0, 'dinero_recaudado': 0, 'dinero_recaudado_format': '$0'} for uv in uv_values}
 
-        # Perform the actual query.
+        # Perform the actual query with the sum of dinero recaudado.
         queryset = ComprobanteVenta.objects.filter(
             estado='FINALIZADA',
             created__gte=fecha_inicio,
             created__lte=fecha_fin
         ).values('comprador__direcciones__uv').annotate(
-            ventas=Count('id')
+            ventas=Count('id'),
+            dinero_recaudado=Sum('productovendido__precio_venta')
         ).order_by('comprador__direcciones__uv')
 
-        # Update the dict with actual ventas.
+        # Update the dict with actual ventas and dinero recaudado.
         for obj in queryset:
-            uv_ventas[obj['comprador__direcciones__uv']]['ventas'] = obj['ventas']
+            uv = obj['comprador__direcciones__uv']
+            uv_ventas[uv]['ventas'] = obj['ventas']
+            dinero_recaudado = obj['dinero_recaudado'] or 0
+            uv_ventas[uv]['dinero_recaudado'] = dinero_recaudado
+
+            # Format the money value
+            if dinero_recaudado == 0:
+                uv_ventas[uv]['dinero_recaudado_format'] = '$0' 
+            else:
+                uv_ventas[uv]['dinero_recaudado_format'] = '${:,.0f}'.format(dinero_recaudado).replace(",", ".")
 
         # Convert dict items to a list of dicts.
-        data = [{'uv': uv, 'ventas': ventas['ventas']} for uv, ventas in uv_ventas.items()]
+        data = [{'uv': uv, 'ventas': ventas['ventas'], 'dinero_recaudado': ventas['dinero_recaudado'], 'dinero_recaudado_format': ventas['dinero_recaudado_format']} 
+                for uv, ventas in uv_ventas.items()]
 
         return Response(data)
+
+
+
 
 # EMPRESAS
 
@@ -97,34 +113,41 @@ class CountEmpresasByUV(APIView):
 
         # Cuenta el total de empresas
         queryset_total = Empresas.objects.filter(created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(total=Count('id')).order_by('uv')
+        queryset_total_monto = Empresas.objects.filter(created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(total_monto=Sum('monto')).order_by('uv')
         queryset_total_ly = Empresas.objects.filter(created__gte=fecha_inicio_ly, created__lte=fecha_fin_ly).values('uv').annotate(total=Count('id')).order_by('uv')
 
         # Cuenta las empresas de alcohol
         queryset_alcohol = Empresas.objects.filter(tipo='alcohol', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(alcohol=Count('id')).order_by('uv')
+        queryset_alcohol_monto = Empresas.objects.filter(tipo='alcohol', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(alcohol_monto=Sum('monto')).order_by('uv')
         queryset_alcohol_ly = Empresas.objects.filter(tipo='alcohol', created__gte=fecha_inicio_ly, created__lte=fecha_fin_ly).values('uv').annotate(alcohol=Count('id')).order_by('uv')
 
         # Cuenta las empresas comerciales
-        queryset_comercial = Empresas.objects.filter(tipo='comercial', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(comercial=Count('id')).order_by('uv')
+        queryset_comercial = Empresas.objects.filter(tipo='comercial', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(comercial=Count('id')).order_by('uv')
+        queryset_comercial_monto = Empresas.objects.filter(tipo='comercial', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(comercial_monto=Sum('monto')).order_by('uv')
         queryset_comercial_ly = Empresas.objects.filter(tipo='comercial', created__gte=fecha_inicio_ly, created__lte=fecha_fin_ly).values('uv').annotate(comercial=Count('id')).order_by('uv')
 
         # Cuenta las empresas profesionales
         queryset_profesional = Empresas.objects.filter(tipo='profesional', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(profesional=Count('id')).order_by('uv')
+        queryset_profesional_monto = Empresas.objects.filter(tipo='profesional', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(profesional_monto=Sum('monto')).order_by('uv')
         queryset_profesional_ly = Empresas.objects.filter(tipo='profesional', created__gte=fecha_inicio_ly, created__lte=fecha_fin_ly).values('uv').annotate(profesional=Count('id')).order_by('uv')
 
         # Cuentas las empresas de industrial
         queryset_industrial = Empresas.objects.filter(tipo='industrial', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(industrial=Count('id')).order_by('uv')
+        queryset_industrial_monto = Empresas.objects.filter(tipo='industrial', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(industrial_monto=Sum('monto')).order_by('uv')
         queryset_industrial_ly = Empresas.objects.filter(tipo='industrial', created__gte=fecha_inicio_ly, created__lte=fecha_fin_ly).values('uv').annotate(industrial=Count('id')).order_by('uv')
 
         # Cuenta las empresas microempresas
         queryset_microempresa = Empresas.objects.filter(tipo='microempresa', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(microempresa=Count('id')).order_by('uv')
+        queryset_microempresa_monto = Empresas.objects.filter(tipo='microempresa', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(microempresa_monto=Sum('monto')).order_by('uv')
         queryset_microempresa_ly = Empresas.objects.filter(tipo='microempresa', created__gte=fecha_inicio_ly, created__lte=fecha_fin_ly).values('uv').annotate(microempresa=Count('id')).order_by('uv')
 
         # Cuenta las empresas estacionada
-        queryset_estacionada = Empresas.objects.filter(tipo='estacionado', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(estacionada=Count('id')).order_by('uv')
+        queryset_estacionada = Empresas.objects.filter(tipo='estacionado', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(estacionada=Count('id')).order_by('uv')
+        queryset_estacionada_monto = Empresas.objects.filter(tipo='estacionada', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(estacionada_monto=Sum('monto')).order_by('uv')
         queryset_estacionada_ly = Empresas.objects.filter(tipo='estacionado', created__gte=fecha_inicio_ly, created__lte=fecha_fin_ly).values('uv').annotate(estacionada=Count('id')).order_by('uv')
 
         # Actualiza uv_densities con los resultados obtenidos
-        for qs in [queryset_total, queryset_alcohol, queryset_comercial, queryset_profesional, queryset_industrial, queryset_microempresa, queryset_estacionada]:
+        for qs in [queryset_total, queryset_total_monto, queryset_alcohol, queryset_alcohol_monto, queryset_comercial, queryset_comercial_monto, queryset_profesional, queryset_profesional_monto, queryset_industrial, queryset_industrial_monto, queryset_microempresa, queryset_microempresa_monto, queryset_estacionada, queryset_estacionada_monto]:
             for obj in qs:
                 uv = obj['uv']
                 for key, value in obj.items():
@@ -226,20 +249,28 @@ class CountEmpresasByUV(APIView):
         #     uv_densities_ly[1]['rank_industrial_ly'] = None
 
         # Convierte los resultados a la forma requerida
+        print(uv_densities.items())
         data = [{'uv': uv, 
                  'total': values['total'], 
+                 'total_monto': values['total_monto'], 
                  'total_porcentaje': round(values['total']/totales['total']*100,2),
                  'alcohol': values['alcohol'], 
+                 'alcohol_monto': values['alcohol_monto'], 
                  'alcohol_porcentaje': round(values['alcohol']/totales['alcohol']*100,2),
                  'comercial': values['comercial'], 
+                 'comercial_monto': values['comercial_monto'],
                  'comercial_porcentaje': round(values['comercial']/totales['comercial']*100,2),
                  'profesional': values['profesional'],
+                 'profesional_monto': values['profesional_monto'],
                  'profesional_porcentaje': round(values['profesional']/totales['profesional']*100,2),
                  'industrial': values['industrial'],
+                 'industrial_monto': values['industrial_monto'],
                  'industrial_porcentaje': round(values['industrial']/totales['industrial']*100,2), 
                  'microempresa': values['microempresa'],
+                 'microempresa_monto': values['microempresa_monto'],
                  'microempresa_porcentaje': round(values['microempresa']/totales['microempresa']*100,2),
                  'estacionada': values['estacionada'],
+                 'estacionada_monto': values['estacionada_monto'],
                  'estacionada_porcentaje': round(values['estacionada']/totales['estacionada']*100,2),
                  'rank_total': values.get('rank_total', None), 
                  'rank_alcohol': values.get('rank_alcohol', None), 
@@ -255,6 +286,44 @@ class CountEmpresasByUV(APIView):
                  } for uv, values in uv_densities.items()]
 
         return Response(data)
+    
+class CargaEmpresasView(APIView):
+
+    def post(self, request, format=None):
+        excel_file = request.FILES.get('file')
+        if not excel_file:
+            return Response({"error": "No se proporcionó un archivo Excel."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Leer el archivo Excel
+            df = pd.read_excel(excel_file)
+            
+            # Procesar cada fila del DataFrame
+            for index, row in df.iterrows():
+                empresa_data = {
+                    'uv': UV.objects.get_or_create(nombre=row['UV'])[0].id,  # Asumiendo que UV tiene un campo 'nombre'
+                    'rol': row.get('ROL'),
+                    'razon_social': row.get('NOMBRE'),
+                    'rut': row.get('RUT'),
+                    'giro': row.get('GIRO'),
+                    'calle': row.get('CALLE'),
+                    'numeracion': row.get('Nº'),
+                    'tipo': row.get('TIPO'),
+                    'monto': row.get('MONTO'),
+                    'transaccion': row.get('FECHA TRANSACCIÓN', None),
+                    # Añade los demás campos según sea necesario
+                }
+                
+                serializer = EmpresasSerializer(data=empresa_data)
+                if serializer.is_valid():
+                    serializer.save()
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response({"success": "Datos cargados correctamente."}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     #EXENCION BASURA
 
@@ -611,8 +680,12 @@ class RangoFechasGeneralView(generics.RetrieveAPIView):
                 queryset = queryset.filter(tipo=tipo)
 
 
-            fecha_inicio = queryset.earliest('created').created.date()
-            fecha_fin = queryset.latest('created').created.date()
+            fecha_inicio = queryset.earliest('transaccion').created.date()
+            # fecha_inicio = fecha_inicio - timedelta(days=1)
+            fecha_fin = queryset.latest('transaccion').transaccion.date()
+            # fecha_fin = fecha_fin + timedelta(days=1)
+            # fecha_inicio = queryset.earliest('created').created.date()
+            # fecha_fin = queryset.latest('created').created.date()
                                        
         elif mapa == "ayudasocial":
             # Código para el caso "ayudasocial"

@@ -54,7 +54,7 @@ class ProductoFarmacia(models.Model):
 
 class ComprobanteVenta(models.Model):
     comprador = models.ForeignKey(Persona, on_delete=models.PROTECT,verbose_name='Comprador')
-    estado = models.CharField(null=True, blank=True,max_length=30, default='EN PROGRESO', choices=(('EN PROGRESO', 'En Progreso'),('FINALIZADA','Finalizada'),('CANCELADA','Cancelada')), verbose_name='Estado de venta')
+    estado = models.CharField(null=True, blank=True,max_length=30, default='EN PROGRESO', choices=(('EN PROGRESO', 'En Progreso'),('FINALIZADA','Finalizada'),('CANCELADA','Cancelada'),('CAJA','Caja')), verbose_name='Estado de venta')
     farmaceuta = models.ForeignKey(User,null = True , blank=True, on_delete=models.PROTECT, verbose_name='Profesional')
     created = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación", editable=False)
     updated = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición", editable=False)

@@ -20,6 +20,8 @@ class Empresas(models.Model):
     trabajadores_pais = models.PositiveIntegerField(verbose_name="Trabajadores pais",null=True, blank=True)
     trabajadores_comuna = models.PositiveIntegerField(verbose_name="Trabajadores Comuna",null=True, blank=True)
     trabajadores_patente = models.PositiveIntegerField(verbose_name="Trabajadores Patente",null=True, blank=True)
+    monto = models.PositiveIntegerField(verbose_name="Monto",null=True, blank=True)
+    transaccion = models.DateTimeField(verbose_name='Fecha de transaccion', null=True, blank=True)
     created = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de creación', editable=False)
 
     class Meta:

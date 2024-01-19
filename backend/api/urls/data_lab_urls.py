@@ -16,6 +16,7 @@ urlpatterns = [
     path('update_DOM/', views.UpdateDomDatalabView.as_view(), name='update_dom'),
     path('DOM/', views.DOMDataLabView.as_view(), name='dom_datalab_vis'),
     path('DOMUV/<int:uv>/', views.DOMDataLabByUVView.as_view()),
+    path('DOM-rank/', views.RankDomDataLabView.as_view()),
     #TRANSITO
     path('update_transito/', views.UpdateTransitoDataLabView.as_view(), name='update_datalab'),
     path('transito/', views.TransitoDataLabView.as_view(), name='transito_datalab_vis'),

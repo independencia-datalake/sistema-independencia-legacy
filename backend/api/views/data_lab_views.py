@@ -231,6 +231,52 @@ class DOMDataLabView(APIView):
 
         else:
             return Response({'error': 'No ApiCall found with tipo_call TRANSITO'}, status=404)  
+        
+class RankDomDataLabView(APIView):
+    def get(self, request, *args, **kwargs):
+        api_call = ApiCall.objects.filter(tipo_call='DOM').order_by('-timestamp').first()
+
+        if api_call is not None:
+            dom_data_labs = DOMDataLab.objects.filter(api_call=api_call)
+
+            serializer = DOMDataLabSerializer(dom_data_labs, many=True)
+            data= serializer.data
+            response_data = {
+                'total': rank_data(data, 'rank_total', 'total'),
+                'anexion': rank_data(data, 'rank_anexion', 'anexion'),
+                'antiguas': rank_data(data, 'rank_antiguas', 'antiguas'),
+                'anulacion': rank_data(data, 'rank_anulacion', 'anulacion'),
+                'cambio de destino': rank_data(data, 'rank_cambiodestino', 'cambio_de_destino'),
+                'fusion': rank_data(data, 'rank_fusion', 'fusion'),
+                'ley 20.898': rank_data(data, 'rank_ley20898', 'ley_20898'),
+                'obras menores': rank_data(data, 'rank_obrasmenores', 'obras_menores'), 
+                'permisos de edificacion': rank_data(data, 'rank_permisosedificacion', 'permisos_de_edificacion'),
+                'recepcion final': rank_data(data, 'rank_recepcionfinal', 'recepcion_final'),
+                'regularizaciones': rank_data(data, 'rank_regularizaciones', 'regularizaciones'),
+                'regularizaciones ley 18.591': rank_data(data, 'rank_regularizaciones18591', 'regularizaciones_ley_18591'),
+                'resolucion': rank_data(data, 'rank_resolucion', 'resolucion'),
+                'subdivisiones': rank_data(data, 'rank_subdivisiones', 'subdivisiones'),
+                'ventas por piso': rank_data(data, 'rank_ventasporpiso', 'ventas_por_piso')
+            }
+
+            def rename_key_in_results(results, old_key, new_key):
+                        for item in results:
+                            if old_key in item:
+                                item[new_key] = item.pop(old_key)
+
+                    # Renombrar la clave en los datos de 'obras menores'
+            rename_key_in_results(response_data['cambio de destino'], 'cambio_de_destino', 'cambio de destino')
+            rename_key_in_results(response_data['ley 20.898'], 'ley_20898', 'ley 20.898')
+            rename_key_in_results(response_data['obras menores'], 'obras_menores', 'obras menores')
+            rename_key_in_results(response_data['permisos de edificacion'], 'permisos_de_edificacion', 'permisos de edificacion')
+            rename_key_in_results(response_data['recepcion final'], 'recepcion_final', 'recepcion final')
+            rename_key_in_results(response_data['regularizaciones ley 18.591'], 'regularizaciones_ley_18591', 'regularizaciones ley 18.591')
+            rename_key_in_results(response_data['ventas por piso'], 'ventas_por_piso', 'ventas por piso')
+ 
+            return Response(response_data)
+        
+        else: 
+            return Response({'error': 'No ApiCall found with tipo_call Empresas'}, status=404)
 
 class DOMDataLabByUVView(APIView):
     def get(self, request, uv, *args, **kwargs):

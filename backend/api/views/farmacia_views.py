@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from api.filters.farmacia_filters import ProductoFarmaciaFilter, ComprobanteVentaFilter
 from .permissions_views import *
+from rest_framework.exceptions import NotFound
 
 from api.serializers.farmacia_serializers import *
 from database.farmacia.models import (
@@ -140,6 +141,49 @@ class UltimoComprobanteVentaAPIViw(generics.RetrieveAPIView):
     def get_object(self):
         latest_comprobante = ComprobanteVenta.objects.latest('created')
         return latest_comprobante
+
+class UltimoComprobanteVentaByPersonaAPIView(generics.RetrieveAPIView):
+    serializer_class = ComprobanteVentaSerializer
+    permission_classes = [IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
+
+    def get_object(self):
+        persona_id = self.kwargs.get('persona_id')
+        case = self.request.query_params.get('case', '1')  # case es '1' por defecto
+
+        query = ComprobanteVenta.objects.filter(comprador=persona_id)
+        if case == '2':
+            query = query.filter(estado='FINALIZADA')
+        try:
+            latest_comprobante = query.latest('created')
+            return latest_comprobante
+        except ComprobanteVenta.DoesNotExist:
+            raise NotFound('NoHayComprobante')
+        
+class ComprobantesVentaHistoricoByPersonaAPIView(generics.ListAPIView):
+    serializer_class = ComprobanteVentaSerializer
+    permission_classes = [IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
+
+    def get_queryset(self):
+        persona_id = self.kwargs.get('persona_id')
+        query = ComprobanteVenta.objects.filter(comprador=persona_id, estado='FINALIZADA').order_by('-created')[:10]
+
+        if not query.exists():
+            raise NotFound('NoHayComprobantes')
+
+        return query
+    
+class ComprobantesVentaEsperaCajaAPIView(generics.ListAPIView):
+    serializer_class = ComprobanteVentaSerializer
+    permission_classes = [IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
+
+    def get_queryset(self):
+        # Filtrar por estado 'CAJA'
+        query = ComprobanteVenta.objects.filter(estado='CAJA').order_by('-created')[:10]
+
+        if not query.exists():
+            raise NotFound('NoHayComprobantes')
+
+        return query
 
 class ComprobanteVentasDetailAPIViw(generics.RetrieveAPIView):
     queryset = ComprobanteVenta.objects.all()
