@@ -89,7 +89,7 @@ class CountEmpresasByUV(APIView):
 
         uv_values = range(1, 28)  # Incluyendo la UV 1 para el resto de las variables
 
-        uv_densities = {uv: {'total': 0, 'alcohol': 0, 'comercial': 0, 'profesional': 0, 'industrial': 0, 'microempresa': 0, 'estacionada': 0} for uv in uv_values}
+        uv_densities = {uv: {'total': 0, 'alcohol': 0, 'alcohol_monto':0, 'comercial': 0, 'comercial_monto': 0, 'profesional': 0, 'profesional_monto': 0, 'industrial': 0, 'industrial_monto': 0, 'microempresa': 0, 'microempresa_monto': 0, 'estacionada': 0, 'estacionada_monto': 0} for uv in uv_values}
         uv_densities_ly = {uv: {'total': 0} for uv in uv_values}
 
         # Cuenta el total de empresas
@@ -153,7 +153,6 @@ class CountEmpresasByUV(APIView):
                 for key, value in obj.items():
                     if key != 'uv':
                         uv_densities[uv][key] = value
-
         list_names = ['total', 'alcohol', 'comercial', 'profesional', 'industrial', 'microempresa', 'estacionada']
 
         ranked_lists = {list_name: [(uv, values[list_name]) for uv, values in uv_densities.items() if uv != 1] for list_name in list_names}
@@ -247,9 +246,11 @@ class CountEmpresasByUV(APIView):
         #     uv_densities_ly[1]['rank_comercial_ly'] = None
         #     uv_densities_ly[1]['rank_alcohol_ly'] = None
         #     uv_densities_ly[1]['rank_industrial_ly'] = None
-
+        for uv, values in uv_densities.items():
+            print(uv)
+            print(values)
         # Convierte los resultados a la forma requerida
-        print(uv_densities.items())
+        # print(uv_densities.items())
         data = [{'uv': uv, 
                  'total': values['total'], 
                  'total_monto': values['total_monto'], 
