@@ -13,6 +13,7 @@ urlpatterns = [
     path('productofarmacia/<int:pk>/', views.ProductoFarmaciaDetailAPIViw.as_view()),
     path('productofarmacia/update/<int:pk>/', views.ProductoFarmaciaUpdateAPIViw.as_view()),
     path('productofarmacia/delete/<int:pk>/', views.ProductoFarmaciaDeleteAPIViw.as_view()),
+    path('productos/<int:pk>/aceptar/', views.ProductoFarmaciaIngresoAceptado.as_view(), name='producto-aceptar'),
     path('comprobanteventa/', views.ComprobanteVentaListCreateAPIViw.as_view()),
     path('comprobanteventa-lista/', views.ComprobanteVentaList2CreateAPIViw.as_view()),
     path('comprobanteventa/ultimo/', views.UltimoComprobanteVentaAPIViw.as_view()),
@@ -35,4 +36,5 @@ urlpatterns = [
     path('cargaproducto/<int:pk>/', views.CargaProductoDetailAPIViw.as_view()),
     path('cargaproducto/update/<int:pk>/', views.CargaProductoUpdateAPIViw.as_view()),
     path('cargaproducto/delete/<int:pk>/', views.CargaProductoDeleteAPIViw.as_view()),
+    path('generate_acta_recepcion/', views.GenerateActaRecepccionAPIView.as_view()),
 ]  

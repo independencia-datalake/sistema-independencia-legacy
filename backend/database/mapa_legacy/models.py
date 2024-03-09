@@ -136,3 +136,21 @@ class ExencionAseo(models.Model):
     nombre = models.CharField(blank=True, null=True,max_length=200, verbose_name="Nombres")
     serie = models.PositiveIntegerField(verbose_name="Serie")
 
+class GestionSocialLocal(models.Model):
+    uv = models.ForeignKey(UV, on_delete=models.PROTECT, verbose_name="Unidad Vecinal")
+
+    fecha = models.DateTimeField(verbose_name='Fecha Asociada', null=True, blank=True)
+    calle = models.CharField(blank=True, null=True, max_length=200, verbose_name="Avenida/Calle/Pasaje")
+    numero = models.CharField( max_length=1000, blank=True, null=True, verbose_name="Numeración")
+    tipo = models.CharField(blank=True, null=True,max_length=200, verbose_name="Tipo")
+    categoria = models.CharField(blank=True, null=True,max_length=200, verbose_name="Categoria")
+    beneficio = models.CharField(blank=True, null=True,max_length=200, verbose_name="Beneficio")
+    periodo = models.DateTimeField(verbose_name='Fecha de periodo', null=True, blank=True)
+    tipo_caso = models.CharField(
+        null=True,
+        blank=True,
+        max_length=200,
+        verbose_name='Tipo Caso GSL',
+        )
+
+    created = models.DateTimeField(auto_now_add=True, verbose_name='Fecha de creación', editable=False)

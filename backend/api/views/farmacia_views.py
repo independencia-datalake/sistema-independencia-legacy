@@ -10,6 +10,9 @@ from django_filters.rest_framework import DjangoFilterBackend
 from api.filters.farmacia_filters import ProductoFarmaciaFilter, ComprobanteVentaFilter
 from .permissions_views import *
 from rest_framework.exceptions import NotFound
+import pandas as pd
+from django.http import HttpResponse
+from rest_framework.views import APIView
 
 from api.serializers.farmacia_serializers import *
 from database.farmacia.models import (
@@ -112,6 +115,13 @@ class ProductoFarmaciaDeleteAPIViw(generics.DestroyAPIView):
     def perform_destroy(self, instance):
         return super().perform_destroy(instance)
 
+class ProductoFarmaciaIngresoAceptado(APIView):
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedorNOPOST]
+    def post(self, request, pk, format=None):
+        producto = get_object_or_404(ProductoFarmacia, pk=pk)
+        producto.estado = 'ACEPTADO'
+        producto.save()
+        return Response({'status': 'Producto aceptado'}, status=status.HTTP_200_OK)
 
     ## Comprobante Venta
 
@@ -319,3 +329,28 @@ class CargaProductoDeleteAPIViw(generics.DestroyAPIView):
     def perform_destroy(self, instance):
         return super().perform_destroy(instance)
     
+## ACATA DE RECEPCION
+    
+class GenerateActaRecepccionAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        # Simulamos algunos datos como ejemplo
+        datos = {
+            'Nombre': ['Ana', 'Luis', 'Carlos'],
+            'Edad': [25, 30, 22],
+            'Ciudad': ['Madrid', 'Barcelona', 'Valencia']
+        }
+
+        # Convertimos los datos a un DataFrame de Pandas
+        df = pd.DataFrame(datos)
+
+        # Creamos una respuesta HTTP con el contenido adecuado para un archivo Excel
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        # Especificamos el nombre del archivo que se descargará
+        response['Content-Disposition'] = 'attachment; filename="datos.xlsx"'
+
+        # Creamos el archivo Excel en la respuesta
+        with pd.ExcelWriter(response, engine='openpyxl') as writer:
+            df.to_excel(writer, index=False)
+
+        return response

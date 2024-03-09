@@ -7,4 +7,5 @@ admin.site.register(LicenciaConducir)
 admin.site.register(EntregasPandemia)
 admin.site.register(DOM)
 admin.site.register(ExencionAseo)
+admin.site.register(GestionSocialLocal)
 
