@@ -104,3 +104,9 @@ class TransitoDataLab(models.Model):
 
     def __str__(self):
         return f'Llamado: {self.api_call.id} | Unidad Vecinal: {self.uv}'
+
+class GPTMessageDataLab(models.Model):
+    uv = models.IntegerField()
+    mensaje = models.TextField(max_length=1000, verbose_name="Mensaje API GPT",null=True, blank=True)
+    def __str__(self):
+        return f'Mensaje generado por api OpenAi | Unidad Vecinal: {self.uv}'

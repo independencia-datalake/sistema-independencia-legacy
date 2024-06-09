@@ -1,5 +1,5 @@
 from rest_framework.response import Response
-from rest_framework import generics
+from rest_framework import generics, status
 from django_filters import rest_framework as filters
 from django.db.models import Count
 from rest_framework.views import APIView
@@ -7,6 +7,8 @@ from datetime import datetime, timedelta
 from django.db.models import Count, Window, F, Case, When, Value, IntegerField
 from django.db.models.functions import RowNumber
 from django.db.models import Q, Sum
+import pandas as pd
+from datetime import timedelta
 
 from collections import defaultdict
 
@@ -21,27 +23,41 @@ from database.farmacia.models import (
 # FARMACIA
 class CountFarmaciaByUV(APIView):
     def get(self, request, fecha_inicio, fecha_fin):
-        # Initialize a dict with all UV values, each having ventas = 0.
+        # Initialize a dict with all UV values, each having ventas = 0 and dinero_recaudado = 0.
         uv_values = range(1, 28)
-        uv_ventas = {uv: {'ventas': 0} for uv in uv_values}
+        uv_ventas = {uv: {'ventas': 0, 'dinero_recaudado': 0, 'dinero_recaudado_format': '$0'} for uv in uv_values}
 
-        # Perform the actual query.
+        # Perform the actual query with the sum of dinero recaudado.
         queryset = ComprobanteVenta.objects.filter(
             estado='FINALIZADA',
             created__gte=fecha_inicio,
             created__lte=fecha_fin
         ).values('comprador__direcciones__uv').annotate(
-            ventas=Count('id')
+            ventas=Count('id'),
+            dinero_recaudado=Sum('productovendido__precio_venta')
         ).order_by('comprador__direcciones__uv')
 
-        # Update the dict with actual ventas.
+        # Update the dict with actual ventas and dinero recaudado.
         for obj in queryset:
-            uv_ventas[obj['comprador__direcciones__uv']]['ventas'] = obj['ventas']
+            uv = obj['comprador__direcciones__uv']
+            uv_ventas[uv]['ventas'] = obj['ventas']
+            dinero_recaudado = obj['dinero_recaudado'] or 0
+            uv_ventas[uv]['dinero_recaudado'] = dinero_recaudado
+
+            # Format the money value
+            if dinero_recaudado == 0:
+                uv_ventas[uv]['dinero_recaudado_format'] = '$0' 
+            else:
+                uv_ventas[uv]['dinero_recaudado_format'] = '${:,.0f}'.format(dinero_recaudado).replace(",", ".")
 
         # Convert dict items to a list of dicts.
-        data = [{'uv': uv, 'ventas': ventas['ventas']} for uv, ventas in uv_ventas.items()]
+        data = [{'uv': uv, 'ventas': ventas['ventas'], 'dinero_recaudado': ventas['dinero_recaudado'], 'dinero_recaudado_format': ventas['dinero_recaudado_format']} 
+                for uv, ventas in uv_ventas.items()]
 
         return Response(data)
+
+
+
 
 # EMPRESAS
 
@@ -63,19 +79,21 @@ class EmpresasByUVAPIViw(generics.ListAPIView):
 class CountEmpresasByUV(APIView):
     def get(self, request, fecha_inicio, fecha_fin):
 
+        fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d') # + timedelta(days=1) 
+
+
         # Convertir las fechas de string a datetime
         fecha_inicio_dt = datetime.strptime(fecha_inicio, '%Y-%m-%d')
-        fecha_fin_dt = datetime.strptime(fecha_fin, '%Y-%m-%d')
+        # fecha_fin_dt = datetime.strptime(fecha_fin, '%Y-%m-%d')
 
         # Calcular las fechas del año pasado
         fecha_inicio_ly = fecha_inicio_dt - timedelta(days=365)
-        fecha_fin_ly = fecha_fin_dt - timedelta(days=365)
+        # fecha_fin_ly = fecha_fin_dt - timedelta(days=365)
 
         uv_values = range(1, 28)  # Incluyendo la UV 1 para el resto de las variables
 
-        uv_densities = {uv: {'total': 0, 'alcohol': 0, 'comercial': 0, 'profesional': 0, 'industrial': 0, 'microempresa': 0, 'estacionada': 0} for uv in uv_values}
+        uv_densities = {uv: {'total': 0, 'alcohol': 0, 'alcohol_monto':0, 'comercial': 0, 'comercial_monto': 0, 'profesional': 0, 'profesional_monto': 0, 'industrial': 0, 'industrial_monto': 0, 'microempresa': 0, 'microempresa_monto': 0, 'estacionada': 0, 'estacionada_monto': 0} for uv in uv_values}
         uv_densities_ly = {uv: {'total': 0} for uv in uv_values}
-
         # Cuenta el total de empresas
         total_empresas = Empresas.objects.filter(created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
         total_alcohol = Empresas.objects.filter(tipo='alcohol', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
@@ -96,32 +114,39 @@ class CountEmpresasByUV(APIView):
         }
 
         # Cuenta el total de empresas
-        queryset_total = Empresas.objects.filter(created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(total=Count('id')).order_by('uv')
-        queryset_total_ly = Empresas.objects.filter(created__gte=fecha_inicio_ly, created__lte=fecha_fin_ly).values('uv').annotate(total=Count('id')).order_by('uv')
+        queryset_total = Empresas.objects.filter(transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(total=Count('id')).order_by('uv')
+        # queryset_total_monto = Empresas.objects.filter(transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(total_monto=Sum('monto')).order_by('uv')
+        # queryset_total_ly = Empresas.objects.filter(transaccion__gte=fecha_inicio_ly, transaccion__lte=fecha_fin_ly).values('uv').annotate(total=Count('id')).order_by('uv')
 
         # Cuenta las empresas de alcohol
-        queryset_alcohol = Empresas.objects.filter(tipo='alcohol', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(alcohol=Count('id')).order_by('uv')
-        queryset_alcohol_ly = Empresas.objects.filter(tipo='alcohol', created__gte=fecha_inicio_ly, created__lte=fecha_fin_ly).values('uv').annotate(alcohol=Count('id')).order_by('uv')
+        queryset_alcohol = Empresas.objects.filter(tipo='alcohol', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(alcohol=Count('id')).order_by('uv')
+        # queryset_alcohol_monto = Empresas.objects.filter(tipo='alcohol', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(alcohol_monto=Sum('monto')).order_by('uv')
+        # queryset_alcohol_ly = Empresas.objects.filter(tipo='alcohol', transaccion__gte=fecha_inicio_ly, transaccion__lte=fecha_fin_ly).values('uv').annotate(alcohol=Count('id')).order_by('uv')
 
         # Cuenta las empresas comerciales
-        queryset_comercial = Empresas.objects.filter(tipo='comercial', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(comercial=Count('id')).order_by('uv')
-        queryset_comercial_ly = Empresas.objects.filter(tipo='comercial', created__gte=fecha_inicio_ly, created__lte=fecha_fin_ly).values('uv').annotate(comercial=Count('id')).order_by('uv')
+        queryset_comercial = Empresas.objects.filter(tipo='comercial', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(comercial=Count('id')).order_by('uv')
+        # queryset_comercial_monto = Empresas.objects.filter(tipo='comercial', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(comercial_monto=Sum('monto')).order_by('uv')
+        # queryset_comercial_ly = Empresas.objects.filter(tipo='comercial', transaccion__gte=fecha_inicio_ly, transaccion__lte=fecha_fin_ly).values('uv').annotate(comercial=Count('id')).order_by('uv')
 
         # Cuenta las empresas profesionales
-        queryset_profesional = Empresas.objects.filter(tipo='profesional', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(profesional=Count('id')).order_by('uv')
-        queryset_profesional_ly = Empresas.objects.filter(tipo='profesional', created__gte=fecha_inicio_ly, created__lte=fecha_fin_ly).values('uv').annotate(profesional=Count('id')).order_by('uv')
+        queryset_profesional = Empresas.objects.filter(tipo='profesional', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(profesional=Count('id')).order_by('uv')
+        # queryset_profesional_monto = Empresas.objects.filter(tipo='profesional', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(profesional_monto=Sum('monto')).order_by('uv')
+        # queryset_profesional_ly = Empresas.objects.filter(tipo='profesional', transaccion__gte=fecha_inicio_ly, transaccion__lte=fecha_fin_ly).values('uv').annotate(profesional=Count('id')).order_by('uv')
 
         # Cuentas las empresas de industrial
-        queryset_industrial = Empresas.objects.filter(tipo='industrial', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(industrial=Count('id')).order_by('uv')
-        queryset_industrial_ly = Empresas.objects.filter(tipo='industrial', created__gte=fecha_inicio_ly, created__lte=fecha_fin_ly).values('uv').annotate(industrial=Count('id')).order_by('uv')
+        queryset_industrial = Empresas.objects.filter(tipo='industrial', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(industrial=Count('id')).order_by('uv')
+        # queryset_industrial_monto = Empresas.objects.filter(tipo='industrial', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(industrial_monto=Sum('monto')).order_by('uv')
+        # queryset_industrial_ly = Empresas.objects.filter(tipo='industrial', transaccion__gte=fecha_inicio_ly, transaccion__lte=fecha_fin_ly).values('uv').annotate(industrial=Count('id')).order_by('uv')
 
         # Cuenta las empresas microempresas
-        queryset_microempresa = Empresas.objects.filter(tipo='microempresa', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(microempresa=Count('id')).order_by('uv')
-        queryset_microempresa_ly = Empresas.objects.filter(tipo='microempresa', created__gte=fecha_inicio_ly, created__lte=fecha_fin_ly).values('uv').annotate(microempresa=Count('id')).order_by('uv')
+        queryset_microempresa = Empresas.objects.filter(tipo='microempresa', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(microempresa=Count('id')).order_by('uv')
+        # queryset_microempresa_monto = Empresas.objects.filter(tipo='microempresa', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(microempresa_monto=Sum('monto')).order_by('uv')
+        # queryset_microempresa_ly = Empresas.objects.filter(tipo='microempresa', transaccion__gte=fecha_inicio_ly, transaccion__lte=fecha_fin_ly).values('uv').annotate(microempresa=Count('id')).order_by('uv')
 
         # Cuenta las empresas estacionada
-        queryset_estacionada = Empresas.objects.filter(tipo='estacionado', created__gte=fecha_inicio, created__lte=fecha_fin).values('uv').annotate(estacionada=Count('id')).order_by('uv')
-        queryset_estacionada_ly = Empresas.objects.filter(tipo='estacionado', created__gte=fecha_inicio_ly, created__lte=fecha_fin_ly).values('uv').annotate(estacionada=Count('id')).order_by('uv')
+        queryset_estacionada = Empresas.objects.filter(tipo='estacionado', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(estacionada=Count('id')).order_by('uv')
+        # queryset_estacionada_monto = Empresas.objects.filter(tipo='estacionado', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(estacionada_monto=Sum('monto')).order_by('uv')
+        # queryset_estacionada_ly = Empresas.objects.filter(tipo='estacionado', transaccion__gte=fecha_inicio_ly, transaccion__lte=fecha_fin_ly).values('uv').annotate(estacionada=Count('id')).order_by('uv')
 
         # Actualiza uv_densities con los resultados obtenidos
         for qs in [queryset_total, queryset_alcohol, queryset_comercial, queryset_profesional, queryset_industrial, queryset_microempresa, queryset_estacionada]:
@@ -130,7 +155,6 @@ class CountEmpresasByUV(APIView):
                 for key, value in obj.items():
                     if key != 'uv':
                         uv_densities[uv][key] = value
-
         list_names = ['total', 'alcohol', 'comercial', 'profesional', 'industrial', 'microempresa', 'estacionada']
 
         ranked_lists = {list_name: [(uv, values[list_name]) for uv, values in uv_densities.items() if uv != 1] for list_name in list_names}
@@ -224,23 +248,26 @@ class CountEmpresasByUV(APIView):
         #     uv_densities_ly[1]['rank_comercial_ly'] = None
         #     uv_densities_ly[1]['rank_alcohol_ly'] = None
         #     uv_densities_ly[1]['rank_industrial_ly'] = None
-
+        # for uv, values in uv_densities.items():
+        #     print(uv)
+        #     print(values)
         # Convierte los resultados a la forma requerida
+        # print(uv_densities.items())
         data = [{'uv': uv, 
                  'total': values['total'], 
-                 'total_porcentaje': round(values['total']/totales['total']*100,2),
+                 'total_porcentaje': 0 if totales['total'] == 0 else round(values['total']/totales['total']*100, 2),
                  'alcohol': values['alcohol'], 
-                 'alcohol_porcentaje': round(values['alcohol']/totales['alcohol']*100,2),
+                 'alcohol_porcentaje': 0 if totales['alcohol'] == 0 else round(values['alcohol']/totales['alcohol']*100, 2),
                  'comercial': values['comercial'], 
-                 'comercial_porcentaje': round(values['comercial']/totales['comercial']*100,2),
+                 'comercial_porcentaje': 0 if totales['comercial'] == 0 else round(values['comercial']/totales['comercial']*100,2),
                  'profesional': values['profesional'],
-                 'profesional_porcentaje': round(values['profesional']/totales['profesional']*100,2),
+                 'profesional_porcentaje': 0 if totales['profesional'] == 0 else round(values['profesional']/totales['profesional']*100,2),
                  'industrial': values['industrial'],
-                 'industrial_porcentaje': round(values['industrial']/totales['industrial']*100,2), 
+                 'industrial_porcentaje': 0 if totales['industrial'] == 0 else round(values['industrial']/totales['industrial']*100,2), 
                  'microempresa': values['microempresa'],
-                 'microempresa_porcentaje': round(values['microempresa']/totales['microempresa']*100,2),
+                 'microempresa_porcentaje': 0 if totales['microempresa'] == 0 else round(values['microempresa']/totales['microempresa']*100,2),
                  'estacionada': values['estacionada'],
-                 'estacionada_porcentaje': round(values['estacionada']/totales['estacionada']*100,2),
+                 'estacionada_porcentaje': 0 if totales['estacionada'] == 0 else round(values['estacionada']/totales['estacionada']*100,2),
                  'rank_total': values.get('rank_total', None), 
                  'rank_alcohol': values.get('rank_alcohol', None), 
                  'rank_comercial': values.get('rank_comercial', None),
@@ -255,6 +282,214 @@ class CountEmpresasByUV(APIView):
                  } for uv, values in uv_densities.items()]
 
         return Response(data)
+    
+class CountEmpresasDineroByUV(APIView):
+    def get(self, request, fecha_inicio, fecha_fin):
+      fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d') # + timedelta(days=1)   
+      fecha_inicio_dt = datetime.strptime(fecha_inicio, '%Y-%m-%d')
+      fecha_inicio_pp = fecha_inicio_dt - timedelta(days=30)
+      uv_values = range(1, 28)  # Incluyendo la UV 1 para el resto de las variables
+
+      uv_densities = {uv: {'total': 0, 'alcohol': 0, 'alcohol_monto':0, 'comercial': 0, 'comercial_monto': 0, 'profesional': 0, 'profesional_monto': 0, 'industrial': 0, 'industrial_monto': 0, 'microempresa': 0, 'microempresa_monto': 0, 'estacionada': 0, 'estacionada_monto': 0} for uv in uv_values}
+        
+      queryset_total_monto = Empresas.objects.filter(transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(total_monto=Sum('monto')).order_by('uv')
+      queryset_alcohol_monto = Empresas.objects.filter(tipo='alcohol', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(alcohol_monto=Sum('monto')).order_by('uv')
+      queryset_comercial_monto = Empresas.objects.filter(tipo='comercial', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(comercial_monto=Sum('monto')).order_by('uv')
+      queryset_profesional_monto = Empresas.objects.filter(tipo='profesional', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(profesional_monto=Sum('monto')).order_by('uv')
+      queryset_industrial_monto = Empresas.objects.filter(tipo='industrial', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(industrial_monto=Sum('monto')).order_by('uv')
+      queryset_microempresa_monto = Empresas.objects.filter(tipo='microempresa', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(microempresa_monto=Sum('monto')).order_by('uv')
+      queryset_estacionada_monto = Empresas.objects.filter(tipo='estacionado', transaccion__gte=fecha_inicio, transaccion__lte=fecha_fin).values('uv').annotate(estacionada_monto=Sum('monto')).order_by('uv')
+      for qs in [ queryset_total_monto, queryset_alcohol_monto, queryset_comercial_monto, queryset_profesional_monto, queryset_industrial_monto, queryset_microempresa_monto, queryset_estacionada_monto]:
+          for obj in qs:
+              uv = obj['uv']
+              for key, value in obj.items():
+                  if key != 'uv':
+                      uv_densities[uv][key] = value
+      list_names = ['total_monto', 'alcohol_monto', 'comercial_monto', 'profesional_monto', 'industrial_monto', 'microempresa_monto', 'estacionada_monto']
+
+      ranked_lists = {list_name: [(uv, values[list_name]) for uv, values in uv_densities.items() if uv != 1] for list_name in list_names}
+      ranks = {key: 1 for key in ranked_lists.keys()}
+      for list_name, uv_list in ranked_lists.items():
+         uv_list.sort(key=lambda x: x[1], reverse=True)
+         for uv, _ in uv_list:
+             uv_densities[uv]['rank_'+list_name] = ranks[list_name]
+             ranks[list_name] += 1
+
+      data = [{'uv': uv,
+              'total_monto': values['total_monto'],
+              'alcohol_monto': values['alcohol_monto'], 
+              'comercial_monto': values['comercial_monto'],
+              'profesional_monto': values['profesional_monto'],
+              'industrial_monto': values['industrial_monto'],
+              'microempresa_monto': values['microempresa_monto'],
+              'estacionada_monto': values['estacionada_monto'],
+              'rank_total': values.get('rank_total_monto', None), 
+              'rank_alcohol': values.get('rank_alcohol_monto', None), 
+              'rank_comercial': values.get('rank_comercial_monto', None),
+              'rank_profesional': values.get('rank_profesional_monto', None),                
+              'rank_industrial': values.get('rank_industrial_monto', None),  
+              'rank_microempresa': values.get('rank_microempresa_monto', None),
+              'rank_estacionada': values.get('rank_estacionada_monto', None),
+              } for uv, values in uv_densities.items()]
+      return Response(data)
+
+class CargaEmpresasView(APIView):
+
+    def post(self, request, format=None):
+        excel_file = request.FILES.get('file')
+        if not excel_file:
+            return Response({"error": "No se proporcionó un archivo Excel."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Leer el archivo Excel
+            df = pd.read_excel(excel_file)
+            
+            # Procesar cada fila del DataFrame
+            for index, row in df.iterrows():
+                empresa_data = {
+                    'uv': UV.objects.get_or_create(nombre=row['UV'])[0].id,  # Asumiendo que UV tiene un campo 'nombre'
+                    'rol': row.get('ROL'),
+                    'razon_social': row.get('NOMBRE'),
+                    'rut': row.get('RUT'),
+                    'giro': row.get('GIRO'),
+                    'calle': row.get('CALLE'),
+                    'numeracion': row.get('Nº'),
+                    'tipo': row.get('TIPO'),
+                    'monto': row.get('MONTO'),
+                    'transaccion': row.get('FECHA TRANSACCIÓN', None),
+                    # Añade los demás campos según sea necesario
+                }
+                
+                serializer = EmpresasSerializer(data=empresa_data)
+                if serializer.is_valid():
+                    serializer.save()
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response({"success": "Datos cargados correctamente."}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    #GSL 
+    
+class CountGSLByUV(APIView):
+    def get(self, request, fecha_inicio, fecha_fin):
+        fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d') # + timedelta(days=1) 
+
+
+        # Convertir las fechas de string a datetime
+        fecha_inicio_dt = datetime.strptime(fecha_inicio, '%Y-%m-%d')
+        # fecha_fin_dt = datetime.strptime(fecha_fin, '%Y-%m-%d')
+
+        # Calcular las fechas del año pasado
+        fecha_inicio_ly = fecha_inicio_dt - timedelta(days=365)
+        # fecha_fin_ly = fecha_fin_dt - timedelta(days=365)
+
+        uv_values = range(1, 28)  # Incluyendo la UV 1 para el resto de las variables
+
+        uv_densities = {uv: {'total': 0, 'alimentacion': 0, 'aporte_economico':0, 'articulos_personal': 0, 'educacion_salud': 0, 'habitabilidad': 0, 'servicios_basicos': 0, 'servicios_funerarios': 0, 'subsidios_sociales': 0, 'tramite_derivacion': 0} for uv in uv_values}        
+
+        total_gsl = GestionSocialLocal.objects.filter(created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_alimentacion = GestionSocialLocal.objects.filter(tipo_caso='ALIMENTACIÓN', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_aporte_economico = GestionSocialLocal.objects.filter(tipo_caso='APORTE ECONÓMICO', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_articulos_personal = GestionSocialLocal.objects.filter(tipo_caso='ARTÍCULOS DE USO PERSONAL', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_educacion_salud = GestionSocialLocal.objects.filter(tipo_caso='EDUCACIÓN / SALUD', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_habitabilidad = GestionSocialLocal.objects.filter(tipo_caso='HABITABILIDAD', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_servicios_basicos = GestionSocialLocal.objects.filter(tipo_caso='SERVICIOS BÁSICOS', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_servicios_funerarios = GestionSocialLocal.objects.filter(tipo_caso='SERVICIOS FUNERARIOS', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_subsidios_sociales = GestionSocialLocal.objects.filter(tipo_caso='SUBSIDIOS SOCIALES', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+        total_tramite_derivacion = GestionSocialLocal.objects.filter(tipo_caso='TRÁMITE / DERIVACIÓN', created__gte=fecha_inicio, created__lte=fecha_fin).aggregate(total=Count('id'))['total']
+
+        totales = {
+            'total': total_gsl,
+            'alimentacion': total_alimentacion,
+            'aporte_economico': total_aporte_economico,
+            'articulos_personal': total_articulos_personal,
+            'educacion_salud': total_educacion_salud,
+            'habitabilidad': total_habitabilidad,
+            'servicios_basicos': total_servicios_basicos,
+            'servicios_funerarios': total_servicios_funerarios,
+            'subsidios_sociales': total_subsidios_sociales,
+            'tramite_derivacion': total_tramite_derivacion
+        }
+
+        queryset_total_gsl = GestionSocialLocal.objects.filter(periodo__gte=fecha_inicio, periodo__lte=fecha_fin).values('uv').annotate(total=Count('id')).order_by('uv')
+        queryset_alimentacion = GestionSocialLocal.objects.filter(tipo_caso='ALIMENTACIÓN', periodo__gte=fecha_inicio, periodo__lte=fecha_fin).values('uv').annotate(alimentacion=Count('id')).order_by('uv')
+        queryset_aporte_economico = GestionSocialLocal.objects.filter(tipo_caso='APORTE ECONÓMICO', periodo__gte=fecha_inicio, periodo__lte=fecha_fin).values('uv').annotate(alcohol=Count('id')).order_by('uv')
+        queryset_articulos_personal = GestionSocialLocal.objects.filter(tipo_caso='ARTÍCULOS DE USO PERSONAL', periodo__gte=fecha_inicio, periodo__lte=fecha_fin).values('uv').annotate(alcohol=Count('id')).order_by('uv')
+        queryset_educacion_salud = GestionSocialLocal.objects.filter(tipo_caso='EDUCACIÓN / SALUD', periodo__gte=fecha_inicio, periodo__lte=fecha_fin).values('uv').annotate(alcohol=Count('id')).order_by('uv')
+        queryset_habitabilidad = GestionSocialLocal.objects.filter(tipo_caso='HABITABILIDAD', periodo__gte=fecha_inicio, periodo__lte=fecha_fin).values('uv').annotate(alcohol=Count('id')).order_by('uv')
+        queryset_servicios_basicos = GestionSocialLocal.objects.filter(tipo_caso='SERVICIOS BÁSICOS', periodo__gte=fecha_inicio, periodo__lte=fecha_fin).values('uv').annotate(alcohol=Count('id')).order_by('uv')
+        queryset_servicios_funerarios = GestionSocialLocal.objects.filter(tipo_caso='SERVICIOS FUNERARIOS', periodo__gte=fecha_inicio, periodo__lte=fecha_fin).values('uv').annotate(alcohol=Count('id')).order_by('uv')
+        queryset_subsidios_sociales = GestionSocialLocal.objects.filter(tipo_caso='SUBSIDIOS SOCIALES', periodo__gte=fecha_inicio, periodo__lte=fecha_fin).values('uv').annotate(alcohol=Count('id')).order_by('uv')
+        queryset_tramite_derivacion = GestionSocialLocal.objects.filter(tipo_caso='TRÁMITE / DERIVACIÓN', periodo__gte=fecha_inicio, periodo__lte=fecha_fin).values('uv').annotate(alcohol=Count('id')).order_by('uv')
+
+        # print(queryset_total_gsl)
+        # for qs in [queryset_total_gsl, queryset_alimentacion, queryset_aporte_economico, queryset_articulos_personal, queryset_educacion_salud, queryset_habitabilidad, queryset_servicios_basicos, queryset_servicios_funerarios, queryset_subsidios_sociales, queryset_tramite_derivacion]:
+        for qs in [queryset_total_gsl, queryset_alimentacion]:
+            for obj in qs:
+                uv = obj['uv']
+                for key, value in obj.items():
+                    if key != 'uv':
+                        uv_densities[uv][key] = value
+                # for key, value in obj.items():
+                #     if key != 'uv':
+                #         uv_densities[uv][key] = value
+        list_names = ['total_gsl', 'alimentacion', 'aporte economico', 'articulos personal', 'educacion salud', 'habitabilidad', 'servicios basicos', 'servicios funerarios', 'subsidios sociales', 'tramite derivacion']
+
+        data = [{'uv': uv, 
+                 'total': values['total'], 
+                 'total_porcentaje': 0 if totales['total'] == 0 else round(values['total']/totales['total']*100, 2),
+                 'alimentacion': values['alimentacion'], 
+                 'alimentacion_porcentaje': 0 if totales['alimentacion'] == 0 else round(values['alimentacion']/totales['alimentacion']*100, 2),
+                #  'aporte_economico': values['aporte_economico'], 
+                #  'aporte_economico_porcentaje': 0 if totales['aporte_economico'] == 0 else round(values['aporte_economico']/totales['aporte_economico']*100,2),
+                #  'articulos_personal': values['articulos_personal'],
+                #  'articulos_personal_porcentaje': 0 if totales['articulos_personal'] == 0 else round(values['articulos_personal']/totales['articulos_personal']*100,2),
+                #  'industrial': values['industrial'],
+                #  'industrial_porcentaje': 0 if totales['industrial'] == 0 else round(values['industrial']/totales['industrial']*100,2), 
+                #  'microempresa': values['microempresa'],
+                #  'microempresa_porcentaje': 0 if totales['microempresa'] == 0 else round(values['microempresa']/totales['microempresa']*100,2),
+                #  'estacionada': values['estacionada'],
+                #  'estacionada_porcentaje': 0 if totales['estacionada'] == 0 else round(values['estacionada']/totales['estacionada']*100,2),
+
+                 } for uv, values in uv_densities.items()]
+
+        return Response(data)
+
+
+class CargaGSLView(APIView):
+    def post(self, request, format=None):
+        excel_file = request.FILES.get('file')
+        if not excel_file:
+            return Response({"error": "No se proporcionó un archivo Excel."}, status=status.HTTP_400_BAD_REQUEST)
+        try: 
+            df = pd.read_excel(excel_file)
+
+            for index, row, in df.iterrows():
+                gsl_data = {
+                    'uv': UV.objects.get_or_create(nombre=row['UV'])[0].id,
+                    'fecha': row.get('FECHA'),
+                    'calle': row.get('CALLE'),
+                    'numeracion': row.get('N'),
+                    'tipo': row.get('TIPO'),
+                    'categoria': row.get('CATEGORIA'),
+                    'beneficio': row.get('BENEFICIO'),
+                    'periodo': row.get('PERIODO'),
+                    'tipo_caso': row.get('TIPO DE CASO'), 
+                }
+
+                serializer = GSLSerializer(data=gsl_data)
+                if serializer.is_valid():
+                    serializer.save()
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response({"success": "Datos cargados correctamente."}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     #EXENCION BASURA
 
@@ -611,8 +846,12 @@ class RangoFechasGeneralView(generics.RetrieveAPIView):
                 queryset = queryset.filter(tipo=tipo)
 
 
-            fecha_inicio = queryset.earliest('created').created.date()
-            fecha_fin = queryset.latest('created').created.date()
+            fecha_inicio = queryset.earliest('transaccion').transaccion.date()
+            fecha_inicio = fecha_inicio - timedelta(days=1)
+            fecha_fin = queryset.latest('transaccion').transaccion.date()
+            fecha_fin = fecha_fin + timedelta(days=1)
+            # fecha_inicio = queryset.earliest('created').created.date()
+            # fecha_fin = queryset.latest('created').created.date()
                                        
         elif mapa == "ayudasocial":
             # Código para el caso "ayudasocial"

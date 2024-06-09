@@ -1,0 +1,32 @@
+<div>
+  <div class="pink-banner container">
+      <h1>Carga Masiva de productos farmacia</h1>
+      <span class="spacer"></span>
+      <div>
+        <button class="f-acenter-jarround delete" (click)="fileInput.click()"><span>Subir archvio</span><mat-icon>chevron_right</mat-icon></button>
+        <input hidden class="custom-file-upload" type="file" (change)="onSelectFile($event)" #fileInput>
+      </div>
+  </div>
+  <div class="container">
+      <div>
+          <p>
+              <span>Importante: </span> El archivo debe seguir el formato de filas y columnas. un ejemplo de ello lo puedes descargar <a href="../../../assets/base.xlsx" download="base">Aquí</a>
+          </p>
+      </div>
+      <ngx-dropzone (change)="onSelect($event)">
+          <ngx-dropzone-label><mat-icon class="icon-drop-here">cloud_upload</mat-icon> Arrastra tu archivo aquí <hr/><small>Recuerda que tus archvivo deben ser extencion <b class="text-pink"> .xlm, .xlsx, .xls </b> y debe seguir el <b class="text-pink">formato base </b> de informacion.</small> </ngx-dropzone-label>
+          <ngx-dropzone-preview *ngIf="selectedFile !== null" [removable]="true" (removed)="onRemove($event)">
+              <ngx-dropzone-label><mat-icon class="grid-icon">grid_on</mat-icon> {{selectedFile[0].name}}</ngx-dropzone-label>
+          </ngx-dropzone-preview>
+      </ngx-dropzone>
+  </div>
+<br>
+  <div>
+
+    <button type="submit" mat-raised-button (click)="subirCarga()">Confirmar Carga</button>
+    <!-- <button mat-button (click)="">Reset</button> -->
+
+  </div>
+
+</div>
+

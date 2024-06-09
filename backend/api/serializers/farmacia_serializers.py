@@ -16,6 +16,10 @@ class ComprobanteVentaSerializer(serializers.ModelSerializer):
         model = ComprobanteVenta
         fields = '__all__'
 
+class ComprobanteVentaVacioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ComprobanteVenta
+
 class ComprobanteVentaSerializer2(serializers.ModelSerializer):
     comprador_aux = serializers.SerializerMethodField()
     farmaceuta_aux = serializers.SerializerMethodField()

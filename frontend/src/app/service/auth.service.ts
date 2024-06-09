@@ -96,7 +96,7 @@ export class AuthService {
     const grupos = this.getGrupos(token_check);
     try {
       if (grupos.includes('Developer') ) {
-        console.log('grupo aceptado')
+        // console.log('grupo aceptado')
         return true
       } else {
         console.log('grupo no encontrado')

@@ -23,6 +23,12 @@ class IsFarmaciaVendedorNOPOST(permissions.BasePermission):
             return False
         return request.user.groups.filter(name='Farmacia-Vendedor').exists()
     
+class IsFarmaciaFarmaceutaNOPOST(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method == 'POST':
+            return False
+        return request.user.groups.filter(name='Farmacia-Farmaceuta').exists()
+    
 class JustFarmaciaPOST(permissions.BasePermission):
     def has_permission(self, request, view):
         group_names = ['Farmacia-Vendedor', 'Farmacia-Farmaceuta', 'Developer']

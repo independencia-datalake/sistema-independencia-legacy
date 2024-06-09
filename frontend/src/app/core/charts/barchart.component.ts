@@ -1,9 +1,11 @@
-import { Component, NgModule } from '@angular/core';
+import { Component, Input, NgModule, ViewEncapsulation } from '@angular/core';
+import { DataLabService } from 'src/app/service/data-lab.service';
+import { EmpresasServiceService } from 'src/app/service/empresas.service.service';
 
 @Component({
   selector: 'app-barchart',
   template: `
-  <ngx-charts-bar-vertical-2d
+  <ngx-charts-bar-vertical
         [view]="view"
         [scheme]="colorScheme"
         [results]="single"
@@ -11,309 +13,144 @@ import { Component, NgModule } from '@angular/core';
         [xAxis]="showXAxis"
         [yAxis]="showYAxis"
         [legend]="showLegend"
+        [showDataLabel]="showDataLabel"
         [showXAxisLabel]="showXAxisLabel"
         [showYAxisLabel]="showYAxisLabel"
         [xAxisLabel]="xAxisLabel"
         [yAxisLabel]="yAxisLabel"
+        [barPadding]="2"
+        [dataLabelFormatting]="dataLabelFormattingFunc"
     >
-    </ngx-charts-bar-vertical-2d>`,
+    </ngx-charts-bar-vertical>`,
     styleUrls: ['./charts.component.css'],
+    encapsulation: ViewEncapsulation.None,
 })
 export class BarChartComponent {
+  key_columna = localStorage.getItem('Columna')
+//   key_columna = "alcohol"
+  public diccionario_columna = {
+    'total': 'Total',
+    'alcohol': 'Alcohol',
+    'comercial': 'Comercial',
+    'profesional': 'Profesional',
+    'industrial': 'Industrial',
+    'microempresa': 'Microempresa',
+    'estacionada': 'Estacionada',
 
-    dataBd:any = [
-        {
-          "id": 1,
-          "uv": 1,
-          "licencia_conducir": 1,
-          "permiso_circulacion": 1,
-          "rank_licencia_conducir": 1,
-          "rank_permiso_circulacion": 1,
-          "created": "2023-07-04T16:08:52.129169",
-          "api_call": 9
-        },
-        {
-          "id": 3,
-          "uv": 3,
-          "licencia_conducir": 3,
-          "permiso_circulacion": 3,
-          "rank_licencia_conducir": 3,
-          "rank_permiso_circulacion": 3,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 4,
-          "uv": 4,
-          "licencia_conducir": 4,
-          "permiso_circulacion": 4,
-          "rank_licencia_conducir": 4,
-          "rank_permiso_circulacion": 4,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 2,
-          "uv": 2,
-          "licencia_conducir": 2,
-          "permiso_circulacion": 2,
-          "rank_licencia_conducir": 2,
-          "rank_permiso_circulacion": 2,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 8,
-          "uv": 8,
-          "licencia_conducir": 8,
-          "permiso_circulacion": 8,
-          "rank_licencia_conducir": 8,
-          "rank_permiso_circulacion": 8,
-          "created": "2023-07-04T16:08:52.129169",
-          "api_call": 9
-        },
-        {
-          "id": 6,
-          "uv": 6,
-          "licencia_conducir": 6,
-          "permiso_circulacion": 6,
-          "rank_licencia_conducir": 6,
-          "rank_permiso_circulacion": 6,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 7,
-          "uv": 7,
-          "licencia_conducir": 7,
-          "permiso_circulacion": 7,
-          "rank_licencia_conducir": 7,
-          "rank_permiso_circulacion": 7,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 9,
-          "uv": 9,
-          "licencia_conducir": 9,
-          "permiso_circulacion": 9,
-          "rank_licencia_conducir": 9,
-          "rank_permiso_circulacion": 9,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 10,
-          "uv": 10,
-          "licencia_conducir": 10,
-          "permiso_circulacion": 10,
-          "rank_licencia_conducir": 10,
-          "rank_permiso_circulacion": 10,
-          "created": "2023-07-04T16:08:52.129169",
-          "api_call": 9
-        },
-        {
-          "id": 11,
-          "uv": 11,
-          "licencia_conducir": 11,
-          "permiso_circulacion": 11,
-          "rank_licencia_conducir": 11,
-          "rank_permiso_circulacion": 11,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 12,
-          "uv": 12,
-          "licencia_conducir": 12,
-          "permiso_circulacion": 12,
-          "rank_licencia_conducir": 12,
-          "rank_permiso_circulacion": 12,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 13,
-          "uv": 13,
-          "licencia_conducir": 13,
-          "permiso_circulacion": 13,
-          "rank_licencia_conducir": 13,
-          "rank_permiso_circulacion": 13,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 14,
-          "uv": 14,
-          "licencia_conducir": 14,
-          "permiso_circulacion": 14,
-          "rank_licencia_conducir": 14,
-          "rank_permiso_circulacion": 14,
-          "created": "2023-07-04T16:08:52.129169",
-          "api_call": 9
-        },
-        {
-          "id": 15,
-          "uv": 15,
-          "licencia_conducir": 15,
-          "permiso_circulacion": 15,
-          "rank_licencia_conducir": 15,
-          "rank_permiso_circulacion": 15,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 16,
-          "uv": 16,
-          "licencia_conducir": 16,
-          "permiso_circulacion": 16,
-          "rank_licencia_conducir": 16,
-          "rank_permiso_circulacion": 16,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 17,
-          "uv": 17,
-          "licencia_conducir": 17,
-          "permiso_circulacion": 17,
-          "rank_licencia_conducir": 17,
-          "rank_permiso_circulacion": 17,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 18,
-          "uv": 18,
-          "licencia_conducir": 18,
-          "permiso_circulacion": 18,
-          "rank_licencia_conducir": 18,
-          "rank_permiso_circulacion": 18,
-          "created": "2023-07-04T16:08:52.129169",
-          "api_call": 9
-        },
-        {
-          "id": 19,
-          "uv": 19,
-          "licencia_conducir": 19,
-          "permiso_circulacion": 19,
-          "rank_licencia_conducir": 19,
-          "rank_permiso_circulacion": 19,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 20,
-          "uv": 20,
-          "licencia_conducir": 20,
-          "permiso_circulacion": 20,
-          "rank_licencia_conducir": 20,
-          "rank_permiso_circulacion": 20,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 21,
-          "uv": 21,
-          "licencia_conducir": 21,
-          "permiso_circulacion": 21,
-          "rank_licencia_conducir": 21,
-          "rank_permiso_circulacion": 21,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 22,
-          "uv": 22,
-          "licencia_conducir": 22,
-          "permiso_circulacion": 22,
-          "rank_licencia_conducir": 22,
-          "rank_permiso_circulacion": 22,
-          "created": "2023-07-04T16:08:52.129169",
-          "api_call": 9
-        },
-        {
-          "id": 23,
-          "uv": 23,
-          "licencia_conducir": 23,
-          "permiso_circulacion": 23,
-          "rank_licencia_conducir": 23,
-          "rank_permiso_circulacion": 23,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 24,
-          "uv": 24,
-          "licencia_conducir": 24,
-          "permiso_circulacion": 24,
-          "rank_licencia_conducir": 24,
-          "rank_permiso_circulacion": 24,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 25,
-          "uv": 25,
-          "licencia_conducir": 25,
-          "permiso_circulacion": 25,
-          "rank_licencia_conducir": 25,
-          "rank_permiso_circulacion": 25,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        {
-          "id": 26,
-          "uv": 26,
-          "licencia_conducir": 26,
-          "permiso_circulacion": 26,
-          "rank_licencia_conducir": 26,
-          "rank_permiso_circulacion": 26,
-          "created": "2023-07-04T16:08:52.134417",
-          "api_call": 9
-        },
-        
-      ]
-    
+    'licencia conducir': 'Licencia de Conducir',
+    'permiso circulacion': 'Permisos de Circulacion',
+  };
+  public diccionario_columna_y = {
+    'total': 'Patentes totales',
+    'alcohol': 'Patentes de Alcohol',
+    'comercial': 'Patentes Comerciales',
+    'profesional': 'Patentes Profesionales',
+    'industrial': 'Patentes Industriales',
+    'microempresa': 'Patentes Microempresas',
+    'estacionada': 'Patentes Estacionadas',
+
+    'licencia conducir': 'Licencias de Conducir',
+    'permiso circulacion': 'Permisos de Circulacion',
+  };
+
+  mapaDict = {
+    "impuestos y derechos": ["total", "alcohol", "comercial", "profesional", "industrial", "microempresa", "estacionada"],
+    "transito": ["licencias", "permisos"],
+    "obras municipales": ["obrasmenores", "anulacion"]
+};
+
+@Input() dataBd: any[];
+
+  // chartdataBd: any[]
+  chartDataByType: { [key: string]: any[] } = {};
+
+  ngOnInit() {
+    this.empresas.getEmpresasRankDataLab().subscribe(data => {
+        this.generateDataBd("impuestos y derechos", data);
+        this.single = this.createChartData(this.key_columna);
+        // Aquí puedes hacer cualquier otra cosa con los datos
+    });
+
+
+
+    this.generateDataBd
+}
+
     single: any[];
     multi: any[];
 
-    view: [number, number] = [1000, 500];
+    view: [number, number] = [1000, 600];
+    padding: number = 8;
 
     // options
     showXAxis = true;
     showYAxis = true;
     gradient = false;
     showLegend = true;
+    showDataLabel = true;
     showXAxisLabel = true;
-    xAxisLabel = 'Country';
+    xAxisLabel = 'Unidad Vecinal';
     showYAxisLabel = true;
-    yAxisLabel = 'Population';
+    yAxisLabel = this.diccionario_columna_y[this.key_columna];
 
     colorScheme : any= {
-        domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+        domain: ['#D4AF37', '#C0C0C0', '#CD7F32',]
     };
 
-    createChartData() {
-        const chartData = [];
-        this.dataBd.forEach((item) => {
-            const name = `UV ${item.id}`;
-            const obj = [{name: "Licencia de conducir", value: item.licencia_conducir}, {name: "Permiso de circulacion", value: item.permiso_circulacion}];
-            const series = [...obj];
-            chartData.push({ name, series });
-        });
-
-        console.log('CHARDATA=== ',chartData)
-    
-        return chartData;
-    }
-
-    constructor() {
-        this.single = this.createChartData();
-        console.log(this.single)
+    constructor(private empresas: DataLabService) {
+        // this.single = this.createChartData();
+        // console.log(this.single)
     }
 
     onSelect(event) {
         console.log(event);
     }
+
+    generateDataBd(key: string, data: any) {
+      const categories = this.mapaDict[key];
+
+      categories.forEach((category) => {
+        const categoryData = data[category];
+        const result = [];
+
+        categoryData.forEach((item, idx) => {
+          const value = item[category] === 0 ? 0.001 : item[category];
+          result.push({
+            "name": "uv-" + (item.uv - 1),
+            "value": value
+          });
+        });
+
+        this.chartDataByType[category] = result; // Almacenar los datos en el objeto
+      });
+    }
+
+    ngOnChanges() {
+      if (this.chartDataByType) { // Asegúrate de que chartDataByType está lleno
+        this.key_columna = localStorage.getItem('Columna'); // Obtener el tipo seleccionado del almacenamiento local
+        this.yAxisLabel = this.diccionario_columna_y[this.key_columna];
+        this.single = this.createChartData(this.key_columna); // Establecer 'single' con los datos para el tipo seleccionado
+      }
+    }
+
+
+  createChartData(selectedItem: string) {
+    const selectedName = this.diccionario_columna[selectedItem].toLowerCase(); // Obtener el nombre legible para el ítem seleccionado
+
+    // Recuperar los datos del objeto usando la clave
+    console.log(this.chartDataByType)
+    const filteredData = this.chartDataByType[selectedName];
+
+    if (filteredData) {
+      // Ordenar los datos y tomar el top 26
+      return filteredData.sort((a, b) => b.value - a.value).slice(0, 26);
+    } else {
+      return []; // Devolver un array vacío si no hay datos para ese tipo
+    }
+  }
+
+  dataLabelFormattingFunc(value: any): string {
+    return value === 0.001 ? '0' : value.toString();
+  }
+
 }

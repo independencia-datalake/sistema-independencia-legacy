@@ -9,6 +9,10 @@ from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from api.filters.farmacia_filters import ProductoFarmaciaFilter, ComprobanteVentaFilter
 from .permissions_views import *
+from rest_framework.exceptions import NotFound
+import pandas as pd
+from django.http import HttpResponse
+from rest_framework.views import APIView
 
 from api.serializers.farmacia_serializers import *
 from database.farmacia.models import (
@@ -111,6 +115,13 @@ class ProductoFarmaciaDeleteAPIViw(generics.DestroyAPIView):
     def perform_destroy(self, instance):
         return super().perform_destroy(instance)
 
+class ProductoFarmaciaIngresoAceptado(APIView):
+    permission_classes = [ IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedorNOPOST]
+    def post(self, request, pk, format=None):
+        producto = get_object_or_404(ProductoFarmacia, pk=pk)
+        producto.estado = 'ACEPTADO'
+        producto.save()
+        return Response({'status': 'Producto aceptado'}, status=status.HTTP_200_OK)
 
     ## Comprobante Venta
 
@@ -140,6 +151,49 @@ class UltimoComprobanteVentaAPIViw(generics.RetrieveAPIView):
     def get_object(self):
         latest_comprobante = ComprobanteVenta.objects.latest('created')
         return latest_comprobante
+
+class UltimoComprobanteVentaByPersonaAPIView(generics.RetrieveAPIView):
+    serializer_class = ComprobanteVentaSerializer
+    permission_classes = [IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
+
+    def get_object(self):
+        persona_id = self.kwargs.get('persona_id')
+        case = self.request.query_params.get('case', '1')  # case es '1' por defecto
+
+        query = ComprobanteVenta.objects.filter(comprador=persona_id)
+        if case == '2':
+            query = query.filter(estado='FINALIZADA')
+        try:
+            latest_comprobante = query.latest('created')
+            return latest_comprobante
+        except ComprobanteVenta.DoesNotExist:
+            raise NotFound('NoHayComprobante')
+        
+class ComprobantesVentaHistoricoByPersonaAPIView(generics.ListAPIView):
+    serializer_class = ComprobanteVentaSerializer
+    permission_classes = [IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
+
+    def get_queryset(self):
+        persona_id = self.kwargs.get('persona_id')
+        query = ComprobanteVenta.objects.filter(comprador=persona_id, estado='FINALIZADA').order_by('-created')[:10]
+
+        if not query.exists():
+            raise NotFound('NoHayComprobantes')
+
+        return query
+    
+class ComprobantesVentaEsperaCajaAPIView(generics.ListAPIView):
+    serializer_class = ComprobanteVentaSerializer
+    permission_classes = [IsDeveloper | IsFarmaciaFarmaceuta | IsFarmaciaVendedor]
+
+    def get_queryset(self):
+        # Filtrar por estado 'CAJA'
+        query = ComprobanteVenta.objects.filter(estado='CAJA').order_by('-created')[:10]
+
+        if not query.exists():
+            raise NotFound('NoHayComprobantes')
+
+        return query
 
 class ComprobanteVentasDetailAPIViw(generics.RetrieveAPIView):
     queryset = ComprobanteVenta.objects.all()
@@ -275,3 +329,28 @@ class CargaProductoDeleteAPIViw(generics.DestroyAPIView):
     def perform_destroy(self, instance):
         return super().perform_destroy(instance)
     
+## ACATA DE RECEPCION
+    
+class GenerateActaRecepccionAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        # Simulamos algunos datos como ejemplo
+        datos = {
+            'Nombre': ['Ana', 'Luis', 'Carlos'],
+            'Edad': [25, 30, 22],
+            'Ciudad': ['Madrid', 'Barcelona', 'Valencia']
+        }
+
+        # Convertimos los datos a un DataFrame de Pandas
+        df = pd.DataFrame(datos)
+
+        # Creamos una respuesta HTTP con el contenido adecuado para un archivo Excel
+        response = HttpResponse(
+            content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        # Especificamos el nombre del archivo que se descargará
+        response['Content-Disposition'] = 'attachment; filename="datos.xlsx"'
+
+        # Creamos el archivo Excel en la respuesta
+        with pd.ExcelWriter(response, engine='openpyxl') as writer:
+            df.to_excel(writer, index=False)
+
+        return response

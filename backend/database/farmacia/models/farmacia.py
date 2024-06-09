@@ -21,11 +21,20 @@ class ProductoFarmacia(models.Model):
     dosis = models.CharField(max_length=200, verbose_name="Dosis del Producto",null=True, blank=True)
     presentacion = models.CharField(max_length=200, verbose_name="Presentacion del Producto",null=True, blank=True)
     precio = models.PositiveIntegerField(default=1, verbose_name="Precio Producto",null=True, blank=True)
+    precio_sin_iva = models.PositiveIntegerField(verbose_name="Precio Sin Iva", null=True, blank=True)
     laboratorio_id = models.ForeignKey(Laboratorios, on_delete=models.PROTECT, verbose_name=" Id Laboratorio")
     laboratorio = models.CharField(max_length=200, verbose_name="Nombre Laboratorio",null=True, blank=True)
     cenabast = models.BooleanField(default = False, verbose_name = "Cenabast",null=True, blank=True)
     bioequivalencia = models.BooleanField(default = False, verbose_name = "Bioequivalencia",null=True, blank=True)
     
+    forma_farmaceutica = models.CharField(max_length=100, verbose_name="Forma Farmaceutica", null=True, blank=True)
+    registro_sanitario = models.CharField(max_length=100, verbose_name="Registro Sanitario", null=True, blank=True)
+    fecha_vencimiento = models.DateField(verbose_name="Fecha de Vencimiento", blank=True, null=True)
+    fecha_recepcion = models.DateField(verbose_name="Fecha de Recepcion", blank=True, null=True)
+    fact = models.CharField(max_length=100, verbose_name="Fact", null=True, blank=True)
+    estado = models.CharField(null=True, blank=True, max_length=30, default='ACEPTADO', choices=(('ACEPTADO', 'Aceptado'),('RECHAZADO','Rechazado'),('INGRESANDO','Ingresando')))
+
+
     autor = models.ForeignKey(User, on_delete=models.PROTECT, null=True)     
     created = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación", editable=False)
     updated = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición", editable=False)
@@ -46,14 +55,15 @@ class ProductoFarmacia(models.Model):
         return super(ProductoFarmacia, self).save(*args, **kwargs)
 
     def __str__(self):
-        return f'{self.marca_producto} | {self.dosis} x {self.presentacion} | {self.p_a} | Proovedor: {self.proveedor} | Lab: {self.laboratorio} '
+        # return f'{self.marca_producto} | {self.dosis} x {self.presentacion} | {self.p_a} | Proovedor: {self.proveedor} | Lab: {self.laboratorio} '
+        return f'{self.marca_producto}'
 
     def  get_absolute_url(self):
         return reverse("productofarmacia-inicio")  
 
 class ComprobanteVenta(models.Model):
     comprador = models.ForeignKey(Persona, on_delete=models.PROTECT,verbose_name='Comprador')
-    estado = models.CharField(null=True, blank=True,max_length=30, default='EN PROGRESO', choices=(('EN PROGRESO', 'En Progreso'),('FINALIZADA','Finalizada'),('CANCELADA','Cancelada')), verbose_name='Estado de venta')
+    estado = models.CharField(null=True, blank=True,max_length=30, default='EN PROGRESO', choices=(('EN PROGRESO', 'En Progreso'),('FINALIZADA','Finalizada'),('CANCELADA','Cancelada'),('CAJA','Caja')), verbose_name='Estado de venta')
     farmaceuta = models.ForeignKey(User,null = True , blank=True, on_delete=models.PROTECT, verbose_name='Profesional')
     created = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de creación", editable=False)
     updated = models.DateTimeField(auto_now=True, verbose_name="Fecha de edición", editable=False)

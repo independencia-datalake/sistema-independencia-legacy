@@ -18,6 +18,11 @@ class CountEmpresasByUVRankSerializer(serializers.Serializer):
     densidad = serializers.IntegerField()
     rank = serializers.IntegerField()
 
+class GSLSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GestionSocialLocal
+        fields = '__all__'
+
 class RangoFechasByTipo(serializers.Serializer):
     fecha_inicio = serializers.DateField()
     fecha_fin = serializers.DateField()

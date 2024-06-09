@@ -31,6 +31,14 @@ import { MatRadioModule } from '@angular/material/radio';
 import { VentaPendienteDialogComponent } from './venta/venta-pendiente-dialog/venta-pendiente-dialog.component';
 import { ConfirmacionDialogComponent } from './comprobanteventa-detail/confirmacion-dialog/confirmacion-dialog.component';
 import { FichaIngresoComponent } from './ficha-ingreso/ficha-ingreso.component';
+import { CargaMasivaComponent } from './carga-masiva/carga-masiva.component';
+import { NgxDropzoneModule } from 'ngx-dropzone';
+import { EditarProductoDialogComponent } from './informes-productos/editar-producto-dialog/editar-producto-dialog.component';
+import { EditarPersonaComponent } from './editar-persona/editar-persona.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { CargaMasivaPersonasComponent } from './carga-masiva-personas/carga-masiva-personas.component';
 
 
 
@@ -57,6 +65,10 @@ import { FichaIngresoComponent } from './ficha-ingreso/ficha-ingreso.component';
     VentaPendienteDialogComponent,
     ConfirmacionDialogComponent,
     FichaIngresoComponent,
+    CargaMasivaComponent,
+    EditarProductoDialogComponent,
+    EditarPersonaComponent,
+    CargaMasivaPersonasComponent,
   ],
   imports: [
     CommonModule,
@@ -76,6 +88,10 @@ import { FichaIngresoComponent } from './ficha-ingreso/ficha-ingreso.component';
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
+    NgxDropzoneModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatSlideToggleModule,
   ],
 
 })

@@ -1,0 +1,58 @@
+<div class="modal-center">
+  <h1>Editar Producto</h1>
+  <p class="m-b-30">{{nombre_producto}}</p>
+
+  <div class="producto-form-row">
+    <!-- Columna 1 -->
+    <div class="column">
+      <mat-form-field class="m-w-300">
+        <mat-label>Nombre Producto</mat-label>
+        <input matInput [(ngModel)]="this.data.producto.marca_producto" placeholder="" required>
+      </mat-form-field>
+
+      <mat-form-field class="info">
+        <mat-label>Proveedor</mat-label>
+        <input matInput [(ngModel)]="this.data.producto.proveedor" placeholder="" required>
+      </mat-form-field>
+
+      <mat-form-field class="info">
+        <mat-label>Precio</mat-label>
+        <input matInput [(ngModel)]="this.data.producto.precio" placeholder="" required>
+      </mat-form-field>
+
+      <mat-form-field class="info">
+        <mat-label>Dosis </mat-label>
+        <input matInput [(ngModel)]="this.data.producto.dosis" placeholder="" required>
+      </mat-form-field>
+
+    </div>
+
+    <!-- Columna 2 -->
+    <div class="column">
+      <mat-form-field class="info">
+        <mat-label>Presentación</mat-label>
+        <input matInput [(ngModel)]="this.data.producto.presentacion" placeholder="" required>
+      </mat-form-field>
+
+      <mat-form-field class="info">
+        <mat-label>Cenabast</mat-label>
+        <input matInput [(ngModel)]="this.data.producto.cenabast" placeholder="" required>
+      </mat-form-field>
+
+      <mat-form-field class="info">
+        <mat-label>Bioequivalencia</mat-label>
+        <input matInput [(ngModel)]="this.data.producto.bioequivalencia" placeholder="" required>
+      </mat-form-field>
+
+      <mat-form-field class="info">
+        <mat-label>Laboratorio</mat-label>
+        <input matInput [(ngModel)]="this.data.producto.laboratorio" placeholder="" required>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()" class="pink-rounded-button">Cancelar</button>
+    <button mat-button (click)="editarProducto()">Actualizar</button>
+  </div>
+</div>

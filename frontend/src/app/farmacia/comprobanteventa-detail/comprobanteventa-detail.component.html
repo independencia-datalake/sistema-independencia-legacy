@@ -32,14 +32,14 @@
         <a *ngIf="estado_venta === 'EN PROGRESO'" (click)="add_receta()"
           style="color: #0000EE; cursor: pointer;">Agregar receta</a>
         <a *ngIf="estado_venta !== 'EN PROGRESO'" [style.pointer-events]="permiso_farmaceuta ? 'auto' : 'none'"
-          [style.cursor]="permiso_farmaceuta ? 'pointer' : 'default'" style="color: #0000EE;">Agregar receta</a>
+          [style.cursor]="permiso_farmaceuta ? 'pointer' : 'default'" style="color: #0000EE;" (click)="add_receta()">Agregar receta</a>
       </div>
       <div *ngIf="!recetas || recetas.length === 0">
         <p>No se adjuntaron documentos.</p>
         <a *ngIf="estado_venta === 'EN PROGRESO'" (click)="add_receta()"
           style="color: #0000EE; cursor: pointer;">Agregar receta</a>
         <a *ngIf="estado_venta !== 'EN PROGRESO'" [style.pointer-events]="permiso_farmaceuta ? 'auto' : 'none'"
-          [style.cursor]="permiso_farmaceuta ? 'pointer' : 'default'" style="color: #0000EE;">Agregar receta</a>
+          [style.cursor]="permiso_farmaceuta ? 'pointer' : 'default'" style="color: #0000EE;" (click)="add_receta()">Agregar receta</a>
       </div>
 
     </div>

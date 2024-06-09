@@ -22,6 +22,8 @@ DATABASES = {
 # Configuración de CORS del proyecto
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:4200',
+    'http://127.0.0.1:8000',  # Añade esta línea
+    'http://192.168.1.92'
 ]
 CORS_ALLOWED_ORIGIN_REGEXES = r'^/api/.*'
 CORS_ALLOW_CREDENTIALS = True
